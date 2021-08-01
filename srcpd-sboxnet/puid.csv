@@ -1,0 +1,8 @@
+puid,roca,senscnt,isga,reports_locoaddr,comment
+2,1,8,1,0,Weichenservo:1 Weichen2
+4,2,8,1,0,Weichenservo:1 Weichen1
+5,5,16,1,1,GBmelder:1
+10,6,16,1,1,GBmelder:1
+7,7,16,1,1,GBmelder:1
+8,9,0,0,0,DCC Gen
+12,8,0,0,0,Booster

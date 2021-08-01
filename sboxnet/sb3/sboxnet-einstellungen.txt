@@ -1,0 +1,7 @@
+
+Einstellungen für sboxnet
+=========================
+- Byte 0x300:
+    0: Gerätemain ausführen
+    <> 0: Bootloader Fireware Update
+- BootRST: Bootreset Vector

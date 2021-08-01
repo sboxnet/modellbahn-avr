@@ -1,0 +1,3251 @@
+GAS LISTING /tmp/cch68YwQ.s 			page 1
+
+
+   1               		.file	"test-usb.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.stabs	"/home/balagi/src/mcp/avr/avrutilslib/usb/test/",100,0,2,.Ltext0
+   8               		.stabs	"test-usb.c",100,0,2,.Ltext0
+   9               		.text
+  10               	.Ltext0:
+  11               		.stabs	"gcc2_compiled.",60,0,0,0
+  12               		.stabs	"int:t(0,1)=r(0,1);-32768;32767;",128,0,0,0
+  13               		.stabs	"char:t(0,2)=r(0,2);0;127;",128,0,0,0
+  14               		.stabs	"long int:t(0,3)=@s32;r(0,3);020000000000;017777777777;",128,0,0,0
+  15               		.stabs	"unsigned int:t(0,4)=r(0,4);0;0177777;",128,0,0,0
+  16               		.stabs	"long unsigned int:t(0,5)=@s32;r(0,5);0;037777777777;",128,0,0,0
+  17               		.stabs	"long long int:t(0,6)=@s64;r(0,6);01000000000000000000000;0777777777777777777777;",128,0,0,
+  18               		.stabs	"long long unsigned int:t(0,7)=@s64;r(0,7);0;01777777777777777777777;",128,0,0,0
+  19               		.stabs	"short int:t(0,8)=r(0,8);-32768;32767;",128,0,0,0
+  20               		.stabs	"short unsigned int:t(0,9)=r(0,9);0;0177777;",128,0,0,0
+  21               		.stabs	"signed char:t(0,10)=@s8;r(0,10);-128;127;",128,0,0,0
+  22               		.stabs	"unsigned char:t(0,11)=@s8;r(0,11);0;255;",128,0,0,0
+  23               		.stabs	"float:t(0,12)=r(0,1);4;0;",128,0,0,0
+  24               		.stabs	"double:t(0,13)=r(0,1);4;0;",128,0,0,0
+  25               		.stabs	"long double:t(0,14)=r(0,1);4;0;",128,0,0,0
+  26               		.stabs	"short _Fract:t(0,15)=r(0,1);1;0;",128,0,0,0
+  27               		.stabs	"_Fract:t(0,16)=r(0,1);2;0;",128,0,0,0
+  28               		.stabs	"long _Fract:t(0,17)=r(0,1);4;0;",128,0,0,0
+  29               		.stabs	"long long _Fract:t(0,18)=r(0,1);8;0;",128,0,0,0
+  30               		.stabs	"unsigned short _Fract:t(0,19)=r(0,1);1;0;",128,0,0,0
+  31               		.stabs	"unsigned _Fract:t(0,20)=r(0,1);2;0;",128,0,0,0
+  32               		.stabs	"unsigned long _Fract:t(0,21)=r(0,1);4;0;",128,0,0,0
+  33               		.stabs	"unsigned long long _Fract:t(0,22)=r(0,1);8;0;",128,0,0,0
+  34               		.stabs	"_Sat short _Fract:t(0,23)=r(0,1);1;0;",128,0,0,0
+  35               		.stabs	"_Sat _Fract:t(0,24)=r(0,1);2;0;",128,0,0,0
+  36               		.stabs	"_Sat long _Fract:t(0,25)=r(0,1);4;0;",128,0,0,0
+  37               		.stabs	"_Sat long long _Fract:t(0,26)=r(0,1);8;0;",128,0,0,0
+  38               		.stabs	"_Sat unsigned short _Fract:t(0,27)=r(0,1);1;0;",128,0,0,0
+  39               		.stabs	"_Sat unsigned _Fract:t(0,28)=r(0,1);2;0;",128,0,0,0
+  40               		.stabs	"_Sat unsigned long _Fract:t(0,29)=r(0,1);4;0;",128,0,0,0
+  41               		.stabs	"_Sat unsigned long long _Fract:t(0,30)=r(0,1);8;0;",128,0,0,0
+  42               		.stabs	"short _Accum:t(0,31)=r(0,1);2;0;",128,0,0,0
+  43               		.stabs	"_Accum:t(0,32)=r(0,1);4;0;",128,0,0,0
+  44               		.stabs	"long _Accum:t(0,33)=r(0,1);8;0;",128,0,0,0
+  45               		.stabs	"long long _Accum:t(0,34)=r(0,1);8;0;",128,0,0,0
+  46               		.stabs	"unsigned short _Accum:t(0,35)=r(0,1);2;0;",128,0,0,0
+  47               		.stabs	"unsigned _Accum:t(0,36)=r(0,1);4;0;",128,0,0,0
+  48               		.stabs	"unsigned long _Accum:t(0,37)=r(0,1);8;0;",128,0,0,0
+  49               		.stabs	"unsigned long long _Accum:t(0,38)=r(0,1);8;0;",128,0,0,0
+  50               		.stabs	"_Sat short _Accum:t(0,39)=r(0,1);2;0;",128,0,0,0
+  51               		.stabs	"_Sat _Accum:t(0,40)=r(0,1);4;0;",128,0,0,0
+  52               		.stabs	"_Sat long _Accum:t(0,41)=r(0,1);8;0;",128,0,0,0
+  53               		.stabs	"_Sat long long _Accum:t(0,42)=r(0,1);8;0;",128,0,0,0
+  54               		.stabs	"_Sat unsigned short _Accum:t(0,43)=r(0,1);2;0;",128,0,0,0
+  55               		.stabs	"_Sat unsigned _Accum:t(0,44)=r(0,1);4;0;",128,0,0,0
+  56               		.stabs	"_Sat unsigned long _Accum:t(0,45)=r(0,1);8;0;",128,0,0,0
+  57               		.stabs	"_Sat unsigned long long _Accum:t(0,46)=r(0,1);8;0;",128,0,0,0
+GAS LISTING /tmp/cch68YwQ.s 			page 2
+
+
+  58               		.stabs	"void:t(0,47)=(0,47)",128,0,0,0
+  59               		.stabs	"/usr/lib/gcc/avr/4.8.1/include/stdint.h",130,0,0,0
+  60               		.stabs	"/usr/avr/include/stdint.h",130,0,0,0
+  61               		.stabs	"int8_t:t(2,1)=(0,10)",128,0,121,0
+  62               		.stabs	"uint8_t:t(2,2)=(0,11)",128,0,122,0
+  63               		.stabs	"int16_t:t(2,3)=(0,1)",128,0,123,0
+  64               		.stabs	"uint16_t:t(2,4)=(0,4)",128,0,124,0
+  65               		.stabs	"int32_t:t(2,5)=(0,3)",128,0,125,0
+  66               		.stabs	"uint32_t:t(2,6)=(0,5)",128,0,126,0
+  67               		.stabs	"int64_t:t(2,7)=(0,6)",128,0,128,0
+  68               		.stabs	"uint64_t:t(2,8)=(0,7)",128,0,129,0
+  69               		.stabs	"intptr_t:t(2,9)=(2,3)",128,0,142,0
+  70               		.stabs	"uintptr_t:t(2,10)=(2,4)",128,0,147,0
+  71               		.stabs	"int_least8_t:t(2,11)=(2,1)",128,0,159,0
+  72               		.stabs	"uint_least8_t:t(2,12)=(2,2)",128,0,164,0
+  73               		.stabs	"int_least16_t:t(2,13)=(2,3)",128,0,169,0
+  74               		.stabs	"uint_least16_t:t(2,14)=(2,4)",128,0,174,0
+  75               		.stabs	"int_least32_t:t(2,15)=(2,5)",128,0,179,0
+  76               		.stabs	"uint_least32_t:t(2,16)=(2,6)",128,0,184,0
+  77               		.stabs	"int_least64_t:t(2,17)=(2,7)",128,0,192,0
+  78               		.stabs	"uint_least64_t:t(2,18)=(2,8)",128,0,199,0
+  79               		.stabs	"int_fast8_t:t(2,19)=(2,1)",128,0,213,0
+  80               		.stabs	"uint_fast8_t:t(2,20)=(2,2)",128,0,218,0
+  81               		.stabs	"int_fast16_t:t(2,21)=(2,3)",128,0,223,0
+  82               		.stabs	"uint_fast16_t:t(2,22)=(2,4)",128,0,228,0
+  83               		.stabs	"int_fast32_t:t(2,23)=(2,5)",128,0,233,0
+  84               		.stabs	"uint_fast32_t:t(2,24)=(2,6)",128,0,238,0
+  85               		.stabs	"int_fast64_t:t(2,25)=(2,7)",128,0,246,0
+  86               		.stabs	"uint_fast64_t:t(2,26)=(2,8)",128,0,253,0
+  87               		.stabs	"intmax_t:t(2,27)=(2,7)",128,0,273,0
+  88               		.stabs	"uintmax_t:t(2,28)=(2,8)",128,0,278,0
+  89               		.stabn	162,0,0,0
+  90               		.stabn	162,0,0,0
+  91               		.stabs	"/usr/avr/include/avr/io.h",130,0,0,0
+  92               		.stabs	"/usr/avr/include/avr/sfr_defs.h",130,0,0,0
+  93               		.stabs	"/usr/avr/include/inttypes.h",130,0,0,0
+  94               		.stabs	"int_farptr_t:t(5,1)=(2,5)",128,0,77,0
+  95               		.stabs	"uint_farptr_t:t(5,2)=(2,6)",128,0,81,0
+  96               		.stabn	162,0,0,0
+  97               		.stabn	162,0,0,0
+  98               		.stabs	"/usr/avr/include/avr/fuse.h",130,0,0,0
+  99               		.stabs	"__fuse_t:t(6,1)=(6,2)=s3low:(0,11),0,8;high:(0,11),8,8;extended:(0,11),16,8;;",128,0,244,0
+ 100               		.stabn	162,0,0,0
+ 101               		.stabn	162,0,0,0
+ 102               		.stabs	"/usr/avr/include/avr/eeprom.h",130,0,0,0
+ 103               		.stabs	"/usr/lib/gcc/avr/4.8.1/include/stddef.h",130,0,0,0
+ 104               		.stabs	"ptrdiff_t:t(8,1)=(0,1)",128,0,147,0
+ 105               		.stabs	"size_t:t(8,2)=(0,4)",128,0,212,0
+ 106               		.stabs	"wchar_t:t(8,3)=(0,1)",128,0,324,0
+ 107               		.stabn	162,0,0,0
+ 108               		.stabn	162,0,0,0
+ 109               		.stabs	"../../../avrutilslib/logger-usart.c",130,0,0,0
+ 110               		.stabs	"../../../avrutilslib/ringbuffer.h",130,0,0,0
+ 111               		.stabs	"ring_buffer:T(10,1)=s4rd:(2,2),0,8;wr:(2,2),8,8;size:(2,2),16,8;count:(2,2),24,8;buf:(10,2
+ 112               		.stabn	162,0,0,0
+ 113               		.stabs	"logger_buf:T(9,1)=s258rb:(10,1),0,32;buf:(9,2)=ar(10,3);0;253;(2,2),32,2032;;",128,0,0,0
+ 114               		.stabn	162,0,0,0
+GAS LISTING /tmp/cch68YwQ.s 			page 3
+
+
+ 115               		.stabs	"../../../avrutilslib/usb/usb.c",130,0,0,0
+ 116               		.stabs	"../../../avrutilslib/usb/usb.h",130,0,0,0
+ 117               		.stabs	"usb_device_desc:T(12,1)=s18bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;bcdUSB:(2,4),16,16;
+ 118               		.stabs	"usb_device_qualifier:T(12,2)=s10bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;bcdUSB:(2,4),1
+ 119               		.stabs	"usb_configuration_desc:T(12,3)=s9bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;wTotalLength:
+ 120               		.stabs	"usb_other_speed_config_desc:T(12,4)=s9bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;wTotalLe
+ 121               		.stabs	"usb_interface_desc:T(12,5)=s9bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;bInterfaceNumber:
+ 122               		.stabs	"usb_endpoint_desc:T(12,6)=s7bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;bEndpointAddress:(
+ 123               		.stabs	"usb_string_desc:T(12,7)=s2bLength:(2,2),0,8;bDescriptorType:(2,2),8,8;;",128,0,0,0
+ 124               		.stabs	"usb_device_request:T(12,8)=s8bmRequestType:(2,2),0,8;bRequest:(2,2),8,8;wValue:(2,4),16,16
+ 125               		.stabs	"usb_dev:T(12,9)=s11state:(12,10)=B(2,2),0,8;cur_config:(2,2),8,8;pdesc_dev:(12,11)=*(12,12
+ 126               		.stabn	162,0,0,0
+ 127               		.stabn	162,0,0,0
+ 128               		.stabs	"config_1:T(0,48)=s32config:(12,3),0,72;interface:(12,5),72,72;ep1:(12,6),144,56;ep2:(12,6)
+ 129               		.stabs	"usb_ep_waitIN:f(2,2)",36,0,142,usb_ep_waitIN
+ 130               		.type	usb_ep_waitIN, @function
+ 131               	usb_ep_waitIN:
+ 132               		.stabd	46,0,0
+ 133               		.stabs	"../../../avrutilslib/usb/usb.c",132,0,0,.Ltext1
+ 134               	.Ltext1:
+ 135               		.stabn	68,0,142,.LM0-.LFBB1
+ 136               	.LM0:
+ 137               	.LFBB1:
+ 138               	/* prologue: function */
+ 139               	/* frame size = 0 */
+ 140               	/* stack size = 0 */
+ 141               	.L__stack_usage = 0
+ 142               		.stabn	68,0,143,.LM1-.LFBB1
+ 143               	.LM1:
+ 144 0000 00C0      		rjmp .L2
+ 145               	.L4:
+ 146               		.stabn	68,0,144,.LM2-.LFBB1
+ 147               	.LM2:
+ 148 0002 8091 0000 		lds r24,g_usb_dev
+ 149 0006 8C71      		andi r24,lo8(28)
+ 150 0008 01F0      		breq .L5
+ 151               	.L2:
+ 152               	.LBB88:
+ 153               	.LBB89:
+ 154               		.stabn	68,0,124,.LM3-.LFBB1
+ 155               	.LM3:
+ 156 000a 8091 E800 		lds r24,232
+ 157               	.LBE89:
+ 158               	.LBE88:
+ 159               		.stabn	68,0,143,.LM4-.LFBB1
+ 160               	.LM4:
+ 161 000e 80FF      		sbrs r24,0
+ 162 0010 00C0      		rjmp .L4
+ 163               		.stabn	68,0,148,.LM5-.LFBB1
+ 164               	.LM5:
+ 165 0012 80E0      		ldi r24,0
+ 166 0014 0895      		ret
+ 167               	.L5:
+ 168               		.stabn	68,0,145,.LM6-.LFBB1
+ 169               	.LM6:
+ 170 0016 83E0      		ldi r24,lo8(3)
+ 171               		.stabn	68,0,149,.LM7-.LFBB1
+GAS LISTING /tmp/cch68YwQ.s 			page 4
+
+
+ 172               	.LM7:
+ 173 0018 0895      		ret
+ 174               		.size	usb_ep_waitIN, .-usb_ep_waitIN
+ 175               	.Lscope1:
+ 176               		.stabs	"",36,0,0,.Lscope1-.LFBB1
+ 177               		.stabd	78,0,0
+ 178               		.stabs	"usb_ep_send_zlp:f(2,2)",36,0,151,usb_ep_send_zlp
+ 179               		.type	usb_ep_send_zlp, @function
+ 180               	usb_ep_send_zlp:
+ 181               		.stabd	46,0,0
+ 182               		.stabn	68,0,151,.LM8-.LFBB2
+ 183               	.LM8:
+ 184               	.LFBB2:
+ 185               	/* prologue: function */
+ 186               	/* frame size = 0 */
+ 187               	/* stack size = 0 */
+ 188               	.L__stack_usage = 0
+ 189               		.stabn	68,0,152,.LM9-.LFBB2
+ 190               	.LM9:
+ 191 001a 0E94 0000 		call usb_ep_waitIN
+ 192               		.stabn	68,0,153,.LM10-.LFBB2
+ 193               	.LM10:
+ 194 001e 8111      		cpse r24,__zero_reg__
+ 195               		.stabn	68,0,158,.LM11-.LFBB2
+ 196               	.LM11:
+ 197 0020 0895      		ret
+ 198               	.L9:
+ 199               	.LBB90:
+ 200               	.LBB91:
+ 201               		.stabn	68,0,127,.LM12-.LFBB2
+ 202               	.LM12:
+ 203 0022 8091 E800 		lds r24,232
+ 204 0026 8E7F      		andi r24,lo8(-2)
+ 205 0028 8093 E800 		sts 232,r24
+ 206               	.LBE91:
+ 207               	.LBE90:
+ 208               		.stabn	68,0,155,.LM13-.LFBB2
+ 209               	.LM13:
+ 210 002c 0C94 0000 		jmp usb_ep_waitIN
+ 211               		.size	usb_ep_send_zlp, .-usb_ep_send_zlp
+ 212               		.stabs	"rc:r(2,2)",64,0,152,24
+ 213               		.stabn	192,0,0,.LFBB2-.LFBB2
+ 214               		.stabn	224,0,0,.Lscope2-.LFBB2
+ 215               	.Lscope2:
+ 216               		.stabs	"",36,0,0,.Lscope2-.LFBB2
+ 217               		.stabd	78,0,0
+ 218               		.stabs	"init_system:f(0,47)",36,0,156,init_system
+ 219               		.type	init_system, @function
+ 220               	init_system:
+ 221               		.stabd	46,0,0
+ 222               		.stabs	"test-usb.c",132,0,0,.Ltext2
+ 223               	.Ltext2:
+ 224               		.stabn	68,0,156,.LM14-.LFBB3
+ 225               	.LM14:
+ 226               	.LFBB3:
+ 227               	/* prologue: function */
+ 228               	/* frame size = 0 */
+GAS LISTING /tmp/cch68YwQ.s 			page 5
+
+
+ 229               	/* stack size = 0 */
+ 230               	.L__stack_usage = 0
+ 231               		.stabn	68,0,157,.LM15-.LFBB3
+ 232               	.LM15:
+ 233               	/* #APP */
+ 234               	 ;  157 "test-usb.c" 1
+ 235 0030 A895      		wdr
+ 236               	 ;  0 "" 2
+ 237               		.stabn	68,0,158,.LM16-.LFBB3
+ 238               	.LM16:
+ 239               	/* #NOAPP */
+ 240 0032 88E1      		ldi r24,lo8(24)
+ 241               	/* #APP */
+ 242               	 ;  158 "test-usb.c" 1
+ 243 0034 0FB6      		in __tmp_reg__, __SREG__
+ 244 0036 F894      		cli
+ 245 0038 8093 6000 		sts 96, r24
+ 246 003c 1092 6000 		sts 96, __zero_reg__
+ 247 0040 0FBE      		out __SREG__,__tmp_reg__
+ 248               		
+ 249               	 ;  0 "" 2
+ 250               		.stabn	68,0,160,.LM17-.LFBB3
+ 251               	.LM17:
+ 252               	/* #NOAPP */
+ 253 0042 8FEF      		ldi r24,lo8(-1)
+ 254 0044 85B9      		out 0x5,r24
+ 255               		.stabn	68,0,161,.LM18-.LFBB3
+ 256               	.LM18:
+ 257 0046 88B9      		out 0x8,r24
+ 258               		.stabn	68,0,162,.LM19-.LFBB3
+ 259               	.LM19:
+ 260 0048 8BB9      		out 0xb,r24
+ 261               		.stabn	68,0,163,.LM20-.LFBB3
+ 262               	.LM20:
+ 263 004a 80E2      		ldi r24,lo8(32)
+ 264 004c 84B9      		out 0x4,r24
+ 265               		.stabn	68,0,164,.LM21-.LFBB3
+ 266               	.LM21:
+ 267 004e 17B8      		out 0x7,__zero_reg__
+ 268               		.stabn	68,0,165,.LM22-.LFBB3
+ 269               	.LM22:
+ 270 0050 1AB8      		out 0xa,__zero_reg__
+ 271               		.stabn	68,0,168,.LM23-.LFBB3
+ 272               	.LM23:
+ 273 0052 E1E6      		ldi r30,lo8(97)
+ 274 0054 F0E0      		ldi r31,0
+ 275 0056 80E8      		ldi r24,lo8(-128)
+ 276 0058 8083      		st Z,r24
+ 277               		.stabn	68,0,169,.LM24-.LFBB3
+ 278               	.LM24:
+ 279 005a 1082      		st Z,__zero_reg__
+ 280 005c 0895      		ret
+ 281               		.size	init_system, .-init_system
+ 282               	.Lscope3:
+ 283               		.stabs	"",36,0,0,.Lscope3-.LFBB3
+ 284               		.stabd	78,0,0
+ 285               		.stabs	"logger_usart_init:F(0,47)",36,0,40,logger_usart_init
+GAS LISTING /tmp/cch68YwQ.s 			page 6
+
+
+ 286               	.global	logger_usart_init
+ 287               		.type	logger_usart_init, @function
+ 288               	logger_usart_init:
+ 289               		.stabd	46,0,0
+ 290               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext3
+ 291               	.Ltext3:
+ 292               		.stabn	68,0,40,.LM25-.LFBB4
+ 293               	.LM25:
+ 294               	.LFBB4:
+ 295               	/* prologue: function */
+ 296               	/* frame size = 0 */
+ 297               	/* stack size = 0 */
+ 298               	.L__stack_usage = 0
+ 299               	.LBB94:
+ 300               	.LBB95:
+ 301               		.stabs	"../../../avrutilslib/ringbuffer.c",132,0,0,.Ltext4
+ 302               	.Ltext4:
+ 303               		.stabn	68,0,23,.LM26-.LFBB4
+ 304               	.LM26:
+ 305 005e 1092 0000 		sts g_logger_usart_buf,__zero_reg__
+ 306               		.stabn	68,0,24,.LM27-.LFBB4
+ 307               	.LM27:
+ 308 0062 1092 0000 		sts g_logger_usart_buf+1,__zero_reg__
+ 309               		.stabn	68,0,25,.LM28-.LFBB4
+ 310               	.LM28:
+ 311 0066 8EEF      		ldi r24,lo8(-2)
+ 312 0068 8093 0000 		sts g_logger_usart_buf+2,r24
+ 313               		.stabn	68,0,26,.LM29-.LFBB4
+ 314               	.LM29:
+ 315 006c 1092 0000 		sts g_logger_usart_buf+3,__zero_reg__
+ 316               	.LBE95:
+ 317               	.LBE94:
+ 318               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext5
+ 319               	.Ltext5:
+ 320               		.stabn	68,0,43,.LM30-.LFBB4
+ 321               	.LM30:
+ 322 0070 1092 CD00 		sts 205,__zero_reg__
+ 323               		.stabn	68,0,44,.LM31-.LFBB4
+ 324               	.LM31:
+ 325 0074 8CE0      		ldi r24,lo8(12)
+ 326 0076 8093 CC00 		sts 204,r24
+ 327               		.stabn	68,0,45,.LM32-.LFBB4
+ 328               	.LM32:
+ 329 007a 80E4      		ldi r24,lo8(64)
+ 330 007c 8093 C800 		sts 200,r24
+ 331               		.stabn	68,0,46,.LM33-.LFBB4
+ 332               	.LM33:
+ 333 0080 86E0      		ldi r24,lo8(6)
+ 334 0082 8093 CA00 		sts 202,r24
+ 335               		.stabn	68,0,52,.LM34-.LFBB4
+ 336               	.LM34:
+ 337 0086 1092 CB00 		sts 203,__zero_reg__
+ 338               		.stabn	68,0,54,.LM35-.LFBB4
+ 339               	.LM35:
+ 340 008a 88E0      		ldi r24,lo8(8)
+ 341 008c 8093 C900 		sts 201,r24
+ 342 0090 0895      		ret
+GAS LISTING /tmp/cch68YwQ.s 			page 7
+
+
+ 343               		.size	logger_usart_init, .-logger_usart_init
+ 344               	.Lscope4:
+ 345               		.stabs	"",36,0,0,.Lscope4-.LFBB4
+ 346               		.stabd	78,0,0
+ 347               		.stabs	"ringbuf_init:F(0,47)",36,0,22,ringbuf_init
+ 348               		.stabs	"a_rb:P(0,49)=*(10,1)",64,0,22,30
+ 349               		.stabs	"a_size:P(2,2)",64,0,22,22
+ 350               	.global	ringbuf_init
+ 351               		.type	ringbuf_init, @function
+ 352               	ringbuf_init:
+ 353               		.stabd	46,0,0
+ 354               		.stabs	"../../../avrutilslib/ringbuffer.c",132,0,0,.Ltext6
+ 355               	.Ltext6:
+ 356               		.stabn	68,0,22,.LM36-.LFBB5
+ 357               	.LM36:
+ 358               	.LFBB5:
+ 359               	/* prologue: function */
+ 360               	/* frame size = 0 */
+ 361               	/* stack size = 0 */
+ 362               	.L__stack_usage = 0
+ 363 0092 FC01      		movw r30,r24
+ 364               		.stabn	68,0,23,.LM37-.LFBB5
+ 365               	.LM37:
+ 366 0094 1082      		st Z,__zero_reg__
+ 367               		.stabn	68,0,24,.LM38-.LFBB5
+ 368               	.LM38:
+ 369 0096 1182      		std Z+1,__zero_reg__
+ 370               		.stabn	68,0,25,.LM39-.LFBB5
+ 371               	.LM39:
+ 372 0098 6283      		std Z+2,r22
+ 373               		.stabn	68,0,26,.LM40-.LFBB5
+ 374               	.LM40:
+ 375 009a 1382      		std Z+3,__zero_reg__
+ 376 009c 0895      		ret
+ 377               		.size	ringbuf_init, .-ringbuf_init
+ 378               	.Lscope5:
+ 379               		.stabs	"",36,0,0,.Lscope5-.LFBB5
+ 380               		.stabd	78,0,0
+ 381               		.stabs	"ringbuf_read:F(2,2)",36,0,29,ringbuf_read
+ 382               		.stabs	"a_rb:P(0,49)",64,0,29,30
+ 383               	.global	ringbuf_read
+ 384               		.type	ringbuf_read, @function
+ 385               	ringbuf_read:
+ 386               		.stabd	46,0,0
+ 387               		.stabn	68,0,29,.LM41-.LFBB6
+ 388               	.LM41:
+ 389               	.LFBB6:
+ 390               	/* prologue: function */
+ 391               	/* frame size = 0 */
+ 392               	/* stack size = 0 */
+ 393               	.L__stack_usage = 0
+ 394 009e FC01      		movw r30,r24
+ 395               		.stabn	68,0,30,.LM42-.LFBB6
+ 396               	.LM42:
+ 397 00a0 8381      		ldd r24,Z+3
+ 398 00a2 8823      		tst r24
+ 399 00a4 01F0      		breq .L15
+GAS LISTING /tmp/cch68YwQ.s 			page 8
+
+
+ 400               	.LBB96:
+ 401               		.stabn	68,0,31,.LM43-.LFBB6
+ 402               	.LM43:
+ 403 00a6 8150      		subi r24,lo8(-(-1))
+ 404 00a8 8383      		std Z+3,r24
+ 405               		.stabn	68,0,32,.LM44-.LFBB6
+ 406               	.LM44:
+ 407 00aa 9081      		ld r25,Z
+ 408 00ac DF01      		movw r26,r30
+ 409 00ae A90F      		add r26,r25
+ 410 00b0 B11D      		adc r27,__zero_reg__
+ 411 00b2 1496      		adiw r26,4
+ 412 00b4 8C91      		ld r24,X
+ 413               		.stabn	68,0,33,.LM45-.LFBB6
+ 414               	.LM45:
+ 415 00b6 9F5F      		subi r25,lo8(-(1))
+ 416 00b8 9083      		st Z,r25
+ 417               		.stabn	68,0,34,.LM46-.LFBB6
+ 418               	.LM46:
+ 419 00ba 2281      		ldd r18,Z+2
+ 420 00bc 9217      		cp r25,r18
+ 421 00be 00F0      		brlo .L14
+ 422               		.stabn	68,0,35,.LM47-.LFBB6
+ 423               	.LM47:
+ 424 00c0 1082      		st Z,__zero_reg__
+ 425 00c2 0895      		ret
+ 426               	.L15:
+ 427               	.LBE96:
+ 428               		.stabn	68,0,38,.LM48-.LFBB6
+ 429               	.LM48:
+ 430 00c4 80E0      		ldi r24,0
+ 431               	.L14:
+ 432               		.stabn	68,0,39,.LM49-.LFBB6
+ 433               	.LM49:
+ 434 00c6 0895      		ret
+ 435               		.size	ringbuf_read, .-ringbuf_read
+ 436               		.stabs	"v:r(2,2)",64,0,32,24
+ 437               		.stabn	192,0,0,.LBB96-.LFBB6
+ 438               		.stabn	224,0,0,.LBE96-.LFBB6
+ 439               	.Lscope6:
+ 440               		.stabs	"",36,0,0,.Lscope6-.LFBB6
+ 441               		.stabd	78,0,0
+ 442               		.stabs	"__vector_24:F(0,47)",36,0,69,__vector_24
+ 443               	.global	__vector_24
+ 444               		.type	__vector_24, @function
+ 445               	__vector_24:
+ 446               		.stabd	46,0,0
+ 447               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext7
+ 448               	.Ltext7:
+ 449               		.stabn	68,0,69,.LM50-.LFBB7
+ 450               	.LM50:
+ 451               	.LFBB7:
+ 452 00c8 1F92      		push r1
+ 453 00ca 0F92      		push r0
+ 454 00cc 0FB6      		in r0,__SREG__
+ 455 00ce 0F92      		push r0
+ 456 00d0 1124      		clr __zero_reg__
+GAS LISTING /tmp/cch68YwQ.s 			page 9
+
+
+ 457 00d2 2F93      		push r18
+ 458 00d4 3F93      		push r19
+ 459 00d6 4F93      		push r20
+ 460 00d8 5F93      		push r21
+ 461 00da 6F93      		push r22
+ 462 00dc 7F93      		push r23
+ 463 00de 8F93      		push r24
+ 464 00e0 9F93      		push r25
+ 465 00e2 AF93      		push r26
+ 466 00e4 BF93      		push r27
+ 467 00e6 EF93      		push r30
+ 468 00e8 FF93      		push r31
+ 469               	/* prologue: Signal */
+ 470               	/* frame size = 0 */
+ 471               	/* stack size = 15 */
+ 472               	.L__stack_usage = 15
+ 473               	.LBB99:
+ 474               	.LBB100:
+ 475               		.stabn	68,0,62,.LM51-.LFBB7
+ 476               	.LM51:
+ 477 00ea 8091 0000 		lds r24,g_logger_usart_buf+3
+ 478 00ee 8111      		cpse r24,__zero_reg__
+ 479 00f0 00C0      		rjmp .L18
+ 480               		.stabn	68,0,63,.LM52-.LFBB7
+ 481               	.LM52:
+ 482 00f2 8091 C900 		lds r24,201
+ 483 00f6 8F7D      		andi r24,lo8(-33)
+ 484 00f8 8093 C900 		sts 201,r24
+ 485               	.L17:
+ 486               	/* epilogue start */
+ 487               	.LBE100:
+ 488               	.LBE99:
+ 489               		.stabn	68,0,71,.LM53-.LFBB7
+ 490               	.LM53:
+ 491 00fc FF91      		pop r31
+ 492 00fe EF91      		pop r30
+ 493 0100 BF91      		pop r27
+ 494 0102 AF91      		pop r26
+ 495 0104 9F91      		pop r25
+ 496 0106 8F91      		pop r24
+ 497 0108 7F91      		pop r23
+ 498 010a 6F91      		pop r22
+ 499 010c 5F91      		pop r21
+ 500 010e 4F91      		pop r20
+ 501 0110 3F91      		pop r19
+ 502 0112 2F91      		pop r18
+ 503 0114 0F90      		pop r0
+ 504 0116 0FBE      		out __SREG__,r0
+ 505 0118 0F90      		pop r0
+ 506 011a 1F90      		pop r1
+ 507 011c 1895      		reti
+ 508               	.L18:
+ 509               	.LBB102:
+ 510               	.LBB101:
+ 511               		.stabn	68,0,65,.LM54-.LFBB7
+ 512               	.LM54:
+ 513 011e 80E0      		ldi r24,lo8(g_logger_usart_buf)
+GAS LISTING /tmp/cch68YwQ.s 			page 10
+
+
+ 514 0120 90E0      		ldi r25,hi8(g_logger_usart_buf)
+ 515 0122 0E94 0000 		call ringbuf_read
+ 516 0126 8093 CE00 		sts 206,r24
+ 517 012a 00C0      		rjmp .L17
+ 518               	.LBE101:
+ 519               	.LBE102:
+ 520               		.size	__vector_24, .-__vector_24
+ 521               	.Lscope7:
+ 522               		.stabs	"",36,0,0,.Lscope7-.LFBB7
+ 523               		.stabd	78,0,0
+ 524               		.stabs	"logger_usart_check:F(0,47)",36,0,94,logger_usart_check
+ 525               	.global	logger_usart_check
+ 526               		.type	logger_usart_check, @function
+ 527               	logger_usart_check:
+ 528               		.stabd	46,0,0
+ 529               		.stabn	68,0,94,.LM55-.LFBB8
+ 530               	.LM55:
+ 531               	.LFBB8:
+ 532 012c CF93      		push r28
+ 533               	/* prologue: function */
+ 534               	/* frame size = 0 */
+ 535               	/* stack size = 1 */
+ 536               	.L__stack_usage = 1
+ 537               	.LBB103:
+ 538               		.stabn	68,0,95,.LM56-.LFBB8
+ 539               	.LM56:
+ 540 012e CFB7      		in r28,__SREG__
+ 541               	.LBB104:
+ 542               	.LBB105:
+ 543               		.stabs	"/usr/avr/include/util/atomic.h",132,0,0,.Ltext8
+ 544               	.Ltext8:
+ 545               		.stabn	68,0,50,.LM57-.LFBB8
+ 546               	.LM57:
+ 547               	/* #APP */
+ 548               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 549 0130 F894      		cli
+ 550               	 ;  0 "" 2
+ 551               	/* #NOAPP */
+ 552               	.LBE105:
+ 553               	.LBE104:
+ 554               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext9
+ 555               	.Ltext9:
+ 556               		.stabn	68,0,96,.LM58-.LFBB8
+ 557               	.LM58:
+ 558 0132 8091 C800 		lds r24,200
+ 559 0136 85FF      		sbrs r24,5
+ 560 0138 00C0      		rjmp .L21
+ 561               		.stabn	68,0,96,.LM59-.LFBB8
+ 562               	.LM59:
+ 563 013a 8091 0000 		lds r24,g_logger_usart_buf+3
+ 564 013e 8111      		cpse r24,__zero_reg__
+ 565 0140 00C0      		rjmp .L28
+ 566               	.L21:
+ 567               	.LBB106:
+ 568               	.LBB107:
+ 569               		.stabs	"/usr/avr/include/util/atomic.h",132,0,0,.Ltext10
+ 570               	.Ltext10:
+GAS LISTING /tmp/cch68YwQ.s 			page 11
+
+
+ 571               		.stabn	68,0,70,.LM60-.LFBB8
+ 572               	.LM60:
+ 573 0142 CFBF      		out __SREG__,r28
+ 574               		.stabn	68,0,71,.LM61-.LFBB8
+ 575               	.LM61:
+ 576               	/* epilogue start */
+ 577               	.LBE107:
+ 578               	.LBE106:
+ 579               	.LBE103:
+ 580               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext11
+ 581               	.Ltext11:
+ 582               		.stabn	68,0,100,.LM62-.LFBB8
+ 583               	.LM62:
+ 584 0144 CF91      		pop r28
+ 585 0146 0895      		ret
+ 586               	.L28:
+ 587               	.LBB110:
+ 588               		.stabn	68,0,97,.LM63-.LFBB8
+ 589               	.LM63:
+ 590 0148 80E0      		ldi r24,lo8(g_logger_usart_buf)
+ 591 014a 90E0      		ldi r25,hi8(g_logger_usart_buf)
+ 592 014c 0E94 0000 		call ringbuf_read
+ 593 0150 8093 CE00 		sts 206,r24
+ 594               	.LBB109:
+ 595               	.LBB108:
+ 596               		.stabs	"/usr/avr/include/util/atomic.h",132,0,0,.Ltext12
+ 597               	.Ltext12:
+ 598               		.stabn	68,0,70,.LM64-.LFBB8
+ 599               	.LM64:
+ 600 0154 CFBF      		out __SREG__,r28
+ 601               		.stabn	68,0,71,.LM65-.LFBB8
+ 602               	.LM65:
+ 603               	/* epilogue start */
+ 604               	.LBE108:
+ 605               	.LBE109:
+ 606               	.LBE110:
+ 607               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext13
+ 608               	.Ltext13:
+ 609               		.stabn	68,0,100,.LM66-.LFBB8
+ 610               	.LM66:
+ 611 0156 CF91      		pop r28
+ 612 0158 0895      		ret
+ 613               		.size	logger_usart_check, .-logger_usart_check
+ 614               		.stabs	"sreg_save:r(2,2)",64,0,95,28
+ 615               		.stabn	192,0,0,.LBB103-.LFBB8
+ 616               		.stabn	224,0,0,.LBE103-.LFBB8
+ 617               		.stabs	"sreg_save:r(2,2)",64,0,95,28
+ 618               		.stabn	192,0,0,.LBB110-.LFBB8
+ 619               		.stabn	224,0,0,.LBE110-.LFBB8
+ 620               	.Lscope8:
+ 621               		.stabs	"",36,0,0,.Lscope8-.LFBB8
+ 622               		.stabd	78,0,0
+ 623               		.stabs	"ringbuf_write:F(0,47)",36,0,41,ringbuf_write
+ 624               		.stabs	"a_rb:P(0,49)",64,0,41,30
+ 625               		.stabs	"a_v:P(2,2)",64,0,41,22
+ 626               	.global	ringbuf_write
+ 627               		.type	ringbuf_write, @function
+GAS LISTING /tmp/cch68YwQ.s 			page 12
+
+
+ 628               	ringbuf_write:
+ 629               		.stabd	46,0,0
+ 630               		.stabs	"../../../avrutilslib/ringbuffer.c",132,0,0,.Ltext14
+ 631               	.Ltext14:
+ 632               		.stabn	68,0,41,.LM67-.LFBB9
+ 633               	.LM67:
+ 634               	.LFBB9:
+ 635               	/* prologue: function */
+ 636               	/* frame size = 0 */
+ 637               	/* stack size = 0 */
+ 638               	.L__stack_usage = 0
+ 639 015a FC01      		movw r30,r24
+ 640               		.stabn	68,0,42,.LM68-.LFBB9
+ 641               	.LM68:
+ 642 015c 9381      		ldd r25,Z+3
+ 643 015e 8281      		ldd r24,Z+2
+ 644 0160 9817      		cp r25,r24
+ 645 0162 00F4      		brsh .L29
+ 646               		.stabn	68,0,43,.LM69-.LFBB9
+ 647               	.LM69:
+ 648 0164 9F5F      		subi r25,lo8(-(1))
+ 649 0166 9383      		std Z+3,r25
+ 650               		.stabn	68,0,44,.LM70-.LFBB9
+ 651               	.LM70:
+ 652 0168 9181      		ldd r25,Z+1
+ 653 016a DF01      		movw r26,r30
+ 654 016c A90F      		add r26,r25
+ 655 016e B11D      		adc r27,__zero_reg__
+ 656 0170 1496      		adiw r26,4
+ 657 0172 6C93      		st X,r22
+ 658               		.stabn	68,0,45,.LM71-.LFBB9
+ 659               	.LM71:
+ 660 0174 9F5F      		subi r25,lo8(-(1))
+ 661 0176 9183      		std Z+1,r25
+ 662               		.stabn	68,0,46,.LM72-.LFBB9
+ 663               	.LM72:
+ 664 0178 9817      		cp r25,r24
+ 665 017a 00F0      		brlo .L29
+ 666               		.stabn	68,0,47,.LM73-.LFBB9
+ 667               	.LM73:
+ 668 017c 1182      		std Z+1,__zero_reg__
+ 669               	.L29:
+ 670 017e 0895      		ret
+ 671               		.size	ringbuf_write, .-ringbuf_write
+ 672               	.Lscope9:
+ 673               		.stabs	"",36,0,0,.Lscope9-.LFBB9
+ 674               		.stabd	78,0,0
+ 675               		.stabs	"logger_usart_write:f(0,47)",36,0,73,logger_usart_write
+ 676               		.stabs	"a_v:P(2,2)",64,0,73,22
+ 677               		.type	logger_usart_write, @function
+ 678               	logger_usart_write:
+ 679               		.stabd	46,0,0
+ 680               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext15
+ 681               	.Ltext15:
+ 682               		.stabn	68,0,73,.LM74-.LFBB10
+ 683               	.LM74:
+ 684               	.LFBB10:
+GAS LISTING /tmp/cch68YwQ.s 			page 13
+
+
+ 685 0180 1F93      		push r17
+ 686 0182 CF93      		push r28
+ 687 0184 DF93      		push r29
+ 688 0186 1F92      		push __zero_reg__
+ 689 0188 CDB7      		in r28,__SP_L__
+ 690 018a DEB7      		in r29,__SP_H__
+ 691               	/* prologue: function */
+ 692               	/* frame size = 1 */
+ 693               	/* stack size = 4 */
+ 694               	.L__stack_usage = 4
+ 695 018c 682F      		mov r22,r24
+ 696               	.LBB111:
+ 697               		.stabn	68,0,74,.LM75-.LFBB10
+ 698               	.LM75:
+ 699 018e 1FB7      		in r17,__SREG__
+ 700               	.LBB112:
+ 701               	.LBB113:
+ 702               		.stabs	"/usr/avr/include/util/atomic.h",132,0,0,.Ltext16
+ 703               	.Ltext16:
+ 704               		.stabn	68,0,50,.LM76-.LFBB10
+ 705               	.LM76:
+ 706               	/* #APP */
+ 707               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 708 0190 F894      		cli
+ 709               	 ;  0 "" 2
+ 710               	/* #NOAPP */
+ 711               	.LBE113:
+ 712               	.LBE112:
+ 713               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext17
+ 714               	.Ltext17:
+ 715               		.stabn	68,0,75,.LM77-.LFBB10
+ 716               	.LM77:
+ 717 0192 8091 C800 		lds r24,200
+ 718 0196 85FD      		sbrc r24,5
+ 719 0198 00C0      		rjmp .L34
+ 720 019a 2091 0000 		lds r18,g_logger_usart_buf+3
+ 721               	.L35:
+ 722               		.stabn	68,0,79,.LM78-.LFBB10
+ 723               	.LM78:
+ 724 019e 9091 0000 		lds r25,g_logger_usart_buf+2
+ 725 01a2 9217      		cp r25,r18
+ 726 01a4 01F0      		breq .L36
+ 727               	.LBB114:
+ 728               	.LBB115:
+ 729               		.stabs	"../../../avrutilslib/ringbuffer.h",132,0,0,.Ltext18
+ 730               	.Ltext18:
+ 731               		.stabn	68,0,53,.LM79-.LFBB10
+ 732               	.LM79:
+ 733 01a6 921B      		sub r25,r18
+ 734               	.LBE115:
+ 735               	.LBE114:
+ 736               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext19
+ 737               	.Ltext19:
+ 738               		.stabn	68,0,82,.LM80-.LFBB10
+ 739               	.LM80:
+ 740 01a8 9130      		cpi r25,lo8(1)
+ 741 01aa 01F0      		breq .L44
+GAS LISTING /tmp/cch68YwQ.s 			page 14
+
+
+ 742               	.L37:
+ 743               		.stabn	68,0,85,.LM81-.LFBB10
+ 744               	.LM81:
+ 745 01ac 80E0      		ldi r24,lo8(g_logger_usart_buf)
+ 746 01ae 90E0      		ldi r25,hi8(g_logger_usart_buf)
+ 747 01b0 0E94 0000 		call ringbuf_write
+ 748               		.stabn	68,0,86,.LM82-.LFBB10
+ 749               	.LM82:
+ 750 01b4 8091 C800 		lds r24,200
+ 751 01b8 85FD      		sbrc r24,5
+ 752 01ba 00C0      		rjmp .L45
+ 753               	.L36:
+ 754               	.LBB116:
+ 755               	.LBB117:
+ 756               		.stabs	"/usr/avr/include/util/atomic.h",132,0,0,.Ltext20
+ 757               	.Ltext20:
+ 758               		.stabn	68,0,70,.LM83-.LFBB10
+ 759               	.LM83:
+ 760 01bc 1FBF      		out __SREG__,r17
+ 761               		.stabn	68,0,71,.LM84-.LFBB10
+ 762               	.LM84:
+ 763               	.LBE117:
+ 764               	.LBE116:
+ 765               	.LBE111:
+ 766               	.LBB118:
+ 767               	.LBB119:
+ 768               		.stabs	"../../../avrutilslib/logger-usart.c",132,0,0,.Ltext21
+ 769               	.Ltext21:
+ 770               		.stabn	68,0,58,.LM85-.LFBB10
+ 771               	.LM85:
+ 772 01be 8091 C900 		lds r24,201
+ 773 01c2 8062      		ori r24,lo8(32)
+ 774 01c4 8093 C900 		sts 201,r24
+ 775               	/* epilogue start */
+ 776               	.LBE119:
+ 777               	.LBE118:
+ 778               		.stabn	68,0,92,.LM86-.LFBB10
+ 779               	.LM86:
+ 780 01c8 0F90      		pop __tmp_reg__
+ 781 01ca DF91      		pop r29
+ 782 01cc CF91      		pop r28
+ 783 01ce 1F91      		pop r17
+ 784 01d0 0895      		ret
+ 785               	.L34:
+ 786               	.LBB120:
+ 787               		.stabn	68,0,75,.LM87-.LFBB10
+ 788               	.LM87:
+ 789 01d2 8091 0000 		lds r24,g_logger_usart_buf+3
+ 790 01d6 8111      		cpse r24,__zero_reg__
+ 791 01d8 00C0      		rjmp .L46
+ 792 01da 20E0      		ldi r18,0
+ 793 01dc 00C0      		rjmp .L35
+ 794               	.L45:
+ 795               		.stabn	68,0,87,.LM88-.LFBB10
+ 796               	.LM88:
+ 797 01de 80E0      		ldi r24,lo8(g_logger_usart_buf)
+ 798 01e0 90E0      		ldi r25,hi8(g_logger_usart_buf)
+GAS LISTING /tmp/cch68YwQ.s 			page 15
+
+
+ 799 01e2 0E94 0000 		call ringbuf_read
+ 800 01e6 8093 CE00 		sts 206,r24
+ 801 01ea 00C0      		rjmp .L36
+ 802               	.L44:
+ 803               		.stabn	68,0,83,.LM89-.LFBB10
+ 804               	.LM89:
+ 805 01ec 64E2      		ldi r22,lo8(36)
+ 806 01ee 00C0      		rjmp .L37
+ 807               	.L46:
+ 808               		.stabn	68,0,76,.LM90-.LFBB10
+ 809               	.LM90:
+ 810 01f0 80E0      		ldi r24,lo8(g_logger_usart_buf)
+ 811 01f2 90E0      		ldi r25,hi8(g_logger_usart_buf)
+ 812 01f4 6983      		std Y+1,r22
+ 813 01f6 0E94 0000 		call ringbuf_read
+ 814 01fa 8093 CE00 		sts 206,r24
+ 815 01fe 2091 0000 		lds r18,g_logger_usart_buf+3
+ 816 0202 6981      		ldd r22,Y+1
+ 817 0204 00C0      		rjmp .L35
+ 818               	.LBE120:
+ 819               		.size	logger_usart_write, .-logger_usart_write
+ 820               		.stabs	"sreg_save:r(2,2)",64,0,74,17
+ 821               		.stabn	192,0,0,.LBB111-.LFBB10
+ 822               		.stabn	224,0,0,.LBE111-.LFBB10
+ 823               		.stabs	"sreg_save:r(2,2)",64,0,74,17
+ 824               		.stabn	192,0,0,.LBB120-.LFBB10
+ 825               		.stabn	224,0,0,.LBE120-.LFBB10
+ 826               	.Lscope10:
+ 827               		.stabs	"",36,0,0,.Lscope10-.LFBB10
+ 828               		.stabd	78,0,0
+ 829               		.stabs	"logger_usart_str_P:F(0,47)",36,0,102,logger_usart_str_P
+ 830               		.stabs	"a_str:P(0,50)=*(0,51)=k(0,2)",64,0,102,28
+ 831               	.global	logger_usart_str_P
+ 832               		.type	logger_usart_str_P, @function
+ 833               	logger_usart_str_P:
+ 834               		.stabd	46,0,0
+ 835               		.stabn	68,0,102,.LM91-.LFBB11
+ 836               	.LM91:
+ 837               	.LFBB11:
+ 838 0206 CF93      		push r28
+ 839 0208 DF93      		push r29
+ 840               	/* prologue: function */
+ 841               	/* frame size = 0 */
+ 842               	/* stack size = 2 */
+ 843               	.L__stack_usage = 2
+ 844 020a EC01      		movw r28,r24
+ 845               	.LBB121:
+ 846               		.stabn	68,0,104,.LM92-.LFBB11
+ 847               	.LM92:
+ 848 020c FC01      		movw r30,r24
+ 849               	/* #APP */
+ 850               	 ;  104 "../../../avrutilslib/logger-usart.c" 1
+ 851 020e 8491      		lpm r24, Z
+ 852               		
+ 853               	 ;  0 "" 2
+ 854               	/* #NOAPP */
+ 855               	.LBE121:
+GAS LISTING /tmp/cch68YwQ.s 			page 16
+
+
+ 856 0210 8823      		tst r24
+ 857 0212 01F0      		breq .L47
+ 858               	.L53:
+ 859               		.stabn	68,0,105,.LM93-.LFBB11
+ 860               	.LM93:
+ 861 0214 0E94 0000 		call logger_usart_write
+ 862               		.stabn	68,0,106,.LM94-.LFBB11
+ 863               	.LM94:
+ 864 0218 2196      		adiw r28,1
+ 865               	.LBB122:
+ 866               		.stabn	68,0,104,.LM95-.LFBB11
+ 867               	.LM95:
+ 868 021a FE01      		movw r30,r28
+ 869               	/* #APP */
+ 870               	 ;  104 "../../../avrutilslib/logger-usart.c" 1
+ 871 021c 8491      		lpm r24, Z
+ 872               		
+ 873               	 ;  0 "" 2
+ 874               	/* #NOAPP */
+ 875               	.LBE122:
+ 876 021e 8111      		cpse r24,__zero_reg__
+ 877 0220 00C0      		rjmp .L53
+ 878               	.L47:
+ 879               	/* epilogue start */
+ 880               		.stabn	68,0,108,.LM96-.LFBB11
+ 881               	.LM96:
+ 882 0222 DF91      		pop r29
+ 883 0224 CF91      		pop r28
+ 884 0226 0895      		ret
+ 885               		.size	logger_usart_str_P, .-logger_usart_str_P
+ 886               		.stabs	"__result:r(2,2)",64,0,104,24
+ 887               		.stabn	192,0,0,.LBB121-.LFBB11
+ 888               		.stabn	224,0,0,.LBE121-.LFBB11
+ 889               		.stabs	"__result:r(2,2)",64,0,104,24
+ 890               		.stabn	192,0,0,.LBB122-.LFBB11
+ 891               		.stabn	224,0,0,.LBE122-.LFBB11
+ 892               	.Lscope11:
+ 893               		.stabs	"",36,0,0,.Lscope11-.LFBB11
+ 894               		.stabd	78,0,0
+ 895               		.stabs	"logger_usart_hex_byte:F(0,47)",36,0,110,logger_usart_hex_byte
+ 896               		.stabs	"a_v:P(2,2)",64,0,110,28
+ 897               	.global	logger_usart_hex_byte
+ 898               		.type	logger_usart_hex_byte, @function
+ 899               	logger_usart_hex_byte:
+ 900               		.stabd	46,0,0
+ 901               		.stabn	68,0,110,.LM97-.LFBB12
+ 902               	.LM97:
+ 903               	.LFBB12:
+ 904 0228 CF93      		push r28
+ 905               	/* prologue: function */
+ 906               	/* frame size = 0 */
+ 907               	/* stack size = 1 */
+ 908               	.L__stack_usage = 1
+ 909 022a C82F      		mov r28,r24
+ 910               	.LBB123:
+ 911               		.stabn	68,0,112,.LM98-.LFBB12
+ 912               	.LM98:
+GAS LISTING /tmp/cch68YwQ.s 			page 17
+
+
+ 913 022c E82F      		mov r30,r24
+ 914 022e E295      		swap r30
+ 915 0230 EF70      		andi r30,lo8(15)
+ 916 0232 F0E0      		ldi r31,0
+ 917 0234 E050      		subi r30,lo8(-(hexstring.1764))
+ 918 0236 F040      		sbci r31,hi8(-(hexstring.1764))
+ 919               	/* #APP */
+ 920               	 ;  112 "../../../avrutilslib/logger-usart.c" 1
+ 921 0238 8491      		lpm r24, Z
+ 922               		
+ 923               	 ;  0 "" 2
+ 924               	/* #NOAPP */
+ 925               	.LBE123:
+ 926 023a 0E94 0000 		call logger_usart_write
+ 927               	.LBB124:
+ 928               		.stabn	68,0,113,.LM99-.LFBB12
+ 929               	.LM99:
+ 930 023e CF70      		andi r28,lo8(15)
+ 931 0240 EC2F      		mov r30,r28
+ 932 0242 F0E0      		ldi r31,0
+ 933 0244 E050      		subi r30,lo8(-(hexstring.1764))
+ 934 0246 F040      		sbci r31,hi8(-(hexstring.1764))
+ 935               	/* #APP */
+ 936               	 ;  113 "../../../avrutilslib/logger-usart.c" 1
+ 937 0248 8491      		lpm r24, Z
+ 938               		
+ 939               	 ;  0 "" 2
+ 940               	/* epilogue start */
+ 941               	/* #NOAPP */
+ 942               	.LBE124:
+ 943               		.stabn	68,0,114,.LM100-.LFBB12
+ 944               	.LM100:
+ 945 024a CF91      		pop r28
+ 946               		.stabn	68,0,113,.LM101-.LFBB12
+ 947               	.LM101:
+ 948 024c 0C94 0000 		jmp logger_usart_write
+ 949               		.size	logger_usart_hex_byte, .-logger_usart_hex_byte
+ 950               		.stabs	"hexstring:V(0,52)=ar(10,3);0;16;(0,51)",38,0,111,hexstring.1764
+ 951               		.stabn	192,0,0,.LFBB12-.LFBB12
+ 952               		.stabn	224,0,0,.Lscope12-.LFBB12
+ 953               	.Lscope12:
+ 954               		.stabs	"",36,0,0,.Lscope12-.LFBB12
+ 955               		.stabd	78,0,0
+ 956               		.stabs	"logger_usart_hex_word:F(0,47)",36,0,116,logger_usart_hex_word
+ 957               	.global	logger_usart_hex_word
+ 958               		.type	logger_usart_hex_word, @function
+ 959               	logger_usart_hex_word:
+ 960               		.stabd	46,0,0
+ 961               		.stabn	68,0,116,.LM102-.LFBB13
+ 962               	.LM102:
+ 963               	.LFBB13:
+ 964 0250 CF93      		push r28
+ 965               	/* prologue: function */
+ 966               	/* frame size = 0 */
+ 967               	/* stack size = 1 */
+ 968               	.L__stack_usage = 1
+ 969 0252 C82F      		mov r28,r24
+GAS LISTING /tmp/cch68YwQ.s 			page 18
+
+
+ 970               		.stabn	68,0,117,.LM103-.LFBB13
+ 971               	.LM103:
+ 972 0254 892F      		mov r24,r25
+ 973 0256 0E94 0000 		call logger_usart_hex_byte
+ 974               		.stabn	68,0,118,.LM104-.LFBB13
+ 975               	.LM104:
+ 976 025a 8C2F      		mov r24,r28
+ 977               	/* epilogue start */
+ 978               		.stabn	68,0,119,.LM105-.LFBB13
+ 979               	.LM105:
+ 980 025c CF91      		pop r28
+ 981               		.stabn	68,0,118,.LM106-.LFBB13
+ 982               	.LM106:
+ 983 025e 0C94 0000 		jmp logger_usart_hex_byte
+ 984               		.size	logger_usart_hex_word, .-logger_usart_hex_word
+ 985               	.Lscope13:
+ 986               		.stabs	"",36,0,0,.Lscope13-.LFBB13
+ 987               		.stabd	78,0,0
+ 988               		.stabs	"usb_ep_read_data:F(0,47)",36,0,110,usb_ep_read_data
+ 989               		.stabs	"size:P(2,2)",64,0,110,22
+ 990               	.global	usb_ep_read_data
+ 991               		.type	usb_ep_read_data, @function
+ 992               	usb_ep_read_data:
+ 993               		.stabd	46,0,0
+ 994               		.stabs	"../../../avrutilslib/usb/usb.c",132,0,0,.Ltext22
+ 995               	.Ltext22:
+ 996               		.stabn	68,0,110,.LM107-.LFBB14
+ 997               	.LM107:
+ 998               	.LFBB14:
+ 999               	/* prologue: function */
+ 1000               	/* frame size = 0 */
+ 1001               	/* stack size = 0 */
+ 1002               	.L__stack_usage = 0
+ 1003               		.stabn	68,0,111,.LM108-.LFBB14
+ 1004               	.LM108:
+ 1005 0262 6623      		tst r22
+ 1006 0264 01F0      		breq .L57
+ 1007 0266 FC01      		movw r30,r24
+ 1008               	.L60:
+ 1009               		.stabn	68,0,112,.LM109-.LFBB14
+ 1010               	.LM109:
+ 1011 0268 8091 F100 		lds r24,241
+ 1012 026c 8193      		st Z+,r24
+ 1013               		.stabn	68,0,113,.LM110-.LFBB14
+ 1014               	.LM110:
+ 1015 026e 6150      		subi r22,lo8(-(-1))
+ 1016               		.stabn	68,0,111,.LM111-.LFBB14
+ 1017               	.LM111:
+ 1018 0270 01F4      		brne .L60
+ 1019               	.L57:
+ 1020 0272 0895      		ret
+ 1021               		.size	usb_ep_read_data, .-usb_ep_read_data
+ 1022               	.Lscope14:
+ 1023               		.stabs	"",36,0,0,.Lscope14-.LFBB14
+ 1024               		.stabd	78,0,0
+ 1025               		.stabs	"usb_mem_read_byte:F(2,2)",36,0,161,usb_mem_read_byte
+ 1026               		.stabs	"psrc:P(12,13)",64,0,161,24
+GAS LISTING /tmp/cch68YwQ.s 			page 19
+
+
+ 1027               		.stabs	"srctype:P(2,2)",64,0,161,22
+ 1028               	.global	usb_mem_read_byte
+ 1029               		.type	usb_mem_read_byte, @function
+ 1030               	usb_mem_read_byte:
+ 1031               		.stabd	46,0,0
+ 1032               		.stabn	68,0,161,.LM112-.LFBB15
+ 1033               	.LM112:
+ 1034               	.LFBB15:
+ 1035               	/* prologue: function */
+ 1036               	/* frame size = 0 */
+ 1037               	/* stack size = 0 */
+ 1038               	.L__stack_usage = 0
+ 1039               		.stabn	68,0,162,.LM113-.LFBB15
+ 1040               	.LM113:
+ 1041 0274 6130      		cpi r22,lo8(1)
+ 1042 0276 01F0      		breq .L66
+ 1043 0278 6230      		cpi r22,lo8(2)
+ 1044 027a 01F4      		brne .L70
+ 1045               		.stabn	68,0,167,.LM114-.LFBB15
+ 1046               	.LM114:
+ 1047 027c 0C94 0000 		jmp __eerd_byte_usb162
+ 1048               	.L70:
+ 1049               		.stabn	68,0,171,.LM115-.LFBB15
+ 1050               	.LM115:
+ 1051 0280 FC01      		movw r30,r24
+ 1052 0282 8081      		ld r24,Z
+ 1053               		.stabn	68,0,173,.LM116-.LFBB15
+ 1054               	.LM116:
+ 1055 0284 0895      		ret
+ 1056               	.L66:
+ 1057               	.LBB125:
+ 1058               		.stabn	68,0,164,.LM117-.LFBB15
+ 1059               	.LM117:
+ 1060 0286 FC01      		movw r30,r24
+ 1061               	/* #APP */
+ 1062               	 ;  164 "../../../avrutilslib/usb/usb.c" 1
+ 1063 0288 8491      		lpm r24, Z
+ 1064               		
+ 1065               	 ;  0 "" 2
+ 1066               	/* #NOAPP */
+ 1067               	.LBE125:
+ 1068 028a 0895      		ret
+ 1069               		.size	usb_mem_read_byte, .-usb_mem_read_byte
+ 1070               	.Lscope15:
+ 1071               		.stabs	"",36,0,0,.Lscope15-.LFBB15
+ 1072               		.stabd	78,0,0
+ 1073               		.stabs	"usb_ep_getbufsize:F(2,2)",36,0,175,usb_ep_getbufsize
+ 1074               	.global	usb_ep_getbufsize
+ 1075               		.type	usb_ep_getbufsize, @function
+ 1076               	usb_ep_getbufsize:
+ 1077               		.stabd	46,0,0
+ 1078               		.stabn	68,0,175,.LM118-.LFBB16
+ 1079               	.LM118:
+ 1080               	.LFBB16:
+ 1081               	/* prologue: function */
+ 1082               	/* frame size = 0 */
+ 1083               	/* stack size = 0 */
+GAS LISTING /tmp/cch68YwQ.s 			page 20
+
+
+ 1084               	.L__stack_usage = 0
+ 1085               	.LBB126:
+ 1086               		.stabn	68,0,177,.LM119-.LFBB16
+ 1087               	.LM119:
+ 1088 028c E091 ED00 		lds r30,237
+ 1089 0290 E295      		swap r30
+ 1090 0292 E370      		andi r30,lo8(3)
+ 1091 0294 F0E0      		ldi r31,0
+ 1092 0296 E050      		subi r30,lo8(-(epsizemap.2058))
+ 1093 0298 F040      		sbci r31,hi8(-(epsizemap.2058))
+ 1094               	/* #APP */
+ 1095               	 ;  177 "../../../avrutilslib/usb/usb.c" 1
+ 1096 029a 8491      		lpm r24, Z
+ 1097               		
+ 1098               	 ;  0 "" 2
+ 1099               	/* #NOAPP */
+ 1100               	.LBE126:
+ 1101               		.stabn	68,0,178,.LM120-.LFBB16
+ 1102               	.LM120:
+ 1103 029c 0895      		ret
+ 1104               		.size	usb_ep_getbufsize, .-usb_ep_getbufsize
+ 1105               		.stabs	"epsizemap:V(0,53)=ar(10,3);0;3;(0,54)=k(2,2)",38,0,176,epsizemap.2058
+ 1106               		.stabn	192,0,0,.LFBB16-.LFBB16
+ 1107               		.stabn	224,0,0,.Lscope16-.LFBB16
+ 1108               	.Lscope16:
+ 1109               		.stabs	"",36,0,0,.Lscope16-.LFBB16
+ 1110               		.stabd	78,0,0
+ 1111               		.stabs	"usb_ep_send_in_data:F(2,2)",36,0,180,usb_ep_send_in_data
+ 1112               		.stabs	"psrc:P(12,13)",64,0,180,24
+ 1113               		.stabs	"size:P(2,4)",64,0,180,28
+ 1114               		.stabs	"srctype:P(2,2)",64,0,180,15
+ 1115               	.global	usb_ep_send_in_data
+ 1116               		.type	usb_ep_send_in_data, @function
+ 1117               	usb_ep_send_in_data:
+ 1118               		.stabd	46,0,0
+ 1119               		.stabn	68,0,180,.LM121-.LFBB17
+ 1120               	.LM121:
+ 1121               	.LFBB17:
+ 1122 029e EF92      		push r14
+ 1123 02a0 FF92      		push r15
+ 1124 02a2 0F93      		push r16
+ 1125 02a4 1F93      		push r17
+ 1126 02a6 CF93      		push r28
+ 1127 02a8 DF93      		push r29
+ 1128               	/* prologue: function */
+ 1129               	/* frame size = 0 */
+ 1130               	/* stack size = 6 */
+ 1131               	.L__stack_usage = 6
+ 1132 02aa EB01      		movw r28,r22
+ 1133 02ac F42E      		mov r15,r20
+ 1134               	.L76:
+ 1135               		.stabn	68,0,188,.LM122-.LFBB17
+ 1136               	.LM122:
+ 1137 02ae 2091 0000 		lds r18,g_usb_dev
+ 1138 02b2 2C71      		andi r18,lo8(28)
+ 1139 02b4 01F4      		brne .+2
+ 1140 02b6 00C0      		rjmp .L81
+GAS LISTING /tmp/cch68YwQ.s 			page 21
+
+
+ 1141               	.L96:
+ 1142               	.LBB127:
+ 1143               	.LBB128:
+ 1144               		.stabn	68,0,118,.LM123-.LFBB17
+ 1145               	.LM123:
+ 1146 02b8 2091 E800 		lds r18,232
+ 1147               	.LBE128:
+ 1148               	.LBE127:
+ 1149               		.stabn	68,0,190,.LM124-.LFBB17
+ 1150               	.LM124:
+ 1151 02bc 23FD      		sbrc r18,3
+ 1152 02be 00C0      		rjmp .L82
+ 1153               	.LBB129:
+ 1154               	.LBB130:
+ 1155               		.stabn	68,0,133,.LM125-.LFBB17
+ 1156               	.LM125:
+ 1157 02c0 2091 E800 		lds r18,232
+ 1158               	.LBE130:
+ 1159               	.LBE129:
+ 1160               		.stabn	68,0,193,.LM126-.LFBB17
+ 1161               	.LM126:
+ 1162 02c4 322F      		mov r19,r18
+ 1163 02c6 3470      		andi r19,lo8(4)
+ 1164 02c8 E32E      		mov r14,r19
+ 1165 02ca 22FD      		sbrc r18,2
+ 1166 02cc 00C0      		rjmp .L94
+ 1167               	.LBB131:
+ 1168               	.LBB132:
+ 1169               		.stabn	68,0,124,.LM127-.LFBB17
+ 1170               	.LM127:
+ 1171 02ce 2091 E800 		lds r18,232
+ 1172               	.LBE132:
+ 1173               	.LBE131:
+ 1174               		.stabn	68,0,197,.LM128-.LFBB17
+ 1175               	.LM128:
+ 1176 02d2 20FF      		sbrs r18,0
+ 1177 02d4 00C0      		rjmp .L76
+ 1178               		.stabn	68,0,202,.LM129-.LFBB17
+ 1179               	.LM129:
+ 1180 02d6 2097      		sbiw r28,0
+ 1181 02d8 01F0      		breq .L77
+ 1182               		.stabn	68,0,202,.LM130-.LFBB17
+ 1183               	.LM130:
+ 1184 02da 2091 E800 		lds r18,232
+ 1185 02de 25FD      		sbrc r18,5
+ 1186 02e0 00C0      		rjmp .L79
+ 1187 02e2 00C0      		rjmp .L97
+ 1188               	.L95:
+ 1189               		.stabn	68,0,202,.LM131-.LFBB17
+ 1190               	.LM131:
+ 1191 02e4 9091 E800 		lds r25,232
+ 1192 02e8 95FF      		sbrs r25,5
+ 1193 02ea 00C0      		rjmp .L78
+ 1194               	.LBB133:
+ 1195               		.stabn	68,0,203,.LM132-.LFBB17
+ 1196               	.LM132:
+ 1197 02ec C801      		movw r24,r16
+GAS LISTING /tmp/cch68YwQ.s 			page 22
+
+
+ 1198               	.L79:
+ 1199 02ee 8C01      		movw r16,r24
+ 1200 02f0 0F5F      		subi r16,-1
+ 1201 02f2 1F4F      		sbci r17,-1
+ 1202 02f4 6F2D      		mov r22,r15
+ 1203 02f6 0E94 0000 		call usb_mem_read_byte
+ 1204               		.stabn	68,0,204,.LM133-.LFBB17
+ 1205               	.LM133:
+ 1206 02fa 8093 F100 		sts 241,r24
+ 1207               		.stabn	68,0,205,.LM134-.LFBB17
+ 1208               	.LM134:
+ 1209 02fe 2197      		sbiw r28,1
+ 1210               	.LBE133:
+ 1211               		.stabn	68,0,202,.LM135-.LFBB17
+ 1212               	.LM135:
+ 1213 0300 2097      		sbiw r28,0
+ 1214 0302 01F4      		brne .L95
+ 1215               	.L77:
+ 1216               	.LBB134:
+ 1217               	.LBB135:
+ 1218               		.stabn	68,0,127,.LM136-.LFBB17
+ 1219               	.LM136:
+ 1220 0304 8091 E800 		lds r24,232
+ 1221 0308 8E7F      		andi r24,lo8(-2)
+ 1222 030a 8093 E800 		sts 232,r24
+ 1223               	.LBE135:
+ 1224               	.LBE134:
+ 1225               	.LBB137:
+ 1226               	.LBB138:
+ 1227               		.stabn	68,0,130,.LM137-.LFBB17
+ 1228               	.LM137:
+ 1229 030e 8091 E800 		lds r24,232
+ 1230 0312 8F77      		andi r24,lo8(127)
+ 1231 0314 8093 E800 		sts 232,r24
+ 1232               	.LBE138:
+ 1233               	.LBE137:
+ 1234               		.stabn	68,0,217,.LM138-.LFBB17
+ 1235               	.LM138:
+ 1236 0318 8E2D      		mov r24,r14
+ 1237               	/* epilogue start */
+ 1238 031a DF91      		pop r29
+ 1239 031c CF91      		pop r28
+ 1240 031e 1F91      		pop r17
+ 1241 0320 0F91      		pop r16
+ 1242 0322 FF90      		pop r15
+ 1243 0324 EF90      		pop r14
+ 1244 0326 0895      		ret
+ 1245               	.L97:
+ 1246               		.stabn	68,0,202,.LM139-.LFBB17
+ 1247               	.LM139:
+ 1248 0328 8C01      		movw r16,r24
+ 1249               	.L78:
+ 1250               	.LBB140:
+ 1251               	.LBB136:
+ 1252               		.stabn	68,0,127,.LM140-.LFBB17
+ 1253               	.LM140:
+ 1254 032a 8091 E800 		lds r24,232
+GAS LISTING /tmp/cch68YwQ.s 			page 23
+
+
+ 1255 032e 8E7F      		andi r24,lo8(-2)
+ 1256 0330 8093 E800 		sts 232,r24
+ 1257               	.LBE136:
+ 1258               	.LBE140:
+ 1259               	.LBB141:
+ 1260               	.LBB139:
+ 1261               		.stabn	68,0,130,.LM141-.LFBB17
+ 1262               	.LM141:
+ 1263 0334 8091 E800 		lds r24,232
+ 1264 0338 8F77      		andi r24,lo8(127)
+ 1265 033a 8093 E800 		sts 232,r24
+ 1266 033e C801      		movw r24,r16
+ 1267               	.LBE139:
+ 1268               	.LBE141:
+ 1269               		.stabn	68,0,188,.LM142-.LFBB17
+ 1270               	.LM142:
+ 1271 0340 2091 0000 		lds r18,g_usb_dev
+ 1272 0344 2C71      		andi r18,lo8(28)
+ 1273 0346 01F0      		breq .+2
+ 1274 0348 00C0      		rjmp .L96
+ 1275               	.L81:
+ 1276               		.stabn	68,0,189,.LM143-.LFBB17
+ 1277               	.LM143:
+ 1278 034a 83E0      		ldi r24,lo8(3)
+ 1279 034c E82E      		mov r14,r24
+ 1280               		.stabn	68,0,217,.LM144-.LFBB17
+ 1281               	.LM144:
+ 1282 034e 8E2D      		mov r24,r14
+ 1283               	/* epilogue start */
+ 1284 0350 DF91      		pop r29
+ 1285 0352 CF91      		pop r28
+ 1286 0354 1F91      		pop r17
+ 1287 0356 0F91      		pop r16
+ 1288 0358 FF90      		pop r15
+ 1289 035a EF90      		pop r14
+ 1290 035c 0895      		ret
+ 1291               	.L94:
+ 1292               	.LBB142:
+ 1293               	.LBB143:
+ 1294               		.stabn	68,0,136,.LM145-.LFBB17
+ 1295               	.LM145:
+ 1296 035e 8091 E800 		lds r24,232
+ 1297 0362 8B7F      		andi r24,lo8(-5)
+ 1298 0364 8093 E800 		sts 232,r24
+ 1299               	.LBE143:
+ 1300               	.LBE142:
+ 1301               		.stabn	68,0,196,.LM146-.LFBB17
+ 1302               	.LM146:
+ 1303 0368 92E0      		ldi r25,lo8(2)
+ 1304 036a E92E      		mov r14,r25
+ 1305               		.stabn	68,0,217,.LM147-.LFBB17
+ 1306               	.LM147:
+ 1307 036c 8E2D      		mov r24,r14
+ 1308               	/* epilogue start */
+ 1309 036e DF91      		pop r29
+ 1310 0370 CF91      		pop r28
+ 1311 0372 1F91      		pop r17
+GAS LISTING /tmp/cch68YwQ.s 			page 24
+
+
+ 1312 0374 0F91      		pop r16
+ 1313 0376 FF90      		pop r15
+ 1314 0378 EF90      		pop r14
+ 1315 037a 0895      		ret
+ 1316               	.L82:
+ 1317               		.stabn	68,0,192,.LM148-.LFBB17
+ 1318               	.LM148:
+ 1319 037c EE24      		clr r14
+ 1320 037e E394      		inc r14
+ 1321               		.stabn	68,0,217,.LM149-.LFBB17
+ 1322               	.LM149:
+ 1323 0380 8E2D      		mov r24,r14
+ 1324               	/* epilogue start */
+ 1325 0382 DF91      		pop r29
+ 1326 0384 CF91      		pop r28
+ 1327 0386 1F91      		pop r17
+ 1328 0388 0F91      		pop r16
+ 1329 038a FF90      		pop r15
+ 1330 038c EF90      		pop r14
+ 1331 038e 0895      		ret
+ 1332               		.size	usb_ep_send_in_data, .-usb_ep_send_in_data
+ 1333               		.stabs	"d:r(2,2)",64,0,203,24
+ 1334               		.stabn	192,0,0,.LBB133-.LFBB17
+ 1335               		.stabn	224,0,0,.LBE133-.LFBB17
+ 1336               	.Lscope17:
+ 1337               		.stabs	"",36,0,0,.Lscope17-.LFBB17
+ 1338               		.stabd	78,0,0
+ 1339               		.stabs	"usb_ep_send_control_data:F(2,2)",36,0,219,usb_ep_send_control_data
+ 1340               		.stabs	"psrc:P(12,13)",64,0,219,28
+ 1341               		.stabs	"size:P(2,4)",64,0,219,12
+ 1342               		.stabs	"srctype:P(2,2)",64,0,219,10
+ 1343               		.stabs	"reqsize:P(2,4)",64,0,219,14
+ 1344               	.global	usb_ep_send_control_data
+ 1345               		.type	usb_ep_send_control_data, @function
+ 1346               	usb_ep_send_control_data:
+ 1347               		.stabd	46,0,0
+ 1348               		.stabn	68,0,219,.LM150-.LFBB18
+ 1349               	.LM150:
+ 1350               	.LFBB18:
+ 1351 0390 AF92      		push r10
+ 1352 0392 BF92      		push r11
+ 1353 0394 CF92      		push r12
+ 1354 0396 DF92      		push r13
+ 1355 0398 EF92      		push r14
+ 1356 039a FF92      		push r15
+ 1357 039c 0F93      		push r16
+ 1358 039e 1F93      		push r17
+ 1359 03a0 CF93      		push r28
+ 1360 03a2 DF93      		push r29
+ 1361               	/* prologue: function */
+ 1362               	/* frame size = 0 */
+ 1363               	/* stack size = 10 */
+ 1364               	.L__stack_usage = 10
+ 1365 03a4 EC01      		movw r28,r24
+ 1366 03a6 6B01      		movw r12,r22
+ 1367 03a8 A42E      		mov r10,r20
+ 1368 03aa 7901      		movw r14,r18
+GAS LISTING /tmp/cch68YwQ.s 			page 25
+
+
+ 1369               		.stabn	68,0,220,.LM151-.LFBB18
+ 1370               	.LM151:
+ 1371 03ac 0E94 0000 		call usb_ep_getbufsize
+ 1372 03b0 B82E      		mov r11,r24
+ 1373               		.stabn	68,0,222,.LM152-.LFBB18
+ 1374               	.LM152:
+ 1375 03b2 8701      		movw r16,r14
+ 1376 03b4 CE14      		cp r12,r14
+ 1377 03b6 DF04      		cpc r13,r15
+ 1378 03b8 00F4      		brsh .L106
+ 1379 03ba 8601      		movw r16,r12
+ 1380               	.L106:
+ 1381               	.LBB144:
+ 1382               		.stabn	68,0,231,.LM153-.LFBB18
+ 1383               	.LM153:
+ 1384 03bc 8091 0000 		lds r24,g_usb_dev
+ 1385 03c0 8C71      		andi r24,lo8(28)
+ 1386 03c2 01F0      		breq .L112
+ 1387               	.L101:
+ 1388               	.LBB145:
+ 1389               	.LBB146:
+ 1390               		.stabn	68,0,118,.LM154-.LFBB18
+ 1391               	.LM154:
+ 1392 03c4 8091 E800 		lds r24,232
+ 1393               	.LBE146:
+ 1394               	.LBE145:
+ 1395               		.stabn	68,0,233,.LM155-.LFBB18
+ 1396               	.LM155:
+ 1397 03c8 83FD      		sbrc r24,3
+ 1398 03ca 00C0      		rjmp .L113
+ 1399               	.LBB147:
+ 1400               	.LBB148:
+ 1401               		.stabn	68,0,133,.LM156-.LFBB18
+ 1402               	.LM156:
+ 1403 03cc 9091 E800 		lds r25,232
+ 1404               	.LBE148:
+ 1405               	.LBE147:
+ 1406               		.stabn	68,0,236,.LM157-.LFBB18
+ 1407               	.LM157:
+ 1408 03d0 892F      		mov r24,r25
+ 1409 03d2 8470      		andi r24,lo8(4)
+ 1410 03d4 C82E      		mov r12,r24
+ 1411 03d6 92FD      		sbrc r25,2
+ 1412 03d8 00C0      		rjmp .L135
+ 1413               	.LBB149:
+ 1414               	.LBB150:
+ 1415               		.stabn	68,0,124,.LM158-.LFBB18
+ 1416               	.LM158:
+ 1417 03da 9091 E800 		lds r25,232
+ 1418               	.LBE150:
+ 1419               	.LBE149:
+ 1420               		.stabn	68,0,240,.LM159-.LFBB18
+ 1421               	.LM159:
+ 1422 03de 90FF      		sbrs r25,0
+ 1423 03e0 00C0      		rjmp .L106
+ 1424               		.stabn	68,0,245,.LM160-.LFBB18
+ 1425               	.LM160:
+GAS LISTING /tmp/cch68YwQ.s 			page 26
+
+
+ 1426 03e2 D090 F200 		lds r13,242
+ 1427               		.stabn	68,0,246,.LM161-.LFBB18
+ 1428               	.LM161:
+ 1429 03e6 0115      		cp r16,__zero_reg__
+ 1430 03e8 1105      		cpc r17,__zero_reg__
+ 1431 03ea 01F4      		brne .L134
+ 1432 03ec 00C0      		rjmp .L107
+ 1433               	.L136:
+ 1434 03ee CE01      		movw r24,r28
+ 1435               	.LBB151:
+ 1436               		.stabn	68,0,247,.LM162-.LFBB18
+ 1437               	.LM162:
+ 1438 03f0 2196      		adiw r28,1
+ 1439 03f2 6A2D      		mov r22,r10
+ 1440 03f4 0E94 0000 		call usb_mem_read_byte
+ 1441               		.stabn	68,0,248,.LM163-.LFBB18
+ 1442               	.LM163:
+ 1443 03f8 8093 F100 		sts 241,r24
+ 1444               		.stabn	68,0,249,.LM164-.LFBB18
+ 1445               	.LM164:
+ 1446 03fc 0150      		subi r16,1
+ 1447 03fe 1109      		sbc r17,__zero_reg__
+ 1448               		.stabn	68,0,250,.LM165-.LFBB18
+ 1449               	.LM165:
+ 1450 0400 81E0      		ldi r24,1
+ 1451 0402 E81A      		sub r14,r24
+ 1452 0404 F108      		sbc r15,__zero_reg__
+ 1453               		.stabn	68,0,251,.LM166-.LFBB18
+ 1454               	.LM166:
+ 1455 0406 D394      		inc r13
+ 1456               	.LBE151:
+ 1457               		.stabn	68,0,246,.LM167-.LFBB18
+ 1458               	.LM167:
+ 1459 0408 0115      		cp r16,__zero_reg__
+ 1460 040a 1105      		cpc r17,__zero_reg__
+ 1461 040c 01F0      		breq .L107
+ 1462               	.L134:
+ 1463 040e DB14      		cp r13,r11
+ 1464 0410 00F0      		brlo .L136
+ 1465               	.LBB152:
+ 1466               	.LBB153:
+ 1467               		.stabn	68,0,127,.LM168-.LFBB18
+ 1468               	.LM168:
+ 1469 0412 8091 E800 		lds r24,232
+ 1470 0416 8E7F      		andi r24,lo8(-2)
+ 1471 0418 8093 E800 		sts 232,r24
+ 1472               	.LBE153:
+ 1473               	.LBE152:
+ 1474               		.stabn	68,0,231,.LM169-.LFBB18
+ 1475               	.LM169:
+ 1476 041c 8091 0000 		lds r24,g_usb_dev
+ 1477 0420 8C71      		andi r24,lo8(28)
+ 1478 0422 01F4      		brne .L101
+ 1479               	.L112:
+ 1480               		.stabn	68,0,232,.LM170-.LFBB18
+ 1481               	.LM170:
+ 1482 0424 33E0      		ldi r19,lo8(3)
+GAS LISTING /tmp/cch68YwQ.s 			page 27
+
+
+ 1483 0426 C32E      		mov r12,r19
+ 1484 0428 00C0      		rjmp .L129
+ 1485               	.L107:
+ 1486               	.LBB155:
+ 1487               	.LBB154:
+ 1488               		.stabn	68,0,127,.LM171-.LFBB18
+ 1489               	.LM171:
+ 1490 042a 8091 E800 		lds r24,232
+ 1491 042e 8E7F      		andi r24,lo8(-2)
+ 1492 0430 8093 E800 		sts 232,r24
+ 1493               	.LBE154:
+ 1494               	.LBE155:
+ 1495               		.stabn	68,0,256,.LM172-.LFBB18
+ 1496               	.LM172:
+ 1497 0434 DB14      		cp r13,r11
+ 1498 0436 00F0      		brlo .L111
+ 1499               		.stabn	68,0,256,.LM173-.LFBB18
+ 1500               	.LM173:
+ 1501 0438 EF28      		or r14,r15
+ 1502 043a 01F0      		breq .L111
+ 1503               		.stabn	68,0,258,.LM174-.LFBB18
+ 1504               	.LM174:
+ 1505 043c E12C      		mov r14,__zero_reg__
+ 1506 043e F12C      		mov r15,__zero_reg__
+ 1507 0440 00E0      		ldi r16,0
+ 1508 0442 10E0      		ldi r17,0
+ 1509 0444 00C0      		rjmp .L106
+ 1510               	.L117:
+ 1511               	.LBE144:
+ 1512               		.stabn	68,0,263,.LM175-.LFBB18
+ 1513               	.LM175:
+ 1514 0446 8091 0000 		lds r24,g_usb_dev
+ 1515 044a 8C71      		andi r24,lo8(28)
+ 1516 044c 01F0      		breq .L112
+ 1517               	.LBB158:
+ 1518               	.LBB159:
+ 1519               		.stabn	68,0,118,.LM176-.LFBB18
+ 1520               	.LM176:
+ 1521 044e 8091 E800 		lds r24,232
+ 1522               	.LBE159:
+ 1523               	.LBE158:
+ 1524               		.stabn	68,0,265,.LM177-.LFBB18
+ 1525               	.LM177:
+ 1526 0452 83FD      		sbrc r24,3
+ 1527 0454 00C0      		rjmp .L113
+ 1528               	.L111:
+ 1529               	.LBB160:
+ 1530               	.LBB161:
+ 1531               		.stabn	68,0,133,.LM178-.LFBB18
+ 1532               	.LM178:
+ 1533 0456 8091 E800 		lds r24,232
+ 1534               	.LBE161:
+ 1535               	.LBE160:
+ 1536               		.stabn	68,0,262,.LM179-.LFBB18
+ 1537               	.LM179:
+ 1538 045a 82FF      		sbrs r24,2
+ 1539 045c 00C0      		rjmp .L117
+GAS LISTING /tmp/cch68YwQ.s 			page 28
+
+
+ 1540               	.LBB162:
+ 1541               	.LBB163:
+ 1542               		.stabn	68,0,136,.LM180-.LFBB18
+ 1543               	.LM180:
+ 1544 045e 8091 E800 		lds r24,232
+ 1545 0462 8B7F      		andi r24,lo8(-5)
+ 1546 0464 8093 E800 		sts 232,r24
+ 1547               	.LBE163:
+ 1548               	.LBE162:
+ 1549               		.stabn	68,0,273,.LM181-.LFBB18
+ 1550               	.LM181:
+ 1551 0468 00C0      		rjmp .L129
+ 1552               	.L113:
+ 1553               	.LBB164:
+ 1554               		.stabn	68,0,235,.LM182-.LFBB18
+ 1555               	.LM182:
+ 1556 046a CC24      		clr r12
+ 1557 046c C394      		inc r12
+ 1558               	.L129:
+ 1559               	.LBE164:
+ 1560               		.stabn	68,0,274,.LM183-.LFBB18
+ 1561               	.LM183:
+ 1562 046e 8C2D      		mov r24,r12
+ 1563               	/* epilogue start */
+ 1564 0470 DF91      		pop r29
+ 1565 0472 CF91      		pop r28
+ 1566 0474 1F91      		pop r17
+ 1567 0476 0F91      		pop r16
+ 1568 0478 FF90      		pop r15
+ 1569 047a EF90      		pop r14
+ 1570 047c DF90      		pop r13
+ 1571 047e CF90      		pop r12
+ 1572 0480 BF90      		pop r11
+ 1573 0482 AF90      		pop r10
+ 1574 0484 0895      		ret
+ 1575               	.L135:
+ 1576               	.LBB165:
+ 1577               	.LBB156:
+ 1578               	.LBB157:
+ 1579               		.stabn	68,0,136,.LM184-.LFBB18
+ 1580               	.LM184:
+ 1581 0486 8091 E800 		lds r24,232
+ 1582 048a 8B7F      		andi r24,lo8(-5)
+ 1583 048c 8093 E800 		sts 232,r24
+ 1584               	.LBE157:
+ 1585               	.LBE156:
+ 1586               		.stabn	68,0,239,.LM185-.LFBB18
+ 1587               	.LM185:
+ 1588 0490 22E0      		ldi r18,lo8(2)
+ 1589 0492 C22E      		mov r12,r18
+ 1590 0494 00C0      		rjmp .L129
+ 1591               	.LBE165:
+ 1592               		.size	usb_ep_send_control_data, .-usb_ep_send_control_data
+ 1593               		.stabs	"epsize:r(2,2)",64,0,220,11
+ 1594               		.stabn	192,0,0,.LFBB18-.LFBB18
+ 1595               		.stabs	"written:r(2,2)",64,0,245,13
+ 1596               		.stabn	192,0,0,.LBB144-.LFBB18
+GAS LISTING /tmp/cch68YwQ.s 			page 29
+
+
+ 1597               		.stabs	"d:r(2,2)",64,0,247,24
+ 1598               		.stabn	192,0,0,.LBB151-.LFBB18
+ 1599               		.stabn	224,0,0,.LBE151-.LFBB18
+ 1600               		.stabn	224,0,0,.LBE144-.LFBB18
+ 1601               		.stabs	"written:r(2,2)",64,0,245,13
+ 1602               		.stabn	192,0,0,.LBB164-.LFBB18
+ 1603               		.stabn	224,0,0,.LBE164-.LFBB18
+ 1604               		.stabs	"written:r(2,2)",64,0,245,13
+ 1605               		.stabn	192,0,0,.LBB165-.LFBB18
+ 1606               		.stabn	224,0,0,.LBE165-.LFBB18
+ 1607               		.stabn	224,0,0,.Lscope18-.LFBB18
+ 1608               	.Lscope18:
+ 1609               		.stabs	"",36,0,0,.Lscope18-.LFBB18
+ 1610               		.stabd	78,0,0
+ 1611               		.stabs	"usb_ep0_get_configuration:F(0,47)",36,0,278,usb_ep0_get_configuration
+ 1612               	.global	usb_ep0_get_configuration
+ 1613               		.type	usb_ep0_get_configuration, @function
+ 1614               	usb_ep0_get_configuration:
+ 1615               		.stabd	46,0,0
+ 1616               		.stabn	68,0,278,.LM186-.LFBB19
+ 1617               	.LM186:
+ 1618               	.LFBB19:
+ 1619               	/* prologue: function */
+ 1620               	/* frame size = 0 */
+ 1621               	/* stack size = 0 */
+ 1622               	.L__stack_usage = 0
+ 1623               		.stabn	68,0,280,.LM187-.LFBB19
+ 1624               	.LM187:
+ 1625 0496 8091 0000 		lds r24,g_usb_dev
+ 1626 049a 8871      		andi r24,lo8(24)
+ 1627 049c 01F4      		brne .L139
+ 1628 049e 0895      		ret
+ 1629               	.L139:
+ 1630               	.LBB166:
+ 1631               	.LBB167:
+ 1632               		.stabn	68,0,121,.LM188-.LFBB19
+ 1633               	.LM188:
+ 1634 04a0 8091 E800 		lds r24,232
+ 1635 04a4 877F      		andi r24,lo8(-9)
+ 1636 04a6 8093 E800 		sts 232,r24
+ 1637               	.LBE167:
+ 1638               	.LBE166:
+ 1639               		.stabn	68,0,282,.LM189-.LFBB19
+ 1640               	.LM189:
+ 1641 04aa 21E0      		ldi r18,lo8(1)
+ 1642 04ac 30E0      		ldi r19,0
+ 1643 04ae 40E0      		ldi r20,0
+ 1644 04b0 61E0      		ldi r22,lo8(1)
+ 1645 04b2 70E0      		ldi r23,0
+ 1646 04b4 80E0      		ldi r24,lo8(g_usb_dev+1)
+ 1647 04b6 90E0      		ldi r25,hi8(g_usb_dev+1)
+ 1648 04b8 0C94 0000 		jmp usb_ep_send_control_data
+ 1649               		.size	usb_ep0_get_configuration, .-usb_ep0_get_configuration
+ 1650               	.Lscope19:
+ 1651               		.stabs	"",36,0,0,.Lscope19-.LFBB19
+ 1652               		.stabd	78,0,0
+ 1653               		.stabs	"usb_ep0_get_descriptor:F(0,47)",36,0,286,usb_ep0_get_descriptor
+GAS LISTING /tmp/cch68YwQ.s 			page 30
+
+
+ 1654               		.stabs	"req:P(0,55)=*(12,8)",64,0,286,14
+ 1655               	.global	usb_ep0_get_descriptor
+ 1656               		.type	usb_ep0_get_descriptor, @function
+ 1657               	usb_ep0_get_descriptor:
+ 1658               		.stabd	46,0,0
+ 1659               		.stabn	68,0,286,.LM190-.LFBB20
+ 1660               	.LM190:
+ 1661               	.LFBB20:
+ 1662 04bc EF92      		push r14
+ 1663 04be FF92      		push r15
+ 1664 04c0 0F93      		push r16
+ 1665 04c2 1F93      		push r17
+ 1666 04c4 CF93      		push r28
+ 1667 04c6 DF93      		push r29
+ 1668 04c8 1F92      		push __zero_reg__
+ 1669 04ca CDB7      		in r28,__SP_L__
+ 1670 04cc DEB7      		in r29,__SP_H__
+ 1671               	/* prologue: function */
+ 1672               	/* frame size = 1 */
+ 1673               	/* stack size = 7 */
+ 1674               	.L__stack_usage = 7
+ 1675 04ce 7C01      		movw r14,r24
+ 1676               		.stabn	68,0,288,.LM191-.LFBB20
+ 1677               	.LM191:
+ 1678 04d0 DC01      		movw r26,r24
+ 1679 04d2 1296      		adiw r26,2
+ 1680 04d4 ED91      		ld r30,X+
+ 1681 04d6 FC91      		ld r31,X
+ 1682 04d8 1397      		sbiw r26,2+1
+ 1683 04da 2F2F      		mov r18,r31
+ 1684 04dc 3327      		clr r19
+ 1685 04de 2230      		cpi r18,2
+ 1686 04e0 3105      		cpc r19,__zero_reg__
+ 1687 04e2 01F4      		brne .+2
+ 1688 04e4 00C0      		rjmp .L142
+ 1689 04e6 2330      		cpi r18,3
+ 1690 04e8 3105      		cpc r19,__zero_reg__
+ 1691 04ea 01F0      		breq .L143
+ 1692 04ec 2130      		cpi r18,1
+ 1693 04ee 3105      		cpc r19,__zero_reg__
+ 1694 04f0 01F0      		breq .L151
+ 1695               	.L140:
+ 1696               	/* epilogue start */
+ 1697               		.stabn	68,0,334,.LM192-.LFBB20
+ 1698               	.LM192:
+ 1699 04f2 0F90      		pop __tmp_reg__
+ 1700 04f4 DF91      		pop r29
+ 1701 04f6 CF91      		pop r28
+ 1702 04f8 1F91      		pop r17
+ 1703 04fa 0F91      		pop r16
+ 1704 04fc FF90      		pop r15
+ 1705 04fe EF90      		pop r14
+ 1706 0500 0895      		ret
+ 1707               	.L151:
+ 1708               	.LBB168:
+ 1709               	.LBB169:
+ 1710               		.stabn	68,0,121,.LM193-.LFBB20
+GAS LISTING /tmp/cch68YwQ.s 			page 31
+
+
+ 1711               	.LM193:
+ 1712 0502 8091 E800 		lds r24,232
+ 1713 0506 877F      		andi r24,lo8(-9)
+ 1714 0508 8093 E800 		sts 232,r24
+ 1715               	.LBE169:
+ 1716               	.LBE168:
+ 1717               		.stabn	68,0,292,.LM194-.LFBB20
+ 1718               	.LM194:
+ 1719 050c 1696      		adiw r26,6
+ 1720 050e 2D91      		ld r18,X+
+ 1721 0510 3C91      		ld r19,X
+ 1722 0512 1797      		sbiw r26,6+1
+ 1723 0514 4091 0000 		lds r20,g_usb_dev+10
+ 1724 0518 62E1      		ldi r22,lo8(18)
+ 1725 051a 70E0      		ldi r23,0
+ 1726 051c 8091 0000 		lds r24,g_usb_dev+2
+ 1727 0520 9091 0000 		lds r25,g_usb_dev+2+1
+ 1728               	.L150:
+ 1729               	/* epilogue start */
+ 1730               		.stabn	68,0,334,.LM195-.LFBB20
+ 1731               	.LM195:
+ 1732 0524 0F90      		pop __tmp_reg__
+ 1733 0526 DF91      		pop r29
+ 1734 0528 CF91      		pop r28
+ 1735 052a 1F91      		pop r17
+ 1736 052c 0F91      		pop r16
+ 1737 052e FF90      		pop r15
+ 1738 0530 EF90      		pop r14
+ 1739               	.LBB170:
+ 1740               	.LBB171:
+ 1741               		.stabn	68,0,326,.LM196-.LFBB20
+ 1742               	.LM196:
+ 1743 0532 0C94 0000 		jmp usb_ep_send_control_data
+ 1744               	.L143:
+ 1745               	.LBE171:
+ 1746               		.stabn	68,0,309,.LM197-.LFBB20
+ 1747               	.LM197:
+ 1748 0536 8091 0000 		lds r24,g_usb_dev+9
+ 1749 053a E817      		cp r30,r24
+ 1750 053c 00F4      		brsh .L140
+ 1751               	.LBB175:
+ 1752               	.LBB172:
+ 1753               	.LBB173:
+ 1754               		.stabn	68,0,121,.LM198-.LFBB20
+ 1755               	.LM198:
+ 1756 053e 8091 E800 		lds r24,232
+ 1757 0542 877F      		andi r24,lo8(-9)
+ 1758 0544 8093 E800 		sts 232,r24
+ 1759               	.LBE173:
+ 1760               	.LBE172:
+ 1761               		.stabn	68,0,313,.LM199-.LFBB20
+ 1762               	.LM199:
+ 1763 0548 4091 0000 		lds r20,g_usb_dev+10
+ 1764 054c 4130      		cpi r20,lo8(1)
+ 1765 054e 01F4      		brne .+2
+ 1766 0550 00C0      		rjmp .L146
+ 1767 0552 4230      		cpi r20,lo8(2)
+GAS LISTING /tmp/cch68YwQ.s 			page 32
+
+
+ 1768 0554 01F4      		brne .L152
+ 1769               		.stabn	68,0,319,.LM200-.LFBB20
+ 1770               	.LM200:
+ 1771 0556 FF27      		clr r31
+ 1772 0558 EE0F      		lsl r30
+ 1773 055a FF1F      		rol r31
+ 1774 055c 8091 0000 		lds r24,g_usb_dev+7
+ 1775 0560 9091 0000 		lds r25,g_usb_dev+7+1
+ 1776 0564 8E0F      		add r24,r30
+ 1777 0566 9F1F      		adc r25,r31
+ 1778 0568 4983      		std Y+1,r20
+ 1779 056a 0E94 0000 		call __eerd_word_usb162
+ 1780 056e 8C01      		movw r16,r24
+ 1781               		.stabn	68,0,320,.LM201-.LFBB20
+ 1782               	.LM201:
+ 1783 0570 4981      		ldd r20,Y+1
+ 1784               	.L148:
+ 1785               		.stabn	68,0,326,.LM202-.LFBB20
+ 1786               	.LM202:
+ 1787 0572 642F      		mov r22,r20
+ 1788 0574 C801      		movw r24,r16
+ 1789 0576 4983      		std Y+1,r20
+ 1790 0578 0E94 0000 		call usb_mem_read_byte
+ 1791 057c D701      		movw r26,r14
+ 1792 057e 1696      		adiw r26,6
+ 1793 0580 2D91      		ld r18,X+
+ 1794 0582 3C91      		ld r19,X
+ 1795 0584 1797      		sbiw r26,6+1
+ 1796 0586 682F      		mov r22,r24
+ 1797 0588 70E0      		ldi r23,0
+ 1798 058a 4981      		ldd r20,Y+1
+ 1799 058c C801      		movw r24,r16
+ 1800 058e 00C0      		rjmp .L150
+ 1801               	.L142:
+ 1802               	.LBE175:
+ 1803               	.LBE170:
+ 1804               	.LBB177:
+ 1805               		.stabn	68,0,299,.LM203-.LFBB20
+ 1806               	.LM203:
+ 1807 0590 E111      		cpse r30,__zero_reg__
+ 1808 0592 00C0      		rjmp .L140
+ 1809               	.LBB178:
+ 1810               	.LBB179:
+ 1811               		.stabn	68,0,121,.LM204-.LFBB20
+ 1812               	.LM204:
+ 1813 0594 8091 E800 		lds r24,232
+ 1814 0598 877F      		andi r24,lo8(-9)
+ 1815 059a 8093 E800 		sts 232,r24
+ 1816               	.LBE179:
+ 1817               	.LBE178:
+ 1818               		.stabn	68,0,301,.LM205-.LFBB20
+ 1819               	.LM205:
+ 1820 059e F701      		movw r30,r14
+ 1821 05a0 2681      		ldd r18,Z+6
+ 1822 05a2 3781      		ldd r19,Z+7
+ 1823 05a4 6091 0000 		lds r22,g_usb_dev+6
+ 1824 05a8 70E0      		ldi r23,0
+GAS LISTING /tmp/cch68YwQ.s 			page 33
+
+
+ 1825 05aa 4091 0000 		lds r20,g_usb_dev+10
+ 1826 05ae 8091 0000 		lds r24,g_usb_dev+4
+ 1827 05b2 9091 0000 		lds r25,g_usb_dev+4+1
+ 1828 05b6 00C0      		rjmp .L150
+ 1829               	.L152:
+ 1830               	.LBE177:
+ 1831               	.LBB180:
+ 1832               	.LBB176:
+ 1833               		.stabn	68,0,323,.LM206-.LFBB20
+ 1834               	.LM206:
+ 1835 05b8 FF27      		clr r31
+ 1836 05ba EE0F      		lsl r30
+ 1837 05bc FF1F      		rol r31
+ 1838 05be A091 0000 		lds r26,g_usb_dev+7
+ 1839 05c2 B091 0000 		lds r27,g_usb_dev+7+1
+ 1840 05c6 AE0F      		add r26,r30
+ 1841 05c8 BF1F      		adc r27,r31
+ 1842 05ca 0D91      		ld r16,X+
+ 1843 05cc 1C91      		ld r17,X
+ 1844               		.stabn	68,0,324,.LM207-.LFBB20
+ 1845               	.LM207:
+ 1846 05ce 00C0      		rjmp .L148
+ 1847               	.L146:
+ 1848               	.LBB174:
+ 1849               		.stabn	68,0,315,.LM208-.LFBB20
+ 1850               	.LM208:
+ 1851 05d0 FF27      		clr r31
+ 1852 05d2 EE0F      		lsl r30
+ 1853 05d4 FF1F      		rol r31
+ 1854 05d6 8091 0000 		lds r24,g_usb_dev+7
+ 1855 05da 9091 0000 		lds r25,g_usb_dev+7+1
+ 1856 05de 8E0F      		add r24,r30
+ 1857 05e0 9F1F      		adc r25,r31
+ 1858               	.LBE174:
+ 1859 05e2 FC01      		movw r30,r24
+ 1860               	/* #APP */
+ 1861               	 ;  315 "../../../avrutilslib/usb/usb.c" 1
+ 1862 05e4 0591      		lpm r16, Z+
+ 1863 05e6 1491      		lpm r17, Z
+ 1864               		
+ 1865               	 ;  0 "" 2
+ 1866               		.stabn	68,0,316,.LM209-.LFBB20
+ 1867               	.LM209:
+ 1868               	/* #NOAPP */
+ 1869 05e8 00C0      		rjmp .L148
+ 1870               	.LBE176:
+ 1871               	.LBE180:
+ 1872               		.size	usb_ep0_get_descriptor, .-usb_ep0_get_descriptor
+ 1873               		.stabs	"paddr:r(0,56)=*(0,57)=k(12,7)",64,0,310,16
+ 1874               		.stabn	192,0,0,.LBB171-.LFBB20
+ 1875               		.stabs	"__addr16:r(2,4)",64,0,315,24
+ 1876               		.stabn	192,0,0,.LBB174-.LFBB20
+ 1877               		.stabn	224,0,0,.LBE174-.LFBB20
+ 1878               		.stabn	224,0,0,.LBE171-.LFBB20
+ 1879               		.stabs	"paddr:r(0,56)",64,0,310,16
+ 1880               		.stabn	192,0,0,.LBB175-.LFBB20
+ 1881               		.stabn	224,0,0,.LBE175-.LFBB20
+GAS LISTING /tmp/cch68YwQ.s 			page 34
+
+
+ 1882               		.stabs	"paddr:r(0,56)",64,0,310,16
+ 1883               		.stabn	192,0,0,.LBB176-.LFBB20
+ 1884               		.stabn	224,0,0,.LBE176-.LFBB20
+ 1885               	.Lscope20:
+ 1886               		.stabs	"",36,0,0,.Lscope20-.LFBB20
+ 1887               		.stabd	78,0,0
+ 1888               		.stabs	"usb_ep0_set_address:F(0,47)",36,0,336,usb_ep0_set_address
+ 1889               		.stabs	"req:P(0,55)",64,0,336,24
+ 1890               	.global	usb_ep0_set_address
+ 1891               		.type	usb_ep0_set_address, @function
+ 1892               	usb_ep0_set_address:
+ 1893               		.stabd	46,0,0
+ 1894               		.stabn	68,0,336,.LM210-.LFBB21
+ 1895               	.LM210:
+ 1896               	.LFBB21:
+ 1897 05ea CF93      		push r28
+ 1898               	/* prologue: function */
+ 1899               	/* frame size = 0 */
+ 1900               	/* stack size = 1 */
+ 1901               	.L__stack_usage = 1
+ 1902               		.stabn	68,0,339,.LM211-.LFBB21
+ 1903               	.LM211:
+ 1904 05ec 2091 0000 		lds r18,g_usb_dev
+ 1905 05f0 2C70      		andi r18,lo8(12)
+ 1906 05f2 01F4      		brne .L159
+ 1907               	/* epilogue start */
+ 1908               		.stabn	68,0,351,.LM212-.LFBB21
+ 1909               	.LM212:
+ 1910 05f4 CF91      		pop r28
+ 1911 05f6 0895      		ret
+ 1912               	.L159:
+ 1913               	.LBB181:
+ 1914               		.stabn	68,0,340,.LM213-.LFBB21
+ 1915               	.LM213:
+ 1916 05f8 FC01      		movw r30,r24
+ 1917 05fa C281      		ldd r28,Z+2
+ 1918 05fc CF77      		andi r28,lo8(127)
+ 1919               	.LBB182:
+ 1920               	.LBB183:
+ 1921               		.stabn	68,0,121,.LM214-.LFBB21
+ 1922               	.LM214:
+ 1923 05fe 8091 E800 		lds r24,232
+ 1924 0602 877F      		andi r24,lo8(-9)
+ 1925 0604 8093 E800 		sts 232,r24
+ 1926               	.LBE183:
+ 1927               	.LBE182:
+ 1928               		.stabn	68,0,342,.LM215-.LFBB21
+ 1929               	.LM215:
+ 1930 0608 C093 E300 		sts 227,r28
+ 1931               		.stabn	68,0,343,.LM216-.LFBB21
+ 1932               	.LM216:
+ 1933 060c 0E94 0000 		call usb_ep_send_zlp
+ 1934               		.stabn	68,0,344,.LM217-.LFBB21
+ 1935               	.LM217:
+ 1936 0610 8091 E300 		lds r24,227
+ 1937 0614 8068      		ori r24,lo8(-128)
+ 1938 0616 8093 E300 		sts 227,r24
+GAS LISTING /tmp/cch68YwQ.s 			page 35
+
+
+ 1939               		.stabn	68,0,345,.LM218-.LFBB21
+ 1940               	.LM218:
+ 1941 061a C111      		cpse r28,__zero_reg__
+ 1942 061c 00C0      		rjmp .L160
+ 1943               		.stabn	68,0,348,.LM219-.LFBB21
+ 1944               	.LM219:
+ 1945 061e 84E0      		ldi r24,lo8(4)
+ 1946 0620 8093 0000 		sts g_usb_dev,r24
+ 1947               	/* epilogue start */
+ 1948               	.LBE181:
+ 1949               		.stabn	68,0,351,.LM220-.LFBB21
+ 1950               	.LM220:
+ 1951 0624 CF91      		pop r28
+ 1952 0626 0895      		ret
+ 1953               	.L160:
+ 1954               	.LBB184:
+ 1955               		.stabn	68,0,346,.LM221-.LFBB21
+ 1956               	.LM221:
+ 1957 0628 88E0      		ldi r24,lo8(8)
+ 1958 062a 8093 0000 		sts g_usb_dev,r24
+ 1959               	/* epilogue start */
+ 1960               	.LBE184:
+ 1961               		.stabn	68,0,351,.LM222-.LFBB21
+ 1962               	.LM222:
+ 1963 062e CF91      		pop r28
+ 1964 0630 0895      		ret
+ 1965               		.size	usb_ep0_set_address, .-usb_ep0_set_address
+ 1966               		.stabs	"addr:r(2,2)",64,0,340,28
+ 1967               		.stabn	192,0,0,.LBB181-.LFBB21
+ 1968               		.stabn	224,0,0,.LBE181-.LFBB21
+ 1969               		.stabs	"addr:r(2,2)",64,0,340,28
+ 1970               		.stabn	192,0,0,.LBB184-.LFBB21
+ 1971               		.stabn	224,0,0,.LBE184-.LFBB21
+ 1972               	.Lscope21:
+ 1973               		.stabs	"",36,0,0,.Lscope21-.LFBB21
+ 1974               		.stabd	78,0,0
+ 1975               		.stabs	"usb_ep_setup:F(0,47)",36,0,468,usb_ep_setup
+ 1976               		.stabs	"epaddr:P(2,2)",64,0,468,24
+ 1977               		.stabs	"epattr:P(2,2)",64,0,468,22
+ 1978               		.stabs	"epsize:P(2,2)",64,0,468,20
+ 1979               		.stabs	"epbanks:P(2,2)",64,0,468,18
+ 1980               	.global	usb_ep_setup
+ 1981               		.type	usb_ep_setup, @function
+ 1982               	usb_ep_setup:
+ 1983               		.stabd	46,0,0
+ 1984               		.stabn	68,0,468,.LM223-.LFBB22
+ 1985               	.LM223:
+ 1986               	.LFBB22:
+ 1987               	/* prologue: function */
+ 1988               	/* frame size = 0 */
+ 1989               	/* stack size = 0 */
+ 1990               	.L__stack_usage = 0
+ 1991 0632 4850      		subi r20,lo8(-(-8))
+ 1992 0634 4931      		cpi r20,lo8(25)
+ 1993 0636 00F4      		brsh .L163
+ 1994 0638 A42F      		mov r26,r20
+ 1995 063a B0E0      		ldi r27,0
+GAS LISTING /tmp/cch68YwQ.s 			page 36
+
+
+ 1996 063c A050      		subi r26,lo8(-(CSWTCH.60))
+ 1997 063e B040      		sbci r27,hi8(-(CSWTCH.60))
+ 1998 0640 3C91      		ld r19,X
+ 1999               	.L162:
+ 2000               		.stabn	68,0,480,.LM224-.LFBB22
+ 2001               	.LM224:
+ 2002 0642 982F      		mov r25,r24
+ 2003 0644 9770      		andi r25,lo8(7)
+ 2004 0646 9093 E900 		sts 233,r25
+ 2005               		.stabn	68,0,481,.LM225-.LFBB22
+ 2006               	.LM225:
+ 2007 064a 9091 EB00 		lds r25,235
+ 2008 064e 9160      		ori r25,lo8(1)
+ 2009 0650 9093 EB00 		sts 235,r25
+ 2010               		.stabn	68,0,482,.LM226-.LFBB22
+ 2011               	.LM226:
+ 2012 0654 6295      		swap r22
+ 2013 0656 660F      		lsl r22
+ 2014 0658 660F      		lsl r22
+ 2015 065a 607C      		andi r22,lo8(-64)
+ 2016 065c 881F      		rol r24
+ 2017 065e 8827      		clr r24
+ 2018 0660 881F      		rol r24
+ 2019 0662 682B      		or r22,r24
+ 2020 0664 6093 EC00 		sts 236,r22
+ 2021               		.stabn	68,0,483,.LM227-.LFBB22
+ 2022               	.LM227:
+ 2023 0668 E22F      		mov r30,r18
+ 2024 066a E170      		andi r30,1
+ 2025 066c F0E0      		ldi r31,0
+ 2026 066e EE0F      		lsl r30
+ 2027 0670 FF1F      		rol r31
+ 2028 0672 EE0F      		lsl r30
+ 2029 0674 FF1F      		rol r31
+ 2030 0676 E32B      		or r30,r19
+ 2031 0678 E093 ED00 		sts 237,r30
+ 2032               		.stabn	68,0,500,.LM228-.LFBB22
+ 2033               	.LM228:
+ 2034 067c 1092 F000 		sts 240,__zero_reg__
+ 2035 0680 0895      		ret
+ 2036               	.L163:
+ 2037               		.stabn	68,0,468,.LM229-.LFBB22
+ 2038               	.LM229:
+ 2039 0682 32E3      		ldi r19,lo8(50)
+ 2040 0684 00C0      		rjmp .L162
+ 2041               		.size	usb_ep_setup, .-usb_ep_setup
+ 2042               	.Lscope22:
+ 2043               		.stabs	"",36,0,0,.Lscope22-.LFBB22
+ 2044               		.stabd	78,0,0
+ 2045               		.stabs	"usb_ep_setup_control:F(0,47)",36,0,507,usb_ep_setup_control
+ 2046               	.global	usb_ep_setup_control
+ 2047               		.type	usb_ep_setup_control, @function
+ 2048               	usb_ep_setup_control:
+ 2049               		.stabd	46,0,0
+ 2050               		.stabn	68,0,507,.LM230-.LFBB23
+ 2051               	.LM230:
+ 2052               	.LFBB23:
+GAS LISTING /tmp/cch68YwQ.s 			page 37
+
+
+ 2053               	/* prologue: function */
+ 2054               	/* frame size = 0 */
+ 2055               	/* stack size = 0 */
+ 2056               	.L__stack_usage = 0
+ 2057               		.stabn	68,0,509,.LM231-.LFBB23
+ 2058               	.LM231:
+ 2059 0686 8091 0000 		lds r24,g_usb_dev+2
+ 2060 068a 9091 0000 		lds r25,g_usb_dev+2+1
+ 2061 068e 6091 0000 		lds r22,g_usb_dev+10
+ 2062 0692 0796      		adiw r24,7
+ 2063 0694 0E94 0000 		call usb_mem_read_byte
+ 2064               		.stabn	68,0,510,.LM232-.LFBB23
+ 2065               	.LM232:
+ 2066 0698 20E0      		ldi r18,0
+ 2067 069a 482F      		mov r20,r24
+ 2068 069c 60E0      		ldi r22,0
+ 2069 069e 80E0      		ldi r24,0
+ 2070 06a0 0C94 0000 		jmp usb_ep_setup
+ 2071               		.size	usb_ep_setup_control, .-usb_ep_setup_control
+ 2072               		.stabs	"size:r(2,2)",64,0,509,24
+ 2073               		.stabn	192,0,0,.LFBB23-.LFBB23
+ 2074               		.stabn	224,0,0,.Lscope23-.LFBB23
+ 2075               	.Lscope23:
+ 2076               		.stabs	"",36,0,0,.Lscope23-.LFBB23
+ 2077               		.stabd	78,0,0
+ 2078               		.stabs	"usb_intr_endofreset:F(0,47)",36,0,513,usb_intr_endofreset
+ 2079               	.global	usb_intr_endofreset
+ 2080               		.type	usb_intr_endofreset, @function
+ 2081               	usb_intr_endofreset:
+ 2082               		.stabd	46,0,0
+ 2083               		.stabn	68,0,513,.LM233-.LFBB24
+ 2084               	.LM233:
+ 2085               	.LFBB24:
+ 2086               	/* prologue: function */
+ 2087               	/* frame size = 0 */
+ 2088               	/* stack size = 0 */
+ 2089               	.L__stack_usage = 0
+ 2090               		.stabn	68,0,514,.LM234-.LFBB24
+ 2091               	.LM234:
+ 2092 06a4 0E94 0000 		call usb_ep_setup_control
+ 2093               		.stabn	68,0,516,.LM235-.LFBB24
+ 2094               	.LM235:
+ 2095 06a8 84E0      		ldi r24,lo8(4)
+ 2096 06aa 8093 0000 		sts g_usb_dev,r24
+ 2097               		.stabn	68,0,517,.LM236-.LFBB24
+ 2098               	.LM236:
+ 2099 06ae 1092 0000 		sts g_usb_dev+1,__zero_reg__
+ 2100 06b2 0895      		ret
+ 2101               		.size	usb_intr_endofreset, .-usb_intr_endofreset
+ 2102               	.Lscope24:
+ 2103               		.stabs	"",36,0,0,.Lscope24-.LFBB24
+ 2104               		.stabd	78,0,0
+ 2105               		.stabs	"__vector_11:F(0,47)",36,0,75,__vector_11
+ 2106               	.global	__vector_11
+ 2107               		.type	__vector_11, @function
+ 2108               	__vector_11:
+ 2109               		.stabd	46,0,0
+GAS LISTING /tmp/cch68YwQ.s 			page 38
+
+
+ 2110               		.stabn	68,0,75,.LM237-.LFBB25
+ 2111               	.LM237:
+ 2112               	.LFBB25:
+ 2113 06b4 1F92      		push r1
+ 2114 06b6 0F92      		push r0
+ 2115 06b8 0FB6      		in r0,__SREG__
+ 2116 06ba 0F92      		push r0
+ 2117 06bc 1124      		clr __zero_reg__
+ 2118 06be 1F93      		push r17
+ 2119 06c0 2F93      		push r18
+ 2120 06c2 3F93      		push r19
+ 2121 06c4 4F93      		push r20
+ 2122 06c6 5F93      		push r21
+ 2123 06c8 6F93      		push r22
+ 2124 06ca 7F93      		push r23
+ 2125 06cc 8F93      		push r24
+ 2126 06ce 9F93      		push r25
+ 2127 06d0 AF93      		push r26
+ 2128 06d2 BF93      		push r27
+ 2129 06d4 EF93      		push r30
+ 2130 06d6 FF93      		push r31
+ 2131 06d8 CF93      		push r28
+ 2132 06da DF93      		push r29
+ 2133 06dc 00D0      		rcall .
+ 2134 06de CDB7      		in r28,__SP_L__
+ 2135 06e0 DEB7      		in r29,__SP_H__
+ 2136               	/* prologue: Signal */
+ 2137               	/* frame size = 2 */
+ 2138               	/* stack size = 20 */
+ 2139               	.L__stack_usage = 20
+ 2140               		.stabn	68,0,77,.LM238-.LFBB25
+ 2141               	.LM238:
+ 2142 06e2 8091 E100 		lds r24,225
+ 2143 06e6 8A83      		std Y+2,r24
+ 2144               		.stabn	68,0,78,.LM239-.LFBB25
+ 2145               	.LM239:
+ 2146 06e8 8091 E200 		lds r24,226
+ 2147 06ec 8983      		std Y+1,r24
+ 2148               		.stabn	68,0,80,.LM240-.LFBB25
+ 2149               	.LM240:
+ 2150 06ee 1091 E900 		lds r17,233
+ 2151               		.stabn	68,0,82,.LM241-.LFBB25
+ 2152               	.LM241:
+ 2153 06f2 8A81      		ldd r24,Y+2
+ 2154               		.stabn	68,0,85,.LM242-.LFBB25
+ 2155               	.LM242:
+ 2156 06f4 8A81      		ldd r24,Y+2
+ 2157               		.stabn	68,0,88,.LM243-.LFBB25
+ 2158               	.LM243:
+ 2159 06f6 8A81      		ldd r24,Y+2
+ 2160               		.stabn	68,0,91,.LM244-.LFBB25
+ 2161               	.LM244:
+ 2162 06f8 8A81      		ldd r24,Y+2
+ 2163 06fa 83FF      		sbrs r24,3
+ 2164 06fc 00C0      		rjmp .L167
+ 2165               		.stabn	68,0,93,.LM245-.LFBB25
+ 2166               	.LM245:
+GAS LISTING /tmp/cch68YwQ.s 			page 39
+
+
+ 2167 06fe 8981      		ldd r24,Y+1
+ 2168 0700 83FD      		sbrc r24,3
+ 2169 0702 00C0      		rjmp .L175
+ 2170               	.L168:
+ 2171               		.stabn	68,0,96,.LM246-.LFBB25
+ 2172               	.LM246:
+ 2173 0704 8091 E100 		lds r24,225
+ 2174 0708 877F      		andi r24,lo8(-9)
+ 2175 070a 8093 E100 		sts 225,r24
+ 2176               	.L167:
+ 2177               		.stabn	68,0,98,.LM247-.LFBB25
+ 2178               	.LM247:
+ 2179 070e 8A81      		ldd r24,Y+2
+ 2180               		.stabn	68,0,101,.LM248-.LFBB25
+ 2181               	.LM248:
+ 2182 0710 8A81      		ldd r24,Y+2
+ 2183               		.stabn	68,0,105,.LM249-.LFBB25
+ 2184               	.LM249:
+ 2185 0712 1092 E100 		sts 225,__zero_reg__
+ 2186               		.stabn	68,0,106,.LM250-.LFBB25
+ 2187               	.LM250:
+ 2188 0716 1093 E900 		sts 233,r17
+ 2189               	/* epilogue start */
+ 2190               		.stabn	68,0,107,.LM251-.LFBB25
+ 2191               	.LM251:
+ 2192 071a 0F90      		pop __tmp_reg__
+ 2193 071c 0F90      		pop __tmp_reg__
+ 2194 071e DF91      		pop r29
+ 2195 0720 CF91      		pop r28
+ 2196 0722 FF91      		pop r31
+ 2197 0724 EF91      		pop r30
+ 2198 0726 BF91      		pop r27
+ 2199 0728 AF91      		pop r26
+ 2200 072a 9F91      		pop r25
+ 2201 072c 8F91      		pop r24
+ 2202 072e 7F91      		pop r23
+ 2203 0730 6F91      		pop r22
+ 2204 0732 5F91      		pop r21
+ 2205 0734 4F91      		pop r20
+ 2206 0736 3F91      		pop r19
+ 2207 0738 2F91      		pop r18
+ 2208 073a 1F91      		pop r17
+ 2209 073c 0F90      		pop r0
+ 2210 073e 0FBE      		out __SREG__,r0
+ 2211 0740 0F90      		pop r0
+ 2212 0742 1F90      		pop r1
+ 2213 0744 1895      		reti
+ 2214               	.L175:
+ 2215               		.stabn	68,0,94,.LM252-.LFBB25
+ 2216               	.LM252:
+ 2217 0746 0E94 0000 		call usb_intr_endofreset
+ 2218 074a 00C0      		rjmp .L168
+ 2219               		.size	__vector_11, .-__vector_11
+ 2220               		.stabs	"intf:(2,2)",128,0,77,2
+ 2221               		.stabs	"inte:(2,2)",128,0,78,1
+ 2222               		.stabs	"epnum_save:r(2,2)",64,0,80,17
+ 2223               		.stabn	192,0,0,.LFBB25-.LFBB25
+GAS LISTING /tmp/cch68YwQ.s 			page 40
+
+
+ 2224               		.stabn	224,0,0,.Lscope25-.LFBB25
+ 2225               	.Lscope25:
+ 2226               		.stabs	"",36,0,0,.Lscope25-.LFBB25
+ 2227               		.stabd	78,0,0
+ 2228               		.stabs	"usb_init:F(0,47)",36,0,521,usb_init
+ 2229               		.stabs	"pdevdesc:P(12,11)",64,0,521,24
+ 2230               		.stabs	"pconfig:P(12,13)",64,0,522,22
+ 2231               		.stabs	"configsize:P(2,2)",64,0,522,20
+ 2232               		.stabs	"pstrings:P(12,15)",64,0,523,18
+ 2233               		.stabs	"numstrings:P(2,2)",64,0,523,16
+ 2234               		.stabs	"desc_dtype:P(2,2)",64,0,524,14
+ 2235               	.global	usb_init
+ 2236               		.type	usb_init, @function
+ 2237               	usb_init:
+ 2238               		.stabd	46,0,0
+ 2239               		.stabn	68,0,524,.LM253-.LFBB26
+ 2240               	.LM253:
+ 2241               	.LFBB26:
+ 2242 074c EF92      		push r14
+ 2243 074e 0F93      		push r16
+ 2244               	/* prologue: function */
+ 2245               	/* frame size = 0 */
+ 2246               	/* stack size = 2 */
+ 2247               	.L__stack_usage = 2
+ 2248               		.stabn	68,0,528,.LM254-.LFBB26
+ 2249               	.LM254:
+ 2250 0750 5BE0      		ldi r21,lo8(11)
+ 2251 0752 E0E0      		ldi r30,lo8(g_usb_dev)
+ 2252 0754 F0E0      		ldi r31,hi8(g_usb_dev)
+ 2253 0756 DF01      		movw r26,r30
+ 2254               		0:
+ 2255 0758 1D92      		st X+,__zero_reg__
+ 2256 075a 5A95      		dec r21
+ 2257 075c 01F4      		brne 0b
+ 2258               		.stabn	68,0,529,.LM255-.LFBB26
+ 2259               	.LM255:
+ 2260 075e 1092 0000 		sts g_usb_dev,__zero_reg__
+ 2261               		.stabn	68,0,531,.LM256-.LFBB26
+ 2262               	.LM256:
+ 2263 0762 9093 0000 		sts g_usb_dev+2+1,r25
+ 2264 0766 8093 0000 		sts g_usb_dev+2,r24
+ 2265               		.stabn	68,0,532,.LM257-.LFBB26
+ 2266               	.LM257:
+ 2267 076a 7093 0000 		sts g_usb_dev+4+1,r23
+ 2268 076e 6093 0000 		sts g_usb_dev+4,r22
+ 2269               		.stabn	68,0,533,.LM258-.LFBB26
+ 2270               	.LM258:
+ 2271 0772 4093 0000 		sts g_usb_dev+6,r20
+ 2272               		.stabn	68,0,534,.LM259-.LFBB26
+ 2273               	.LM259:
+ 2274 0776 3093 0000 		sts g_usb_dev+7+1,r19
+ 2275 077a 2093 0000 		sts g_usb_dev+7,r18
+ 2276               		.stabn	68,0,535,.LM260-.LFBB26
+ 2277               	.LM260:
+ 2278 077e 0093 0000 		sts g_usb_dev+9,r16
+ 2279               		.stabn	68,0,536,.LM261-.LFBB26
+ 2280               	.LM261:
+GAS LISTING /tmp/cch68YwQ.s 			page 41
+
+
+ 2281 0782 E092 0000 		sts g_usb_dev+10,r14
+ 2282               		.stabn	68,0,538,.LM262-.LFBB26
+ 2283               	.LM262:
+ 2284 0786 80E2      		ldi r24,lo8(32)
+ 2285 0788 8093 D800 		sts 216,r24
+ 2286               		.stabn	68,0,539,.LM263-.LFBB26
+ 2287               	.LM263:
+ 2288 078c 1092 FB00 		sts 251,__zero_reg__
+ 2289               		.stabn	68,0,542,.LM264-.LFBB26
+ 2290               	.LM264:
+ 2291 0790 82E0      		ldi r24,lo8(2)
+ 2292 0792 89BD      		out 0x29,r24
+ 2293               	.L178:
+ 2294               		.stabn	68,0,544,.LM265-.LFBB26
+ 2295               	.LM265:
+ 2296 0794 09B4      		in __tmp_reg__,0x29
+ 2297 0796 00FE      		sbrs __tmp_reg__,0
+ 2298 0798 00C0      		rjmp .L178
+ 2299               		.stabn	68,0,548,.LM266-.LFBB26
+ 2300               	.LM266:
+ 2301 079a 80EA      		ldi r24,lo8(-96)
+ 2302 079c 8093 D800 		sts 216,r24
+ 2303               		.stabn	68,0,549,.LM267-.LFBB26
+ 2304               	.LM267:
+ 2305 07a0 80E8      		ldi r24,lo8(-128)
+ 2306 07a2 8093 D800 		sts 216,r24
+ 2307               		.stabn	68,0,552,.LM268-.LFBB26
+ 2308               	.LM268:
+ 2309 07a6 1092 E200 		sts 226,__zero_reg__
+ 2310               		.stabn	68,0,553,.LM269-.LFBB26
+ 2311               	.LM269:
+ 2312 07aa 1092 E100 		sts 225,__zero_reg__
+ 2313               		.stabn	68,0,558,.LM270-.LFBB26
+ 2314               	.LM270:
+ 2315 07ae 89E0      		ldi r24,lo8(9)
+ 2316 07b0 8093 E200 		sts 226,r24
+ 2317               		.stabn	68,0,560,.LM271-.LFBB26
+ 2318               	.LM271:
+ 2319 07b4 1092 E000 		sts 224,__zero_reg__
+ 2320               		.stabn	68,0,562,.LM272-.LFBB26
+ 2321               	.LM272:
+ 2322 07b8 84E0      		ldi r24,lo8(4)
+ 2323 07ba 8093 0000 		sts g_usb_dev,r24
+ 2324               	/* epilogue start */
+ 2325               		.stabn	68,0,568,.LM273-.LFBB26
+ 2326               	.LM273:
+ 2327 07be 0F91      		pop r16
+ 2328 07c0 EF90      		pop r14
+ 2329 07c2 0895      		ret
+ 2330               		.size	usb_init, .-usb_init
+ 2331               	.Lscope26:
+ 2332               		.stabs	"",36,0,0,.Lscope26-.LFBB26
+ 2333               		.stabd	78,0,0
+ 2334               		.stabs	"ep1_task:F(0,47)",36,0,123,ep1_task
+ 2335               	.global	ep1_task
+ 2336               		.type	ep1_task, @function
+ 2337               	ep1_task:
+GAS LISTING /tmp/cch68YwQ.s 			page 42
+
+
+ 2338               		.stabd	46,0,0
+ 2339               		.stabs	"test-usb.c",132,0,0,.Ltext23
+ 2340               	.Ltext23:
+ 2341               		.stabn	68,0,123,.LM274-.LFBB27
+ 2342               	.LM274:
+ 2343               	.LFBB27:
+ 2344 07c4 CF93      		push r28
+ 2345 07c6 DF93      		push r29
+ 2346               	/* prologue: function */
+ 2347               	/* frame size = 0 */
+ 2348               	/* stack size = 2 */
+ 2349               	.L__stack_usage = 2
+ 2350               		.stabn	68,0,126,.LM275-.LFBB27
+ 2351               	.LM275:
+ 2352 07c8 81E0      		ldi r24,lo8(1)
+ 2353 07ca 8093 E900 		sts 233,r24
+ 2354               		.stabn	68,0,127,.LM276-.LFBB27
+ 2355               	.LM276:
+ 2356 07ce 8091 E800 		lds r24,232
+ 2357 07d2 86FF      		sbrs r24,6
+ 2358 07d4 00C0      		rjmp .L179
+ 2359               	.LBB185:
+ 2360               	.LBB186:
+ 2361               		.stabs	"../../../avrutilslib/usb/usb.c",132,0,0,.Ltext24
+ 2362               	.Ltext24:
+ 2363               		.stabn	68,0,124,.LM277-.LFBB27
+ 2364               	.LM277:
+ 2365 07d6 8091 E800 		lds r24,232
+ 2366               	.LBE186:
+ 2367               	.LBE185:
+ 2368               		.stabs	"test-usb.c",132,0,0,.Ltext25
+ 2369               	.Ltext25:
+ 2370               		.stabn	68,0,127,.LM278-.LFBB27
+ 2371               	.LM278:
+ 2372 07da 80FF      		sbrs r24,0
+ 2373 07dc 00C0      		rjmp .L179
+ 2374               		.stabn	68,0,134,.LM279-.LFBB27
+ 2375               	.LM279:
+ 2376 07de C091 0000 		lds r28,paddr.2205
+ 2377 07e2 D091 0000 		lds r29,paddr.2205+1
+ 2378 07e6 C13F      		cpi r28,-15
+ 2379 07e8 8FE3      		ldi r24,63
+ 2380 07ea D807      		cpc r29,r24
+ 2381 07ec 00F0      		brlo .L188
+ 2382               	.L181:
+ 2383               		.stabn	68,0,138,.LM280-.LFBB27
+ 2384               	.LM280:
+ 2385 07ee 8091 E800 		lds r24,232
+ 2386 07f2 8F7B      		andi r24,lo8(-65)
+ 2387 07f4 8093 E800 		sts 232,r24
+ 2388               	.L179:
+ 2389               	/* epilogue start */
+ 2390               		.stabn	68,0,140,.LM281-.LFBB27
+ 2391               	.LM281:
+ 2392 07f8 DF91      		pop r29
+ 2393 07fa CF91      		pop r28
+ 2394 07fc 0895      		ret
+GAS LISTING /tmp/cch68YwQ.s 			page 43
+
+
+ 2395               	.L188:
+ 2396               		.stabn	68,0,135,.LM282-.LFBB27
+ 2397               	.LM282:
+ 2398 07fe 41E0      		ldi r20,lo8(1)
+ 2399 0800 60E1      		ldi r22,lo8(16)
+ 2400 0802 70E0      		ldi r23,0
+ 2401 0804 CE01      		movw r24,r28
+ 2402 0806 0E94 0000 		call usb_ep_send_in_data
+ 2403               		.stabn	68,0,136,.LM283-.LFBB27
+ 2404               	.LM283:
+ 2405 080a 6096      		adiw r28,16
+ 2406 080c D093 0000 		sts paddr.2205+1,r29
+ 2407 0810 C093 0000 		sts paddr.2205,r28
+ 2408 0814 00C0      		rjmp .L181
+ 2409               		.size	ep1_task, .-ep1_task
+ 2410               		.stabs	"paddr:V(2,4)",38,0,124,paddr.2205
+ 2411               		.stabn	192,0,0,.LFBB27-.LFBB27
+ 2412               		.stabn	224,0,0,.Lscope27-.LFBB27
+ 2413               	.Lscope27:
+ 2414               		.stabs	"",36,0,0,.Lscope27-.LFBB27
+ 2415               		.stabd	78,0,0
+ 2416               		.stabs	"usb_event_set_configuration:F(0,47)",36,0,142,usb_event_set_configuration
+ 2417               	.global	usb_event_set_configuration
+ 2418               		.type	usb_event_set_configuration, @function
+ 2419               	usb_event_set_configuration:
+ 2420               		.stabd	46,0,0
+ 2421               		.stabn	68,0,142,.LM284-.LFBB28
+ 2422               	.LM284:
+ 2423               	.LFBB28:
+ 2424               	/* prologue: function */
+ 2425               	/* frame size = 0 */
+ 2426               	/* stack size = 0 */
+ 2427               	.L__stack_usage = 0
+ 2428               		.stabn	68,0,143,.LM285-.LFBB28
+ 2429               	.LM285:
+ 2430 0816 20E0      		ldi r18,0
+ 2431 0818 40E2      		ldi r20,lo8(32)
+ 2432 081a 63E0      		ldi r22,lo8(3)
+ 2433 081c 81E8      		ldi r24,lo8(-127)
+ 2434 081e 0C94 0000 		jmp usb_ep_setup
+ 2435               		.size	usb_event_set_configuration, .-usb_event_set_configuration
+ 2436               	.Lscope28:
+ 2437               		.stabs	"",36,0,0,.Lscope28-.LFBB28
+ 2438               		.stabd	78,0,0
+ 2439               		.stabs	"usb_ep0_set_configuration:F(0,47)",36,0,353,usb_ep0_set_configuration
+ 2440               		.stabs	"req:P(0,55)",64,0,353,24
+ 2441               	.global	usb_ep0_set_configuration
+ 2442               		.type	usb_ep0_set_configuration, @function
+ 2443               	usb_ep0_set_configuration:
+ 2444               		.stabd	46,0,0
+ 2445               		.stabs	"../../../avrutilslib/usb/usb.c",132,0,0,.Ltext26
+ 2446               	.Ltext26:
+ 2447               		.stabn	68,0,353,.LM286-.LFBB29
+ 2448               	.LM286:
+ 2449               	.LFBB29:
+ 2450 0822 CF93      		push r28
+ 2451               	/* prologue: function */
+GAS LISTING /tmp/cch68YwQ.s 			page 44
+
+
+ 2452               	/* frame size = 0 */
+ 2453               	/* stack size = 1 */
+ 2454               	.L__stack_usage = 1
+ 2455               		.stabn	68,0,355,.LM287-.LFBB29
+ 2456               	.LM287:
+ 2457 0824 2091 0000 		lds r18,g_usb_dev
+ 2458 0828 2871      		andi r18,lo8(24)
+ 2459 082a 01F0      		breq .L190
+ 2460               	.LBB187:
+ 2461               		.stabn	68,0,356,.LM288-.LFBB29
+ 2462               	.LM288:
+ 2463 082c FC01      		movw r30,r24
+ 2464 082e C281      		ldd r28,Z+2
+ 2465               		.stabn	68,0,357,.LM289-.LFBB29
+ 2466               	.LM289:
+ 2467 0830 C111      		cpse r28,__zero_reg__
+ 2468 0832 00C0      		rjmp .L192
+ 2469               		.stabn	68,0,358,.LM290-.LFBB29
+ 2470               	.LM290:
+ 2471 0834 88E0      		ldi r24,lo8(8)
+ 2472 0836 8093 0000 		sts g_usb_dev,r24
+ 2473               		.stabn	68,0,359,.LM291-.LFBB29
+ 2474               	.LM291:
+ 2475 083a 1092 0000 		sts g_usb_dev+1,__zero_reg__
+ 2476               	.L193:
+ 2477               	.LBB188:
+ 2478               	.LBB189:
+ 2479               		.stabn	68,0,121,.LM292-.LFBB29
+ 2480               	.LM292:
+ 2481 083e 8091 E800 		lds r24,232
+ 2482 0842 877F      		andi r24,lo8(-9)
+ 2483 0844 8093 E800 		sts 232,r24
+ 2484               	/* epilogue start */
+ 2485               	.LBE189:
+ 2486               	.LBE188:
+ 2487               	.LBE187:
+ 2488               		.stabn	68,0,378,.LM293-.LFBB29
+ 2489               	.LM293:
+ 2490 0848 CF91      		pop r28
+ 2491               	.LBB192:
+ 2492               		.stabn	68,0,376,.LM294-.LFBB29
+ 2493               	.LM294:
+ 2494 084a 0C94 0000 		jmp usb_ep_send_zlp
+ 2495               	.L192:
+ 2496               	.LBB190:
+ 2497               		.stabn	68,0,362,.LM295-.LFBB29
+ 2498               	.LM295:
+ 2499 084e 8091 0000 		lds r24,g_usb_dev+4
+ 2500 0852 9091 0000 		lds r25,g_usb_dev+4+1
+ 2501 0856 6091 0000 		lds r22,g_usb_dev+10
+ 2502 085a 0596      		adiw r24,5
+ 2503 085c 0E94 0000 		call usb_mem_read_byte
+ 2504               		.stabn	68,0,363,.LM296-.LFBB29
+ 2505               	.LM296:
+ 2506 0860 C817      		cp r28,r24
+ 2507 0862 01F0      		breq .L197
+ 2508               	.L190:
+GAS LISTING /tmp/cch68YwQ.s 			page 45
+
+
+ 2509               	/* epilogue start */
+ 2510               	.LBE190:
+ 2511               	.LBE192:
+ 2512               		.stabn	68,0,378,.LM297-.LFBB29
+ 2513               	.LM297:
+ 2514 0864 CF91      		pop r28
+ 2515 0866 0895      		ret
+ 2516               	.L197:
+ 2517               	.LBB193:
+ 2518               	.LBB191:
+ 2519               		.stabn	68,0,364,.LM298-.LFBB29
+ 2520               	.LM298:
+ 2521 0868 80E1      		ldi r24,lo8(16)
+ 2522 086a 8093 0000 		sts g_usb_dev,r24
+ 2523               		.stabn	68,0,365,.LM299-.LFBB29
+ 2524               	.LM299:
+ 2525 086e C093 0000 		sts g_usb_dev+1,r28
+ 2526               		.stabn	68,0,367,.LM300-.LFBB29
+ 2527               	.LM300:
+ 2528 0872 0E94 0000 		call usb_event_set_configuration
+ 2529               		.stabn	68,0,369,.LM301-.LFBB29
+ 2530               	.LM301:
+ 2531 0876 1092 E900 		sts 233,__zero_reg__
+ 2532 087a 00C0      		rjmp .L193
+ 2533               	.LBE191:
+ 2534               	.LBE193:
+ 2535               		.size	usb_ep0_set_configuration, .-usb_ep0_set_configuration
+ 2536               		.stabs	"confnr:r(2,2)",64,0,356,28
+ 2537               		.stabn	192,0,0,.LBB187-.LFBB29
+ 2538               		.stabn	224,0,0,.LBE187-.LFBB29
+ 2539               		.stabs	"confnr:r(2,2)",64,0,356,28
+ 2540               		.stabn	192,0,0,.LBB192-.LFBB29
+ 2541               		.stabn	224,0,0,.LBE192-.LFBB29
+ 2542               		.stabs	"confnr:r(2,2)",64,0,356,28
+ 2543               		.stabn	192,0,0,.LBB193-.LFBB29
+ 2544               		.stabn	224,0,0,.LBE193-.LFBB29
+ 2545               	.Lscope29:
+ 2546               		.stabs	"",36,0,0,.Lscope29-.LFBB29
+ 2547               		.stabd	78,0,0
+ 2548               		.stabs	"usb_ep0_task:F(0,47)",36,0,381,usb_ep0_task
+ 2549               	.global	usb_ep0_task
+ 2550               		.type	usb_ep0_task, @function
+ 2551               	usb_ep0_task:
+ 2552               		.stabd	46,0,0
+ 2553               		.stabn	68,0,381,.LM302-.LFBB30
+ 2554               	.LM302:
+ 2555               	.LFBB30:
+ 2556 087c CF93      		push r28
+ 2557 087e DF93      		push r29
+ 2558 0880 CDB7      		in r28,__SP_L__
+ 2559 0882 DEB7      		in r29,__SP_H__
+ 2560 0884 2897      		sbiw r28,8
+ 2561 0886 0FB6      		in __tmp_reg__,__SREG__
+ 2562 0888 F894      		cli
+ 2563 088a DEBF      		out __SP_H__,r29
+ 2564 088c 0FBE      		out __SREG__,__tmp_reg__
+ 2565 088e CDBF      		out __SP_L__,r28
+GAS LISTING /tmp/cch68YwQ.s 			page 46
+
+
+ 2566               	/* prologue: function */
+ 2567               	/* frame size = 8 */
+ 2568               	/* stack size = 10 */
+ 2569               	.L__stack_usage = 10
+ 2570               		.stabn	68,0,384,.LM303-.LFBB30
+ 2571               	.LM303:
+ 2572 0890 1092 E900 		sts 233,__zero_reg__
+ 2573               	.LBB194:
+ 2574               	.LBB195:
+ 2575               		.stabn	68,0,118,.LM304-.LFBB30
+ 2576               	.LM304:
+ 2577 0894 8091 E800 		lds r24,232
+ 2578               	.LBE195:
+ 2579               	.LBE194:
+ 2580               		.stabn	68,0,385,.LM305-.LFBB30
+ 2581               	.LM305:
+ 2582 0898 83FD      		sbrc r24,3
+ 2583 089a 00C0      		rjmp .L211
+ 2584               	.L198:
+ 2585               	/* epilogue start */
+ 2586               		.stabn	68,0,465,.LM306-.LFBB30
+ 2587               	.LM306:
+ 2588 089c 2896      		adiw r28,8
+ 2589 089e 0FB6      		in __tmp_reg__,__SREG__
+ 2590 08a0 F894      		cli
+ 2591 08a2 DEBF      		out __SP_H__,r29
+ 2592 08a4 0FBE      		out __SREG__,__tmp_reg__
+ 2593 08a6 CDBF      		out __SP_L__,r28
+ 2594 08a8 DF91      		pop r29
+ 2595 08aa CF91      		pop r28
+ 2596 08ac 0895      		ret
+ 2597               	.L211:
+ 2598               		.stabn	68,0,387,.LM307-.LFBB30
+ 2599               	.LM307:
+ 2600 08ae 68E0      		ldi r22,lo8(8)
+ 2601 08b0 CE01      		movw r24,r28
+ 2602 08b2 0196      		adiw r24,1
+ 2603 08b4 0E94 0000 		call usb_ep_read_data
+ 2604               		.stabn	68,0,395,.LM308-.LFBB30
+ 2605               	.LM308:
+ 2606 08b8 8981      		ldd r24,Y+1
+ 2607 08ba 982F      		mov r25,r24
+ 2608 08bc 9076      		andi r25,lo8(96)
+ 2609 08be 01F4      		brne .L201
+ 2610               		.stabn	68,0,396,.LM309-.LFBB30
+ 2611               	.LM309:
+ 2612 08c0 9A81      		ldd r25,Y+2
+ 2613 08c2 9630      		cpi r25,lo8(6)
+ 2614 08c4 01F0      		breq .L202
+ 2615 08c6 00F0      		brlo .L212
+ 2616 08c8 9830      		cpi r25,lo8(8)
+ 2617 08ca 01F0      		breq .L205
+ 2618 08cc 9930      		cpi r25,lo8(9)
+ 2619 08ce 01F4      		brne .L201
+ 2620               		.stabn	68,0,428,.LM310-.LFBB30
+ 2621               	.LM310:
+ 2622 08d0 8111      		cpse r24,__zero_reg__
+GAS LISTING /tmp/cch68YwQ.s 			page 47
+
+
+ 2623 08d2 00C0      		rjmp .L201
+ 2624               		.stabn	68,0,429,.LM311-.LFBB30
+ 2625               	.LM311:
+ 2626 08d4 CE01      		movw r24,r28
+ 2627 08d6 0196      		adiw r24,1
+ 2628 08d8 0E94 0000 		call usb_ep0_set_configuration
+ 2629               	.L201:
+ 2630               		.stabn	68,0,456,.LM312-.LFBB30
+ 2631               	.LM312:
+ 2632 08dc 1092 E900 		sts 233,__zero_reg__
+ 2633               	.LBB196:
+ 2634               	.LBB197:
+ 2635               		.stabn	68,0,118,.LM313-.LFBB30
+ 2636               	.LM313:
+ 2637 08e0 8091 E800 		lds r24,232
+ 2638               	.LBE197:
+ 2639               	.LBE196:
+ 2640               		.stabn	68,0,458,.LM314-.LFBB30
+ 2641               	.LM314:
+ 2642 08e4 83FF      		sbrs r24,3
+ 2643 08e6 00C0      		rjmp .L198
+ 2644               	.LBB198:
+ 2645               	.LBB199:
+ 2646               		.stabn	68,0,121,.LM315-.LFBB30
+ 2647               	.LM315:
+ 2648 08e8 8091 E800 		lds r24,232
+ 2649 08ec 877F      		andi r24,lo8(-9)
+ 2650 08ee 8093 E800 		sts 232,r24
+ 2651               	.LBE199:
+ 2652               	.LBE198:
+ 2653               	.LBB200:
+ 2654               	.LBB201:
+ 2655               		.stabn	68,0,139,.LM316-.LFBB30
+ 2656               	.LM316:
+ 2657 08f2 8091 EB00 		lds r24,235
+ 2658 08f6 8062      		ori r24,lo8(32)
+ 2659 08f8 8093 EB00 		sts 235,r24
+ 2660 08fc 00C0      		rjmp .L198
+ 2661               	.L212:
+ 2662               	.LBE201:
+ 2663               	.LBE200:
+ 2664               		.stabn	68,0,396,.LM317-.LFBB30
+ 2665               	.LM317:
+ 2666 08fe 9530      		cpi r25,lo8(5)
+ 2667 0900 01F4      		brne .L201
+ 2668               		.stabn	68,0,422,.LM318-.LFBB30
+ 2669               	.LM318:
+ 2670 0902 8111      		cpse r24,__zero_reg__
+ 2671 0904 00C0      		rjmp .L201
+ 2672               		.stabn	68,0,423,.LM319-.LFBB30
+ 2673               	.LM319:
+ 2674 0906 CE01      		movw r24,r28
+ 2675 0908 0196      		adiw r24,1
+ 2676 090a 0E94 0000 		call usb_ep0_set_address
+ 2677 090e 00C0      		rjmp .L201
+ 2678               	.L205:
+ 2679               		.stabn	68,0,402,.LM320-.LFBB30
+GAS LISTING /tmp/cch68YwQ.s 			page 48
+
+
+ 2680               	.LM320:
+ 2681 0910 8038      		cpi r24,lo8(-128)
+ 2682 0912 01F4      		brne .L201
+ 2683               		.stabn	68,0,403,.LM321-.LFBB30
+ 2684               	.LM321:
+ 2685 0914 0E94 0000 		call usb_ep0_get_configuration
+ 2686 0918 00C0      		rjmp .L201
+ 2687               	.L202:
+ 2688               		.stabn	68,0,408,.LM322-.LFBB30
+ 2689               	.LM322:
+ 2690 091a 8038      		cpi r24,lo8(-128)
+ 2691 091c 01F4      		brne .L201
+ 2692               		.stabn	68,0,409,.LM323-.LFBB30
+ 2693               	.LM323:
+ 2694 091e CE01      		movw r24,r28
+ 2695 0920 0196      		adiw r24,1
+ 2696 0922 0E94 0000 		call usb_ep0_get_descriptor
+ 2697 0926 00C0      		rjmp .L201
+ 2698               		.size	usb_ep0_task, .-usb_ep0_task
+ 2699               		.stabs	"req:(12,8)",128,0,382,1
+ 2700               		.stabn	192,0,0,.LFBB30-.LFBB30
+ 2701               		.stabn	224,0,0,.Lscope30-.LFBB30
+ 2702               	.Lscope30:
+ 2703               		.stabs	"",36,0,0,.Lscope30-.LFBB30
+ 2704               		.stabd	78,0,0
+ 2705               		.stabs	"usb_event_ep0_request:F(0,47)",36,0,148,usb_event_ep0_request
+ 2706               		.stabs	"req:P(0,55)",64,0,148,24
+ 2707               	.global	usb_event_ep0_request
+ 2708               		.type	usb_event_ep0_request, @function
+ 2709               	usb_event_ep0_request:
+ 2710               		.stabd	46,0,0
+ 2711               		.stabs	"test-usb.c",132,0,0,.Ltext27
+ 2712               	.Ltext27:
+ 2713               		.stabn	68,0,148,.LM324-.LFBB31
+ 2714               	.LM324:
+ 2715               	.LFBB31:
+ 2716               	/* prologue: function */
+ 2717               	/* frame size = 0 */
+ 2718               	/* stack size = 0 */
+ 2719               	.L__stack_usage = 0
+ 2720 0928 0895      		ret
+ 2721               		.size	usb_event_ep0_request, .-usb_event_ep0_request
+ 2722               	.Lscope31:
+ 2723               		.stabs	"",36,0,0,.Lscope31-.LFBB31
+ 2724               		.stabd	78,0,0
+ 2725               		.stabs	"__vector_18:F(0,47)",36,0,151,__vector_18
+ 2726               	.global	__vector_18
+ 2727               		.type	__vector_18, @function
+ 2728               	__vector_18:
+ 2729               		.stabd	46,0,0
+ 2730               		.stabn	68,0,151,.LM325-.LFBB32
+ 2731               	.LM325:
+ 2732               	.LFBB32:
+ 2733               		.stabn	68,0,151,.LM326-.LFBB32
+ 2734               	.LM326:
+ 2735 092a 1F92      		push r1
+ 2736 092c 0F92      		push r0
+GAS LISTING /tmp/cch68YwQ.s 			page 49
+
+
+ 2737 092e 0FB6      		in r0,__SREG__
+ 2738 0930 0F92      		push r0
+ 2739 0932 1124      		clr __zero_reg__
+ 2740 0934 8F93      		push r24
+ 2741 0936 9F93      		push r25
+ 2742               	/* prologue: Signal */
+ 2743               	/* frame size = 0 */
+ 2744               	/* stack size = 5 */
+ 2745               	.L__stack_usage = 5
+ 2746               		.stabn	68,0,152,.LM327-.LFBB32
+ 2747               	.LM327:
+ 2748 0938 85B1      		in r24,0x5
+ 2749 093a 90E2      		ldi r25,lo8(32)
+ 2750 093c 8927      		eor r24,r25
+ 2751 093e 85B9      		out 0x5,r24
+ 2752               	/* epilogue start */
+ 2753               		.stabn	68,0,153,.LM328-.LFBB32
+ 2754               	.LM328:
+ 2755 0940 9F91      		pop r25
+ 2756 0942 8F91      		pop r24
+ 2757 0944 0F90      		pop r0
+ 2758 0946 0FBE      		out __SREG__,r0
+ 2759 0948 0F90      		pop r0
+ 2760 094a 1F90      		pop r1
+ 2761 094c 1895      		reti
+ 2762               		.size	__vector_18, .-__vector_18
+ 2763               	.Lscope32:
+ 2764               		.stabs	"",36,0,0,.Lscope32-.LFBB32
+ 2765               		.stabd	78,0,0
+ 2766               		.section	.text.startup,"ax",@progbits
+ 2767               		.stabs	"main:F(0,1)",36,0,172,main
+ 2768               	.global	main
+ 2769               		.type	main, @function
+ 2770               	main:
+ 2771               		.stabd	46,0,0
+ 2772               		.stabn	68,0,172,.LM329-.LFBB33
+ 2773               	.LM329:
+ 2774               	.LFBB33:
+ 2775               	/* prologue: function */
+ 2776               	/* frame size = 0 */
+ 2777               	/* stack size = 0 */
+ 2778               	.L__stack_usage = 0
+ 2779               		.stabn	68,0,173,.LM330-.LFBB33
+ 2780               	.LM330:
+ 2781               	/* #APP */
+ 2782               	 ;  173 "test-usb.c" 1
+ 2783 0000 F894      		cli
+ 2784               	 ;  0 "" 2
+ 2785               		.stabn	68,0,174,.LM331-.LFBB33
+ 2786               	.LM331:
+ 2787               	/* #NOAPP */
+ 2788 0002 0E94 0000 		call init_system
+ 2789               		.stabn	68,0,179,.LM332-.LFBB33
+ 2790               	.LM332:
+ 2791 0006 8FEF      		ldi r24,lo8(-1)
+ 2792 0008 9FE7      		ldi r25,lo8(127)
+ 2793 000a 9093 8500 		sts 132+1,r25
+GAS LISTING /tmp/cch68YwQ.s 			page 50
+
+
+ 2794 000e 8093 8400 		sts 132,r24
+ 2795               		.stabn	68,0,180,.LM333-.LFBB33
+ 2796               	.LM333:
+ 2797 0012 1092 8200 		sts 130,__zero_reg__
+ 2798               		.stabn	68,0,181,.LM334-.LFBB33
+ 2799               	.LM334:
+ 2800 0016 1092 8000 		sts 128,__zero_reg__
+ 2801               		.stabn	68,0,182,.LM335-.LFBB33
+ 2802               	.LM335:
+ 2803 001a 83E0      		ldi r24,lo8(3)
+ 2804 001c 8093 8100 		sts 129,r24
+ 2805               		.stabn	68,0,183,.LM336-.LFBB33
+ 2806               	.LM336:
+ 2807 0020 8FEF      		ldi r24,lo8(-1)
+ 2808 0022 86BB      		out 0x16,r24
+ 2809               		.stabn	68,0,184,.LM337-.LFBB33
+ 2810               	.LM337:
+ 2811 0024 81E0      		ldi r24,lo8(1)
+ 2812 0026 8093 6F00 		sts 111,r24
+ 2813               		.stabn	68,0,186,.LM338-.LFBB33
+ 2814               	.LM338:
+ 2815 002a EE24      		clr r14
+ 2816 002c E394      		inc r14
+ 2817 002e 04E0      		ldi r16,lo8(4)
+ 2818 0030 20E0      		ldi r18,lo8(g_strings_P)
+ 2819 0032 30E0      		ldi r19,hi8(g_strings_P)
+ 2820 0034 40E2      		ldi r20,lo8(32)
+ 2821 0036 60E0      		ldi r22,lo8(g_config_1_P)
+ 2822 0038 70E0      		ldi r23,hi8(g_config_1_P)
+ 2823 003a 80E0      		ldi r24,lo8(g_device_desc_P)
+ 2824 003c 90E0      		ldi r25,hi8(g_device_desc_P)
+ 2825 003e 0E94 0000 		call usb_init
+ 2826               		.stabn	68,0,191,.LM339-.LFBB33
+ 2827               	.LM339:
+ 2828               	/* #APP */
+ 2829               	 ;  191 "test-usb.c" 1
+ 2830 0042 7894      		sei
+ 2831               	 ;  0 "" 2
+ 2832               	/* #NOAPP */
+ 2833               	.L216:
+ 2834               		.stabn	68,0,195,.LM340-.LFBB33
+ 2835               	.LM340:
+ 2836 0044 0E94 0000 		call usb_ep0_task
+ 2837               		.stabn	68,0,196,.LM341-.LFBB33
+ 2838               	.LM341:
+ 2839 0048 0E94 0000 		call ep1_task
+ 2840 004c 00C0      		rjmp .L216
+ 2841               		.size	main, .-main
+ 2842               	.Lscope33:
+ 2843               		.stabs	"",36,0,0,.Lscope33-.LFBB33
+ 2844               		.stabd	78,0,0
+ 2845               		.section	.rodata
+ 2846               		.type	CSWTCH.60, @object
+ 2847               		.size	CSWTCH.60, 25
+ 2848               	CSWTCH.60:
+ 2849 0000 02        		.byte	2
+ 2850 0001 32        		.byte	50
+GAS LISTING /tmp/cch68YwQ.s 			page 51
+
+
+ 2851 0002 32        		.byte	50
+ 2852 0003 32        		.byte	50
+ 2853 0004 32        		.byte	50
+ 2854 0005 32        		.byte	50
+ 2855 0006 32        		.byte	50
+ 2856 0007 32        		.byte	50
+ 2857 0008 12        		.byte	18
+ 2858 0009 32        		.byte	50
+ 2859 000a 32        		.byte	50
+ 2860 000b 32        		.byte	50
+ 2861 000c 32        		.byte	50
+ 2862 000d 32        		.byte	50
+ 2863 000e 32        		.byte	50
+ 2864 000f 32        		.byte	50
+ 2865 0010 32        		.byte	50
+ 2866 0011 32        		.byte	50
+ 2867 0012 32        		.byte	50
+ 2868 0013 32        		.byte	50
+ 2869 0014 32        		.byte	50
+ 2870 0015 32        		.byte	50
+ 2871 0016 32        		.byte	50
+ 2872 0017 32        		.byte	50
+ 2873 0018 22        		.byte	34
+ 2874               		.data
+ 2875               		.type	paddr.2205, @object
+ 2876               		.size	paddr.2205, 2
+ 2877               	paddr.2205:
+ 2878 0000 0030      		.word	12288
+ 2879               		.section	.progmem.data,"a",@progbits
+ 2880               		.type	epsizemap.2058, @object
+ 2881               		.size	epsizemap.2058, 4
+ 2882               	epsizemap.2058:
+ 2883 0000 08        		.byte	8
+ 2884 0001 10        		.byte	16
+ 2885 0002 20        		.byte	32
+ 2886 0003 40        		.byte	64
+ 2887               		.type	hexstring.1764, @object
+ 2888               		.size	hexstring.1764, 17
+ 2889               	hexstring.1764:
+ 2890 0004 3031 3233 		.string	"0123456789abcdef"
+ 2890      3435 3637 
+ 2890      3839 6162 
+ 2890      6364 6566 
+ 2890      00
+ 2891               	.global	g_strings_P
+ 2892               		.type	g_strings_P, @object
+ 2893               		.size	g_strings_P, 8
+ 2894               	g_strings_P:
+ 2895 0015 0000      		.word	g_string0_P
+ 2896 0017 0000      		.word	g_string1_P
+ 2897 0019 0000      		.word	g_string2_P
+ 2898 001b 0000      		.word	g_string3_P
+ 2899               	.global	g_string3_P
+ 2900               		.type	g_string3_P, @object
+ 2901               		.size	g_string3_P, 2
+ 2902               	g_string3_P:
+ 2903 001d 0C        		.byte	12
+GAS LISTING /tmp/cch68YwQ.s 			page 52
+
+
+ 2904 001e 03        		.byte	3
+ 2905 001f 5600      		.string	"V"
+ 2906 0021 2000      		.string	" "
+ 2907 0023 3100      		.string	"1"
+ 2908 0025 2E00      		.string	"."
+ 2909 0027 3000      		.string	"0"
+ 2910 0029 00        		.string	""
+ 2911 002a 00        		.string	""
+ 2912               	.global	g_string2_P
+ 2913               		.type	g_string2_P, @object
+ 2914               		.size	g_string2_P, 2
+ 2915               	g_string2_P:
+ 2916 002b 10        		.byte	16
+ 2917 002c 03        		.byte	3
+ 2918 002d 5400      		.string	"T"
+ 2919 002f 6500      		.string	"e"
+ 2920 0031 7300      		.string	"s"
+ 2921 0033 7400      		.string	"t"
+ 2922 0035 5500      		.string	"U"
+ 2923 0037 7300      		.string	"s"
+ 2924 0039 6200      		.string	"b"
+ 2925 003b 00        		.string	""
+ 2926 003c 00        		.string	""
+ 2927               	.global	g_string1_P
+ 2928               		.type	g_string1_P, @object
+ 2929               		.size	g_string1_P, 2
+ 2930               	g_string1_P:
+ 2931 003d 16        		.byte	22
+ 2932 003e 03        		.byte	3
+ 2933 003f 4200      		.string	"B"
+ 2934 0041 6100      		.string	"a"
+ 2935 0043 6C00      		.string	"l"
+ 2936 0045 6100      		.string	"a"
+ 2937 0047 4700      		.string	"G"
+ 2938 0049 6900      		.string	"i"
+ 2939 004b 2000      		.string	" "
+ 2940 004d 4900      		.string	"I"
+ 2941 004f 6E00      		.string	"n"
+ 2942 0051 6300      		.string	"c"
+ 2943 0053 00        		.string	""
+ 2944 0054 00        		.string	""
+ 2945               	.global	g_string0_P
+ 2946               		.type	g_string0_P, @object
+ 2947               		.size	g_string0_P, 2
+ 2948               	g_string0_P:
+ 2949 0055 04        		.byte	4
+ 2950 0056 03        		.byte	3
+ 2951 0057 0904      		.word	1033
+ 2952               	.global	g_config_1_P
+ 2953               		.type	g_config_1_P, @object
+ 2954               		.size	g_config_1_P, 32
+ 2955               	g_config_1_P:
+ 2956 0059 09        		.byte	9
+ 2957 005a 02        		.byte	2
+ 2958 005b 2000      		.word	32
+ 2959 005d 01        		.byte	1
+ 2960 005e 01        		.byte	1
+GAS LISTING /tmp/cch68YwQ.s 			page 53
+
+
+ 2961 005f 00        		.byte	0
+ 2962 0060 C0        		.byte	-64
+ 2963 0061 19        		.byte	25
+ 2964 0062 09        		.byte	9
+ 2965 0063 04        		.byte	4
+ 2966 0064 00        		.byte	0
+ 2967 0065 00        		.byte	0
+ 2968 0066 02        		.byte	2
+ 2969 0067 FF        		.byte	-1
+ 2970 0068 FF        		.byte	-1
+ 2971 0069 FF        		.byte	-1
+ 2972 006a 00        		.byte	0
+ 2973 006b 07        		.byte	7
+ 2974 006c 05        		.byte	5
+ 2975 006d 81        		.byte	-127
+ 2976 006e 03        		.byte	3
+ 2977 006f 2000      		.word	32
+ 2978 0071 C8        		.byte	-56
+ 2979 0072 07        		.byte	7
+ 2980 0073 05        		.byte	5
+ 2981 0074 02        		.byte	2
+ 2982 0075 03        		.byte	3
+ 2983 0076 2000      		.word	32
+ 2984 0078 C8        		.byte	-56
+ 2985               	.global	g_device_desc_P
+ 2986               		.type	g_device_desc_P, @object
+ 2987               		.size	g_device_desc_P, 18
+ 2988               	g_device_desc_P:
+ 2989 0079 12        		.byte	18
+ 2990 007a 01        		.byte	1
+ 2991 007b 1001      		.word	272
+ 2992 007d FF        		.byte	-1
+ 2993 007e FF        		.byte	-1
+ 2994 007f FF        		.byte	-1
+ 2995 0080 20        		.byte	32
+ 2996 0081 23F1      		.word	-3805
+ 2997 0083 0100      		.word	1
+ 2998 0085 0100      		.word	1
+ 2999 0087 01        		.byte	1
+ 3000 0088 02        		.byte	2
+ 3001 0089 03        		.byte	3
+ 3002 008a 01        		.byte	1
+ 3003               		.comm	g_usb_dev,11,1
+ 3004               		.local	g_logger_usart_buf
+ 3005               		.comm	g_logger_usart_buf,258,1
+ 3006               		.stabs	"g_logger_usart_buf:S(9,1)",40,0,37,g_logger_usart_buf
+ 3007               		.stabs	"g_usb_dev:G(12,9)",32,0,40,0
+ 3008               		.stabs	"g_device_desc_P:G(12,12)",32,0,48,0
+ 3009               		.stabs	"g_config_1_P:G(0,58)=k(0,48)",32,0,69,0
+ 3010               		.stabs	"g_string0_P:G(0,59)=k(0,60)=s2d:(12,7),0,16;;",32,0,110,0
+ 3011               		.stabs	"g_string1_P:G(0,61)=k(0,62)=s2d:(12,7),0,16;;",32,0,111,0
+ 3012               		.stabs	"g_string2_P:G(0,63)=k(0,64)=s2d:(12,7),0,16;;",32,0,112,0
+ 3013               		.stabs	"g_string3_P:G(0,65)=k(0,66)=s2d:(12,7),0,16;;",32,0,113,0
+ 3014               		.stabs	"g_strings_P:G(0,67)=ar(10,3);0;3;(12,16)",32,0,116,0
+ 3015               		.text
+ 3016               		.stabs	"",100,0,0,.Letext0
+ 3017               	.Letext0:
+GAS LISTING /tmp/cch68YwQ.s 			page 54
+
+
+ 3018               		.ident	"GCC: (Gentoo 4.8.1-r1 p1.2, pie-0.5.7) 4.8.1"
+ 3019               	.global __do_copy_data
+ 3020               	.global __do_clear_bss
+GAS LISTING /tmp/cch68YwQ.s 			page 55
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 test-usb.c
+     /tmp/cch68YwQ.s:2      *ABS*:0000003e __SP_H__
+     /tmp/cch68YwQ.s:3      *ABS*:0000003d __SP_L__
+     /tmp/cch68YwQ.s:4      *ABS*:0000003f __SREG__
+     /tmp/cch68YwQ.s:5      *ABS*:00000000 __tmp_reg__
+     /tmp/cch68YwQ.s:6      *ABS*:00000001 __zero_reg__
+     /tmp/cch68YwQ.s:131    .text:00000000 usb_ep_waitIN
+                            *COM*:0000000b g_usb_dev
+     /tmp/cch68YwQ.s:180    .text:0000001a usb_ep_send_zlp
+     /tmp/cch68YwQ.s:220    .text:00000030 init_system
+     /tmp/cch68YwQ.s:288    .text:0000005e logger_usart_init
+                             .bss:00000000 g_logger_usart_buf
+     /tmp/cch68YwQ.s:352    .text:00000092 ringbuf_init
+     /tmp/cch68YwQ.s:385    .text:0000009e ringbuf_read
+     /tmp/cch68YwQ.s:445    .text:000000c8 __vector_24
+     /tmp/cch68YwQ.s:527    .text:0000012c logger_usart_check
+     /tmp/cch68YwQ.s:628    .text:0000015a ringbuf_write
+     /tmp/cch68YwQ.s:678    .text:00000180 logger_usart_write
+     /tmp/cch68YwQ.s:833    .text:00000206 logger_usart_str_P
+     /tmp/cch68YwQ.s:899    .text:00000228 logger_usart_hex_byte
+     /tmp/cch68YwQ.s:2889   .progmem.data:00000004 hexstring.1764
+     /tmp/cch68YwQ.s:959    .text:00000250 logger_usart_hex_word
+     /tmp/cch68YwQ.s:992    .text:00000262 usb_ep_read_data
+     /tmp/cch68YwQ.s:1030   .text:00000274 usb_mem_read_byte
+     /tmp/cch68YwQ.s:1076   .text:0000028c usb_ep_getbufsize
+     /tmp/cch68YwQ.s:2882   .progmem.data:00000000 epsizemap.2058
+     /tmp/cch68YwQ.s:1117   .text:0000029e usb_ep_send_in_data
+     /tmp/cch68YwQ.s:1346   .text:00000390 usb_ep_send_control_data
+     /tmp/cch68YwQ.s:1614   .text:00000496 usb_ep0_get_configuration
+     /tmp/cch68YwQ.s:1657   .text:000004bc usb_ep0_get_descriptor
+     /tmp/cch68YwQ.s:1892   .text:000005ea usb_ep0_set_address
+     /tmp/cch68YwQ.s:1982   .text:00000632 usb_ep_setup
+     /tmp/cch68YwQ.s:2848   .rodata:00000000 CSWTCH.60
+     /tmp/cch68YwQ.s:2048   .text:00000686 usb_ep_setup_control
+     /tmp/cch68YwQ.s:2081   .text:000006a4 usb_intr_endofreset
+     /tmp/cch68YwQ.s:2108   .text:000006b4 __vector_11
+     /tmp/cch68YwQ.s:2237   .text:0000074c usb_init
+     /tmp/cch68YwQ.s:2337   .text:000007c4 ep1_task
+     /tmp/cch68YwQ.s:2877   .data:00000000 paddr.2205
+     /tmp/cch68YwQ.s:2419   .text:00000816 usb_event_set_configuration
+     /tmp/cch68YwQ.s:2443   .text:00000822 usb_ep0_set_configuration
+     /tmp/cch68YwQ.s:2551   .text:0000087c usb_ep0_task
+     /tmp/cch68YwQ.s:2709   .text:00000928 usb_event_ep0_request
+     /tmp/cch68YwQ.s:2728   .text:0000092a __vector_18
+     /tmp/cch68YwQ.s:2770   .text.startup:00000000 main
+     /tmp/cch68YwQ.s:2894   .progmem.data:00000015 g_strings_P
+     /tmp/cch68YwQ.s:2955   .progmem.data:00000059 g_config_1_P
+     /tmp/cch68YwQ.s:2988   .progmem.data:00000079 g_device_desc_P
+     /tmp/cch68YwQ.s:2948   .progmem.data:00000055 g_string0_P
+     /tmp/cch68YwQ.s:2930   .progmem.data:0000003d g_string1_P
+     /tmp/cch68YwQ.s:2915   .progmem.data:0000002b g_string2_P
+     /tmp/cch68YwQ.s:2902   .progmem.data:0000001d g_string3_P
+
+UNDEFINED SYMBOLS
+__eerd_byte_usb162
+__eerd_word_usb162
+GAS LISTING /tmp/cch68YwQ.s 			page 56
+
+
+__do_copy_data
+__do_clear_bss

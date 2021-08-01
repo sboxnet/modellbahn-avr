@@ -1,0 +1,148 @@
+GAS LISTING xmega.s 			page 1
+
+
+   1               		.file	"xmega.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	init
+  10               		.type	init, @function
+  11               	init:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	/* stack size = 0 */
+  15               	.L__stack_usage = 0
+  16 0000 1092 0006 		sts 1536,__zero_reg__
+  17 0004 E0EB      		ldi r30,lo8(-80)
+  18 0006 F0E0      		ldi r31,0
+  19 0008 9FEF      		ldi r25,lo8(-1)
+  20 000a 9083      		st Z,r25
+  21 000c 88E1      		ldi r24,lo8(24)
+  22 000e 8093 1006 		sts 1552,r24
+  23 0012 1092 2006 		sts 1568,__zero_reg__
+  24 0016 9083      		st Z,r25
+  25 0018 8093 3006 		sts 1584,r24
+  26 001c 1092 4006 		sts 1600,__zero_reg__
+  27 0020 9083      		st Z,r25
+  28 0022 8093 5006 		sts 1616,r24
+  29 0026 1092 6006 		sts 1632,__zero_reg__
+  30 002a 9083      		st Z,r25
+  31 002c 8093 7006 		sts 1648,r24
+  32 0030 1092 8006 		sts 1664,__zero_reg__
+  33 0034 9083      		st Z,r25
+  34 0036 8093 9006 		sts 1680,r24
+  35 003a 0895      		ret
+  36               		.size	init, .-init
+  37               	.global	__vector_14
+  38               		.type	__vector_14, @function
+  39               	__vector_14:
+  40 003c 1F92      		push r1
+  41 003e 0F92      		push r0
+  42 0040 0FB6      		in r0,__SREG__
+  43 0042 0F92      		push r0
+  44 0044 1124      		clr __zero_reg__
+  45 0046 8F93      		push r24
+  46               	/* prologue: Signal */
+  47               	/* frame size = 0 */
+  48               	/* stack size = 4 */
+  49               	.L__stack_usage = 4
+  50 0048 80E2      		ldi r24,lo8(32)
+  51 004a 8093 0706 		sts 1543,r24
+  52               	/* epilogue start */
+  53 004e 8F91      		pop r24
+  54 0050 0F90      		pop r0
+  55 0052 0FBE      		out __SREG__,r0
+  56 0054 0F90      		pop r0
+  57 0056 1F90      		pop r1
+GAS LISTING xmega.s 			page 2
+
+
+  58 0058 1895      		reti
+  59               		.size	__vector_14, .-__vector_14
+  60               		.section	.text.startup,"ax",@progbits
+  61               	.global	main
+  62               		.type	main, @function
+  63               	main:
+  64               	/* prologue: function */
+  65               	/* frame size = 0 */
+  66               	/* stack size = 0 */
+  67               	.L__stack_usage = 0
+  68 0000 8091 A200 		lds r24,162
+  69 0004 8764      		ori r24,lo8(71)
+  70 0006 98ED      		ldi r25,lo8(-40)
+  71 0008 94BF      		out __CCP__,r25
+  72 000a 8093 A200 		sts 162,r24
+  73 000e 0E94 0000 		call init
+  74               	.L4:
+  75 0012 8091 CF01 		lds r24,463
+  76 0016 87FD      		sbrc r24,7
+  77 0018 00C0      		rjmp .L4
+  78 001a 8091 CC01 		lds r24,460
+  79 001e 8860      		ori r24,lo8(8)
+  80 0020 8093 CC01 		sts 460,r24
+  81 0024 6091 0010 		lds r22,4096
+  82 0028 81E0      		ldi r24,lo8(1)
+  83 002a 90E0      		ldi r25,0
+  84 002c 0E94 0000 		call __eewr_byte_x16a4
+  85 0030 80E2      		ldi r24,lo8(32)
+  86 0032 8093 0106 		sts 1537,r24
+  87 0036 1092 1506 		sts 1557,__zero_reg__
+  88 003a 1092 0108 		sts 2049,__zero_reg__
+  89 003e 1092 0308 		sts 2051,__zero_reg__
+  90 0042 1092 0408 		sts 2052,__zero_reg__
+  91 0046 21E0      		ldi r18,lo8(1)
+  92 0048 2093 0608 		sts 2054,r18
+  93 004c 1092 0708 		sts 2055,__zero_reg__
+  94 0050 8FEF      		ldi r24,lo8(-1)
+  95 0052 8093 0C08 		sts 2060,r24
+  96 0056 84E8      		ldi r24,lo8(-124)
+  97 0058 9EE1      		ldi r25,lo8(30)
+  98 005a 8093 2608 		sts 2086,r24
+  99 005e 9093 2708 		sts 2086+1,r25
+ 100 0062 85E0      		ldi r24,lo8(5)
+ 101 0064 8093 0008 		sts 2048,r24
+ 102 0068 2093 A200 		sts 162,r18
+ 103               	/* #APP */
+ 104               	 ;  111 "xmega.c" 1
+ 105 006c 7894      		sei
+ 106               	 ;  0 "" 2
+ 107               	/* #NOAPP */
+ 108               	.L5:
+ 109 006e 2FE7      		ldi r18,lo8(399999)
+ 110 0070 8AE1      		ldi r24,hi8(399999)
+ 111 0072 96E0      		ldi r25,hlo8(399999)
+ 112 0074 2150      		1: subi r18,1
+ 113 0076 8040      		sbci r24,0
+ 114 0078 9040      		sbci r25,0
+GAS LISTING xmega.s 			page 3
+
+
+ 115 007a 01F4      		brne 1b
+ 116 007c 00C0      		rjmp .
+ 117 007e 0000      		nop
+ 118 0080 80E2      		ldi r24,lo8(32)
+ 119 0082 8093 0706 		sts 1543,r24
+ 120 0086 00C0      		rjmp .L5
+ 121               		.size	main, .-main
+ 122               		.ident	"GCC: (Gentoo 4.8.3 p1.1, pie-0.5.9) 4.8.3"
+GAS LISTING xmega.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmega.c
+             xmega.s:2      *ABS*:0000003e __SP_H__
+             xmega.s:3      *ABS*:0000003d __SP_L__
+             xmega.s:4      *ABS*:0000003f __SREG__
+             xmega.s:5      *ABS*:00000034 __CCP__
+             xmega.s:6      *ABS*:00000000 __tmp_reg__
+             xmega.s:7      *ABS*:00000001 __zero_reg__
+             xmega.s:11     .text:00000000 init
+             xmega.s:39     .text:0000003c __vector_14
+             xmega.s:63     .text.startup:00000000 main
+
+UNDEFINED SYMBOLS
+__eewr_byte_x16a4

@@ -1,0 +1,33 @@
+Addressen für Rocrail
+
+puid=2 Weichenservo "Weichen2"
+puid=4 Weichenservo "Weichen1"
+
+(roca, bit) = divmod(addr,64)
+bitnr = int(bit / 4)
+
+pr = self._init_fb.puid(roca)
+puid = pr.puid
+addr = self._sbnm.get_puid_addr(puid)
+
+    def get_puid_addr(self, puid):
+        return self._addrmap.get_puid_addr(puid)
+        # maps sboxnetaddr -> puid
+    
+    # _init_fb wird in self.__init__ gesetzt
+
+
+addr    bitnr
+64 128   0
+68 132   1
+72 136   2
+76 140   3
+80 144   4
+84 148   5
+88 152   6
+92 156   7
+
+roca = base + n*4
+
+# sensor
+faddr = puidroc.roca * 64 + i * 4

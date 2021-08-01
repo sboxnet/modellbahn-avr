@@ -1,0 +1,3 @@
+- TCE0 in bootloader-fw.c bldr_init_system()
+
+ avr-cpp -dM -mmcu=atxmega128a4u -E test.c|grep AT
