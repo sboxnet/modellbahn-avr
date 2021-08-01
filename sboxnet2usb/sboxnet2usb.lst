@@ -1,0 +1,3489 @@
+GAS LISTING sboxnet2usb.s 			page 1
+
+
+   1               		.file	"sboxnet2usb.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               		.type	sboxnet_debug_inc_recverrors, @function
+   9               	sboxnet_debug_inc_recverrors:
+  10               	/* prologue: function */
+  11               	/* frame size = 0 */
+  12               	/* stack size = 0 */
+  13               	.L__stack_usage = 0
+  14 0000 E0E0      		ldi r30,lo8(g_sboxnet+547)
+  15 0002 F0E0      		ldi r31,hi8(g_sboxnet+547)
+  16 0004 8081      		ld r24,Z
+  17 0006 9181      		ldd r25,Z+1
+  18 0008 0196      		adiw r24,1
+  19 000a 9183      		std Z+1,r25
+  20 000c 8083      		st Z,r24
+  21 000e 0895      		ret
+  22               		.size	sboxnet_debug_inc_recverrors, .-sboxnet_debug_inc_recverrors
+  23               		.type	sboxnet_debug_inc_recverr_dor, @function
+  24               	sboxnet_debug_inc_recverr_dor:
+  25               	/* prologue: function */
+  26               	/* frame size = 0 */
+  27               	/* stack size = 0 */
+  28               	.L__stack_usage = 0
+  29 0010 E0E0      		ldi r30,lo8(g_sboxnet+553)
+  30 0012 F0E0      		ldi r31,hi8(g_sboxnet+553)
+  31 0014 8081      		ld r24,Z
+  32 0016 9181      		ldd r25,Z+1
+  33 0018 0196      		adiw r24,1
+  34 001a 9183      		std Z+1,r25
+  35 001c 8083      		st Z,r24
+  36 001e 0895      		ret
+  37               		.size	sboxnet_debug_inc_recverr_dor, .-sboxnet_debug_inc_recverr_dor
+  38               		.type	sboxnet_debug_inc_recv_byte, @function
+  39               	sboxnet_debug_inc_recv_byte:
+  40               	/* prologue: function */
+  41               	/* frame size = 0 */
+  42               	/* stack size = 0 */
+  43               	.L__stack_usage = 0
+  44 0020 E0E0      		ldi r30,lo8(g_sboxnet+525)
+  45 0022 F0E0      		ldi r31,hi8(g_sboxnet+525)
+  46 0024 8081      		ld r24,Z
+  47 0026 9181      		ldd r25,Z+1
+  48 0028 0196      		adiw r24,1
+  49 002a 9183      		std Z+1,r25
+  50 002c 8083      		st Z,r24
+  51 002e 0895      		ret
+  52               		.size	sboxnet_debug_inc_recv_byte, .-sboxnet_debug_inc_recv_byte
+  53               		.type	sboxnet_prandom, @function
+  54               	sboxnet_prandom:
+  55               	/* prologue: function */
+  56               	/* frame size = 0 */
+  57               	/* stack size = 0 */
+GAS LISTING sboxnet2usb.s 			page 2
+
+
+  58               	.L__stack_usage = 0
+  59 0030 E0E0      		ldi r30,lo8(g_sboxnet)
+  60 0032 F0E0      		ldi r31,hi8(g_sboxnet)
+  61 0034 8085      		ldd r24,Z+8
+  62 0036 982F      		mov r25,r24
+  63 0038 990F      		lsl r25
+  64 003a 8927      		eor r24,r25
+  65 003c 982F      		mov r25,r24
+  66 003e 9695      		lsr r25
+  67 0040 8927      		eor r24,r25
+  68 0042 982F      		mov r25,r24
+  69 0044 990F      		lsl r25
+  70 0046 990F      		lsl r25
+  71 0048 8927      		eor r24,r25
+  72 004a 8087      		std Z+8,r24
+  73 004c 0895      		ret
+  74               		.size	sboxnet_prandom, .-sboxnet_prandom
+  75               		.type	sboxnet_rb_write_commit, @function
+  76               	sboxnet_rb_write_commit:
+  77               	/* prologue: function */
+  78               	/* frame size = 0 */
+  79               	/* stack size = 0 */
+  80               	.L__stack_usage = 0
+  81 004e FC01      		movw r30,r24
+  82 0050 8681      		ldd r24,Z+6
+  83 0052 6481      		ldd r22,Z+4
+  84 0054 462F      		mov r20,r22
+  85 0056 50E0      		ldi r21,0
+  86 0058 480F      		add r20,r24
+  87 005a 511D      		adc r21,__zero_reg__
+  88 005c 2781      		ldd r18,Z+7
+  89 005e 30E0      		ldi r19,0
+  90 0060 2417      		cp r18,r20
+  91 0062 3507      		cpc r19,r21
+  92 0064 04F4      		brge .L6
+  93 0066 9091 0000 		lds r25,g_sboxnet+1
+  94 006a 9460      		ori r25,lo8(4)
+  95 006c 9093 0000 		sts g_sboxnet+1,r25
+  96               	.L6:
+  97 0070 860F      		add r24,r22
+  98 0072 8683      		std Z+6,r24
+  99 0074 1482      		std Z+4,__zero_reg__
+ 100 0076 8381      		ldd r24,Z+3
+ 101 0078 8583      		std Z+5,r24
+ 102 007a 0895      		ret
+ 103               		.size	sboxnet_rb_write_commit, .-sboxnet_rb_write_commit
+ 104               		.type	sboxnet_rb_write, @function
+ 105               	sboxnet_rb_write:
+ 106 007c CF93      		push r28
+ 107 007e DF93      		push r29
+ 108               	/* prologue: function */
+ 109               	/* frame size = 0 */
+ 110               	/* stack size = 2 */
+ 111               	.L__stack_usage = 2
+ 112 0080 FC01      		movw r30,r24
+ 113 0082 9681      		ldd r25,Z+6
+ 114 0084 8481      		ldd r24,Z+4
+GAS LISTING sboxnet2usb.s 			page 3
+
+
+ 115 0086 980F      		add r25,r24
+ 116 0088 2781      		ldd r18,Z+7
+ 117 008a 9217      		cp r25,r18
+ 118 008c 00F4      		brsh .L9
+ 119 008e 8F5F      		subi r24,lo8(-(1))
+ 120 0090 8483      		std Z+4,r24
+ 121 0092 8381      		ldd r24,Z+3
+ 122 0094 EF01      		movw r28,r30
+ 123 0096 C80F      		add r28,r24
+ 124 0098 D11D      		adc r29,__zero_reg__
+ 125 009a 6887      		std Y+8,r22
+ 126 009c 8F5F      		subi r24,lo8(-(1))
+ 127 009e 8217      		cp r24,r18
+ 128 00a0 00F4      		brsh .L10
+ 129 00a2 8383      		std Z+3,r24
+ 130 00a4 00C0      		rjmp .L12
+ 131               	.L10:
+ 132 00a6 1382      		std Z+3,__zero_reg__
+ 133               	.L12:
+ 134 00a8 81E0      		ldi r24,lo8(1)
+ 135 00aa 00C0      		rjmp .L11
+ 136               	.L9:
+ 137 00ac 8091 0000 		lds r24,g_sboxnet+1
+ 138 00b0 8460      		ori r24,lo8(4)
+ 139 00b2 8093 0000 		sts g_sboxnet+1,r24
+ 140 00b6 80E0      		ldi r24,0
+ 141               	.L11:
+ 142               	/* epilogue start */
+ 143 00b8 DF91      		pop r29
+ 144 00ba CF91      		pop r28
+ 145 00bc 0895      		ret
+ 146               		.size	sboxnet_rb_write, .-sboxnet_rb_write
+ 147               		.type	sboxnet_rb_read_commit, @function
+ 148               	sboxnet_rb_read_commit:
+ 149               	/* prologue: function */
+ 150               	/* frame size = 0 */
+ 151               	/* stack size = 0 */
+ 152               	.L__stack_usage = 0
+ 153 00be FC01      		movw r30,r24
+ 154 00c0 8681      		ldd r24,Z+6
+ 155 00c2 9181      		ldd r25,Z+1
+ 156 00c4 8917      		cp r24,r25
+ 157 00c6 00F4      		brsh .L14
+ 158 00c8 9091 0000 		lds r25,g_sboxnet+1
+ 159 00cc 9260      		ori r25,lo8(2)
+ 160 00ce 9093 0000 		sts g_sboxnet+1,r25
+ 161               	.L14:
+ 162 00d2 9181      		ldd r25,Z+1
+ 163 00d4 891B      		sub r24,r25
+ 164 00d6 8683      		std Z+6,r24
+ 165 00d8 1182      		std Z+1,__zero_reg__
+ 166 00da 8081      		ld r24,Z
+ 167 00dc 8283      		std Z+2,r24
+ 168 00de 0895      		ret
+ 169               		.size	sboxnet_rb_read_commit, .-sboxnet_rb_read_commit
+ 170               		.type	sboxnet_rb_read, @function
+ 171               	sboxnet_rb_read:
+GAS LISTING sboxnet2usb.s 			page 4
+
+
+ 172 00e0 CF93      		push r28
+ 173 00e2 DF93      		push r29
+ 174               	/* prologue: function */
+ 175               	/* frame size = 0 */
+ 176               	/* stack size = 2 */
+ 177               	.L__stack_usage = 2
+ 178 00e4 FC01      		movw r30,r24
+ 179 00e6 9681      		ldd r25,Z+6
+ 180 00e8 8181      		ldd r24,Z+1
+ 181 00ea 8917      		cp r24,r25
+ 182 00ec 00F4      		brsh .L16
+ 183 00ee 8F5F      		subi r24,lo8(-(1))
+ 184 00f0 8183      		std Z+1,r24
+ 185 00f2 9081      		ld r25,Z
+ 186 00f4 EF01      		movw r28,r30
+ 187 00f6 C90F      		add r28,r25
+ 188 00f8 D11D      		adc r29,__zero_reg__
+ 189 00fa 8885      		ldd r24,Y+8
+ 190 00fc 9F5F      		subi r25,lo8(-(1))
+ 191 00fe 9083      		st Z,r25
+ 192 0100 2781      		ldd r18,Z+7
+ 193 0102 9217      		cp r25,r18
+ 194 0104 00F0      		brlo .L17
+ 195 0106 1082      		st Z,__zero_reg__
+ 196 0108 00C0      		rjmp .L17
+ 197               	.L16:
+ 198 010a 8091 0000 		lds r24,g_sboxnet+1
+ 199 010e 8260      		ori r24,lo8(2)
+ 200 0110 8093 0000 		sts g_sboxnet+1,r24
+ 201 0114 80E0      		ldi r24,0
+ 202               	.L17:
+ 203               	/* epilogue start */
+ 204 0116 DF91      		pop r29
+ 205 0118 CF91      		pop r28
+ 206 011a 0895      		ret
+ 207               		.size	sboxnet_rb_read, .-sboxnet_rb_read
+ 208               		.type	sboxnet_set_timer, @function
+ 209               	sboxnet_set_timer:
+ 210               	/* prologue: function */
+ 211               	/* frame size = 0 */
+ 212               	/* stack size = 0 */
+ 213               	.L__stack_usage = 0
+ 214 011c 2091 8400 		lds r18,132
+ 215 0120 3091 8500 		lds r19,132+1
+ 216 0124 820F      		add r24,r18
+ 217 0126 931F      		adc r25,r19
+ 218 0128 9093 8B00 		sts 138+1,r25
+ 219 012c 8093 8A00 		sts 138,r24
+ 220 0130 84E0      		ldi r24,lo8(4)
+ 221 0132 86BB      		out 0x16,r24
+ 222 0134 EFE6      		ldi r30,lo8(111)
+ 223 0136 F0E0      		ldi r31,0
+ 224 0138 8081      		ld r24,Z
+ 225 013a 8460      		ori r24,lo8(4)
+ 226 013c 8083      		st Z,r24
+ 227 013e 0895      		ret
+ 228               		.size	sboxnet_set_timer, .-sboxnet_set_timer
+GAS LISTING sboxnet2usb.s 			page 5
+
+
+ 229               		.type	sboxnet_check_try_transmit, @function
+ 230               	sboxnet_check_try_transmit:
+ 231 0140 CF93      		push r28
+ 232 0142 DF93      		push r29
+ 233               	/* prologue: function */
+ 234               	/* frame size = 0 */
+ 235               	/* stack size = 2 */
+ 236               	.L__stack_usage = 2
+ 237 0144 C0E0      		ldi r28,lo8(g_sboxnet)
+ 238 0146 D0E0      		ldi r29,hi8(g_sboxnet)
+ 239 0148 8C81      		ldd r24,Y+4
+ 240 014a 8111      		cpse r24,__zero_reg__
+ 241 014c 00C0      		rjmp .L20
+ 242 014e FE01      		movw r30,r28
+ 243 0150 EF5E      		subi r30,-17
+ 244 0152 FE4F      		sbci r31,-2
+ 245 0154 8081      		ld r24,Z
+ 246 0156 8730      		cpi r24,lo8(7)
+ 247 0158 00F0      		brlo .L20
+ 248 015a 1B82      		std Y+3,__zero_reg__
+ 249 015c CE01      		movw r24,r28
+ 250 015e 855F      		subi r24,-11
+ 251 0160 9E4F      		sbci r25,-2
+ 252 0162 0E94 0000 		call sboxnet_rb_read
+ 253 0166 8C83      		std Y+4,r24
+ 254               	.L20:
+ 255 0168 8C81      		ldd r24,Y+4
+ 256 016a 8823      		tst r24
+ 257 016c 01F0      		breq .L19
+ 258 016e 8B81      		ldd r24,Y+3
+ 259 0170 8111      		cpse r24,__zero_reg__
+ 260 0172 00C0      		rjmp .L19
+ 261 0174 8881      		ld r24,Y
+ 262 0176 8111      		cpse r24,__zero_reg__
+ 263 0178 00C0      		rjmp .L19
+ 264 017a 0E94 0000 		call sboxnet_prandom
+ 265 017e 282F      		mov r18,r24
+ 266 0180 2F73      		andi r18,lo8(63)
+ 267 0182 9A81      		ldd r25,Y+2
+ 268 0184 892F      		mov r24,r25
+ 269 0186 90E0      		ldi r25,0
+ 270 0188 880F      		lsl r24
+ 271 018a 991F      		rol r25
+ 272 018c 8857      		subi r24,120
+ 273 018e 9F4F      		sbci r25,-1
+ 274 0190 34E0      		ldi r19,lo8(4)
+ 275 0192 3CBB      		out 0x1c,r19
+ 276 0194 31E0      		ldi r19,lo8(1)
+ 277 0196 3093 0000 		sts g_sboxnet,r19
+ 278 019a 820F      		add r24,r18
+ 279 019c 911D      		adc r25,__zero_reg__
+ 280               	/* epilogue start */
+ 281 019e DF91      		pop r29
+ 282 01a0 CF91      		pop r28
+ 283 01a2 0C94 0000 		jmp sboxnet_set_timer
+ 284               	.L19:
+ 285               	/* epilogue start */
+GAS LISTING sboxnet2usb.s 			page 6
+
+
+ 286 01a6 DF91      		pop r29
+ 287 01a8 CF91      		pop r28
+ 288 01aa 0895      		ret
+ 289               		.size	sboxnet_check_try_transmit, .-sboxnet_check_try_transmit
+ 290               		.type	usb_ep_clearSETUP, @function
+ 291               	usb_ep_clearSETUP:
+ 292               	/* prologue: function */
+ 293               	/* frame size = 0 */
+ 294               	/* stack size = 0 */
+ 295               	.L__stack_usage = 0
+ 296 01ac E8EE      		ldi r30,lo8(-24)
+ 297 01ae F0E0      		ldi r31,0
+ 298 01b0 8081      		ld r24,Z
+ 299 01b2 877F      		andi r24,lo8(-9)
+ 300 01b4 8083      		st Z,r24
+ 301 01b6 0895      		ret
+ 302               		.size	usb_ep_clearSETUP, .-usb_ep_clearSETUP
+ 303               		.type	usb_ep_clearIN, @function
+ 304               	usb_ep_clearIN:
+ 305               	/* prologue: function */
+ 306               	/* frame size = 0 */
+ 307               	/* stack size = 0 */
+ 308               	.L__stack_usage = 0
+ 309 01b8 E8EE      		ldi r30,lo8(-24)
+ 310 01ba F0E0      		ldi r31,0
+ 311 01bc 8081      		ld r24,Z
+ 312 01be 8E7F      		andi r24,lo8(-2)
+ 313 01c0 8083      		st Z,r24
+ 314 01c2 0895      		ret
+ 315               		.size	usb_ep_clearIN, .-usb_ep_clearIN
+ 316               		.type	usb_ep_clearOUT, @function
+ 317               	usb_ep_clearOUT:
+ 318               	/* prologue: function */
+ 319               	/* frame size = 0 */
+ 320               	/* stack size = 0 */
+ 321               	.L__stack_usage = 0
+ 322 01c4 E8EE      		ldi r30,lo8(-24)
+ 323 01c6 F0E0      		ldi r31,0
+ 324 01c8 8081      		ld r24,Z
+ 325 01ca 8B7F      		andi r24,lo8(-5)
+ 326 01cc 8083      		st Z,r24
+ 327 01ce 0895      		ret
+ 328               		.size	usb_ep_clearOUT, .-usb_ep_clearOUT
+ 329               		.type	init_system, @function
+ 330               	init_system:
+ 331 01d0 CF93      		push r28
+ 332 01d2 DF93      		push r29
+ 333 01d4 1F92      		push __zero_reg__
+ 334 01d6 CDB7      		in r28,__SP_L__
+ 335 01d8 DEB7      		in r29,__SP_H__
+ 336               	/* prologue: function */
+ 337               	/* frame size = 1 */
+ 338               	/* stack size = 3 */
+ 339               	.L__stack_usage = 3
+ 340               	/* #APP */
+ 341               	 ;  470 "sboxnet2usb.c" 1
+ 342 01da A895      		wdr
+GAS LISTING sboxnet2usb.s 			page 7
+
+
+ 343               	 ;  0 "" 2
+ 344               	/* #NOAPP */
+ 345 01dc 84B7      		in r24,0x34
+ 346 01de 8983      		std Y+1,r24
+ 347 01e0 14BE      		out 0x34,__zero_reg__
+ 348 01e2 88E1      		ldi r24,lo8(24)
+ 349               	/* #APP */
+ 350               	 ;  473 "sboxnet2usb.c" 1
+ 351 01e4 0FB6      		in __tmp_reg__, __SREG__
+ 352 01e6 F894      		cli
+ 353 01e8 8093 6000 		sts 96, r24
+ 354 01ec 1092 6000 		sts 96, __zero_reg__
+ 355 01f0 0FBE      		out __SREG__,__tmp_reg__
+ 356               		
+ 357               	 ;  0 "" 2
+ 358               	/* #NOAPP */
+ 359 01f2 8981      		ldd r24,Y+1
+ 360 01f4 83FF      		sbrs r24,3
+ 361 01f6 00C0      		rjmp .L29
+ 362               	/* #APP */
+ 363               	 ;  476 "sboxnet2usb.c" 1
+ 364 01f8 0C94 0018 		jmp  0x3000
+ 365               	
+ 366               	 ;  0 "" 2
+ 367               	/* #NOAPP */
+ 368               	.L29:
+ 369 01fc 8FE1      		ldi r24,lo8(31)
+ 370 01fe 85B9      		out 0x5,r24
+ 371 0200 8FEF      		ldi r24,lo8(-1)
+ 372 0202 88B9      		out 0x8,r24
+ 373 0204 9FE7      		ldi r25,lo8(127)
+ 374 0206 9BB9      		out 0xb,r25
+ 375 0208 90EE      		ldi r25,lo8(-32)
+ 376 020a 94B9      		out 0x4,r25
+ 377 020c 17B8      		out 0x7,__zero_reg__
+ 378 020e 1AB8      		out 0xa,__zero_reg__
+ 379 0210 90E8      		ldi r25,lo8(-128)
+ 380 0212 9093 6100 		sts 97,r25
+ 381 0216 1092 6100 		sts 97,__zero_reg__
+ 382 021a 1092 8000 		sts 128,__zero_reg__
+ 383 021e 92E0      		ldi r25,lo8(2)
+ 384 0220 9093 8100 		sts 129,r25
+ 385 0224 86BB      		out 0x16,r24
+ 386 0226 81E0      		ldi r24,lo8(1)
+ 387 0228 8093 6F00 		sts 111,r24
+ 388 022c 80E0      		ldi r24,lo8(eeprom)
+ 389 022e 90E0      		ldi r25,hi8(eeprom)
+ 390 0230 0E94 0000 		call __eerd_word_m32u2
+ 391 0234 0196      		adiw r24,1
+ 392 0236 01F4      		brne .L28
+ 393 0238 64E0      		ldi r22,lo8(4)
+ 394 023a 80E0      		ldi r24,lo8(eeprom)
+ 395 023c 90E0      		ldi r25,hi8(eeprom)
+ 396 023e 0E94 0000 		call __eeupd_byte_m32u2
+ 397 0242 63E0      		ldi r22,lo8(3)
+ 398 0244 80E0      		ldi r24,lo8(eeprom+1)
+ 399 0246 90E0      		ldi r25,hi8(eeprom+1)
+GAS LISTING sboxnet2usb.s 			page 8
+
+
+ 400 0248 0E94 0000 		call __eeupd_byte_m32u2
+ 401 024c 68E7      		ldi r22,lo8(120)
+ 402 024e 70E0      		ldi r23,0
+ 403 0250 80E0      		ldi r24,lo8(eeprom+2)
+ 404 0252 90E0      		ldi r25,hi8(eeprom+2)
+ 405               	/* epilogue start */
+ 406 0254 0F90      		pop __tmp_reg__
+ 407 0256 DF91      		pop r29
+ 408 0258 CF91      		pop r28
+ 409 025a 0C94 0000 		jmp __eeupd_word_m32u2
+ 410               	.L28:
+ 411               	/* epilogue start */
+ 412 025e 0F90      		pop __tmp_reg__
+ 413 0260 DF91      		pop r29
+ 414 0262 CF91      		pop r28
+ 415 0264 0895      		ret
+ 416               		.size	init_system, .-init_system
+ 417               		.type	sboxnet_receiver_enable, @function
+ 418               	sboxnet_receiver_enable:
+ 419               	/* prologue: function */
+ 420               	/* frame size = 0 */
+ 421               	/* stack size = 0 */
+ 422               	.L__stack_usage = 0
+ 423 0266 E8EC      		ldi r30,lo8(-56)
+ 424 0268 F0E0      		ldi r31,0
+ 425 026a 8081      		ld r24,Z
+ 426 026c 8160      		ori r24,lo8(1)
+ 427 026e 8083      		st Z,r24
+ 428 0270 E9EC      		ldi r30,lo8(-55)
+ 429 0272 F0E0      		ldi r31,0
+ 430 0274 8081      		ld r24,Z
+ 431 0276 8069      		ori r24,lo8(-112)
+ 432 0278 8083      		st Z,r24
+ 433 027a 0895      		ret
+ 434               		.size	sboxnet_receiver_enable, .-sboxnet_receiver_enable
+ 435               		.type	sboxnet_init, @function
+ 436               	sboxnet_init:
+ 437               	/* prologue: function */
+ 438               	/* frame size = 0 */
+ 439               	/* stack size = 0 */
+ 440               	.L__stack_usage = 0
+ 441 027c E0E0      		ldi r30,lo8(g_sboxnet)
+ 442 027e F0E0      		ldi r31,hi8(g_sboxnet)
+ 443 0280 83E3      		ldi r24,lo8(51)
+ 444 0282 92E0      		ldi r25,lo8(2)
+ 445 0284 DF01      		movw r26,r30
+ 446 0286 9C01      		movw r18,r24
+ 447               		0:
+ 448 0288 1D92      		st X+,__zero_reg__
+ 449 028a 2150      		subi r18,1
+ 450 028c 3040      		sbci r19,0
+ 451 028e 01F4      		brne 0b
+ 452 0290 8091 6600 		lds r24,102
+ 453 0294 8087      		std Z+8,r24
+ 454 0296 89E1      		ldi r24,lo8(25)
+ 455 0298 8283      		std Z+2,r24
+ 456 029a 8AEF      		ldi r24,lo8(-6)
+GAS LISTING sboxnet2usb.s 			page 9
+
+
+ 457 029c 808B      		std Z+16,r24
+ 458 029e 8093 0000 		sts g_sboxnet+274,r24
+ 459 02a2 5298      		cbi 0xa,2
+ 460 02a4 5A9A      		sbi 0xb,2
+ 461 02a6 5B9A      		sbi 0xb,3
+ 462 02a8 539A      		sbi 0xa,3
+ 463 02aa EA98      		cbi 0x1d,2
+ 464 02ac E9E6      		ldi r30,lo8(105)
+ 465 02ae F0E0      		ldi r31,0
+ 466 02b0 8081      		ld r24,Z
+ 467 02b2 8F7D      		andi r24,lo8(-33)
+ 468 02b4 8083      		st Z,r24
+ 469 02b6 8081      		ld r24,Z
+ 470 02b8 8061      		ori r24,lo8(16)
+ 471 02ba 8083      		st Z,r24
+ 472 02bc 84E0      		ldi r24,lo8(4)
+ 473 02be 8CBB      		out 0x1c,r24
+ 474 02c0 1092 CD00 		sts 205,__zero_reg__
+ 475 02c4 93E0      		ldi r25,lo8(3)
+ 476 02c6 9093 CC00 		sts 204,r25
+ 477 02ca 90E4      		ldi r25,lo8(64)
+ 478 02cc 9093 C800 		sts 200,r25
+ 479 02d0 96E2      		ldi r25,lo8(38)
+ 480 02d2 9093 CA00 		sts 202,r25
+ 481 02d6 8093 C900 		sts 201,r24
+ 482 02da 0C94 0000 		jmp sboxnet_receiver_enable
+ 483               		.size	sboxnet_init, .-sboxnet_init
+ 484               	.global	__vector_23
+ 485               		.type	__vector_23, @function
+ 486               	__vector_23:
+ 487 02de 1F92      		push r1
+ 488 02e0 0F92      		push r0
+ 489 02e2 0FB6      		in r0,__SREG__
+ 490 02e4 0F92      		push r0
+ 491 02e6 1124      		clr __zero_reg__
+ 492 02e8 EF92      		push r14
+ 493 02ea FF92      		push r15
+ 494 02ec 0F93      		push r16
+ 495 02ee 1F93      		push r17
+ 496 02f0 2F93      		push r18
+ 497 02f2 3F93      		push r19
+ 498 02f4 4F93      		push r20
+ 499 02f6 5F93      		push r21
+ 500 02f8 6F93      		push r22
+ 501 02fa 7F93      		push r23
+ 502 02fc 8F93      		push r24
+ 503 02fe 9F93      		push r25
+ 504 0300 AF93      		push r26
+ 505 0302 BF93      		push r27
+ 506 0304 CF93      		push r28
+ 507 0306 DF93      		push r29
+ 508 0308 EF93      		push r30
+ 509 030a FF93      		push r31
+ 510               	/* prologue: Signal */
+ 511               	/* frame size = 0 */
+ 512               	/* stack size = 21 */
+ 513               	.L__stack_usage = 21
+GAS LISTING sboxnet2usb.s 			page 10
+
+
+ 514 030c C0E0      		ldi r28,lo8(g_sboxnet)
+ 515 030e D0E0      		ldi r29,hi8(g_sboxnet)
+ 516 0310 0091 C800 		lds r16,200
+ 517 0314 9091 C900 		lds r25,201
+ 518 0318 1091 CE00 		lds r17,206
+ 519 031c 802F      		mov r24,r16
+ 520 031e 8C71      		andi r24,lo8(28)
+ 521 0320 01F0      		breq .L37
+ 522 0322 0E94 0000 		call sboxnet_debug_inc_recverrors
+ 523 0326 04FF      		sbrs r16,4
+ 524 0328 00C0      		rjmp .L38
+ 525 032a FE01      		movw r30,r28
+ 526 032c EB5D      		subi r30,-37
+ 527 032e FD4F      		sbci r31,-3
+ 528 0330 8081      		ld r24,Z
+ 529 0332 9181      		ldd r25,Z+1
+ 530 0334 0196      		adiw r24,1
+ 531 0336 9183      		std Z+1,r25
+ 532 0338 8083      		st Z,r24
+ 533               	.L38:
+ 534 033a 03FD      		sbrc r16,3
+ 535 033c 0E94 0000 		call sboxnet_debug_inc_recverr_dor
+ 536               	.L39:
+ 537 0340 02FF      		sbrs r16,2
+ 538 0342 00C0      		rjmp .L41
+ 539 0344 FE01      		movw r30,r28
+ 540 0346 E95D      		subi r30,-39
+ 541 0348 FD4F      		sbci r31,-3
+ 542 034a 8081      		ld r24,Z
+ 543 034c 9181      		ldd r25,Z+1
+ 544 034e 0196      		adiw r24,1
+ 545 0350 9183      		std Z+1,r25
+ 546 0352 8083      		st Z,r24
+ 547 0354 00C0      		rjmp .L41
+ 548               	.L37:
+ 549 0356 8D85      		ldd r24,Y+13
+ 550 0358 91FF      		sbrs r25,1
+ 551 035a 00C0      		rjmp .L42
+ 552 035c 8823      		tst r24
+ 553 035e 01F0      		breq .L43
+ 554 0360 FE01      		movw r30,r28
+ 555 0362 E55D      		subi r30,-43
+ 556 0364 FD4F      		sbci r31,-3
+ 557 0366 8081      		ld r24,Z
+ 558 0368 9181      		ldd r25,Z+1
+ 559 036a 0196      		adiw r24,1
+ 560 036c 9183      		std Z+1,r25
+ 561 036e 8083      		st Z,r24
+ 562 0370 0E94 0000 		call sboxnet_debug_inc_recverrors
+ 563 0374 1D86      		std Y+13,__zero_reg__
+ 564 0376 8E85      		ldd r24,Y+14
+ 565 0378 8C87      		std Y+12,r24
+ 566               	.L43:
+ 567 037a 8091 0000 		lds r24,g_sboxnet_addr
+ 568 037e 1817      		cp r17,r24
+ 569 0380 01F0      		breq .L44
+ 570 0382 1F3F      		cpi r17,lo8(-1)
+GAS LISTING sboxnet2usb.s 			page 11
+
+
+ 571 0384 01F0      		breq .L44
+ 572 0386 8981      		ldd r24,Y+1
+ 573 0388 80FF      		sbrs r24,0
+ 574 038a 00C0      		rjmp .L41
+ 575               	.L44:
+ 576 038c 8091 C800 		lds r24,200
+ 577 0390 8E7F      		andi r24,lo8(-2)
+ 578 0392 8093 C800 		sts 200,r24
+ 579 0396 7E01      		movw r14,r28
+ 580 0398 89E0      		ldi r24,9
+ 581 039a E80E      		add r14,r24
+ 582 039c F11C      		adc r15,__zero_reg__
+ 583 039e 60E0      		ldi r22,0
+ 584 03a0 C701      		movw r24,r14
+ 585 03a2 0E94 0000 		call sboxnet_rb_write
+ 586 03a6 8823      		tst r24
+ 587 03a8 01F0      		breq .L73
+ 588 03aa 612F      		mov r22,r17
+ 589 03ac C701      		movw r24,r14
+ 590 03ae 0E94 0000 		call sboxnet_rb_write
+ 591 03b2 8823      		tst r24
+ 592 03b4 01F0      		breq .L73
+ 593 03b6 0E94 0000 		call sboxnet_debug_inc_recv_byte
+ 594 03ba 86E0      		ldi r24,lo8(6)
+ 595 03bc 8F83      		std Y+7,r24
+ 596 03be 00C0      		rjmp .L36
+ 597               	.L42:
+ 598 03c0 9F81      		ldd r25,Y+7
+ 599 03c2 9817      		cp r25,r24
+ 600 03c4 00F4      		brsh .L49
+ 601 03c6 FE01      		movw r30,r28
+ 602 03c8 E35D      		subi r30,-45
+ 603 03ca FD4F      		sbci r31,-3
+ 604 03cc 8081      		ld r24,Z
+ 605 03ce 9181      		ldd r25,Z+1
+ 606 03d0 0196      		adiw r24,1
+ 607 03d2 9183      		std Z+1,r25
+ 608 03d4 8083      		st Z,r24
+ 609 03d6 00C0      		rjmp .L48
+ 610               	.L49:
+ 611 03d8 8430      		cpi r24,lo8(4)
+ 612 03da 01F4      		brne .L50
+ 613 03dc 812F      		mov r24,r17
+ 614 03de 8F73      		andi r24,lo8(63)
+ 615 03e0 8A5F      		subi r24,lo8(-(6))
+ 616 03e2 8F83      		std Y+7,r24
+ 617               	.L50:
+ 618 03e4 7E01      		movw r14,r28
+ 619 03e6 89E0      		ldi r24,9
+ 620 03e8 E80E      		add r14,r24
+ 621 03ea F11C      		adc r15,__zero_reg__
+ 622 03ec 612F      		mov r22,r17
+ 623 03ee C701      		movw r24,r14
+ 624 03f0 0E94 0000 		call sboxnet_rb_write
+ 625 03f4 8111      		cpse r24,__zero_reg__
+ 626 03f6 00C0      		rjmp .L51
+ 627               	.L73:
+GAS LISTING sboxnet2usb.s 			page 12
+
+
+ 628 03f8 0E94 0000 		call sboxnet_debug_inc_recverr_dor
+ 629 03fc 00C0      		rjmp .L48
+ 630               	.L51:
+ 631 03fe 0E94 0000 		call sboxnet_debug_inc_recv_byte
+ 632 0402 8D85      		ldd r24,Y+13
+ 633 0404 90E0      		ldi r25,0
+ 634 0406 4F81      		ldd r20,Y+7
+ 635 0408 242F      		mov r18,r20
+ 636 040a 30E0      		ldi r19,0
+ 637 040c 2F5F      		subi r18,-1
+ 638 040e 3F4F      		sbci r19,-1
+ 639 0410 8217      		cp r24,r18
+ 640 0412 9307      		cpc r25,r19
+ 641 0414 01F4      		brne .L36
+ 642 0416 8E85      		ldd r24,Y+14
+ 643 0418 FE01      		movw r30,r28
+ 644 041a E80F      		add r30,r24
+ 645 041c F11D      		adc r31,__zero_reg__
+ 646 041e 418B      		std Z+17,r20
+ 647 0420 1F82      		std Y+7,__zero_reg__
+ 648 0422 9091 C800 		lds r25,200
+ 649 0426 9160      		ori r25,lo8(1)
+ 650 0428 9093 C800 		sts 200,r25
+ 651 042c C701      		movw r24,r14
+ 652 042e 0E94 0000 		call sboxnet_rb_write_commit
+ 653 0432 8091 0000 		lds r24,g_sboxnet+527
+ 654 0436 9091 0000 		lds r25,g_sboxnet+527+1
+ 655 043a 0196      		adiw r24,1
+ 656 043c 9093 0000 		sts g_sboxnet+527+1,r25
+ 657 0440 8093 0000 		sts g_sboxnet+527,r24
+ 658 0444 00C0      		rjmp .L36
+ 659               	.L48:
+ 660 0446 0E94 0000 		call sboxnet_debug_inc_recverrors
+ 661               	.L41:
+ 662 044a 1F82      		std Y+7,__zero_reg__
+ 663 044c 8091 C800 		lds r24,200
+ 664 0450 8160      		ori r24,lo8(1)
+ 665 0452 8093 C800 		sts 200,r24
+ 666 0456 1D86      		std Y+13,__zero_reg__
+ 667 0458 8E85      		ldd r24,Y+14
+ 668 045a 8C87      		std Y+12,r24
+ 669               	.L36:
+ 670               	/* epilogue start */
+ 671 045c FF91      		pop r31
+ 672 045e EF91      		pop r30
+ 673 0460 DF91      		pop r29
+ 674 0462 CF91      		pop r28
+ 675 0464 BF91      		pop r27
+ 676 0466 AF91      		pop r26
+ 677 0468 9F91      		pop r25
+ 678 046a 8F91      		pop r24
+ 679 046c 7F91      		pop r23
+ 680 046e 6F91      		pop r22
+ 681 0470 5F91      		pop r21
+ 682 0472 4F91      		pop r20
+ 683 0474 3F91      		pop r19
+ 684 0476 2F91      		pop r18
+GAS LISTING sboxnet2usb.s 			page 13
+
+
+ 685 0478 1F91      		pop r17
+ 686 047a 0F91      		pop r16
+ 687 047c FF90      		pop r15
+ 688 047e EF90      		pop r14
+ 689 0480 0F90      		pop r0
+ 690 0482 0FBE      		out __SREG__,r0
+ 691 0484 0F90      		pop r0
+ 692 0486 1F90      		pop r1
+ 693 0488 1895      		reti
+ 694               		.size	__vector_23, .-__vector_23
+ 695               	.global	__vector_25
+ 696               		.type	__vector_25, @function
+ 697               	__vector_25:
+ 698 048a 1F92      		push r1
+ 699 048c 0F92      		push r0
+ 700 048e 0FB6      		in r0,__SREG__
+ 701 0490 0F92      		push r0
+ 702 0492 1124      		clr __zero_reg__
+ 703 0494 0F93      		push r16
+ 704 0496 1F93      		push r17
+ 705 0498 2F93      		push r18
+ 706 049a 3F93      		push r19
+ 707 049c 4F93      		push r20
+ 708 049e 5F93      		push r21
+ 709 04a0 6F93      		push r22
+ 710 04a2 7F93      		push r23
+ 711 04a4 8F93      		push r24
+ 712 04a6 9F93      		push r25
+ 713 04a8 AF93      		push r26
+ 714 04aa BF93      		push r27
+ 715 04ac CF93      		push r28
+ 716 04ae DF93      		push r29
+ 717 04b0 EF93      		push r30
+ 718 04b2 FF93      		push r31
+ 719               	/* prologue: Signal */
+ 720               	/* frame size = 0 */
+ 721               	/* stack size = 19 */
+ 722               	.L__stack_usage = 19
+ 723 04b4 C0E0      		ldi r28,lo8(g_sboxnet)
+ 724 04b6 D0E0      		ldi r29,hi8(g_sboxnet)
+ 725 04b8 2091 C800 		lds r18,200
+ 726 04bc 922F      		mov r25,r18
+ 727 04be 9471      		andi r25,lo8(20)
+ 728 04c0 4091 CE00 		lds r20,206
+ 729 04c4 3D81      		ldd r19,Y+5
+ 730 04c6 81E0      		ldi r24,lo8(1)
+ 731 04c8 4313      		cpse r20,r19
+ 732 04ca 00C0      		rjmp .L75
+ 733 04cc 80E0      		ldi r24,0
+ 734               	.L75:
+ 735 04ce 8E01      		movw r16,r28
+ 736 04d0 055F      		subi r16,-11
+ 737 04d2 1E4F      		sbci r17,-2
+ 738 04d4 27FF      		sbrs r18,7
+ 739 04d6 00C0      		rjmp .L76
+ 740 04d8 9111      		cpse r25,__zero_reg__
+ 741 04da 00C0      		rjmp .L77
+GAS LISTING sboxnet2usb.s 			page 14
+
+
+ 742 04dc 8111      		cpse r24,__zero_reg__
+ 743 04de 00C0      		rjmp .L78
+ 744 04e0 00C0      		rjmp .L99
+ 745               	.L76:
+ 746 04e2 FE01      		movw r30,r28
+ 747 04e4 E55E      		subi r30,-27
+ 748 04e6 FD4F      		sbci r31,-3
+ 749 04e8 2081      		ld r18,Z
+ 750 04ea 3181      		ldd r19,Z+1
+ 751 04ec 2F5F      		subi r18,-1
+ 752 04ee 3F4F      		sbci r19,-1
+ 753 04f0 3183      		std Z+1,r19
+ 754 04f2 2083      		st Z,r18
+ 755 04f4 9923      		tst r25
+ 756 04f6 01F0      		breq .L80
+ 757               	.L77:
+ 758 04f8 FE01      		movw r30,r28
+ 759 04fa E35E      		subi r30,-29
+ 760 04fc FD4F      		sbci r31,-3
+ 761 04fe 2081      		ld r18,Z
+ 762 0500 3181      		ldd r19,Z+1
+ 763 0502 2F5F      		subi r18,-1
+ 764 0504 3F4F      		sbci r19,-1
+ 765 0506 3183      		std Z+1,r19
+ 766 0508 2083      		st Z,r18
+ 767               	.L80:
+ 768 050a 8823      		tst r24
+ 769 050c 01F0      		breq .L81
+ 770               	.L78:
+ 771 050e FE01      		movw r30,r28
+ 772 0510 E15E      		subi r30,-31
+ 773 0512 FD4F      		sbci r31,-3
+ 774 0514 8081      		ld r24,Z
+ 775 0516 9181      		ldd r25,Z+1
+ 776 0518 0196      		adiw r24,1
+ 777 051a 9183      		std Z+1,r25
+ 778 051c 8083      		st Z,r24
+ 779               	.L81:
+ 780 051e 5B98      		cbi 0xb,3
+ 781 0520 8091 C900 		lds r24,201
+ 782 0524 877A      		andi r24,lo8(-89)
+ 783 0526 8093 C900 		sts 201,r24
+ 784 052a 82E0      		ldi r24,lo8(2)
+ 785 052c 8883      		st Y,r24
+ 786 052e FE01      		movw r30,r28
+ 787 0530 E75E      		subi r30,-25
+ 788 0532 FD4F      		sbci r31,-3
+ 789 0534 8081      		ld r24,Z
+ 790 0536 9181      		ldd r25,Z+1
+ 791 0538 0196      		adiw r24,1
+ 792 053a 9183      		std Z+1,r25
+ 793 053c 8083      		st Z,r24
+ 794 053e 8A81      		ldd r24,Y+2
+ 795 0540 8823      		tst r24
+ 796 0542 01F0      		breq .L82
+ 797 0544 8150      		subi r24,lo8(-(-1))
+ 798 0546 8A83      		std Y+2,r24
+GAS LISTING sboxnet2usb.s 			page 15
+
+
+ 799 0548 F801      		movw r30,r16
+ 800 054a 1182      		std Z+1,__zero_reg__
+ 801 054c 8281      		ldd r24,Z+2
+ 802 054e 8083      		st Z,r24
+ 803 0550 FE01      		movw r30,r28
+ 804 0552 EF5D      		subi r30,-33
+ 805 0554 FD4F      		sbci r31,-3
+ 806 0556 00C0      		rjmp .L98
+ 807               	.L82:
+ 808 0558 9B81      		ldd r25,Y+3
+ 809 055a 8C81      		ldd r24,Y+4
+ 810 055c 9817      		cp r25,r24
+ 811 055e 00F4      		brsh .L100
+ 812 0560 C801      		movw r24,r16
+ 813 0562 0E94 0000 		call sboxnet_rb_read
+ 814 0566 8B81      		ldd r24,Y+3
+ 815 0568 8F5F      		subi r24,lo8(-(1))
+ 816 056a 8B83      		std Y+3,r24
+ 817 056c 00C0      		rjmp .L82
+ 818               	.L100:
+ 819 056e 1C82      		std Y+4,__zero_reg__
+ 820 0570 1B82      		std Y+3,__zero_reg__
+ 821 0572 89E1      		ldi r24,lo8(25)
+ 822 0574 8A83      		std Y+2,r24
+ 823 0576 C801      		movw r24,r16
+ 824 0578 0E94 0000 		call sboxnet_rb_read_commit
+ 825 057c FE01      		movw r30,r28
+ 826 057e EF5C      		subi r30,-49
+ 827 0580 FD4F      		sbci r31,-3
+ 828               	.L98:
+ 829 0582 8081      		ld r24,Z
+ 830 0584 9181      		ldd r25,Z+1
+ 831 0586 0196      		adiw r24,1
+ 832 0588 9183      		std Z+1,r25
+ 833 058a 8083      		st Z,r24
+ 834 058c 1C82      		std Y+4,__zero_reg__
+ 835 058e 1B82      		std Y+3,__zero_reg__
+ 836 0590 80E8      		ldi r24,lo8(-128)
+ 837 0592 90E0      		ldi r25,0
+ 838 0594 0E94 0000 		call sboxnet_set_timer
+ 839 0598 00C0      		rjmp .L74
+ 840               	.L99:
+ 841 059a 8091 C900 		lds r24,201
+ 842 059e 8F76      		andi r24,lo8(111)
+ 843 05a0 8093 C900 		sts 201,r24
+ 844 05a4 8091 C900 		lds r24,201
+ 845 05a8 8061      		ori r24,lo8(16)
+ 846 05aa 8093 C900 		sts 201,r24
+ 847 05ae 9B81      		ldd r25,Y+3
+ 848 05b0 8C81      		ldd r24,Y+4
+ 849 05b2 9817      		cp r25,r24
+ 850 05b4 00F4      		brsh .L86
+ 851 05b6 C801      		movw r24,r16
+ 852 05b8 0E94 0000 		call sboxnet_rb_read
+ 853 05bc 9B81      		ldd r25,Y+3
+ 854 05be 9F5F      		subi r25,lo8(-(1))
+ 855 05c0 9B83      		std Y+3,r25
+GAS LISTING sboxnet2usb.s 			page 16
+
+
+ 856 05c2 8D83      		std Y+5,r24
+ 857 05c4 9091 C900 		lds r25,201
+ 858 05c8 9E7F      		andi r25,lo8(-2)
+ 859 05ca 9093 C900 		sts 201,r25
+ 860 05ce 8093 CE00 		sts 206,r24
+ 861 05d2 00C0      		rjmp .L87
+ 862               	.L86:
+ 863 05d4 8091 C900 		lds r24,201
+ 864 05d8 8F7B      		andi r24,lo8(-65)
+ 865 05da 8093 C900 		sts 201,r24
+ 866 05de 1C82      		std Y+4,__zero_reg__
+ 867 05e0 1B82      		std Y+3,__zero_reg__
+ 868 05e2 C801      		movw r24,r16
+ 869 05e4 0E94 0000 		call sboxnet_rb_read_commit
+ 870 05e8 8091 0000 		lds r24,g_sboxnet+535
+ 871 05ec 9091 0000 		lds r25,g_sboxnet+535+1
+ 872 05f0 0196      		adiw r24,1
+ 873 05f2 9093 0000 		sts g_sboxnet+535+1,r25
+ 874 05f6 8093 0000 		sts g_sboxnet+535,r24
+ 875 05fa 0E94 0000 		call sboxnet_receiver_enable
+ 876 05fe 8881      		ld r24,Y
+ 877 0600 8330      		cpi r24,lo8(3)
+ 878 0602 01F4      		brne .L88
+ 879 0604 1882      		st Y,__zero_reg__
+ 880               	.L88:
+ 881 0606 89E1      		ldi r24,lo8(25)
+ 882 0608 8A83      		std Y+2,r24
+ 883 060a 0E94 0000 		call sboxnet_check_try_transmit
+ 884               	.L87:
+ 885 060e CD5E      		subi r28,-19
+ 886 0610 DD4F      		sbci r29,-3
+ 887 0612 8881      		ld r24,Y
+ 888 0614 9981      		ldd r25,Y+1
+ 889 0616 0196      		adiw r24,1
+ 890 0618 9983      		std Y+1,r25
+ 891 061a 8883      		st Y,r24
+ 892               	.L74:
+ 893               	/* epilogue start */
+ 894 061c FF91      		pop r31
+ 895 061e EF91      		pop r30
+ 896 0620 DF91      		pop r29
+ 897 0622 CF91      		pop r28
+ 898 0624 BF91      		pop r27
+ 899 0626 AF91      		pop r26
+ 900 0628 9F91      		pop r25
+ 901 062a 8F91      		pop r24
+ 902 062c 7F91      		pop r23
+ 903 062e 6F91      		pop r22
+ 904 0630 5F91      		pop r21
+ 905 0632 4F91      		pop r20
+ 906 0634 3F91      		pop r19
+ 907 0636 2F91      		pop r18
+ 908 0638 1F91      		pop r17
+ 909 063a 0F91      		pop r16
+ 910 063c 0F90      		pop r0
+ 911 063e 0FBE      		out __SREG__,r0
+ 912 0640 0F90      		pop r0
+GAS LISTING sboxnet2usb.s 			page 17
+
+
+ 913 0642 1F90      		pop r1
+ 914 0644 1895      		reti
+ 915               		.size	__vector_25, .-__vector_25
+ 916               		.type	sboxnet_receive_msg, @function
+ 917               	sboxnet_receive_msg:
+ 918 0646 EF92      		push r14
+ 919 0648 FF92      		push r15
+ 920 064a 0F93      		push r16
+ 921 064c 1F93      		push r17
+ 922 064e CF93      		push r28
+ 923 0650 DF93      		push r29
+ 924               	/* prologue: function */
+ 925               	/* frame size = 0 */
+ 926               	/* stack size = 6 */
+ 927               	.L__stack_usage = 6
+ 928 0652 8C01      		movw r16,r24
+ 929 0654 6630      		cpi r22,lo8(6)
+ 930 0656 00F4      		brsh .L102
+ 931               	.L106:
+ 932 0658 8DEF      		ldi r24,lo8(-3)
+ 933 065a 00C0      		rjmp .L103
+ 934               	.L102:
+ 935 065c 3FB7      		in r19,__SREG__
+ 936               	/* #APP */
+ 937               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 938 065e F894      		cli
+ 939               	 ;  0 "" 2
+ 940               	/* #NOAPP */
+ 941 0660 9091 0000 		lds r25,g_sboxnet+10
+ 942 0664 2091 0000 		lds r18,g_sboxnet+15
+ 943 0668 822F      		mov r24,r18
+ 944 066a 891B      		sub r24,r25
+ 945 066c 8730      		cpi r24,lo8(7)
+ 946 066e 00F0      		brlo .L109
+ 947 0670 9217      		cp r25,r18
+ 948 0672 00F4      		brsh .L105
+ 949 0674 E091 0000 		lds r30,g_sboxnet+9
+ 950 0678 F0E0      		ldi r31,0
+ 951 067a E050      		subi r30,lo8(-(g_sboxnet+8))
+ 952 067c F040      		sbci r31,hi8(-(g_sboxnet+8))
+ 953 067e C185      		ldd r28,Z+9
+ 954 0680 00C0      		rjmp .L104
+ 955               	.L105:
+ 956 0682 9091 0000 		lds r25,g_sboxnet+1
+ 957 0686 9260      		ori r25,lo8(2)
+ 958 0688 9093 0000 		sts g_sboxnet+1,r25
+ 959               	.L109:
+ 960 068c C0E0      		ldi r28,0
+ 961               	.L104:
+ 962 068e 3FBF      		out __SREG__,r19
+ 963 0690 C630      		cpi r28,lo8(6)
+ 964 0692 00F4      		brsh .+2
+ 965 0694 00C0      		rjmp .L111
+ 966 0696 2C2F      		mov r18,r28
+ 967 0698 30E0      		ldi r19,0
+ 968 069a 90E0      		ldi r25,0
+ 969 069c 2817      		cp r18,r24
+GAS LISTING sboxnet2usb.s 			page 18
+
+
+ 970 069e 3907      		cpc r19,r25
+ 971 06a0 04F0      		brlt .+2
+ 972 06a2 00C0      		rjmp .L111
+ 973 06a4 6C17      		cp r22,r28
+ 974 06a6 00F0      		brlo .L106
+ 975 06a8 C634      		cpi r28,lo8(70)
+ 976 06aa 00F0      		brlo .+2
+ 977 06ac 00C0      		rjmp .L112
+ 978 06ae DFB7      		in r29,__SREG__
+ 979               	/* #APP */
+ 980               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 981 06b0 F894      		cli
+ 982               	 ;  0 "" 2
+ 983               	/* #NOAPP */
+ 984 06b2 80E0      		ldi r24,lo8(g_sboxnet+9)
+ 985 06b4 90E0      		ldi r25,hi8(g_sboxnet+9)
+ 986 06b6 0E94 0000 		call sboxnet_rb_read
+ 987 06ba DFBF      		out __SREG__,r29
+ 988 06bc F12C      		mov r15,__zero_reg__
+ 989 06be DFEF      		ldi r29,lo8(-1)
+ 990               	.L107:
+ 991 06c0 EFB6      		in r14,__SREG__
+ 992               	/* #APP */
+ 993               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 994 06c2 F894      		cli
+ 995               	 ;  0 "" 2
+ 996               	/* #NOAPP */
+ 997 06c4 80E0      		ldi r24,lo8(g_sboxnet+9)
+ 998 06c6 90E0      		ldi r25,hi8(g_sboxnet+9)
+ 999 06c8 0E94 0000 		call sboxnet_rb_read
+ 1000 06cc EFBE      		out __SREG__,r14
+ 1001               	/* #APP */
+ 1002               	 ;  321 "/usr/avr/include/util/crc16.h" 1
+ 1003 06ce D827      			eor	r29, r24
+ 1004 06d0 98E0      			ldi	r25, 8
+ 1005 06d2 2CE8      			ldi	r18, 0x8C
+ 1006 06d4 D695      		1:	lsr	r29
+ 1007 06d6 00F4      			brcc	2f
+ 1008 06d8 D227      			eor	r29, r18
+ 1009 06da 9A95      		2:	dec	r25
+ 1010 06dc 01F4      			brne	1b
+ 1011               		
+ 1012               	 ;  0 "" 2
+ 1013               	/* #NOAPP */
+ 1014 06de F801      		movw r30,r16
+ 1015 06e0 8083      		st Z,r24
+ 1016 06e2 F394      		inc r15
+ 1017 06e4 0F5F      		subi r16,-1
+ 1018 06e6 1F4F      		sbci r17,-1
+ 1019 06e8 FC16      		cp r15,r28
+ 1020 06ea 00F0      		brlo .L107
+ 1021 06ec 1FB7      		in r17,__SREG__
+ 1022               	/* #APP */
+ 1023               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1024 06ee F894      		cli
+ 1025               	 ;  0 "" 2
+ 1026               	/* #NOAPP */
+GAS LISTING sboxnet2usb.s 			page 19
+
+
+ 1027 06f0 80E0      		ldi r24,lo8(g_sboxnet+9)
+ 1028 06f2 90E0      		ldi r25,hi8(g_sboxnet+9)
+ 1029 06f4 0E94 0000 		call sboxnet_rb_read_commit
+ 1030 06f8 1FBF      		out __SREG__,r17
+ 1031 06fa DD23      		tst r29
+ 1032 06fc 01F0      		breq .L108
+ 1033 06fe 0E94 0000 		call sboxnet_debug_inc_recverrors
+ 1034 0702 8091 0000 		lds r24,g_sboxnet+559
+ 1035 0706 9091 0000 		lds r25,g_sboxnet+559+1
+ 1036 070a 0196      		adiw r24,1
+ 1037 070c 9093 0000 		sts g_sboxnet+559+1,r25
+ 1038 0710 8093 0000 		sts g_sboxnet+559,r24
+ 1039 0714 8EEF      		ldi r24,lo8(-2)
+ 1040 0716 00C0      		rjmp .L103
+ 1041               	.L108:
+ 1042 0718 8091 0000 		lds r24,g_sboxnet+529
+ 1043 071c 9091 0000 		lds r25,g_sboxnet+529+1
+ 1044 0720 0196      		adiw r24,1
+ 1045 0722 9093 0000 		sts g_sboxnet+529+1,r25
+ 1046 0726 8093 0000 		sts g_sboxnet+529,r24
+ 1047 072a 8C2F      		mov r24,r28
+ 1048 072c 00C0      		rjmp .L103
+ 1049               	.L111:
+ 1050 072e 8FEF      		ldi r24,lo8(-1)
+ 1051 0730 00C0      		rjmp .L103
+ 1052               	.L112:
+ 1053 0732 8CEF      		ldi r24,lo8(-4)
+ 1054               	.L103:
+ 1055               	/* epilogue start */
+ 1056 0734 DF91      		pop r29
+ 1057 0736 CF91      		pop r28
+ 1058 0738 1F91      		pop r17
+ 1059 073a 0F91      		pop r16
+ 1060 073c FF90      		pop r15
+ 1061 073e EF90      		pop r14
+ 1062 0740 0895      		ret
+ 1063               		.size	sboxnet_receive_msg, .-sboxnet_receive_msg
+ 1064               		.type	sboxnet_send_msg, @function
+ 1065               	sboxnet_send_msg:
+ 1066 0742 EF92      		push r14
+ 1067 0744 FF92      		push r15
+ 1068 0746 0F93      		push r16
+ 1069 0748 1F93      		push r17
+ 1070 074a CF93      		push r28
+ 1071 074c DF93      		push r29
+ 1072               	/* prologue: function */
+ 1073               	/* frame size = 0 */
+ 1074               	/* stack size = 6 */
+ 1075               	.L__stack_usage = 6
+ 1076 074e FC01      		movw r30,r24
+ 1077 0750 C381      		ldd r28,Z+3
+ 1078 0752 CF73      		andi r28,lo8(63)
+ 1079 0754 CA5F      		subi r28,lo8(-(6))
+ 1080 0756 8FB7      		in r24,__SREG__
+ 1081               	/* #APP */
+ 1082               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1083 0758 F894      		cli
+GAS LISTING sboxnet2usb.s 			page 20
+
+
+ 1084               	 ;  0 "" 2
+ 1085               	/* #NOAPP */
+ 1086 075a 9091 0000 		lds r25,g_sboxnet+274
+ 1087 075e 2091 0000 		lds r18,g_sboxnet+273
+ 1088 0762 921B      		sub r25,r18
+ 1089 0764 2091 0000 		lds r18,g_sboxnet+271
+ 1090 0768 921B      		sub r25,r18
+ 1091 076a 8FBF      		out __SREG__,r24
+ 1092 076c C917      		cp r28,r25
+ 1093 076e 00F0      		brlo .+2
+ 1094 0770 00C0      		rjmp .L120
+ 1095 0772 7F01      		movw r14,r30
+ 1096 0774 DFB7      		in r29,__SREG__
+ 1097               	/* #APP */
+ 1098               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1099 0776 F894      		cli
+ 1100               	 ;  0 "" 2
+ 1101               	/* #NOAPP */
+ 1102 0778 6C2F      		mov r22,r28
+ 1103 077a 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 1104 077c 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 1105 077e 0E94 0000 		call sboxnet_rb_write
+ 1106 0782 DFBF      		out __SREG__,r29
+ 1107 0784 8111      		cpse r24,__zero_reg__
+ 1108 0786 00C0      		rjmp .L121
+ 1109               	.L118:
+ 1110 0788 8FB7      		in r24,__SREG__
+ 1111               	/* #APP */
+ 1112               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1113 078a F894      		cli
+ 1114               	 ;  0 "" 2
+ 1115               	/* #NOAPP */
+ 1116 078c 1092 0000 		sts g_sboxnet+271,__zero_reg__
+ 1117 0790 9091 0000 		lds r25,g_sboxnet+272
+ 1118 0794 9093 0000 		sts g_sboxnet+270,r25
+ 1119 0798 8FBF      		out __SREG__,r24
+ 1120 079a 00C0      		rjmp .L120
+ 1121               	.L121:
+ 1122 079c 10E0      		ldi r17,0
+ 1123 079e DFEF      		ldi r29,lo8(-1)
+ 1124               	.L115:
+ 1125 07a0 212F      		mov r18,r17
+ 1126 07a2 30E0      		ldi r19,0
+ 1127 07a4 8C2F      		mov r24,r28
+ 1128 07a6 90E0      		ldi r25,0
+ 1129 07a8 0197      		sbiw r24,1
+ 1130 07aa 2817      		cp r18,r24
+ 1131 07ac 3907      		cpc r19,r25
+ 1132 07ae 04F4      		brge .L128
+ 1133 07b0 1130      		cpi r17,lo8(1)
+ 1134 07b2 01F4      		brne .L116
+ 1135 07b4 6091 0000 		lds r22,g_sboxnet_addr
+ 1136 07b8 00C0      		rjmp .L117
+ 1137               	.L116:
+ 1138 07ba F701      		movw r30,r14
+ 1139 07bc E20F      		add r30,r18
+ 1140 07be F31F      		adc r31,r19
+GAS LISTING sboxnet2usb.s 			page 21
+
+
+ 1141 07c0 6081      		ld r22,Z
+ 1142               	.L117:
+ 1143               	/* #APP */
+ 1144               	 ;  321 "/usr/avr/include/util/crc16.h" 1
+ 1145 07c2 D627      			eor	r29, r22
+ 1146 07c4 88E0      			ldi	r24, 8
+ 1147 07c6 9CE8      			ldi	r25, 0x8C
+ 1148 07c8 D695      		1:	lsr	r29
+ 1149 07ca 00F4      			brcc	2f
+ 1150 07cc D927      			eor	r29, r25
+ 1151 07ce 8A95      		2:	dec	r24
+ 1152 07d0 01F4      			brne	1b
+ 1153               		
+ 1154               	 ;  0 "" 2
+ 1155               	/* #NOAPP */
+ 1156 07d2 0FB7      		in r16,__SREG__
+ 1157               	/* #APP */
+ 1158               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1159 07d4 F894      		cli
+ 1160               	 ;  0 "" 2
+ 1161               	/* #NOAPP */
+ 1162 07d6 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 1163 07d8 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 1164 07da 0E94 0000 		call sboxnet_rb_write
+ 1165 07de 0FBF      		out __SREG__,r16
+ 1166 07e0 8823      		tst r24
+ 1167 07e2 01F0      		breq .L118
+ 1168 07e4 1F5F      		subi r17,lo8(-(1))
+ 1169 07e6 00C0      		rjmp .L115
+ 1170               	.L128:
+ 1171 07e8 CFB7      		in r28,__SREG__
+ 1172               	/* #APP */
+ 1173               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1174 07ea F894      		cli
+ 1175               	 ;  0 "" 2
+ 1176               	/* #NOAPP */
+ 1177 07ec 6D2F      		mov r22,r29
+ 1178 07ee 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 1179 07f0 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 1180 07f2 0E94 0000 		call sboxnet_rb_write
+ 1181 07f6 CFBF      		out __SREG__,r28
+ 1182 07f8 8823      		tst r24
+ 1183 07fa 01F4      		brne .+2
+ 1184 07fc 00C0      		rjmp .L118
+ 1185 07fe CFB7      		in r28,__SREG__
+ 1186               	/* #APP */
+ 1187               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1188 0800 F894      		cli
+ 1189               	 ;  0 "" 2
+ 1190               	/* #NOAPP */
+ 1191 0802 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 1192 0804 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 1193 0806 0E94 0000 		call sboxnet_rb_write_commit
+ 1194 080a 0E94 0000 		call sboxnet_check_try_transmit
+ 1195 080e CFBF      		out __SREG__,r28
+ 1196 0810 8091 0000 		lds r24,g_sboxnet+533
+ 1197 0814 9091 0000 		lds r25,g_sboxnet+533+1
+GAS LISTING sboxnet2usb.s 			page 22
+
+
+ 1198 0818 0196      		adiw r24,1
+ 1199 081a 9093 0000 		sts g_sboxnet+533+1,r25
+ 1200 081e 8093 0000 		sts g_sboxnet+533,r24
+ 1201 0822 80E0      		ldi r24,0
+ 1202 0824 00C0      		rjmp .L114
+ 1203               	.L120:
+ 1204 0826 81E0      		ldi r24,lo8(1)
+ 1205               	.L114:
+ 1206               	/* epilogue start */
+ 1207 0828 DF91      		pop r29
+ 1208 082a CF91      		pop r28
+ 1209 082c 1F91      		pop r17
+ 1210 082e 0F91      		pop r16
+ 1211 0830 FF90      		pop r15
+ 1212 0832 EF90      		pop r14
+ 1213 0834 0895      		ret
+ 1214               		.size	sboxnet_send_msg, .-sboxnet_send_msg
+ 1215               		.type	sboxnet_can_send_msg, @function
+ 1216               	sboxnet_can_send_msg:
+ 1217               	/* prologue: function */
+ 1218               	/* frame size = 0 */
+ 1219               	/* stack size = 0 */
+ 1220               	.L__stack_usage = 0
+ 1221 0836 FC01      		movw r30,r24
+ 1222 0838 9381      		ldd r25,Z+3
+ 1223 083a 9F73      		andi r25,lo8(63)
+ 1224 083c 9A5F      		subi r25,lo8(-(6))
+ 1225 083e 8FB7      		in r24,__SREG__
+ 1226               	/* #APP */
+ 1227               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1228 0840 F894      		cli
+ 1229               	 ;  0 "" 2
+ 1230               	/* #NOAPP */
+ 1231 0842 2091 0000 		lds r18,g_sboxnet+274
+ 1232 0846 3091 0000 		lds r19,g_sboxnet+273
+ 1233 084a 231B      		sub r18,r19
+ 1234 084c 3091 0000 		lds r19,g_sboxnet+271
+ 1235 0850 231B      		sub r18,r19
+ 1236 0852 8FBF      		out __SREG__,r24
+ 1237 0854 81E0      		ldi r24,lo8(1)
+ 1238 0856 9217      		cp r25,r18
+ 1239 0858 00F0      		brlo .L130
+ 1240 085a 80E0      		ldi r24,0
+ 1241               	.L130:
+ 1242 085c 0895      		ret
+ 1243               		.size	sboxnet_can_send_msg, .-sboxnet_can_send_msg
+ 1244               		.type	sboxnet_all_sent, @function
+ 1245               	sboxnet_all_sent:
+ 1246               	/* prologue: function */
+ 1247               	/* frame size = 0 */
+ 1248               	/* stack size = 0 */
+ 1249               	.L__stack_usage = 0
+ 1250 085e 9091 0000 		lds r25,g_sboxnet+273
+ 1251 0862 81E0      		ldi r24,lo8(1)
+ 1252 0864 9111      		cpse r25,__zero_reg__
+ 1253 0866 80E0      		ldi r24,0
+ 1254               	.L132:
+GAS LISTING sboxnet2usb.s 			page 23
+
+
+ 1255 0868 0895      		ret
+ 1256               		.size	sboxnet_all_sent, .-sboxnet_all_sent
+ 1257               		.type	sboxnet_can_read, @function
+ 1258               	sboxnet_can_read:
+ 1259               	/* prologue: function */
+ 1260               	/* frame size = 0 */
+ 1261               	/* stack size = 0 */
+ 1262               	.L__stack_usage = 0
+ 1263 086a 8FB7      		in r24,__SREG__
+ 1264               	/* #APP */
+ 1265               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1266 086c F894      		cli
+ 1267               	 ;  0 "" 2
+ 1268               	/* #NOAPP */
+ 1269 086e 2091 0000 		lds r18,g_sboxnet+10
+ 1270 0872 9091 0000 		lds r25,g_sboxnet+15
+ 1271 0876 921B      		sub r25,r18
+ 1272 0878 8FBF      		out __SREG__,r24
+ 1273 087a 81E0      		ldi r24,lo8(1)
+ 1274 087c 9630      		cpi r25,lo8(6)
+ 1275 087e 00F4      		brsh .L137
+ 1276 0880 80E0      		ldi r24,0
+ 1277               	.L137:
+ 1278 0882 0895      		ret
+ 1279               		.size	sboxnet_can_read, .-sboxnet_can_read
+ 1280               		.type	sboxnet_can_send, @function
+ 1281               	sboxnet_can_send:
+ 1282               	/* prologue: function */
+ 1283               	/* frame size = 0 */
+ 1284               	/* stack size = 0 */
+ 1285               	.L__stack_usage = 0
+ 1286 0884 8FB7      		in r24,__SREG__
+ 1287               	/* #APP */
+ 1288               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1289 0886 F894      		cli
+ 1290               	 ;  0 "" 2
+ 1291               	/* #NOAPP */
+ 1292 0888 9091 0000 		lds r25,g_sboxnet+274
+ 1293 088c 2091 0000 		lds r18,g_sboxnet+273
+ 1294 0890 921B      		sub r25,r18
+ 1295 0892 2091 0000 		lds r18,g_sboxnet+271
+ 1296 0896 921B      		sub r25,r18
+ 1297 0898 8FBF      		out __SREG__,r24
+ 1298 089a 81E0      		ldi r24,lo8(1)
+ 1299 089c 9730      		cpi r25,lo8(7)
+ 1300 089e 00F4      		brsh .L139
+ 1301 08a0 80E0      		ldi r24,0
+ 1302               	.L139:
+ 1303 08a2 0895      		ret
+ 1304               		.size	sboxnet_can_send, .-sboxnet_can_send
+ 1305               		.type	get_status, @function
+ 1306               	get_status:
+ 1307 08a4 CF93      		push r28
+ 1308 08a6 DF93      		push r29
+ 1309               	/* prologue: function */
+ 1310               	/* frame size = 0 */
+ 1311               	/* stack size = 2 */
+GAS LISTING sboxnet2usb.s 			page 24
+
+
+ 1312               	.L__stack_usage = 2
+ 1313 08a8 C091 0000 		lds r28,g_sboxnet_status
+ 1314 08ac 1092 0000 		sts g_sboxnet_status,__zero_reg__
+ 1315 08b0 0E94 0000 		call sboxnet_can_read
+ 1316 08b4 8111      		cpse r24,__zero_reg__
+ 1317 08b6 C260      		ori r28,lo8(2)
+ 1318               	.L147:
+ 1319 08b8 D0E0      		ldi r29,0
+ 1320 08ba 0E94 0000 		call sboxnet_can_send
+ 1321 08be 8111      		cpse r24,__zero_reg__
+ 1322 08c0 C061      		ori r28,16
+ 1323               	.L143:
+ 1324 08c2 8C2F      		mov r24,r28
+ 1325               	/* epilogue start */
+ 1326 08c4 DF91      		pop r29
+ 1327 08c6 CF91      		pop r28
+ 1328 08c8 0895      		ret
+ 1329               		.size	get_status, .-get_status
+ 1330               	.global	__vector_16
+ 1331               		.type	__vector_16, @function
+ 1332               	__vector_16:
+ 1333 08ca 1F92      		push r1
+ 1334 08cc 0F92      		push r0
+ 1335 08ce 0FB6      		in r0,__SREG__
+ 1336 08d0 0F92      		push r0
+ 1337 08d2 1124      		clr __zero_reg__
+ 1338 08d4 2F93      		push r18
+ 1339 08d6 3F93      		push r19
+ 1340 08d8 4F93      		push r20
+ 1341 08da 5F93      		push r21
+ 1342 08dc 6F93      		push r22
+ 1343 08de 7F93      		push r23
+ 1344 08e0 8F93      		push r24
+ 1345 08e2 9F93      		push r25
+ 1346 08e4 AF93      		push r26
+ 1347 08e6 BF93      		push r27
+ 1348 08e8 CF93      		push r28
+ 1349 08ea EF93      		push r30
+ 1350 08ec FF93      		push r31
+ 1351               	/* prologue: Signal */
+ 1352               	/* frame size = 0 */
+ 1353               	/* stack size = 16 */
+ 1354               	.L__stack_usage = 16
+ 1355 08ee 8091 6F00 		lds r24,111
+ 1356 08f2 8B7F      		andi r24,lo8(-5)
+ 1357 08f4 8093 6F00 		sts 111,r24
+ 1358 08f8 8091 0000 		lds r24,g_sboxnet
+ 1359 08fc 8130      		cpi r24,lo8(1)
+ 1360 08fe 01F0      		breq .+2
+ 1361 0900 00C0      		rjmp .L149
+ 1362 0902 8091 0000 		lds r24,g_sboxnet+4
+ 1363 0906 8823      		tst r24
+ 1364 0908 01F4      		brne .+2
+ 1365 090a 00C0      		rjmp .L150
+ 1366 090c 8091 0000 		lds r24,g_sboxnet+3
+ 1367 0910 8111      		cpse r24,__zero_reg__
+ 1368 0912 00C0      		rjmp .L150
+GAS LISTING sboxnet2usb.s 			page 25
+
+
+ 1369 0914 9091 0000 		lds r25,g_sboxnet+273
+ 1370 0918 8091 0000 		lds r24,g_sboxnet+268
+ 1371 091c 8917      		cp r24,r25
+ 1372 091e 00F4      		brsh .L151
+ 1373 0920 E091 0000 		lds r30,g_sboxnet+267
+ 1374 0924 F0E0      		ldi r31,0
+ 1375 0926 E050      		subi r30,lo8(-(g_sboxnet+275))
+ 1376 0928 F040      		sbci r31,hi8(-(g_sboxnet+275))
+ 1377 092a C081      		ld r28,Z
+ 1378 092c 00C0      		rjmp .L152
+ 1379               	.L151:
+ 1380 092e 8091 0000 		lds r24,g_sboxnet+1
+ 1381 0932 8260      		ori r24,lo8(2)
+ 1382 0934 8093 0000 		sts g_sboxnet+1,r24
+ 1383 0938 C0E0      		ldi r28,0
+ 1384               	.L152:
+ 1385 093a 5B9A      		sbi 0xb,3
+ 1386 093c 8091 C900 		lds r24,201
+ 1387 0940 8960      		ori r24,lo8(9)
+ 1388 0942 8093 C900 		sts 201,r24
+ 1389 0946 E299      		sbic 0x1c,2
+ 1390 0948 00C0      		rjmp .L153
+ 1391 094a 4A99      		sbic 0x9,2
+ 1392 094c 00C0      		rjmp .L154
+ 1393               	.L153:
+ 1394 094e 0E94 0000 		call sboxnet_prandom
+ 1395 0952 482F      		mov r20,r24
+ 1396 0954 4F73      		andi r20,lo8(63)
+ 1397 0956 2091 0000 		lds r18,g_sboxnet+2
+ 1398 095a 30E0      		ldi r19,0
+ 1399 095c 220F      		lsl r18
+ 1400 095e 331F      		rol r19
+ 1401 0960 C901      		movw r24,r18
+ 1402 0962 8858      		subi r24,-120
+ 1403 0964 9F4F      		sbci r25,-1
+ 1404 0966 24E0      		ldi r18,lo8(4)
+ 1405 0968 2CBB      		out 0x1c,r18
+ 1406 096a 21E0      		ldi r18,lo8(1)
+ 1407 096c 2093 0000 		sts g_sboxnet,r18
+ 1408 0970 840F      		add r24,r20
+ 1409 0972 911D      		adc r25,__zero_reg__
+ 1410 0974 00C0      		rjmp .L164
+ 1411               	.L154:
+ 1412 0976 8091 C900 		lds r24,201
+ 1413 097a 8F76      		andi r24,lo8(111)
+ 1414 097c 8093 C900 		sts 201,r24
+ 1415 0980 8091 C900 		lds r24,201
+ 1416 0984 8065      		ori r24,lo8(80)
+ 1417 0986 8093 C900 		sts 201,r24
+ 1418 098a C093 CE00 		sts 206,r28
+ 1419 098e 8091 C800 		lds r24,200
+ 1420 0992 8E7F      		andi r24,lo8(-2)
+ 1421 0994 8093 C800 		sts 200,r24
+ 1422 0998 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 1423 099a 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 1424 099c 0E94 0000 		call sboxnet_rb_read
+ 1425 09a0 C093 0000 		sts g_sboxnet+5,r28
+GAS LISTING sboxnet2usb.s 			page 26
+
+
+ 1426 09a4 8091 0000 		lds r24,g_sboxnet+3
+ 1427 09a8 8F5F      		subi r24,lo8(-(1))
+ 1428 09aa 8093 0000 		sts g_sboxnet+3,r24
+ 1429 09ae 83E0      		ldi r24,lo8(3)
+ 1430 09b0 8093 0000 		sts g_sboxnet,r24
+ 1431 09b4 00C0      		rjmp .L148
+ 1432               	.L150:
+ 1433 09b6 1092 0000 		sts g_sboxnet,__zero_reg__
+ 1434 09ba 00C0      		rjmp .L148
+ 1435               	.L149:
+ 1436 09bc 8230      		cpi r24,lo8(2)
+ 1437 09be 01F4      		brne .L156
+ 1438 09c0 5B9A      		sbi 0xb,3
+ 1439 09c2 C4E0      		ldi r28,lo8(4)
+ 1440 09c4 C093 0000 		sts g_sboxnet,r28
+ 1441 09c8 80E2      		ldi r24,lo8(32)
+ 1442 09ca 90E0      		ldi r25,0
+ 1443 09cc 0E94 0000 		call sboxnet_set_timer
+ 1444 09d0 CCBB      		out 0x1c,r28
+ 1445 09d2 00C0      		rjmp .L148
+ 1446               	.L156:
+ 1447 09d4 8430      		cpi r24,lo8(4)
+ 1448 09d6 01F4      		brne .L148
+ 1449 09d8 E299      		sbic 0x1c,2
+ 1450 09da 00C0      		rjmp .L157
+ 1451 09dc 4A9B      		sbis 0x9,2
+ 1452 09de 00C0      		rjmp .L157
+ 1453 09e0 0E94 0000 		call sboxnet_receiver_enable
+ 1454 09e4 1092 0000 		sts g_sboxnet,__zero_reg__
+ 1455 09e8 0E94 0000 		call sboxnet_check_try_transmit
+ 1456 09ec 00C0      		rjmp .L148
+ 1457               	.L157:
+ 1458 09ee 84E0      		ldi r24,lo8(4)
+ 1459 09f0 8CBB      		out 0x1c,r24
+ 1460 09f2 80E2      		ldi r24,lo8(32)
+ 1461 09f4 90E0      		ldi r25,0
+ 1462               	.L164:
+ 1463 09f6 0E94 0000 		call sboxnet_set_timer
+ 1464               	.L148:
+ 1465               	/* epilogue start */
+ 1466 09fa FF91      		pop r31
+ 1467 09fc EF91      		pop r30
+ 1468 09fe CF91      		pop r28
+ 1469 0a00 BF91      		pop r27
+ 1470 0a02 AF91      		pop r26
+ 1471 0a04 9F91      		pop r25
+ 1472 0a06 8F91      		pop r24
+ 1473 0a08 7F91      		pop r23
+ 1474 0a0a 6F91      		pop r22
+ 1475 0a0c 5F91      		pop r21
+ 1476 0a0e 4F91      		pop r20
+ 1477 0a10 3F91      		pop r19
+ 1478 0a12 2F91      		pop r18
+ 1479 0a14 0F90      		pop r0
+ 1480 0a16 0FBE      		out __SREG__,r0
+ 1481 0a18 0F90      		pop r0
+ 1482 0a1a 1F90      		pop r1
+GAS LISTING sboxnet2usb.s 			page 27
+
+
+ 1483 0a1c 1895      		reti
+ 1484               		.size	__vector_16, .-__vector_16
+ 1485               		.section	.init8,"ax",@progbits
+ 1486               	.global	stack_init8
+ 1487               		.type	stack_init8, @function
+ 1488               	stack_init8:
+ 1489               	/* prologue: naked */
+ 1490               	/* frame size = 0 */
+ 1491               	/* stack size = 0 */
+ 1492               	.L__stack_usage = 0
+ 1493 0000 E0E0      		ldi r30,lo8(_end)
+ 1494 0002 F0E0      		ldi r31,hi8(_end)
+ 1495 0004 00C0      		rjmp .L166
+ 1496               	.L167:
+ 1497 0006 85EA      		ldi r24,lo8(-91)
+ 1498 0008 8083      		st Z,r24
+ 1499 000a 3196      		adiw r30,1
+ 1500               	.L166:
+ 1501 000c 80E0      		ldi r24,hi8(__stack)
+ 1502 000e E030      		cpi r30,lo8(__stack)
+ 1503 0010 F807      		cpc r31,r24
+ 1504 0012 00F0      		brlo .L167
+ 1505               	/* epilogue start */
+ 1506               		.size	stack_init8, .-stack_init8
+ 1507               		.text
+ 1508               	.global	usb_ep_read_data
+ 1509               		.type	usb_ep_read_data, @function
+ 1510               	usb_ep_read_data:
+ 1511               	/* prologue: function */
+ 1512               	/* frame size = 0 */
+ 1513               	/* stack size = 0 */
+ 1514               	.L__stack_usage = 0
+ 1515               	.L169:
+ 1516 0a1e 6623      		tst r22
+ 1517 0a20 01F0      		breq .L171
+ 1518 0a22 2091 F100 		lds r18,241
+ 1519 0a26 FC01      		movw r30,r24
+ 1520 0a28 2083      		st Z,r18
+ 1521 0a2a 6150      		subi r22,lo8(-(-1))
+ 1522 0a2c 0196      		adiw r24,1
+ 1523 0a2e 00C0      		rjmp .L169
+ 1524               	.L171:
+ 1525               	/* epilogue start */
+ 1526 0a30 0895      		ret
+ 1527               		.size	usb_ep_read_data, .-usb_ep_read_data
+ 1528               	.global	usb_ep_waitIN
+ 1529               		.type	usb_ep_waitIN, @function
+ 1530               	usb_ep_waitIN:
+ 1531               	/* prologue: function */
+ 1532               	/* frame size = 0 */
+ 1533               	/* stack size = 0 */
+ 1534               	.L__stack_usage = 0
+ 1535               	.L173:
+ 1536 0a32 8091 E800 		lds r24,232
+ 1537 0a36 80FD      		sbrc r24,0
+ 1538 0a38 00C0      		rjmp .L177
+ 1539 0a3a 8091 0000 		lds r24,g_usb_dev
+GAS LISTING sboxnet2usb.s 			page 28
+
+
+ 1540 0a3e 8C71      		andi r24,lo8(28)
+ 1541 0a40 01F4      		brne .L173
+ 1542 0a42 83E0      		ldi r24,lo8(3)
+ 1543 0a44 0895      		ret
+ 1544               	.L177:
+ 1545 0a46 80E0      		ldi r24,0
+ 1546 0a48 0895      		ret
+ 1547               		.size	usb_ep_waitIN, .-usb_ep_waitIN
+ 1548               	.global	usb_ep_send_zlp
+ 1549               		.type	usb_ep_send_zlp, @function
+ 1550               	usb_ep_send_zlp:
+ 1551               	/* prologue: function */
+ 1552               	/* frame size = 0 */
+ 1553               	/* stack size = 0 */
+ 1554               	.L__stack_usage = 0
+ 1555 0a4a 0E94 0000 		call usb_ep_waitIN
+ 1556 0a4e 8111      		cpse r24,__zero_reg__
+ 1557 0a50 00C0      		rjmp .L179
+ 1558 0a52 0E94 0000 		call usb_ep_clearIN
+ 1559 0a56 0C94 0000 		jmp usb_ep_waitIN
+ 1560               	.L179:
+ 1561 0a5a 0895      		ret
+ 1562               		.size	usb_ep_send_zlp, .-usb_ep_send_zlp
+ 1563               	.global	usb_mem_read_byte
+ 1564               		.type	usb_mem_read_byte, @function
+ 1565               	usb_mem_read_byte:
+ 1566               	/* prologue: function */
+ 1567               	/* frame size = 0 */
+ 1568               	/* stack size = 0 */
+ 1569               	.L__stack_usage = 0
+ 1570 0a5c 6130      		cpi r22,lo8(1)
+ 1571 0a5e 01F0      		breq .L182
+ 1572 0a60 6230      		cpi r22,lo8(2)
+ 1573 0a62 01F4      		brne .L186
+ 1574 0a64 0C94 0000 		jmp __eerd_byte_m32u2
+ 1575               	.L182:
+ 1576 0a68 FC01      		movw r30,r24
+ 1577               	/* #APP */
+ 1578               	 ;  139 "../avrutilslib/usb/usb.c" 1
+ 1579 0a6a 8491      		lpm r24, Z
+ 1580               		
+ 1581               	 ;  0 "" 2
+ 1582               	/* #NOAPP */
+ 1583 0a6c 0895      		ret
+ 1584               	.L186:
+ 1585 0a6e FC01      		movw r30,r24
+ 1586 0a70 8081      		ld r24,Z
+ 1587 0a72 0895      		ret
+ 1588               		.size	usb_mem_read_byte, .-usb_mem_read_byte
+ 1589               	.global	usb_ep_getbufsize
+ 1590               		.type	usb_ep_getbufsize, @function
+ 1591               	usb_ep_getbufsize:
+ 1592               	/* prologue: function */
+ 1593               	/* frame size = 0 */
+ 1594               	/* stack size = 0 */
+ 1595               	.L__stack_usage = 0
+ 1596 0a74 E091 ED00 		lds r30,237
+GAS LISTING sboxnet2usb.s 			page 29
+
+
+ 1597 0a78 E295      		swap r30
+ 1598 0a7a E370      		andi r30,lo8(3)
+ 1599 0a7c F0E0      		ldi r31,0
+ 1600 0a7e E050      		subi r30,lo8(-(epsizemap.2616))
+ 1601 0a80 F040      		sbci r31,hi8(-(epsizemap.2616))
+ 1602               	/* #APP */
+ 1603               	 ;  152 "../avrutilslib/usb/usb.c" 1
+ 1604 0a82 8491      		lpm r24, Z
+ 1605               		
+ 1606               	 ;  0 "" 2
+ 1607               	/* #NOAPP */
+ 1608 0a84 0895      		ret
+ 1609               		.size	usb_ep_getbufsize, .-usb_ep_getbufsize
+ 1610               	.global	usb_ep_send_in_data
+ 1611               		.type	usb_ep_send_in_data, @function
+ 1612               	usb_ep_send_in_data:
+ 1613 0a86 CF92      		push r12
+ 1614 0a88 DF92      		push r13
+ 1615 0a8a EF92      		push r14
+ 1616 0a8c FF92      		push r15
+ 1617 0a8e 0F93      		push r16
+ 1618 0a90 1F93      		push r17
+ 1619 0a92 CF93      		push r28
+ 1620 0a94 DF93      		push r29
+ 1621               	/* prologue: function */
+ 1622               	/* frame size = 0 */
+ 1623               	/* stack size = 8 */
+ 1624               	.L__stack_usage = 8
+ 1625 0a96 7C01      		movw r14,r24
+ 1626 0a98 8B01      		movw r16,r22
+ 1627 0a9a D42F      		mov r29,r20
+ 1628               	.L191:
+ 1629 0a9c 8091 0000 		lds r24,g_usb_dev
+ 1630 0aa0 8C71      		andi r24,lo8(28)
+ 1631 0aa2 01F0      		breq .L196
+ 1632 0aa4 8091 E800 		lds r24,232
+ 1633 0aa8 83FD      		sbrc r24,3
+ 1634 0aaa 00C0      		rjmp .L197
+ 1635 0aac 8091 E800 		lds r24,232
+ 1636 0ab0 C82F      		mov r28,r24
+ 1637 0ab2 C470      		andi r28,lo8(4)
+ 1638 0ab4 82FF      		sbrs r24,2
+ 1639 0ab6 00C0      		rjmp .L190
+ 1640 0ab8 0E94 0000 		call usb_ep_clearOUT
+ 1641 0abc C2E0      		ldi r28,lo8(2)
+ 1642 0abe 00C0      		rjmp .L189
+ 1643               	.L190:
+ 1644 0ac0 8091 E800 		lds r24,232
+ 1645 0ac4 80FF      		sbrs r24,0
+ 1646 0ac6 00C0      		rjmp .L191
+ 1647               	.L192:
+ 1648 0ac8 0115      		cp r16,__zero_reg__
+ 1649 0aca 1105      		cpc r17,__zero_reg__
+ 1650 0acc 01F0      		breq .L193
+ 1651 0ace 8091 E800 		lds r24,232
+ 1652 0ad2 85FF      		sbrs r24,5
+ 1653 0ad4 00C0      		rjmp .L193
+GAS LISTING sboxnet2usb.s 			page 30
+
+
+ 1654 0ad6 6701      		movw r12,r14
+ 1655 0ad8 8FEF      		ldi r24,-1
+ 1656 0ada C81A      		sub r12,r24
+ 1657 0adc D80A      		sbc r13,r24
+ 1658 0ade 6D2F      		mov r22,r29
+ 1659 0ae0 C701      		movw r24,r14
+ 1660 0ae2 0E94 0000 		call usb_mem_read_byte
+ 1661 0ae6 8093 F100 		sts 241,r24
+ 1662 0aea 0150      		subi r16,1
+ 1663 0aec 1109      		sbc r17,__zero_reg__
+ 1664 0aee 7601      		movw r14,r12
+ 1665 0af0 00C0      		rjmp .L192
+ 1666               	.L193:
+ 1667 0af2 0E94 0000 		call usb_ep_clearIN
+ 1668 0af6 9091 E800 		lds r25,232
+ 1669 0afa 9F77      		andi r25,lo8(127)
+ 1670 0afc 9093 E800 		sts 232,r25
+ 1671 0b00 0115      		cp r16,__zero_reg__
+ 1672 0b02 1105      		cpc r17,__zero_reg__
+ 1673 0b04 01F4      		brne .L191
+ 1674 0b06 00C0      		rjmp .L189
+ 1675               	.L196:
+ 1676 0b08 C3E0      		ldi r28,lo8(3)
+ 1677 0b0a 00C0      		rjmp .L189
+ 1678               	.L197:
+ 1679 0b0c C1E0      		ldi r28,lo8(1)
+ 1680               	.L189:
+ 1681 0b0e 8C2F      		mov r24,r28
+ 1682               	/* epilogue start */
+ 1683 0b10 DF91      		pop r29
+ 1684 0b12 CF91      		pop r28
+ 1685 0b14 1F91      		pop r17
+ 1686 0b16 0F91      		pop r16
+ 1687 0b18 FF90      		pop r15
+ 1688 0b1a EF90      		pop r14
+ 1689 0b1c DF90      		pop r13
+ 1690 0b1e CF90      		pop r12
+ 1691 0b20 0895      		ret
+ 1692               		.size	usb_ep_send_in_data, .-usb_ep_send_in_data
+ 1693               	.global	usb_ep_send_control_data_chunk
+ 1694               		.type	usb_ep_send_control_data_chunk, @function
+ 1695               	usb_ep_send_control_data_chunk:
+ 1696 0b22 AF92      		push r10
+ 1697 0b24 BF92      		push r11
+ 1698 0b26 CF92      		push r12
+ 1699 0b28 DF92      		push r13
+ 1700 0b2a EF92      		push r14
+ 1701 0b2c FF92      		push r15
+ 1702 0b2e 0F93      		push r16
+ 1703 0b30 1F93      		push r17
+ 1704 0b32 CF93      		push r28
+ 1705 0b34 DF93      		push r29
+ 1706               	/* prologue: function */
+ 1707               	/* frame size = 0 */
+ 1708               	/* stack size = 10 */
+ 1709               	.L__stack_usage = 10
+ 1710 0b36 6C01      		movw r12,r24
+GAS LISTING sboxnet2usb.s 			page 31
+
+
+ 1711 0b38 8B01      		movw r16,r22
+ 1712 0b3a E42E      		mov r14,r20
+ 1713 0b3c 0E94 0000 		call usb_ep_getbufsize
+ 1714 0b40 F82E      		mov r15,r24
+ 1715               	.L206:
+ 1716 0b42 8091 0000 		lds r24,g_usb_dev
+ 1717 0b46 8C71      		andi r24,lo8(28)
+ 1718 0b48 01F0      		breq .L214
+ 1719 0b4a 8091 E800 		lds r24,232
+ 1720 0b4e 83FD      		sbrc r24,3
+ 1721 0b50 00C0      		rjmp .L215
+ 1722 0b52 8091 E800 		lds r24,232
+ 1723 0b56 D82F      		mov r29,r24
+ 1724 0b58 D470      		andi r29,lo8(4)
+ 1725 0b5a 82FF      		sbrs r24,2
+ 1726 0b5c 00C0      		rjmp .L205
+ 1727 0b5e 0E94 0000 		call usb_ep_clearOUT
+ 1728 0b62 D2E0      		ldi r29,lo8(2)
+ 1729 0b64 00C0      		rjmp .L217
+ 1730               	.L205:
+ 1731 0b66 8091 E800 		lds r24,232
+ 1732 0b6a 80FF      		sbrs r24,0
+ 1733 0b6c 00C0      		rjmp .L206
+ 1734 0b6e C091 F200 		lds r28,242
+ 1735               	.L207:
+ 1736 0b72 0115      		cp r16,__zero_reg__
+ 1737 0b74 1105      		cpc r17,__zero_reg__
+ 1738 0b76 01F0      		breq .L208
+ 1739 0b78 CF15      		cp r28,r15
+ 1740 0b7a 00F4      		brsh .L219
+ 1741 0b7c 5601      		movw r10,r12
+ 1742 0b7e 8FEF      		ldi r24,-1
+ 1743 0b80 A81A      		sub r10,r24
+ 1744 0b82 B80A      		sbc r11,r24
+ 1745 0b84 6E2D      		mov r22,r14
+ 1746 0b86 C601      		movw r24,r12
+ 1747 0b88 0E94 0000 		call usb_mem_read_byte
+ 1748 0b8c 8093 F100 		sts 241,r24
+ 1749 0b90 0150      		subi r16,1
+ 1750 0b92 1109      		sbc r17,__zero_reg__
+ 1751 0b94 CF5F      		subi r28,lo8(-(1))
+ 1752 0b96 6501      		movw r12,r10
+ 1753 0b98 00C0      		rjmp .L207
+ 1754               	.L214:
+ 1755 0b9a D3E0      		ldi r29,lo8(3)
+ 1756 0b9c 00C0      		rjmp .L217
+ 1757               	.L215:
+ 1758 0b9e D1E0      		ldi r29,lo8(1)
+ 1759 0ba0 00C0      		rjmp .L217
+ 1760               	.L208:
+ 1761 0ba2 CF11      		cpse r28,r15
+ 1762 0ba4 00C0      		rjmp .L217
+ 1763               	.L212:
+ 1764 0ba6 0E94 0000 		call usb_ep_clearIN
+ 1765 0baa 0115      		cp r16,__zero_reg__
+ 1766 0bac 1105      		cpc r17,__zero_reg__
+ 1767 0bae 01F4      		brne .L206
+GAS LISTING sboxnet2usb.s 			page 32
+
+
+ 1768 0bb0 00C0      		rjmp .L217
+ 1769               	.L219:
+ 1770 0bb2 CF11      		cpse r28,r15
+ 1771 0bb4 00C0      		rjmp .L206
+ 1772 0bb6 00C0      		rjmp .L212
+ 1773               	.L217:
+ 1774 0bb8 8D2F      		mov r24,r29
+ 1775               	/* epilogue start */
+ 1776 0bba DF91      		pop r29
+ 1777 0bbc CF91      		pop r28
+ 1778 0bbe 1F91      		pop r17
+ 1779 0bc0 0F91      		pop r16
+ 1780 0bc2 FF90      		pop r15
+ 1781 0bc4 EF90      		pop r14
+ 1782 0bc6 DF90      		pop r13
+ 1783 0bc8 CF90      		pop r12
+ 1784 0bca BF90      		pop r11
+ 1785 0bcc AF90      		pop r10
+ 1786 0bce 0895      		ret
+ 1787               		.size	usb_ep_send_control_data_chunk, .-usb_ep_send_control_data_chunk
+ 1788               	.global	usb_ep_send_control_data_finish
+ 1789               		.type	usb_ep_send_control_data_finish, @function
+ 1790               	usb_ep_send_control_data_finish:
+ 1791 0bd0 CF93      		push r28
+ 1792               	/* prologue: function */
+ 1793               	/* frame size = 0 */
+ 1794               	/* stack size = 1 */
+ 1795               	.L__stack_usage = 1
+ 1796               	.L225:
+ 1797 0bd2 8091 0000 		lds r24,g_usb_dev
+ 1798 0bd6 8C71      		andi r24,lo8(28)
+ 1799 0bd8 01F4      		brne .L221
+ 1800               	.L227:
+ 1801 0bda C3E0      		ldi r28,lo8(3)
+ 1802 0bdc 00C0      		rjmp .L222
+ 1803               	.L221:
+ 1804 0bde 8091 E800 		lds r24,232
+ 1805 0be2 83FF      		sbrs r24,3
+ 1806 0be4 00C0      		rjmp .L223
+ 1807               	.L228:
+ 1808 0be6 C1E0      		ldi r28,lo8(1)
+ 1809 0be8 00C0      		rjmp .L222
+ 1810               	.L223:
+ 1811 0bea 8091 E800 		lds r24,232
+ 1812 0bee C82F      		mov r28,r24
+ 1813 0bf0 C470      		andi r28,lo8(4)
+ 1814 0bf2 82FF      		sbrs r24,2
+ 1815 0bf4 00C0      		rjmp .L224
+ 1816 0bf6 0E94 0000 		call usb_ep_clearOUT
+ 1817 0bfa C2E0      		ldi r28,lo8(2)
+ 1818 0bfc 00C0      		rjmp .L222
+ 1819               	.L224:
+ 1820 0bfe 8091 E800 		lds r24,232
+ 1821 0c02 80FF      		sbrs r24,0
+ 1822 0c04 00C0      		rjmp .L225
+ 1823 0c06 0E94 0000 		call usb_ep_clearIN
+ 1824               	.L226:
+GAS LISTING sboxnet2usb.s 			page 33
+
+
+ 1825 0c0a 8091 E800 		lds r24,232
+ 1826 0c0e 82FD      		sbrc r24,2
+ 1827 0c10 00C0      		rjmp .L234
+ 1828 0c12 8091 0000 		lds r24,g_usb_dev
+ 1829 0c16 8C71      		andi r24,lo8(28)
+ 1830 0c18 01F0      		breq .L227
+ 1831 0c1a 8091 E800 		lds r24,232
+ 1832 0c1e 83FF      		sbrs r24,3
+ 1833 0c20 00C0      		rjmp .L226
+ 1834 0c22 00C0      		rjmp .L228
+ 1835               	.L234:
+ 1836 0c24 0E94 0000 		call usb_ep_clearOUT
+ 1837               	.L222:
+ 1838 0c28 8C2F      		mov r24,r28
+ 1839               	/* epilogue start */
+ 1840 0c2a CF91      		pop r28
+ 1841 0c2c 0895      		ret
+ 1842               		.size	usb_ep_send_control_data_finish, .-usb_ep_send_control_data_finish
+ 1843               	.global	usb_ep_send_control_data
+ 1844               		.type	usb_ep_send_control_data, @function
+ 1845               	usb_ep_send_control_data:
+ 1846               	/* prologue: function */
+ 1847               	/* frame size = 0 */
+ 1848               	/* stack size = 0 */
+ 1849               	.L__stack_usage = 0
+ 1850 0c2e 6217      		cp r22,r18
+ 1851 0c30 7307      		cpc r23,r19
+ 1852 0c32 00F4      		brsh .L236
+ 1853 0c34 9B01      		movw r18,r22
+ 1854               	.L236:
+ 1855 0c36 B901      		movw r22,r18
+ 1856 0c38 0E94 0000 		call usb_ep_send_control_data_chunk
+ 1857 0c3c 8111      		cpse r24,__zero_reg__
+ 1858 0c3e 00C0      		rjmp .L237
+ 1859 0c40 0C94 0000 		jmp usb_ep_send_control_data_finish
+ 1860               	.L237:
+ 1861 0c44 0895      		ret
+ 1862               		.size	usb_ep_send_control_data, .-usb_ep_send_control_data
+ 1863               	.global	get_string
+ 1864               		.type	get_string, @function
+ 1865               	get_string:
+ 1866 0c46 CF93      		push r28
+ 1867 0c48 DF93      		push r29
+ 1868               	/* prologue: function */
+ 1869               	/* frame size = 0 */
+ 1870               	/* stack size = 2 */
+ 1871               	.L__stack_usage = 2
+ 1872 0c4a 6330      		cpi r22,lo8(3)
+ 1873 0c4c 01F4      		brne .L240
+ 1874 0c4e EC01      		movw r28,r24
+ 1875 0c50 0E94 0000 		call usb_ep_clearSETUP
+ 1876 0c54 0E80      		ldd __tmp_reg__,Y+6
+ 1877 0c56 DF81      		ldd r29,Y+7
+ 1878 0c58 C02D      		mov r28,__tmp_reg__
+ 1879 0c5a 62E0      		ldi r22,lo8(2)
+ 1880 0c5c 80E0      		ldi r24,lo8(eeprom)
+ 1881 0c5e 90E0      		ldi r25,hi8(eeprom)
+GAS LISTING sboxnet2usb.s 			page 34
+
+
+ 1882 0c60 0E94 0000 		call usb_mem_read_byte
+ 1883 0c64 682F      		mov r22,r24
+ 1884 0c66 70E0      		ldi r23,0
+ 1885 0c68 9E01      		movw r18,r28
+ 1886 0c6a 42E0      		ldi r20,lo8(2)
+ 1887 0c6c 80E0      		ldi r24,lo8(eeprom)
+ 1888 0c6e 90E0      		ldi r25,hi8(eeprom)
+ 1889 0c70 0E94 0000 		call usb_ep_send_control_data
+ 1890 0c74 80E0      		ldi r24,0
+ 1891 0c76 00C0      		rjmp .L239
+ 1892               	.L240:
+ 1893 0c78 81E0      		ldi r24,lo8(1)
+ 1894               	.L239:
+ 1895               	/* epilogue start */
+ 1896 0c7a DF91      		pop r29
+ 1897 0c7c CF91      		pop r28
+ 1898 0c7e 0895      		ret
+ 1899               		.size	get_string, .-get_string
+ 1900               	.global	usb_ep_recv_control_data_chunk
+ 1901               		.type	usb_ep_recv_control_data_chunk, @function
+ 1902               	usb_ep_recv_control_data_chunk:
+ 1903 0c80 AF92      		push r10
+ 1904 0c82 BF92      		push r11
+ 1905 0c84 CF92      		push r12
+ 1906 0c86 DF92      		push r13
+ 1907 0c88 EF92      		push r14
+ 1908 0c8a FF92      		push r15
+ 1909 0c8c 1F93      		push r17
+ 1910 0c8e CF93      		push r28
+ 1911 0c90 DF93      		push r29
+ 1912               	/* prologue: function */
+ 1913               	/* frame size = 0 */
+ 1914               	/* stack size = 9 */
+ 1915               	.L__stack_usage = 9
+ 1916 0c92 6C01      		movw r12,r24
+ 1917 0c94 5B01      		movw r10,r22
+ 1918 0c96 7A01      		movw r14,r20
+ 1919 0c98 FB01      		movw r30,r22
+ 1920 0c9a 1182      		std Z+1,__zero_reg__
+ 1921 0c9c 1082      		st Z,__zero_reg__
+ 1922 0c9e 452B      		or r20,r21
+ 1923 0ca0 01F0      		breq .L249
+ 1924 0ca2 C0E0      		ldi r28,0
+ 1925 0ca4 D0E0      		ldi r29,0
+ 1926               	.L243:
+ 1927 0ca6 8091 0000 		lds r24,g_usb_dev
+ 1928 0caa 8C71      		andi r24,lo8(28)
+ 1929 0cac 01F0      		breq .L250
+ 1930 0cae 8091 E800 		lds r24,232
+ 1931 0cb2 182F      		mov r17,r24
+ 1932 0cb4 1870      		andi r17,lo8(8)
+ 1933 0cb6 83FD      		sbrc r24,3
+ 1934 0cb8 00C0      		rjmp .L251
+ 1935 0cba 8091 E800 		lds r24,232
+ 1936 0cbe 82FF      		sbrs r24,2
+ 1937 0cc0 00C0      		rjmp .L243
+ 1938               	.L244:
+GAS LISTING sboxnet2usb.s 			page 35
+
+
+ 1939 0cc2 8091 F200 		lds r24,242
+ 1940 0cc6 8823      		tst r24
+ 1941 0cc8 01F0      		breq .L245
+ 1942 0cca CE15      		cp r28,r14
+ 1943 0ccc DF05      		cpc r29,r15
+ 1944 0cce 00F4      		brsh .L245
+ 1945 0cd0 8091 F100 		lds r24,241
+ 1946 0cd4 F601      		movw r30,r12
+ 1947 0cd6 8083      		st Z,r24
+ 1948 0cd8 2196      		adiw r28,1
+ 1949 0cda C601      		movw r24,r12
+ 1950 0cdc 0196      		adiw r24,1
+ 1951 0cde 6C01      		movw r12,r24
+ 1952 0ce0 00C0      		rjmp .L244
+ 1953               	.L245:
+ 1954 0ce2 8091 F200 		lds r24,242
+ 1955 0ce6 8111      		cpse r24,__zero_reg__
+ 1956 0ce8 00C0      		rjmp .L247
+ 1957 0cea 0E94 0000 		call usb_ep_clearOUT
+ 1958               	.L247:
+ 1959 0cee CE15      		cp r28,r14
+ 1960 0cf0 DF05      		cpc r29,r15
+ 1961 0cf2 00F0      		brlo .L243
+ 1962 0cf4 F501      		movw r30,r10
+ 1963 0cf6 D183      		std Z+1,r29
+ 1964 0cf8 C083      		st Z,r28
+ 1965 0cfa 00C0      		rjmp .L242
+ 1966               	.L249:
+ 1967 0cfc 10E0      		ldi r17,0
+ 1968 0cfe 00C0      		rjmp .L242
+ 1969               	.L250:
+ 1970 0d00 13E0      		ldi r17,lo8(3)
+ 1971 0d02 00C0      		rjmp .L242
+ 1972               	.L251:
+ 1973 0d04 11E0      		ldi r17,lo8(1)
+ 1974               	.L242:
+ 1975 0d06 812F      		mov r24,r17
+ 1976               	/* epilogue start */
+ 1977 0d08 DF91      		pop r29
+ 1978 0d0a CF91      		pop r28
+ 1979 0d0c 1F91      		pop r17
+ 1980 0d0e FF90      		pop r15
+ 1981 0d10 EF90      		pop r14
+ 1982 0d12 DF90      		pop r13
+ 1983 0d14 CF90      		pop r12
+ 1984 0d16 BF90      		pop r11
+ 1985 0d18 AF90      		pop r10
+ 1986 0d1a 0895      		ret
+ 1987               		.size	usb_ep_recv_control_data_chunk, .-usb_ep_recv_control_data_chunk
+ 1988               	.global	usb_ep_recv_control_data_finish
+ 1989               		.type	usb_ep_recv_control_data_finish, @function
+ 1990               	usb_ep_recv_control_data_finish:
+ 1991               	/* prologue: function */
+ 1992               	/* frame size = 0 */
+ 1993               	/* stack size = 0 */
+ 1994               	.L__stack_usage = 0
+ 1995 0d1c 0E94 0000 		call usb_ep_clearOUT
+GAS LISTING sboxnet2usb.s 			page 36
+
+
+ 1996 0d20 0C94 0000 		jmp usb_ep_send_zlp
+ 1997               		.size	usb_ep_recv_control_data_finish, .-usb_ep_recv_control_data_finish
+ 1998               	.global	usb_ep_recv_control_data
+ 1999               		.type	usb_ep_recv_control_data, @function
+ 2000               	usb_ep_recv_control_data:
+ 2001               	/* prologue: function */
+ 2002               	/* frame size = 0 */
+ 2003               	/* stack size = 0 */
+ 2004               	.L__stack_usage = 0
+ 2005 0d24 0E94 0000 		call usb_ep_recv_control_data_chunk
+ 2006 0d28 8111      		cpse r24,__zero_reg__
+ 2007 0d2a 00C0      		rjmp .L258
+ 2008 0d2c 0C94 0000 		jmp usb_ep_recv_control_data_finish
+ 2009               	.L258:
+ 2010 0d30 0895      		ret
+ 2011               		.size	usb_ep_recv_control_data, .-usb_ep_recv_control_data
+ 2012               	.global	usb_ep_setup
+ 2013               		.type	usb_ep_setup, @function
+ 2014               	usb_ep_setup:
+ 2015               	/* prologue: function */
+ 2016               	/* frame size = 0 */
+ 2017               	/* stack size = 0 */
+ 2018               	.L__stack_usage = 0
+ 2019 0d32 4850      		subi r20,lo8(-(-8))
+ 2020 0d34 4931      		cpi r20,lo8(25)
+ 2021 0d36 00F4      		brsh .L261
+ 2022 0d38 E42F      		mov r30,r20
+ 2023 0d3a F0E0      		ldi r31,0
+ 2024 0d3c E050      		subi r30,lo8(-(CSWTCH.146))
+ 2025 0d3e F040      		sbci r31,hi8(-(CSWTCH.146))
+ 2026 0d40 3081      		ld r19,Z
+ 2027 0d42 00C0      		rjmp .L260
+ 2028               	.L261:
+ 2029 0d44 32E3      		ldi r19,lo8(50)
+ 2030               	.L260:
+ 2031 0d46 982F      		mov r25,r24
+ 2032 0d48 9770      		andi r25,lo8(7)
+ 2033 0d4a 9093 E900 		sts 233,r25
+ 2034 0d4e 9091 EB00 		lds r25,235
+ 2035 0d52 9160      		ori r25,lo8(1)
+ 2036 0d54 9093 EB00 		sts 235,r25
+ 2037 0d58 6295      		swap r22
+ 2038 0d5a 660F      		lsl r22
+ 2039 0d5c 660F      		lsl r22
+ 2040 0d5e 607C      		andi r22,lo8(-64)
+ 2041 0d60 881F      		rol r24
+ 2042 0d62 8827      		clr r24
+ 2043 0d64 881F      		rol r24
+ 2044 0d66 862B      		or r24,r22
+ 2045 0d68 8093 EC00 		sts 236,r24
+ 2046 0d6c A22F      		mov r26,r18
+ 2047 0d6e A170      		andi r26,1
+ 2048 0d70 B0E0      		ldi r27,0
+ 2049 0d72 AA0F      		lsl r26
+ 2050 0d74 BB1F      		rol r27
+ 2051 0d76 AA0F      		lsl r26
+ 2052 0d78 BB1F      		rol r27
+GAS LISTING sboxnet2usb.s 			page 37
+
+
+ 2053 0d7a A32B      		or r26,r19
+ 2054 0d7c A093 ED00 		sts 237,r26
+ 2055 0d80 1092 F000 		sts 240,__zero_reg__
+ 2056 0d84 0895      		ret
+ 2057               		.size	usb_ep_setup, .-usb_ep_setup
+ 2058               	.global	usb_ep_setup_control
+ 2059               		.type	usb_ep_setup_control, @function
+ 2060               	usb_ep_setup_control:
+ 2061               	/* prologue: function */
+ 2062               	/* frame size = 0 */
+ 2063               	/* stack size = 0 */
+ 2064               	.L__stack_usage = 0
+ 2065 0d86 E0E0      		ldi r30,lo8(g_usb_dev)
+ 2066 0d88 F0E0      		ldi r31,hi8(g_usb_dev)
+ 2067 0d8a 6485      		ldd r22,Z+12
+ 2068 0d8c 8281      		ldd r24,Z+2
+ 2069 0d8e 9381      		ldd r25,Z+3
+ 2070 0d90 0796      		adiw r24,7
+ 2071 0d92 0E94 0000 		call usb_mem_read_byte
+ 2072 0d96 20E0      		ldi r18,0
+ 2073 0d98 482F      		mov r20,r24
+ 2074 0d9a 60E0      		ldi r22,0
+ 2075 0d9c 80E0      		ldi r24,0
+ 2076 0d9e 0C94 0000 		jmp usb_ep_setup
+ 2077               		.size	usb_ep_setup_control, .-usb_ep_setup_control
+ 2078               	.global	usb_intr_endofreset
+ 2079               		.type	usb_intr_endofreset, @function
+ 2080               	usb_intr_endofreset:
+ 2081               	/* prologue: function */
+ 2082               	/* frame size = 0 */
+ 2083               	/* stack size = 0 */
+ 2084               	.L__stack_usage = 0
+ 2085 0da2 0E94 0000 		call usb_ep_setup_control
+ 2086 0da6 E0E0      		ldi r30,lo8(g_usb_dev)
+ 2087 0da8 F0E0      		ldi r31,hi8(g_usb_dev)
+ 2088 0daa 84E0      		ldi r24,lo8(4)
+ 2089 0dac 8083      		st Z,r24
+ 2090 0dae 1182      		std Z+1,__zero_reg__
+ 2091 0db0 0895      		ret
+ 2092               		.size	usb_intr_endofreset, .-usb_intr_endofreset
+ 2093               	.global	__vector_11
+ 2094               		.type	__vector_11, @function
+ 2095               	__vector_11:
+ 2096 0db2 1F92      		push r1
+ 2097 0db4 0F92      		push r0
+ 2098 0db6 0FB6      		in r0,__SREG__
+ 2099 0db8 0F92      		push r0
+ 2100 0dba 1124      		clr __zero_reg__
+ 2101 0dbc 1F93      		push r17
+ 2102 0dbe 2F93      		push r18
+ 2103 0dc0 3F93      		push r19
+ 2104 0dc2 4F93      		push r20
+ 2105 0dc4 5F93      		push r21
+ 2106 0dc6 6F93      		push r22
+ 2107 0dc8 7F93      		push r23
+ 2108 0dca 8F93      		push r24
+ 2109 0dcc 9F93      		push r25
+GAS LISTING sboxnet2usb.s 			page 38
+
+
+ 2110 0dce AF93      		push r26
+ 2111 0dd0 BF93      		push r27
+ 2112 0dd2 EF93      		push r30
+ 2113 0dd4 FF93      		push r31
+ 2114 0dd6 CF93      		push r28
+ 2115 0dd8 DF93      		push r29
+ 2116 0dda 00D0      		rcall .
+ 2117 0ddc CDB7      		in r28,__SP_L__
+ 2118 0dde DEB7      		in r29,__SP_H__
+ 2119               	/* prologue: Signal */
+ 2120               	/* frame size = 2 */
+ 2121               	/* stack size = 20 */
+ 2122               	.L__stack_usage = 20
+ 2123 0de0 8091 E100 		lds r24,225
+ 2124 0de4 8A83      		std Y+2,r24
+ 2125 0de6 8091 E200 		lds r24,226
+ 2126 0dea 8983      		std Y+1,r24
+ 2127 0dec 1091 E900 		lds r17,233
+ 2128 0df0 8A81      		ldd r24,Y+2
+ 2129 0df2 8A81      		ldd r24,Y+2
+ 2130 0df4 8A81      		ldd r24,Y+2
+ 2131 0df6 8A81      		ldd r24,Y+2
+ 2132 0df8 83FF      		sbrs r24,3
+ 2133 0dfa 00C0      		rjmp .L265
+ 2134 0dfc 8981      		ldd r24,Y+1
+ 2135 0dfe 83FD      		sbrc r24,3
+ 2136 0e00 0E94 0000 		call usb_intr_endofreset
+ 2137               	.L266:
+ 2138 0e04 8091 E100 		lds r24,225
+ 2139 0e08 877F      		andi r24,lo8(-9)
+ 2140 0e0a 8093 E100 		sts 225,r24
+ 2141               	.L265:
+ 2142 0e0e 8A81      		ldd r24,Y+2
+ 2143 0e10 8A81      		ldd r24,Y+2
+ 2144 0e12 1092 E100 		sts 225,__zero_reg__
+ 2145 0e16 1093 E900 		sts 233,r17
+ 2146               	/* epilogue start */
+ 2147 0e1a 0F90      		pop __tmp_reg__
+ 2148 0e1c 0F90      		pop __tmp_reg__
+ 2149 0e1e DF91      		pop r29
+ 2150 0e20 CF91      		pop r28
+ 2151 0e22 FF91      		pop r31
+ 2152 0e24 EF91      		pop r30
+ 2153 0e26 BF91      		pop r27
+ 2154 0e28 AF91      		pop r26
+ 2155 0e2a 9F91      		pop r25
+ 2156 0e2c 8F91      		pop r24
+ 2157 0e2e 7F91      		pop r23
+ 2158 0e30 6F91      		pop r22
+ 2159 0e32 5F91      		pop r21
+ 2160 0e34 4F91      		pop r20
+ 2161 0e36 3F91      		pop r19
+ 2162 0e38 2F91      		pop r18
+ 2163 0e3a 1F91      		pop r17
+ 2164 0e3c 0F90      		pop r0
+ 2165 0e3e 0FBE      		out __SREG__,r0
+ 2166 0e40 0F90      		pop r0
+GAS LISTING sboxnet2usb.s 			page 39
+
+
+ 2167 0e42 1F90      		pop r1
+ 2168 0e44 1895      		reti
+ 2169               		.size	__vector_11, .-__vector_11
+ 2170               	.global	usb_init
+ 2171               		.type	usb_init, @function
+ 2172               	usb_init:
+ 2173 0e46 CF92      		push r12
+ 2174 0e48 EF92      		push r14
+ 2175 0e4a FF92      		push r15
+ 2176 0e4c 0F93      		push r16
+ 2177               	/* prologue: function */
+ 2178               	/* frame size = 0 */
+ 2179               	/* stack size = 4 */
+ 2180               	.L__stack_usage = 4
+ 2181 0e4e 5DE0      		ldi r21,lo8(13)
+ 2182 0e50 E0E0      		ldi r30,lo8(g_usb_dev)
+ 2183 0e52 F0E0      		ldi r31,hi8(g_usb_dev)
+ 2184 0e54 DF01      		movw r26,r30
+ 2185               		0:
+ 2186 0e56 1D92      		st X+,__zero_reg__
+ 2187 0e58 5A95      		dec r21
+ 2188 0e5a 01F4      		brne 0b
+ 2189 0e5c 1092 0000 		sts g_usb_dev,__zero_reg__
+ 2190 0e60 9093 0000 		sts g_usb_dev+2+1,r25
+ 2191 0e64 8093 0000 		sts g_usb_dev+2,r24
+ 2192 0e68 7093 0000 		sts g_usb_dev+4+1,r23
+ 2193 0e6c 6093 0000 		sts g_usb_dev+4,r22
+ 2194 0e70 4093 0000 		sts g_usb_dev+6,r20
+ 2195 0e74 3093 0000 		sts g_usb_dev+7+1,r19
+ 2196 0e78 2093 0000 		sts g_usb_dev+7,r18
+ 2197 0e7c 0093 0000 		sts g_usb_dev+9,r16
+ 2198 0e80 F092 0000 		sts g_usb_dev+10+1,r15
+ 2199 0e84 E092 0000 		sts g_usb_dev+10,r14
+ 2200 0e88 C092 0000 		sts g_usb_dev+12,r12
+ 2201 0e8c 80E2      		ldi r24,lo8(32)
+ 2202 0e8e 8093 D800 		sts 216,r24
+ 2203 0e92 1092 FB00 		sts 251,__zero_reg__
+ 2204 0e96 84E0      		ldi r24,lo8(4)
+ 2205 0e98 89BD      		out 0x29,r24
+ 2206 0e9a 86E0      		ldi r24,lo8(6)
+ 2207 0e9c 89BD      		out 0x29,r24
+ 2208               	.L274:
+ 2209 0e9e 09B4      		in __tmp_reg__,0x29
+ 2210 0ea0 00FE      		sbrs __tmp_reg__,0
+ 2211 0ea2 00C0      		rjmp .L274
+ 2212 0ea4 80EA      		ldi r24,lo8(-96)
+ 2213 0ea6 8093 D800 		sts 216,r24
+ 2214 0eaa 80E8      		ldi r24,lo8(-128)
+ 2215 0eac 8093 D800 		sts 216,r24
+ 2216 0eb0 1092 E200 		sts 226,__zero_reg__
+ 2217 0eb4 1092 E100 		sts 225,__zero_reg__
+ 2218 0eb8 89E0      		ldi r24,lo8(9)
+ 2219 0eba 8093 E200 		sts 226,r24
+ 2220 0ebe 1092 E000 		sts 224,__zero_reg__
+ 2221 0ec2 84E0      		ldi r24,lo8(4)
+ 2222 0ec4 8093 0000 		sts g_usb_dev,r24
+ 2223               	/* epilogue start */
+GAS LISTING sboxnet2usb.s 			page 40
+
+
+ 2224 0ec8 0F91      		pop r16
+ 2225 0eca FF90      		pop r15
+ 2226 0ecc EF90      		pop r14
+ 2227 0ece CF90      		pop r12
+ 2228 0ed0 0895      		ret
+ 2229               		.size	usb_init, .-usb_init
+ 2230               	.global	usb_event_set_configuration
+ 2231               		.type	usb_event_set_configuration, @function
+ 2232               	usb_event_set_configuration:
+ 2233               	/* prologue: function */
+ 2234               	/* frame size = 0 */
+ 2235               	/* stack size = 0 */
+ 2236               	.L__stack_usage = 0
+ 2237 0ed2 0895      		ret
+ 2238               		.size	usb_event_set_configuration, .-usb_event_set_configuration
+ 2239               	.global	usb_event_ep0_request
+ 2240               		.type	usb_event_ep0_request, @function
+ 2241               	usb_event_ep0_request:
+ 2242 0ed4 FF92      		push r15
+ 2243 0ed6 0F93      		push r16
+ 2244 0ed8 1F93      		push r17
+ 2245 0eda CF93      		push r28
+ 2246 0edc DF93      		push r29
+ 2247 0ede CDB7      		in r28,__SP_L__
+ 2248 0ee0 DEB7      		in r29,__SP_H__
+ 2249 0ee2 C854      		subi r28,72
+ 2250 0ee4 D109      		sbc r29,__zero_reg__
+ 2251 0ee6 0FB6      		in __tmp_reg__,__SREG__
+ 2252 0ee8 F894      		cli
+ 2253 0eea DEBF      		out __SP_H__,r29
+ 2254 0eec 0FBE      		out __SREG__,__tmp_reg__
+ 2255 0eee CDBF      		out __SP_L__,r28
+ 2256               	/* prologue: function */
+ 2257               	/* frame size = 72 */
+ 2258               	/* stack size = 77 */
+ 2259               	.L__stack_usage = 77
+ 2260 0ef0 FC01      		movw r30,r24
+ 2261 0ef2 9081      		ld r25,Z
+ 2262 0ef4 9F77      		andi r25,lo8(127)
+ 2263 0ef6 9134      		cpi r25,lo8(65)
+ 2264 0ef8 01F0      		breq .+2
+ 2265 0efa 00C0      		rjmp .L317
+ 2266 0efc 8F01      		movw r16,r30
+ 2267 0efe 8181      		ldd r24,Z+1
+ 2268 0f00 8A33      		cpi r24,lo8(58)
+ 2269 0f02 01F4      		brne .+2
+ 2270 0f04 00C0      		rjmp .L279
+ 2271 0f06 00F4      		brsh .L280
+ 2272 0f08 8133      		cpi r24,lo8(49)
+ 2273 0f0a 01F4      		brne .+2
+ 2274 0f0c 00C0      		rjmp .L281
+ 2275 0f0e 00F4      		brsh .L282
+ 2276 0f10 8033      		cpi r24,lo8(48)
+ 2277 0f12 01F0      		breq .L283
+ 2278 0f14 00C0      		rjmp .L317
+ 2279               	.L282:
+ 2280 0f16 8233      		cpi r24,lo8(50)
+GAS LISTING sboxnet2usb.s 			page 41
+
+
+ 2281 0f18 01F4      		brne .+2
+ 2282 0f1a 00C0      		rjmp .L284
+ 2283 0f1c 8333      		cpi r24,lo8(51)
+ 2284 0f1e 01F4      		brne .+2
+ 2285 0f20 00C0      		rjmp .L285
+ 2286 0f22 00C0      		rjmp .L317
+ 2287               	.L280:
+ 2288 0f24 8D33      		cpi r24,lo8(61)
+ 2289 0f26 01F4      		brne .+2
+ 2290 0f28 00C0      		rjmp .L286
+ 2291 0f2a 00F4      		brsh .L287
+ 2292 0f2c 8B33      		cpi r24,lo8(59)
+ 2293 0f2e 01F4      		brne .+2
+ 2294 0f30 00C0      		rjmp .L288
+ 2295 0f32 8C33      		cpi r24,lo8(60)
+ 2296 0f34 01F0      		breq .+2
+ 2297 0f36 00C0      		rjmp .L317
+ 2298 0f38 0E94 0000 		call usb_ep_clearSETUP
+ 2299 0f3c F801      		movw r30,r16
+ 2300 0f3e 2681      		ldd r18,Z+6
+ 2301 0f40 3781      		ldd r19,Z+7
+ 2302 0f42 40E0      		ldi r20,0
+ 2303 0f44 62E0      		ldi r22,lo8(2)
+ 2304 0f46 71E0      		ldi r23,lo8(1)
+ 2305 0f48 80E0      		ldi r24,lo8(g_sboxnet+9)
+ 2306 0f4a 90E0      		ldi r25,hi8(g_sboxnet+9)
+ 2307 0f4c 00C0      		rjmp .L331
+ 2308               	.L287:
+ 2309 0f4e 8034      		cpi r24,lo8(64)
+ 2310 0f50 01F4      		brne .+2
+ 2311 0f52 00C0      		rjmp .L290
+ 2312 0f54 8135      		cpi r24,lo8(81)
+ 2313 0f56 01F4      		brne .+2
+ 2314 0f58 00C0      		rjmp .L291
+ 2315 0f5a 00C0      		rjmp .L317
+ 2316               	.L283:
+ 2317 0f5c 0E94 0000 		call usb_ep_clearSETUP
+ 2318 0f60 FFB6      		in r15,__SREG__
+ 2319               	/* #APP */
+ 2320               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 2321 0f62 F894      		cli
+ 2322               	 ;  0 "" 2
+ 2323               	/* #NOAPP */
+ 2324 0f64 F801      		movw r30,r16
+ 2325 0f66 9281      		ldd r25,Z+2
+ 2326 0f68 97FF      		sbrs r25,7
+ 2327 0f6a 00C0      		rjmp .L292
+ 2328               	/* #APP */
+ 2329               	 ;  287 "sboxnet2usb.c" 1
+ 2330 0f6c A895      		wdr
+ 2331               	 ;  0 "" 2
+ 2332               	/* #NOAPP */
+ 2333 0f6e 88E1      		ldi r24,lo8(24)
+ 2334 0f70 8093 6000 		sts 96,r24
+ 2335 0f74 8CE0      		ldi r24,lo8(12)
+ 2336 0f76 8093 6000 		sts 96,r24
+ 2337 0f7a 00C0      		rjmp .L293
+GAS LISTING sboxnet2usb.s 			page 42
+
+
+ 2338               	.L292:
+ 2339 0f7c 8091 0000 		lds r24,g_sboxnet_flags
+ 2340 0f80 90FF      		sbrs r25,0
+ 2341 0f82 00C0      		rjmp .L294
+ 2342 0f84 F801      		movw r30,r16
+ 2343 0f86 9481      		ldd r25,Z+4
+ 2344 0f88 9093 0000 		sts g_sboxnet_addr,r25
+ 2345 0f8c 80FD      		sbrc r24,0
+ 2346 0f8e 00C0      		rjmp .L295
+ 2347 0f90 0E94 0000 		call sboxnet_init
+ 2348 0f94 8091 0000 		lds r24,g_sboxnet_flags
+ 2349 0f98 8160      		ori r24,lo8(1)
+ 2350 0f9a 8093 0000 		sts g_sboxnet_flags,r24
+ 2351               	.L295:
+ 2352 0f9e F801      		movw r30,r16
+ 2353 0fa0 9281      		ldd r25,Z+2
+ 2354 0fa2 8091 0000 		lds r24,g_sboxnet+1
+ 2355 0fa6 91FF      		sbrs r25,1
+ 2356 0fa8 00C0      		rjmp .L296
+ 2357 0faa 8160      		ori r24,lo8(1)
+ 2358 0fac 00C0      		rjmp .L328
+ 2359               	.L296:
+ 2360 0fae 8E7F      		andi r24,lo8(-2)
+ 2361               	.L328:
+ 2362 0fb0 8093 0000 		sts g_sboxnet+1,r24
+ 2363 0fb4 00C0      		rjmp .L293
+ 2364               	.L294:
+ 2365 0fb6 80FF      		sbrs r24,0
+ 2366 0fb8 00C0      		rjmp .L293
+ 2367 0fba 8FB7      		in r24,__SREG__
+ 2368               	/* #APP */
+ 2369               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 2370 0fbc F894      		cli
+ 2371               	 ;  0 "" 2
+ 2372               	/* #NOAPP */
+ 2373 0fbe 1092 0000 		sts g_sboxnet,__zero_reg__
+ 2374 0fc2 94E0      		ldi r25,lo8(4)
+ 2375 0fc4 9093 C900 		sts 201,r25
+ 2376 0fc8 5298      		cbi 0xa,2
+ 2377 0fca 5398      		cbi 0xa,3
+ 2378 0fcc 5B9A      		sbi 0xb,3
+ 2379 0fce EA98      		cbi 0x1d,2
+ 2380 0fd0 8FBF      		out __SREG__,r24
+ 2381 0fd2 8091 0000 		lds r24,g_sboxnet_flags
+ 2382 0fd6 8E7F      		andi r24,lo8(-2)
+ 2383 0fd8 8093 0000 		sts g_sboxnet_flags,r24
+ 2384               	.L293:
+ 2385 0fdc FFBE      		out __SREG__,r15
+ 2386 0fde 0E94 0000 		call usb_ep_send_zlp
+ 2387 0fe2 00C0      		rjmp .L330
+ 2388               	.L281:
+ 2389 0fe4 0E94 0000 		call usb_ep_clearSETUP
+ 2390 0fe8 0E94 0000 		call get_status
+ 2391 0fec 8983      		std Y+1,r24
+ 2392 0fee F801      		movw r30,r16
+ 2393 0ff0 2681      		ldd r18,Z+6
+ 2394 0ff2 3781      		ldd r19,Z+7
+GAS LISTING sboxnet2usb.s 			page 43
+
+
+ 2395 0ff4 40E0      		ldi r20,0
+ 2396 0ff6 61E0      		ldi r22,lo8(1)
+ 2397 0ff8 70E0      		ldi r23,0
+ 2398 0ffa 00C0      		rjmp .L332
+ 2399               	.L284:
+ 2400 0ffc 0E94 0000 		call usb_ep_clearSETUP
+ 2401 1000 F801      		movw r30,r16
+ 2402 1002 0681      		ldd r16,Z+6
+ 2403 1004 1781      		ldd r17,Z+7
+ 2404 1006 0115      		cp r16,__zero_reg__
+ 2405 1008 1105      		cpc r17,__zero_reg__
+ 2406 100a 01F0      		breq .L300
+ 2407 100c 0E94 0000 		call get_status
+ 2408 1010 2896      		adiw r28,71-63
+ 2409 1012 8FAF      		std Y+63,r24
+ 2410 1014 2897      		sbiw r28,71-63
+ 2411 1016 40E0      		ldi r20,0
+ 2412 1018 61E0      		ldi r22,lo8(1)
+ 2413 101a 70E0      		ldi r23,0
+ 2414 101c CE01      		movw r24,r28
+ 2415 101e 895B      		subi r24,-71
+ 2416 1020 9F4F      		sbci r25,-1
+ 2417 1022 0E94 0000 		call usb_ep_send_control_data_chunk
+ 2418 1026 8111      		cpse r24,__zero_reg__
+ 2419 1028 00C0      		rjmp .L330
+ 2420 102a 0150      		subi r16,1
+ 2421 102c 1109      		sbc r17,__zero_reg__
+ 2422 102e 00C0      		rjmp .L300
+ 2423               	.L306:
+ 2424 1030 0130      		cpi r16,1
+ 2425 1032 F1E0      		ldi r31,1
+ 2426 1034 1F07      		cpc r17,r31
+ 2427 1036 00F4      		brsh .L318
+ 2428 1038 6FEF      		ldi r22,lo8(-1)
+ 2429 103a 600F      		add r22,r16
+ 2430               	.L301:
+ 2431 103c CE01      		movw r24,r28
+ 2432 103e 0296      		adiw r24,2
+ 2433 1040 0E94 0000 		call sboxnet_receive_msg
+ 2434 1044 8983      		std Y+1,r24
+ 2435 1046 1816      		cp __zero_reg__,r24
+ 2436 1048 04F4      		brge .L302
+ 2437 104a 081B      		sub r16,r24
+ 2438 104c 1109      		sbc r17,__zero_reg__
+ 2439 104e 87FD      		sbrc r24,7
+ 2440 1050 1395      		inc r17
+ 2441 1052 0150      		subi r16,1
+ 2442 1054 1109      		sbc r17,__zero_reg__
+ 2443 1056 8FB7      		in r24,__SREG__
+ 2444               	/* #APP */
+ 2445               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 2446 1058 F894      		cli
+ 2447               	 ;  0 "" 2
+ 2448               	/* #NOAPP */
+ 2449 105a 93E0      		ldi r25,lo8(3)
+ 2450 105c 9093 0000 		sts g_timer_led_msg_read,r25
+ 2451 1060 2E9A      		sbi 0x5,6
+GAS LISTING sboxnet2usb.s 			page 44
+
+
+ 2452 1062 8FBF      		out __SREG__,r24
+ 2453 1064 6981      		ldd r22,Y+1
+ 2454 1066 7727      		clr r23
+ 2455 1068 67FD      		sbrc r22,7
+ 2456 106a 7095      		com r23
+ 2457 106c 6F5F      		subi r22,-1
+ 2458 106e 7F4F      		sbci r23,-1
+ 2459 1070 40E0      		ldi r20,0
+ 2460 1072 CE01      		movw r24,r28
+ 2461 1074 0196      		adiw r24,1
+ 2462 1076 0E94 0000 		call usb_ep_send_control_data_chunk
+ 2463 107a 8111      		cpse r24,__zero_reg__
+ 2464 107c 00C0      		rjmp .L303
+ 2465               	.L300:
+ 2466 107e 0230      		cpi r16,2
+ 2467 1080 1105      		cpc r17,__zero_reg__
+ 2468 1082 00F4      		brsh .L306
+ 2469 1084 00C0      		rjmp .L307
+ 2470               	.L318:
+ 2471 1086 65E4      		ldi r22,lo8(69)
+ 2472 1088 00C0      		rjmp .L301
+ 2473               	.L302:
+ 2474 108a 40E0      		ldi r20,0
+ 2475 108c 61E0      		ldi r22,lo8(1)
+ 2476 108e 70E0      		ldi r23,0
+ 2477 1090 CE01      		movw r24,r28
+ 2478 1092 0196      		adiw r24,1
+ 2479 1094 0E94 0000 		call usb_ep_send_control_data_chunk
+ 2480               	.L303:
+ 2481 1098 8111      		cpse r24,__zero_reg__
+ 2482 109a 00C0      		rjmp .L330
+ 2483               	.L307:
+ 2484 109c 0E94 0000 		call usb_ep_send_control_data_finish
+ 2485 10a0 00C0      		rjmp .L330
+ 2486               	.L285:
+ 2487 10a2 0E94 0000 		call usb_ep_clearSETUP
+ 2488 10a6 F801      		movw r30,r16
+ 2489 10a8 4681      		ldd r20,Z+6
+ 2490 10aa 5781      		ldd r21,Z+7
+ 2491 10ac 4634      		cpi r20,70
+ 2492 10ae 5105      		cpc r21,__zero_reg__
+ 2493 10b0 00F0      		brlo .L308
+ 2494 10b2 45E4      		ldi r20,lo8(69)
+ 2495 10b4 50E0      		ldi r21,0
+ 2496               	.L308:
+ 2497 10b6 BE01      		movw r22,r28
+ 2498 10b8 695B      		subi r22,-71
+ 2499 10ba 7F4F      		sbci r23,-1
+ 2500 10bc CE01      		movw r24,r28
+ 2501 10be 0196      		adiw r24,1
+ 2502 10c0 0E94 0000 		call usb_ep_recv_control_data
+ 2503 10c4 2996      		adiw r28,71-62
+ 2504 10c6 8EAD      		ldd r24,Y+62
+ 2505 10c8 9FAD      		ldd r25,Y+63
+ 2506 10ca 2997      		sbiw r28,71-62
+ 2507 10cc 0597      		sbiw r24,5
+ 2508 10ce 00F0      		brlo .L309
+GAS LISTING sboxnet2usb.s 			page 45
+
+
+ 2509 10d0 CE01      		movw r24,r28
+ 2510 10d2 0196      		adiw r24,1
+ 2511 10d4 0E94 0000 		call sboxnet_can_send_msg
+ 2512 10d8 8823      		tst r24
+ 2513 10da 01F0      		breq .L310
+ 2514 10dc 8FB7      		in r24,__SREG__
+ 2515               	/* #APP */
+ 2516               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 2517 10de F894      		cli
+ 2518               	 ;  0 "" 2
+ 2519               	/* #NOAPP */
+ 2520 10e0 93E0      		ldi r25,lo8(3)
+ 2521 10e2 9093 0000 		sts g_timer_led_msg_write,r25
+ 2522 10e6 2F9A      		sbi 0x5,7
+ 2523 10e8 8FBF      		out __SREG__,r24
+ 2524 10ea CE01      		movw r24,r28
+ 2525 10ec 0196      		adiw r24,1
+ 2526 10ee 0E94 0000 		call sboxnet_send_msg
+ 2527 10f2 8823      		tst r24
+ 2528 10f4 01F4      		brne .+2
+ 2529 10f6 00C0      		rjmp .L330
+ 2530 10f8 8091 0000 		lds r24,g_sboxnet_status
+ 2531 10fc 8068      		ori r24,lo8(-128)
+ 2532 10fe 00C0      		rjmp .L329
+ 2533               	.L310:
+ 2534 1100 8091 0000 		lds r24,g_sboxnet_status
+ 2535 1104 8064      		ori r24,lo8(64)
+ 2536 1106 00C0      		rjmp .L329
+ 2537               	.L309:
+ 2538 1108 8091 0000 		lds r24,g_sboxnet_status
+ 2539 110c 8062      		ori r24,lo8(32)
+ 2540               	.L329:
+ 2541 110e 8093 0000 		sts g_sboxnet_status,r24
+ 2542 1112 00C0      		rjmp .L330
+ 2543               	.L279:
+ 2544 1114 0E94 0000 		call usb_ep_clearSETUP
+ 2545 1118 F801      		movw r30,r16
+ 2546 111a 2681      		ldd r18,Z+6
+ 2547 111c 3781      		ldd r19,Z+7
+ 2548 111e 40E0      		ldi r20,0
+ 2549 1120 66E2      		ldi r22,lo8(38)
+ 2550 1122 70E0      		ldi r23,0
+ 2551 1124 80E0      		ldi r24,lo8(g_sboxnet+525)
+ 2552 1126 90E0      		ldi r25,hi8(g_sboxnet+525)
+ 2553 1128 00C0      		rjmp .L331
+ 2554               	.L288:
+ 2555 112a 0E94 0000 		call usb_ep_clearSETUP
+ 2556 112e F801      		movw r30,r16
+ 2557 1130 2681      		ldd r18,Z+6
+ 2558 1132 3781      		ldd r19,Z+7
+ 2559 1134 40E0      		ldi r20,0
+ 2560 1136 69E0      		ldi r22,lo8(9)
+ 2561 1138 70E0      		ldi r23,0
+ 2562 113a 80E0      		ldi r24,lo8(g_sboxnet)
+ 2563 113c 90E0      		ldi r25,hi8(g_sboxnet)
+ 2564 113e 00C0      		rjmp .L331
+ 2565               	.L286:
+GAS LISTING sboxnet2usb.s 			page 46
+
+
+ 2566 1140 0E94 0000 		call usb_ep_clearSETUP
+ 2567 1144 F801      		movw r30,r16
+ 2568 1146 2681      		ldd r18,Z+6
+ 2569 1148 3781      		ldd r19,Z+7
+ 2570 114a 40E0      		ldi r20,0
+ 2571 114c 62E0      		ldi r22,lo8(2)
+ 2572 114e 71E0      		ldi r23,lo8(1)
+ 2573 1150 80E0      		ldi r24,lo8(g_sboxnet+267)
+ 2574 1152 90E0      		ldi r25,hi8(g_sboxnet+267)
+ 2575 1154 00C0      		rjmp .L331
+ 2576               	.L290:
+ 2577 1156 0E94 0000 		call usb_ep_clearSETUP
+ 2578 115a 80E0      		ldi r24,lo8(__stack)
+ 2579 115c 90E0      		ldi r25,hi8(__stack)
+ 2580 115e 8050      		subi r24,lo8(_end)
+ 2581 1160 9040      		sbci r25,hi8(_end)
+ 2582 1162 9A83      		std Y+2,r25
+ 2583 1164 8983      		std Y+1,r24
+ 2584 1166 E0E0      		ldi r30,lo8(_end)
+ 2585 1168 F0E0      		ldi r31,hi8(_end)
+ 2586               	.L312:
+ 2587 116a 80E0      		ldi r24,hi8(__stack)
+ 2588 116c E030      		cpi r30,lo8(__stack)
+ 2589 116e F807      		cpc r31,r24
+ 2590 1170 00F4      		brsh .L313
+ 2591 1172 8081      		ld r24,Z
+ 2592 1174 853A      		cpi r24,lo8(-91)
+ 2593 1176 01F4      		brne .L313
+ 2594 1178 3196      		adiw r30,1
+ 2595 117a 00C0      		rjmp .L312
+ 2596               	.L313:
+ 2597 117c E050      		subi r30,lo8(_end)
+ 2598 117e F040      		sbci r31,hi8(_end)
+ 2599 1180 FC83      		std Y+4,r31
+ 2600 1182 EB83      		std Y+3,r30
+ 2601 1184 F801      		movw r30,r16
+ 2602 1186 2681      		ldd r18,Z+6
+ 2603 1188 3781      		ldd r19,Z+7
+ 2604 118a 40E0      		ldi r20,0
+ 2605 118c 64E0      		ldi r22,lo8(4)
+ 2606 118e 70E0      		ldi r23,0
+ 2607               	.L332:
+ 2608 1190 CE01      		movw r24,r28
+ 2609 1192 0196      		adiw r24,1
+ 2610               	.L331:
+ 2611 1194 0E94 0000 		call usb_ep_send_control_data
+ 2612 1198 00C0      		rjmp .L330
+ 2613               	.L291:
+ 2614 119a 0E94 0000 		call usb_ep_clearSETUP
+ 2615 119e 42E4      		ldi r20,lo8(66)
+ 2616 11a0 50E0      		ldi r21,0
+ 2617 11a2 6FEF      		ldi r22,lo8(-1)
+ 2618 11a4 70E0      		ldi r23,0
+ 2619 11a6 CE01      		movw r24,r28
+ 2620 11a8 0196      		adiw r24,1
+ 2621 11aa 0E94 0000 		call memset
+ 2622 11ae F801      		movw r30,r16
+GAS LISTING sboxnet2usb.s 			page 47
+
+
+ 2623 11b0 4681      		ldd r20,Z+6
+ 2624 11b2 5781      		ldd r21,Z+7
+ 2625 11b4 4134      		cpi r20,65
+ 2626 11b6 5105      		cpc r21,__zero_reg__
+ 2627 11b8 00F0      		brlo .L315
+ 2628 11ba 40E4      		ldi r20,lo8(64)
+ 2629 11bc 50E0      		ldi r21,0
+ 2630               	.L315:
+ 2631 11be BE01      		movw r22,r28
+ 2632 11c0 695B      		subi r22,-71
+ 2633 11c2 7F4F      		sbci r23,-1
+ 2634 11c4 CE01      		movw r24,r28
+ 2635 11c6 0396      		adiw r24,3
+ 2636 11c8 0E94 0000 		call usb_ep_recv_control_data
+ 2637 11cc 2996      		adiw r28,71-62
+ 2638 11ce 4EAD      		ldd r20,Y+62
+ 2639 11d0 5FAD      		ldd r21,Y+63
+ 2640 11d2 2997      		sbiw r28,71-62
+ 2641 11d4 82E0      		ldi r24,lo8(2)
+ 2642 11d6 840F      		add r24,r20
+ 2643 11d8 8983      		std Y+1,r24
+ 2644 11da 83E0      		ldi r24,lo8(3)
+ 2645 11dc 8A83      		std Y+2,r24
+ 2646 11de 4E5F      		subi r20,-2
+ 2647 11e0 5F4F      		sbci r21,-1
+ 2648 11e2 60E0      		ldi r22,lo8(eeprom)
+ 2649 11e4 70E0      		ldi r23,hi8(eeprom)
+ 2650 11e6 CE01      		movw r24,r28
+ 2651 11e8 0196      		adiw r24,1
+ 2652 11ea 0E94 0000 		call __eeupd_block_m32u2
+ 2653               	.L330:
+ 2654 11ee 80E0      		ldi r24,0
+ 2655 11f0 00C0      		rjmp .L278
+ 2656               	.L317:
+ 2657 11f2 81E0      		ldi r24,lo8(1)
+ 2658               	.L278:
+ 2659               	/* epilogue start */
+ 2660 11f4 C85B      		subi r28,-72
+ 2661 11f6 DF4F      		sbci r29,-1
+ 2662 11f8 0FB6      		in __tmp_reg__,__SREG__
+ 2663 11fa F894      		cli
+ 2664 11fc DEBF      		out __SP_H__,r29
+ 2665 11fe 0FBE      		out __SREG__,__tmp_reg__
+ 2666 1200 CDBF      		out __SP_L__,r28
+ 2667 1202 DF91      		pop r29
+ 2668 1204 CF91      		pop r28
+ 2669 1206 1F91      		pop r17
+ 2670 1208 0F91      		pop r16
+ 2671 120a FF90      		pop r15
+ 2672 120c 0895      		ret
+ 2673               		.size	usb_event_ep0_request, .-usb_event_ep0_request
+ 2674               	.global	usb_ep0_task
+ 2675               		.type	usb_ep0_task, @function
+ 2676               	usb_ep0_task:
+ 2677 120e CF92      		push r12
+ 2678 1210 DF92      		push r13
+ 2679 1212 FF92      		push r15
+GAS LISTING sboxnet2usb.s 			page 48
+
+
+ 2680 1214 0F93      		push r16
+ 2681 1216 1F93      		push r17
+ 2682 1218 CF93      		push r28
+ 2683 121a DF93      		push r29
+ 2684 121c CDB7      		in r28,__SP_L__
+ 2685 121e DEB7      		in r29,__SP_H__
+ 2686 1220 2897      		sbiw r28,8
+ 2687 1222 0FB6      		in __tmp_reg__,__SREG__
+ 2688 1224 F894      		cli
+ 2689 1226 DEBF      		out __SP_H__,r29
+ 2690 1228 0FBE      		out __SREG__,__tmp_reg__
+ 2691 122a CDBF      		out __SP_L__,r28
+ 2692               	/* prologue: function */
+ 2693               	/* frame size = 8 */
+ 2694               	/* stack size = 15 */
+ 2695               	.L__stack_usage = 15
+ 2696 122c 1092 E900 		sts 233,__zero_reg__
+ 2697 1230 8091 E800 		lds r24,232
+ 2698 1234 83FF      		sbrs r24,3
+ 2699 1236 00C0      		rjmp .L333
+ 2700 1238 68E0      		ldi r22,lo8(8)
+ 2701 123a CE01      		movw r24,r28
+ 2702 123c 0196      		adiw r24,1
+ 2703 123e 0E94 0000 		call usb_ep_read_data
+ 2704 1242 8981      		ldd r24,Y+1
+ 2705 1244 982F      		mov r25,r24
+ 2706 1246 9076      		andi r25,lo8(96)
+ 2707 1248 01F0      		breq .+2
+ 2708 124a 00C0      		rjmp .L337
+ 2709 124c 9A81      		ldd r25,Y+2
+ 2710 124e 9630      		cpi r25,lo8(6)
+ 2711 1250 01F0      		breq .L338
+ 2712 1252 00F4      		brsh .L339
+ 2713 1254 9530      		cpi r25,lo8(5)
+ 2714 1256 01F4      		brne .+2
+ 2715 1258 00C0      		rjmp .L340
+ 2716 125a 00C0      		rjmp .L337
+ 2717               	.L339:
+ 2718 125c 9830      		cpi r25,lo8(8)
+ 2719 125e 01F0      		breq .L341
+ 2720 1260 9930      		cpi r25,lo8(9)
+ 2721 1262 01F4      		brne .+2
+ 2722 1264 00C0      		rjmp .L342
+ 2723 1266 00C0      		rjmp .L337
+ 2724               	.L341:
+ 2725 1268 8038      		cpi r24,lo8(-128)
+ 2726 126a 01F0      		breq .+2
+ 2727 126c 00C0      		rjmp .L337
+ 2728 126e 8091 0000 		lds r24,g_usb_dev
+ 2729 1272 8871      		andi r24,lo8(24)
+ 2730 1274 01F4      		brne .+2
+ 2731 1276 00C0      		rjmp .L337
+ 2732 1278 0E94 0000 		call usb_ep_clearSETUP
+ 2733 127c 21E0      		ldi r18,lo8(1)
+ 2734 127e 30E0      		ldi r19,0
+ 2735 1280 40E0      		ldi r20,0
+ 2736 1282 61E0      		ldi r22,lo8(1)
+GAS LISTING sboxnet2usb.s 			page 49
+
+
+ 2737 1284 70E0      		ldi r23,0
+ 2738 1286 80E0      		ldi r24,lo8(g_usb_dev+1)
+ 2739 1288 90E0      		ldi r25,hi8(g_usb_dev+1)
+ 2740 128a 00C0      		rjmp .L378
+ 2741               	.L338:
+ 2742 128c 8038      		cpi r24,lo8(-128)
+ 2743 128e 01F0      		breq .+2
+ 2744 1290 00C0      		rjmp .L337
+ 2745 1292 0B81      		ldd r16,Y+3
+ 2746 1294 1C81      		ldd r17,Y+4
+ 2747 1296 812F      		mov r24,r17
+ 2748 1298 90E0      		ldi r25,0
+ 2749 129a 8230      		cpi r24,2
+ 2750 129c 9105      		cpc r25,__zero_reg__
+ 2751 129e 01F0      		breq .L344
+ 2752 12a0 8330      		cpi r24,3
+ 2753 12a2 9105      		cpc r25,__zero_reg__
+ 2754 12a4 01F0      		breq .L345
+ 2755 12a6 0197      		sbiw r24,1
+ 2756 12a8 01F0      		breq .+2
+ 2757 12aa 00C0      		rjmp .L337
+ 2758 12ac 0E94 0000 		call usb_ep_clearSETUP
+ 2759 12b0 2F81      		ldd r18,Y+7
+ 2760 12b2 3885      		ldd r19,Y+8
+ 2761 12b4 4091 0000 		lds r20,g_usb_dev+12
+ 2762 12b8 62E1      		ldi r22,lo8(18)
+ 2763 12ba 70E0      		ldi r23,0
+ 2764 12bc 8091 0000 		lds r24,g_usb_dev+2
+ 2765 12c0 9091 0000 		lds r25,g_usb_dev+2+1
+ 2766 12c4 00C0      		rjmp .L378
+ 2767               	.L344:
+ 2768 12c6 0111      		cpse r16,__zero_reg__
+ 2769 12c8 00C0      		rjmp .L337
+ 2770 12ca 0E94 0000 		call usb_ep_clearSETUP
+ 2771 12ce 2F81      		ldd r18,Y+7
+ 2772 12d0 3885      		ldd r19,Y+8
+ 2773 12d2 4091 0000 		lds r20,g_usb_dev+12
+ 2774 12d6 6091 0000 		lds r22,g_usb_dev+6
+ 2775 12da 70E0      		ldi r23,0
+ 2776 12dc 8091 0000 		lds r24,g_usb_dev+4
+ 2777 12e0 9091 0000 		lds r25,g_usb_dev+4+1
+ 2778               	.L378:
+ 2779 12e4 0E94 0000 		call usb_ep_send_control_data
+ 2780 12e8 00C0      		rjmp .L343
+ 2781               	.L345:
+ 2782 12ea F02E      		mov r15,r16
+ 2783 12ec E091 0000 		lds r30,g_usb_dev+10
+ 2784 12f0 F091 0000 		lds r31,g_usb_dev+10+1
+ 2785 12f4 3097      		sbiw r30,0
+ 2786 12f6 01F4      		brne .L347
+ 2787               	.L349:
+ 2788 12f8 8091 0000 		lds r24,g_usb_dev+9
+ 2789 12fc F816      		cp r15,r24
+ 2790 12fe 00F0      		brlo .L348
+ 2791 1300 00C0      		rjmp .L337
+ 2792               	.L347:
+ 2793 1302 602F      		mov r22,r16
+GAS LISTING sboxnet2usb.s 			page 50
+
+
+ 2794 1304 CE01      		movw r24,r28
+ 2795 1306 0196      		adiw r24,1
+ 2796 1308 0995      		icall
+ 2797 130a 8111      		cpse r24,__zero_reg__
+ 2798 130c 00C0      		rjmp .L349
+ 2799 130e 00C0      		rjmp .L343
+ 2800               	.L348:
+ 2801 1310 8091 0000 		lds r24,g_usb_dev+12
+ 2802 1314 E091 0000 		lds r30,g_usb_dev+7
+ 2803 1318 F091 0000 		lds r31,g_usb_dev+7+1
+ 2804 131c 1127      		clr r17
+ 2805 131e 8130      		cpi r24,lo8(1)
+ 2806 1320 01F0      		breq .L351
+ 2807 1322 8230      		cpi r24,lo8(2)
+ 2808 1324 01F4      		brne .L380
+ 2809 1326 C801      		movw r24,r16
+ 2810 1328 880F      		lsl r24
+ 2811 132a 991F      		rol r25
+ 2812 132c 8E0F      		add r24,r30
+ 2813 132e 9F1F      		adc r25,r31
+ 2814 1330 0E94 0000 		call __eerd_word_m32u2
+ 2815 1334 8C01      		movw r16,r24
+ 2816 1336 00C0      		rjmp .L353
+ 2817               	.L351:
+ 2818 1338 000F      		lsl r16
+ 2819 133a 111F      		rol r17
+ 2820 133c E00F      		add r30,r16
+ 2821 133e F11F      		adc r31,r17
+ 2822               	/* #APP */
+ 2823               	 ;  368 "../avrutilslib/usb/usb.c" 1
+ 2824 1340 0591      		lpm r16, Z+
+ 2825 1342 1491      		lpm r17, Z
+ 2826               		
+ 2827               	 ;  0 "" 2
+ 2828               	/* #NOAPP */
+ 2829 1344 00C0      		rjmp .L353
+ 2830               	.L380:
+ 2831 1346 000F      		lsl r16
+ 2832 1348 111F      		rol r17
+ 2833 134a E00F      		add r30,r16
+ 2834 134c F11F      		adc r31,r17
+ 2835 134e 0081      		ld r16,Z
+ 2836 1350 1181      		ldd r17,Z+1
+ 2837               	.L353:
+ 2838 1352 0115      		cp r16,__zero_reg__
+ 2839 1354 1105      		cpc r17,__zero_reg__
+ 2840 1356 01F4      		brne .+2
+ 2841 1358 00C0      		rjmp .L337
+ 2842 135a 0E94 0000 		call usb_ep_clearSETUP
+ 2843 135e CF80      		ldd r12,Y+7
+ 2844 1360 D884      		ldd r13,Y+8
+ 2845 1362 F090 0000 		lds r15,g_usb_dev+12
+ 2846 1366 6F2D      		mov r22,r15
+ 2847 1368 C801      		movw r24,r16
+ 2848 136a 0E94 0000 		call usb_mem_read_byte
+ 2849 136e 682F      		mov r22,r24
+ 2850 1370 70E0      		ldi r23,0
+GAS LISTING sboxnet2usb.s 			page 51
+
+
+ 2851 1372 9601      		movw r18,r12
+ 2852 1374 4F2D      		mov r20,r15
+ 2853 1376 C801      		movw r24,r16
+ 2854 1378 00C0      		rjmp .L378
+ 2855               	.L340:
+ 2856 137a 8111      		cpse r24,__zero_reg__
+ 2857 137c 00C0      		rjmp .L337
+ 2858 137e 8091 0000 		lds r24,g_usb_dev
+ 2859 1382 8C70      		andi r24,lo8(12)
+ 2860 1384 01F4      		brne .+2
+ 2861 1386 00C0      		rjmp .L337
+ 2862 1388 1B81      		ldd r17,Y+3
+ 2863 138a 1F77      		andi r17,lo8(127)
+ 2864 138c 0E94 0000 		call usb_ep_clearSETUP
+ 2865 1390 1093 E300 		sts 227,r17
+ 2866 1394 0E94 0000 		call usb_ep_send_zlp
+ 2867 1398 8091 E300 		lds r24,227
+ 2868 139c 8068      		ori r24,lo8(-128)
+ 2869 139e 8093 E300 		sts 227,r24
+ 2870 13a2 1123      		tst r17
+ 2871 13a4 01F0      		breq .L354
+ 2872 13a6 88E0      		ldi r24,lo8(8)
+ 2873 13a8 00C0      		rjmp .L379
+ 2874               	.L354:
+ 2875 13aa 84E0      		ldi r24,lo8(4)
+ 2876               	.L379:
+ 2877 13ac 8093 0000 		sts g_usb_dev,r24
+ 2878 13b0 00C0      		rjmp .L343
+ 2879               	.L342:
+ 2880 13b2 8111      		cpse r24,__zero_reg__
+ 2881 13b4 00C0      		rjmp .L337
+ 2882 13b6 8091 0000 		lds r24,g_usb_dev
+ 2883 13ba 8871      		andi r24,lo8(24)
+ 2884 13bc 01F0      		breq .L337
+ 2885 13be 1B81      		ldd r17,Y+3
+ 2886 13c0 1111      		cpse r17,__zero_reg__
+ 2887 13c2 00C0      		rjmp .L355
+ 2888 13c4 88E0      		ldi r24,lo8(8)
+ 2889 13c6 8093 0000 		sts g_usb_dev,r24
+ 2890 13ca 1092 0000 		sts g_usb_dev+1,__zero_reg__
+ 2891 13ce 00C0      		rjmp .L356
+ 2892               	.L355:
+ 2893 13d0 6091 0000 		lds r22,g_usb_dev+12
+ 2894 13d4 8091 0000 		lds r24,g_usb_dev+4
+ 2895 13d8 9091 0000 		lds r25,g_usb_dev+4+1
+ 2896 13dc 0596      		adiw r24,5
+ 2897 13de 0E94 0000 		call usb_mem_read_byte
+ 2898 13e2 1813      		cpse r17,r24
+ 2899 13e4 00C0      		rjmp .L337
+ 2900 13e6 80E1      		ldi r24,lo8(16)
+ 2901 13e8 8093 0000 		sts g_usb_dev,r24
+ 2902 13ec 1093 0000 		sts g_usb_dev+1,r17
+ 2903 13f0 1092 E900 		sts 233,__zero_reg__
+ 2904               	.L356:
+ 2905 13f4 0E94 0000 		call usb_ep_clearSETUP
+ 2906 13f8 0E94 0000 		call usb_ep_send_zlp
+ 2907               	.L343:
+GAS LISTING sboxnet2usb.s 			page 52
+
+
+ 2908 13fc 80E0      		ldi r24,0
+ 2909               	.L358:
+ 2910 13fe 1092 E900 		sts 233,__zero_reg__
+ 2911 1402 8823      		tst r24
+ 2912 1404 01F0      		breq .L333
+ 2913 1406 0E94 0000 		call usb_ep_clearSETUP
+ 2914 140a 8091 EB00 		lds r24,235
+ 2915 140e 8062      		ori r24,lo8(32)
+ 2916 1410 8093 EB00 		sts 235,r24
+ 2917 1414 00C0      		rjmp .L333
+ 2918               	.L337:
+ 2919 1416 CE01      		movw r24,r28
+ 2920 1418 0196      		adiw r24,1
+ 2921 141a 0E94 0000 		call usb_event_ep0_request
+ 2922 141e 00C0      		rjmp .L358
+ 2923               	.L333:
+ 2924               	/* epilogue start */
+ 2925 1420 2896      		adiw r28,8
+ 2926 1422 0FB6      		in __tmp_reg__,__SREG__
+ 2927 1424 F894      		cli
+ 2928 1426 DEBF      		out __SP_H__,r29
+ 2929 1428 0FBE      		out __SREG__,__tmp_reg__
+ 2930 142a CDBF      		out __SP_L__,r28
+ 2931 142c DF91      		pop r29
+ 2932 142e CF91      		pop r28
+ 2933 1430 1F91      		pop r17
+ 2934 1432 0F91      		pop r16
+ 2935 1434 FF90      		pop r15
+ 2936 1436 DF90      		pop r13
+ 2937 1438 CF90      		pop r12
+ 2938 143a 0895      		ret
+ 2939               		.size	usb_ep0_task, .-usb_ep0_task
+ 2940               	.global	__vector_18
+ 2941               		.type	__vector_18, @function
+ 2942               	__vector_18:
+ 2943 143c 1F92      		push r1
+ 2944 143e 0F92      		push r0
+ 2945 1440 0FB6      		in r0,__SREG__
+ 2946 1442 0F92      		push r0
+ 2947 1444 1124      		clr __zero_reg__
+ 2948 1446 8F93      		push r24
+ 2949 1448 9F93      		push r25
+ 2950               	/* prologue: Signal */
+ 2951               	/* frame size = 0 */
+ 2952               	/* stack size = 5 */
+ 2953               	.L__stack_usage = 5
+ 2954 144a 8091 0000 		lds r24,g_timer
+ 2955 144e 8F5F      		subi r24,lo8(-(1))
+ 2956 1450 8093 0000 		sts g_timer,r24
+ 2957 1454 8F70      		andi r24,lo8(15)
+ 2958 1456 01F4      		brne .L382
+ 2959 1458 95B1      		in r25,0x5
+ 2960 145a 80E2      		ldi r24,lo8(32)
+ 2961 145c 8927      		eor r24,r25
+ 2962 145e 85B9      		out 0x5,r24
+ 2963               	.L382:
+ 2964 1460 8091 0000 		lds r24,g_timer_led_msg_read
+GAS LISTING sboxnet2usb.s 			page 53
+
+
+ 2965 1464 8823      		tst r24
+ 2966 1466 01F0      		breq .L384
+ 2967 1468 8150      		subi r24,lo8(-(-1))
+ 2968 146a 8093 0000 		sts g_timer_led_msg_read,r24
+ 2969 146e 8111      		cpse r24,__zero_reg__
+ 2970 1470 00C0      		rjmp .L384
+ 2971 1472 2E98      		cbi 0x5,6
+ 2972               	.L384:
+ 2973 1474 8091 0000 		lds r24,g_timer_led_msg_write
+ 2974 1478 8823      		tst r24
+ 2975 147a 01F0      		breq .L381
+ 2976 147c 8150      		subi r24,lo8(-(-1))
+ 2977 147e 8093 0000 		sts g_timer_led_msg_write,r24
+ 2978 1482 8111      		cpse r24,__zero_reg__
+ 2979 1484 00C0      		rjmp .L381
+ 2980 1486 2F98      		cbi 0x5,7
+ 2981               	.L381:
+ 2982               	/* epilogue start */
+ 2983 1488 9F91      		pop r25
+ 2984 148a 8F91      		pop r24
+ 2985 148c 0F90      		pop r0
+ 2986 148e 0FBE      		out __SREG__,r0
+ 2987 1490 0F90      		pop r0
+ 2988 1492 1F90      		pop r1
+ 2989 1494 1895      		reti
+ 2990               		.size	__vector_18, .-__vector_18
+ 2991               		.section	.text.startup,"ax",@progbits
+ 2992               	.global	main
+ 2993               		.type	main, @function
+ 2994               	main:
+ 2995               	/* prologue: function */
+ 2996               	/* frame size = 0 */
+ 2997               	/* stack size = 0 */
+ 2998               	.L__stack_usage = 0
+ 2999               	/* #APP */
+ 3000               	 ;  511 "sboxnet2usb.c" 1
+ 3001 0000 F894      		cli
+ 3002               	 ;  0 "" 2
+ 3003               	/* #NOAPP */
+ 3004 0002 0E94 0000 		call init_system
+ 3005 0006 CC24      		clr r12
+ 3006 0008 C394      		inc r12
+ 3007 000a 80E0      		ldi r24,lo8(gs(get_string))
+ 3008 000c E82E      		mov r14,r24
+ 3009 000e 80E0      		ldi r24,hi8(gs(get_string))
+ 3010 0010 F82E      		mov r15,r24
+ 3011 0012 03E0      		ldi r16,lo8(3)
+ 3012 0014 20E0      		ldi r18,lo8(g_strings_P)
+ 3013 0016 30E0      		ldi r19,hi8(g_strings_P)
+ 3014 0018 42E1      		ldi r20,lo8(18)
+ 3015 001a 60E0      		ldi r22,lo8(g_config_1_P)
+ 3016 001c 70E0      		ldi r23,hi8(g_config_1_P)
+ 3017 001e 80E0      		ldi r24,lo8(g_device_desc_P)
+ 3018 0020 90E0      		ldi r25,hi8(g_device_desc_P)
+ 3019 0022 0E94 0000 		call usb_init
+ 3020 0026 83B7      		in r24,0x33
+ 3021 0028 817F      		andi r24,lo8(-15)
+GAS LISTING sboxnet2usb.s 			page 54
+
+
+ 3022 002a 83BF      		out 0x33,r24
+ 3023 002c 83B7      		in r24,0x33
+ 3024 002e 8160      		ori r24,lo8(1)
+ 3025 0030 83BF      		out 0x33,r24
+ 3026               	/* #APP */
+ 3027               	 ;  521 "sboxnet2usb.c" 1
+ 3028 0032 7894      		sei
+ 3029               	 ;  0 "" 2
+ 3030               	/* #NOAPP */
+ 3031               	.L390:
+ 3032 0034 0E94 0000 		call usb_ep0_task
+ 3033 0038 00C0      		rjmp .L390
+ 3034               		.size	main, .-main
+ 3035               		.section	.rodata
+ 3036               		.type	CSWTCH.146, @object
+ 3037               		.size	CSWTCH.146, 25
+ 3038               	CSWTCH.146:
+ 3039 0000 02        		.byte	2
+ 3040 0001 32        		.byte	50
+ 3041 0002 32        		.byte	50
+ 3042 0003 32        		.byte	50
+ 3043 0004 32        		.byte	50
+ 3044 0005 32        		.byte	50
+ 3045 0006 32        		.byte	50
+ 3046 0007 32        		.byte	50
+ 3047 0008 12        		.byte	18
+ 3048 0009 32        		.byte	50
+ 3049 000a 32        		.byte	50
+ 3050 000b 32        		.byte	50
+ 3051 000c 32        		.byte	50
+ 3052 000d 32        		.byte	50
+ 3053 000e 32        		.byte	50
+ 3054 000f 32        		.byte	50
+ 3055 0010 32        		.byte	50
+ 3056 0011 32        		.byte	50
+ 3057 0012 32        		.byte	50
+ 3058 0013 32        		.byte	50
+ 3059 0014 32        		.byte	50
+ 3060 0015 32        		.byte	50
+ 3061 0016 32        		.byte	50
+ 3062 0017 32        		.byte	50
+ 3063 0018 22        		.byte	34
+ 3064               		.section	.progmem.data,"a",@progbits
+ 3065               		.type	epsizemap.2616, @object
+ 3066               		.size	epsizemap.2616, 4
+ 3067               	epsizemap.2616:
+ 3068 0000 08        		.byte	8
+ 3069 0001 10        		.byte	16
+ 3070 0002 20        		.byte	32
+ 3071 0003 40        		.byte	64
+ 3072               	.global	g_strings_P
+ 3073               		.type	g_strings_P, @object
+ 3074               		.size	g_strings_P, 6
+ 3075               	g_strings_P:
+ 3076 0004 0000      		.word	g_string0_P
+ 3077 0006 0000      		.word	g_string1_P
+ 3078 0008 0000      		.word	g_string2_P
+GAS LISTING sboxnet2usb.s 			page 55
+
+
+ 3079               	.global	g_string2_P
+ 3080               		.type	g_string2_P, @object
+ 3081               		.size	g_string2_P, 2
+ 3082               	g_string2_P:
+ 3083 000a 18        		.byte	24
+ 3084 000b 03        		.byte	3
+ 3085 000c 7300      		.string	"s"
+ 3086 000e 6200      		.string	"b"
+ 3087 0010 6F00      		.string	"o"
+ 3088 0012 7800      		.string	"x"
+ 3089 0014 6E00      		.string	"n"
+ 3090 0016 6500      		.string	"e"
+ 3091 0018 7400      		.string	"t"
+ 3092 001a 3200      		.string	"2"
+ 3093 001c 7500      		.string	"u"
+ 3094 001e 7300      		.string	"s"
+ 3095 0020 6200      		.string	"b"
+ 3096 0022 00        		.string	""
+ 3097 0023 00        		.string	""
+ 3098               	.global	g_string1_P
+ 3099               		.type	g_string1_P, @object
+ 3100               		.size	g_string1_P, 2
+ 3101               	g_string1_P:
+ 3102 0024 44        		.byte	68
+ 3103 0025 03        		.byte	3
+ 3104 0026 5400      		.string	"T"
+ 3105 0028 6800      		.string	"h"
+ 3106 002a 6F00      		.string	"o"
+ 3107 002c 6D00      		.string	"m"
+ 3108 002e 6100      		.string	"a"
+ 3109 0030 7300      		.string	"s"
+ 3110 0032 2000      		.string	" "
+ 3111 0034 4D00      		.string	"M"
+ 3112 0036 6100      		.string	"a"
+ 3113 0038 6900      		.string	"i"
+ 3114 003a 6500      		.string	"e"
+ 3115 003c 7200      		.string	"r"
+ 3116 003e 2000      		.string	" "
+ 3117 0040 3C00      		.string	"<"
+ 3118 0042 6200      		.string	"b"
+ 3119 0044 6100      		.string	"a"
+ 3120 0046 6C00      		.string	"l"
+ 3121 0048 6100      		.string	"a"
+ 3122 004a 6700      		.string	"g"
+ 3123 004c 6900      		.string	"i"
+ 3124 004e 4000      		.string	"@"
+ 3125 0050 6A00      		.string	"j"
+ 3126 0052 7500      		.string	"u"
+ 3127 0054 7300      		.string	"s"
+ 3128 0056 7400      		.string	"t"
+ 3129 0058 6D00      		.string	"m"
+ 3130 005a 6100      		.string	"a"
+ 3131 005c 6900      		.string	"i"
+ 3132 005e 6C00      		.string	"l"
+ 3133 0060 2E00      		.string	"."
+ 3134 0062 6400      		.string	"d"
+ 3135 0064 6500      		.string	"e"
+GAS LISTING sboxnet2usb.s 			page 56
+
+
+ 3136 0066 3E00      		.string	">"
+ 3137 0068 00        		.string	""
+ 3138 0069 00        		.string	""
+ 3139               	.global	g_string0_P
+ 3140               		.type	g_string0_P, @object
+ 3141               		.size	g_string0_P, 2
+ 3142               	g_string0_P:
+ 3143 006a 04        		.byte	4
+ 3144 006b 03        		.byte	3
+ 3145 006c 0904      		.word	1033
+ 3146               	.global	g_config_1_P
+ 3147               		.type	g_config_1_P, @object
+ 3148               		.size	g_config_1_P, 18
+ 3149               	g_config_1_P:
+ 3150 006e 09        		.byte	9
+ 3151 006f 02        		.byte	2
+ 3152 0070 1200      		.word	18
+ 3153 0072 01        		.byte	1
+ 3154 0073 01        		.byte	1
+ 3155 0074 00        		.byte	0
+ 3156 0075 80        		.byte	-128
+ 3157 0076 19        		.byte	25
+ 3158 0077 09        		.byte	9
+ 3159 0078 04        		.byte	4
+ 3160 0079 00        		.byte	0
+ 3161 007a 00        		.byte	0
+ 3162 007b 00        		.byte	0
+ 3163 007c FF        		.byte	-1
+ 3164 007d FF        		.byte	-1
+ 3165 007e FF        		.byte	-1
+ 3166 007f 00        		.byte	0
+ 3167               	.global	g_device_desc_P
+ 3168               		.type	g_device_desc_P, @object
+ 3169               		.size	g_device_desc_P, 18
+ 3170               	g_device_desc_P:
+ 3171 0080 12        		.byte	18
+ 3172 0081 01        		.byte	1
+ 3173 0082 1001      		.word	272
+ 3174 0084 FF        		.byte	-1
+ 3175 0085 FF        		.byte	-1
+ 3176 0086 FF        		.byte	-1
+ 3177 0087 40        		.byte	64
+ 3178 0088 23F1      		.word	-3805
+ 3179 008a 02A0      		.word	-24574
+ 3180 008c 0101      		.word	257
+ 3181 008e 01        		.byte	1
+ 3182 008f 02        		.byte	2
+ 3183 0090 03        		.byte	3
+ 3184 0091 01        		.byte	1
+ 3185               	.global	eeprom
+ 3186               		.section	.eeprom,"aw",@progbits
+ 3187               		.type	eeprom, @object
+ 3188               		.size	eeprom, 66
+ 3189               	eeprom:
+ 3190 0000 0000 0000 		.zero	66
+ 3190      0000 0000 
+ 3190      0000 0000 
+GAS LISTING sboxnet2usb.s 			page 57
+
+
+ 3190      0000 0000 
+ 3190      0000 0000 
+ 3191               		.comm	g_usb_dev,13,1
+ 3192               	.global	g_timer_led_msg_write
+ 3193               		.section .bss
+ 3194               		.type	g_timer_led_msg_write, @object
+ 3195               		.size	g_timer_led_msg_write, 1
+ 3196               	g_timer_led_msg_write:
+ 3197 0000 00        		.zero	1
+ 3198               	.global	g_timer_led_msg_read
+ 3199               		.type	g_timer_led_msg_read, @object
+ 3200               		.size	g_timer_led_msg_read, 1
+ 3201               	g_timer_led_msg_read:
+ 3202 0001 00        		.zero	1
+ 3203               	.global	g_timer
+ 3204               		.type	g_timer, @object
+ 3205               		.size	g_timer, 1
+ 3206               	g_timer:
+ 3207 0002 00        		.zero	1
+ 3208               	.global	g_sboxnet_status
+ 3209               		.type	g_sboxnet_status, @object
+ 3210               		.size	g_sboxnet_status, 1
+ 3211               	g_sboxnet_status:
+ 3212 0003 00        		.zero	1
+ 3213               	.global	g_sboxnet_flags
+ 3214               		.type	g_sboxnet_flags, @object
+ 3215               		.size	g_sboxnet_flags, 1
+ 3216               	g_sboxnet_flags:
+ 3217 0004 00        		.zero	1
+ 3218               		.comm	g_sboxnet,563,1
+ 3219               		.comm	g_sboxnet_addr,1,1
+ 3220               		.ident	"GCC: (Gentoo 4.9.3 p1.3, pie-0.6.3) 4.9.3"
+ 3221               	.global __do_copy_data
+ 3222               	.global __do_clear_bss
+GAS LISTING sboxnet2usb.s 			page 58
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 sboxnet2usb.c
+       sboxnet2usb.s:2      *ABS*:000000000000003e __SP_H__
+       sboxnet2usb.s:3      *ABS*:000000000000003d __SP_L__
+       sboxnet2usb.s:4      *ABS*:000000000000003f __SREG__
+       sboxnet2usb.s:5      *ABS*:0000000000000000 __tmp_reg__
+       sboxnet2usb.s:6      *ABS*:0000000000000001 __zero_reg__
+       sboxnet2usb.s:9      .text:0000000000000000 sboxnet_debug_inc_recverrors
+                            *COM*:0000000000000233 g_sboxnet
+       sboxnet2usb.s:24     .text:0000000000000010 sboxnet_debug_inc_recverr_dor
+       sboxnet2usb.s:39     .text:0000000000000020 sboxnet_debug_inc_recv_byte
+       sboxnet2usb.s:54     .text:0000000000000030 sboxnet_prandom
+       sboxnet2usb.s:76     .text:000000000000004e sboxnet_rb_write_commit
+       sboxnet2usb.s:105    .text:000000000000007c sboxnet_rb_write
+       sboxnet2usb.s:148    .text:00000000000000be sboxnet_rb_read_commit
+       sboxnet2usb.s:171    .text:00000000000000e0 sboxnet_rb_read
+       sboxnet2usb.s:209    .text:000000000000011c sboxnet_set_timer
+       sboxnet2usb.s:230    .text:0000000000000140 sboxnet_check_try_transmit
+       sboxnet2usb.s:291    .text:00000000000001ac usb_ep_clearSETUP
+       sboxnet2usb.s:304    .text:00000000000001b8 usb_ep_clearIN
+       sboxnet2usb.s:317    .text:00000000000001c4 usb_ep_clearOUT
+       sboxnet2usb.s:330    .text:00000000000001d0 init_system
+       sboxnet2usb.s:3189   .eeprom:0000000000000000 eeprom
+       sboxnet2usb.s:418    .text:0000000000000266 sboxnet_receiver_enable
+       sboxnet2usb.s:436    .text:000000000000027c sboxnet_init
+       sboxnet2usb.s:486    .text:00000000000002de __vector_23
+                            *COM*:0000000000000001 g_sboxnet_addr
+       sboxnet2usb.s:697    .text:000000000000048a __vector_25
+       sboxnet2usb.s:917    .text:0000000000000646 sboxnet_receive_msg
+       sboxnet2usb.s:1065   .text:0000000000000742 sboxnet_send_msg
+       sboxnet2usb.s:1216   .text:0000000000000836 sboxnet_can_send_msg
+       sboxnet2usb.s:1245   .text:000000000000085e sboxnet_all_sent
+       sboxnet2usb.s:1258   .text:000000000000086a sboxnet_can_read
+       sboxnet2usb.s:1281   .text:0000000000000884 sboxnet_can_send
+       sboxnet2usb.s:1306   .text:00000000000008a4 get_status
+       sboxnet2usb.s:3211   .bss:0000000000000003 g_sboxnet_status
+       sboxnet2usb.s:1332   .text:00000000000008ca __vector_16
+       sboxnet2usb.s:1488   .init8:0000000000000000 stack_init8
+       sboxnet2usb.s:1510   .text:0000000000000a1e usb_ep_read_data
+       sboxnet2usb.s:1530   .text:0000000000000a32 usb_ep_waitIN
+                            *COM*:000000000000000d g_usb_dev
+       sboxnet2usb.s:1550   .text:0000000000000a4a usb_ep_send_zlp
+       sboxnet2usb.s:1565   .text:0000000000000a5c usb_mem_read_byte
+       sboxnet2usb.s:1591   .text:0000000000000a74 usb_ep_getbufsize
+       sboxnet2usb.s:3067   .progmem.data:0000000000000000 epsizemap.2616
+       sboxnet2usb.s:1612   .text:0000000000000a86 usb_ep_send_in_data
+       sboxnet2usb.s:1695   .text:0000000000000b22 usb_ep_send_control_data_chunk
+       sboxnet2usb.s:1790   .text:0000000000000bd0 usb_ep_send_control_data_finish
+       sboxnet2usb.s:1845   .text:0000000000000c2e usb_ep_send_control_data
+       sboxnet2usb.s:1865   .text:0000000000000c46 get_string
+       sboxnet2usb.s:1902   .text:0000000000000c80 usb_ep_recv_control_data_chunk
+       sboxnet2usb.s:1990   .text:0000000000000d1c usb_ep_recv_control_data_finish
+       sboxnet2usb.s:2000   .text:0000000000000d24 usb_ep_recv_control_data
+       sboxnet2usb.s:2014   .text:0000000000000d32 usb_ep_setup
+       sboxnet2usb.s:3038   .rodata:0000000000000000 CSWTCH.146
+       sboxnet2usb.s:2060   .text:0000000000000d86 usb_ep_setup_control
+       sboxnet2usb.s:2080   .text:0000000000000da2 usb_intr_endofreset
+GAS LISTING sboxnet2usb.s 			page 59
+
+
+       sboxnet2usb.s:2095   .text:0000000000000db2 __vector_11
+       sboxnet2usb.s:2172   .text:0000000000000e46 usb_init
+       sboxnet2usb.s:2232   .text:0000000000000ed2 usb_event_set_configuration
+       sboxnet2usb.s:2241   .text:0000000000000ed4 usb_event_ep0_request
+       sboxnet2usb.s:3216   .bss:0000000000000004 g_sboxnet_flags
+       sboxnet2usb.s:3201   .bss:0000000000000001 g_timer_led_msg_read
+       sboxnet2usb.s:3196   .bss:0000000000000000 g_timer_led_msg_write
+       sboxnet2usb.s:2676   .text:000000000000120e usb_ep0_task
+       sboxnet2usb.s:2942   .text:000000000000143c __vector_18
+       sboxnet2usb.s:3206   .bss:0000000000000002 g_timer
+       sboxnet2usb.s:2994   .text.startup:0000000000000000 main
+       sboxnet2usb.s:3075   .progmem.data:0000000000000004 g_strings_P
+       sboxnet2usb.s:3149   .progmem.data:000000000000006e g_config_1_P
+       sboxnet2usb.s:3170   .progmem.data:0000000000000080 g_device_desc_P
+       sboxnet2usb.s:3142   .progmem.data:000000000000006a g_string0_P
+       sboxnet2usb.s:3101   .progmem.data:0000000000000024 g_string1_P
+       sboxnet2usb.s:3082   .progmem.data:000000000000000a g_string2_P
+
+UNDEFINED SYMBOLS
+__eerd_word_m32u2
+__eeupd_byte_m32u2
+__eeupd_word_m32u2
+_end
+__stack
+__eerd_byte_m32u2
+memset
+__eeupd_block_m32u2
+__do_copy_data
+__do_clear_bss

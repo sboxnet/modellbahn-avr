@@ -1,0 +1,4575 @@
+GAS LISTING gpio-usb.s 			page 1
+
+
+   1               		.file	"gpio-usb.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               		.type	usb_ep_clearSETUP, @function
+   9               	usb_ep_clearSETUP:
+  10               	/* prologue: function */
+  11               	/* frame size = 0 */
+  12               	/* stack size = 0 */
+  13               	.L__stack_usage = 0
+  14 0000 E8EE      		ldi r30,lo8(-24)
+  15 0002 F0E0      		ldi r31,0
+  16 0004 8081      		ld r24,Z
+  17 0006 877F      		andi r24,lo8(-9)
+  18 0008 8083      		st Z,r24
+  19 000a 0895      		ret
+  20               		.size	usb_ep_clearSETUP, .-usb_ep_clearSETUP
+  21               		.type	usb_ep_clearIN, @function
+  22               	usb_ep_clearIN:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	/* stack size = 0 */
+  26               	.L__stack_usage = 0
+  27 000c E8EE      		ldi r30,lo8(-24)
+  28 000e F0E0      		ldi r31,0
+  29 0010 8081      		ld r24,Z
+  30 0012 8E7F      		andi r24,lo8(-2)
+  31 0014 8083      		st Z,r24
+  32 0016 0895      		ret
+  33               		.size	usb_ep_clearIN, .-usb_ep_clearIN
+  34               		.type	usb_ep_clearOUT, @function
+  35               	usb_ep_clearOUT:
+  36               	/* prologue: function */
+  37               	/* frame size = 0 */
+  38               	/* stack size = 0 */
+  39               	.L__stack_usage = 0
+  40 0018 E8EE      		ldi r30,lo8(-24)
+  41 001a F0E0      		ldi r31,0
+  42 001c 8081      		ld r24,Z
+  43 001e 8B7F      		andi r24,lo8(-5)
+  44 0020 8083      		st Z,r24
+  45 0022 0895      		ret
+  46               		.size	usb_ep_clearOUT, .-usb_ep_clearOUT
+  47               		.type	init_system, @function
+  48               	init_system:
+  49               	/* prologue: function */
+  50               	/* frame size = 0 */
+  51               	/* stack size = 0 */
+  52               	.L__stack_usage = 0
+  53               	/* #APP */
+  54               	 ;  1601 "gpio-usb.c" 1
+  55 0024 A895      		wdr
+  56               	 ;  0 "" 2
+  57               	/* #NOAPP */
+GAS LISTING gpio-usb.s 			page 2
+
+
+  58 0026 88E1      		ldi r24,lo8(24)
+  59               	/* #APP */
+  60               	 ;  1602 "gpio-usb.c" 1
+  61 0028 0FB6      		in __tmp_reg__, __SREG__
+  62 002a F894      		cli
+  63 002c 8093 6000 		sts 96, r24
+  64 0030 1092 6000 		sts 96, __zero_reg__
+  65 0034 0FBE      		out __SREG__,__tmp_reg__
+  66               		
+  67               	 ;  0 "" 2
+  68               	/* #NOAPP */
+  69 0036 8FEF      		ldi r24,lo8(-1)
+  70 0038 85B9      		out 0x5,r24
+  71 003a 88B9      		out 0x8,r24
+  72 003c 8BB9      		out 0xb,r24
+  73 003e 14B8      		out 0x4,__zero_reg__
+  74 0040 17B8      		out 0x7,__zero_reg__
+  75 0042 1AB8      		out 0xa,__zero_reg__
+  76 0044 E1E6      		ldi r30,lo8(97)
+  77 0046 F0E0      		ldi r31,0
+  78 0048 90E8      		ldi r25,lo8(-128)
+  79 004a 9083      		st Z,r25
+  80 004c 1082      		st Z,__zero_reg__
+  81 004e 259A      		sbi 0x4,5
+  82 0050 2D98      		cbi 0x5,5
+  83 0052 2091 8400 		lds r18,132
+  84 0056 3091 8500 		lds r19,132+1
+  85 005a 2153      		subi r18,49
+  86 005c 384F      		sbci r19,-8
+  87 005e 3093 8900 		sts 136+1,r19
+  88 0062 2093 8800 		sts 136,r18
+  89 0066 1092 8200 		sts 130,__zero_reg__
+  90 006a 1092 8000 		sts 128,__zero_reg__
+  91 006e 92E0      		ldi r25,lo8(2)
+  92 0070 9093 8100 		sts 129,r25
+  93 0074 86BB      		out 0x16,r24
+  94 0076 83E0      		ldi r24,lo8(3)
+  95 0078 8093 6F00 		sts 111,r24
+  96 007c 0895      		ret
+  97               		.size	init_system, .-init_system
+  98               	.global	usb_ep_read_data
+  99               		.type	usb_ep_read_data, @function
+ 100               	usb_ep_read_data:
+ 101               	/* prologue: function */
+ 102               	/* frame size = 0 */
+ 103               	/* stack size = 0 */
+ 104               	.L__stack_usage = 0
+ 105               	.L6:
+ 106 007e 6623      		tst r22
+ 107 0080 01F0      		breq .L9
+ 108 0082 2091 F100 		lds r18,241
+ 109 0086 FC01      		movw r30,r24
+ 110 0088 2083      		st Z,r18
+ 111 008a 6150      		subi r22,lo8(-(-1))
+ 112 008c 0196      		adiw r24,1
+ 113 008e 00C0      		rjmp .L6
+ 114               	.L9:
+GAS LISTING gpio-usb.s 			page 3
+
+
+ 115               	/* epilogue start */
+ 116 0090 0895      		ret
+ 117               		.size	usb_ep_read_data, .-usb_ep_read_data
+ 118               	.global	usb_ep_waitIN
+ 119               		.type	usb_ep_waitIN, @function
+ 120               	usb_ep_waitIN:
+ 121               	/* prologue: function */
+ 122               	/* frame size = 0 */
+ 123               	/* stack size = 0 */
+ 124               	.L__stack_usage = 0
+ 125               	.L11:
+ 126 0092 8091 E800 		lds r24,232
+ 127 0096 80FD      		sbrc r24,0
+ 128 0098 00C0      		rjmp .L15
+ 129 009a 8091 0000 		lds r24,g_usb_dev
+ 130 009e 8C71      		andi r24,lo8(28)
+ 131 00a0 01F4      		brne .L11
+ 132 00a2 83E0      		ldi r24,lo8(3)
+ 133 00a4 0895      		ret
+ 134               	.L15:
+ 135 00a6 80E0      		ldi r24,0
+ 136 00a8 0895      		ret
+ 137               		.size	usb_ep_waitIN, .-usb_ep_waitIN
+ 138               	.global	usb_ep_send_zlp
+ 139               		.type	usb_ep_send_zlp, @function
+ 140               	usb_ep_send_zlp:
+ 141               	/* prologue: function */
+ 142               	/* frame size = 0 */
+ 143               	/* stack size = 0 */
+ 144               	.L__stack_usage = 0
+ 145 00aa 0E94 0000 		call usb_ep_waitIN
+ 146 00ae 8111      		cpse r24,__zero_reg__
+ 147 00b0 00C0      		rjmp .L17
+ 148 00b2 0E94 0000 		call usb_ep_clearIN
+ 149 00b6 0C94 0000 		jmp usb_ep_waitIN
+ 150               	.L17:
+ 151 00ba 0895      		ret
+ 152               		.size	usb_ep_send_zlp, .-usb_ep_send_zlp
+ 153               	.global	usb_mem_read_byte
+ 154               		.type	usb_mem_read_byte, @function
+ 155               	usb_mem_read_byte:
+ 156               	/* prologue: function */
+ 157               	/* frame size = 0 */
+ 158               	/* stack size = 0 */
+ 159               	.L__stack_usage = 0
+ 160 00bc 6130      		cpi r22,lo8(1)
+ 161 00be 01F0      		breq .L20
+ 162 00c0 6230      		cpi r22,lo8(2)
+ 163 00c2 01F4      		brne .L24
+ 164 00c4 0C94 0000 		jmp __eerd_byte_usb162
+ 165               	.L20:
+ 166 00c8 FC01      		movw r30,r24
+ 167               	/* #APP */
+ 168               	 ;  139 "../avrutilslib/usb/usb.c" 1
+ 169 00ca 8491      		lpm r24, Z
+ 170               		
+ 171               	 ;  0 "" 2
+GAS LISTING gpio-usb.s 			page 4
+
+
+ 172               	/* #NOAPP */
+ 173 00cc 0895      		ret
+ 174               	.L24:
+ 175 00ce FC01      		movw r30,r24
+ 176 00d0 8081      		ld r24,Z
+ 177 00d2 0895      		ret
+ 178               		.size	usb_mem_read_byte, .-usb_mem_read_byte
+ 179               	.global	usb_ep_getbufsize
+ 180               		.type	usb_ep_getbufsize, @function
+ 181               	usb_ep_getbufsize:
+ 182               	/* prologue: function */
+ 183               	/* frame size = 0 */
+ 184               	/* stack size = 0 */
+ 185               	.L__stack_usage = 0
+ 186 00d4 E091 ED00 		lds r30,237
+ 187 00d8 E295      		swap r30
+ 188 00da E370      		andi r30,lo8(3)
+ 189 00dc F0E0      		ldi r31,0
+ 190 00de E050      		subi r30,lo8(-(epsizemap.2209))
+ 191 00e0 F040      		sbci r31,hi8(-(epsizemap.2209))
+ 192               	/* #APP */
+ 193               	 ;  152 "../avrutilslib/usb/usb.c" 1
+ 194 00e2 8491      		lpm r24, Z
+ 195               		
+ 196               	 ;  0 "" 2
+ 197               	/* #NOAPP */
+ 198 00e4 0895      		ret
+ 199               		.size	usb_ep_getbufsize, .-usb_ep_getbufsize
+ 200               	.global	usb_ep_send_in_data
+ 201               		.type	usb_ep_send_in_data, @function
+ 202               	usb_ep_send_in_data:
+ 203 00e6 CF92      		push r12
+ 204 00e8 DF92      		push r13
+ 205 00ea EF92      		push r14
+ 206 00ec FF92      		push r15
+ 207 00ee 0F93      		push r16
+ 208 00f0 1F93      		push r17
+ 209 00f2 CF93      		push r28
+ 210 00f4 DF93      		push r29
+ 211               	/* prologue: function */
+ 212               	/* frame size = 0 */
+ 213               	/* stack size = 8 */
+ 214               	.L__stack_usage = 8
+ 215 00f6 7C01      		movw r14,r24
+ 216 00f8 8B01      		movw r16,r22
+ 217 00fa D42F      		mov r29,r20
+ 218               	.L29:
+ 219 00fc 8091 0000 		lds r24,g_usb_dev
+ 220 0100 8C71      		andi r24,lo8(28)
+ 221 0102 01F0      		breq .L34
+ 222 0104 8091 E800 		lds r24,232
+ 223 0108 83FD      		sbrc r24,3
+ 224 010a 00C0      		rjmp .L35
+ 225 010c 8091 E800 		lds r24,232
+ 226 0110 C82F      		mov r28,r24
+ 227 0112 C470      		andi r28,lo8(4)
+ 228 0114 82FF      		sbrs r24,2
+GAS LISTING gpio-usb.s 			page 5
+
+
+ 229 0116 00C0      		rjmp .L28
+ 230 0118 0E94 0000 		call usb_ep_clearOUT
+ 231 011c C2E0      		ldi r28,lo8(2)
+ 232 011e 00C0      		rjmp .L27
+ 233               	.L28:
+ 234 0120 8091 E800 		lds r24,232
+ 235 0124 80FF      		sbrs r24,0
+ 236 0126 00C0      		rjmp .L29
+ 237               	.L30:
+ 238 0128 0115      		cp r16,__zero_reg__
+ 239 012a 1105      		cpc r17,__zero_reg__
+ 240 012c 01F0      		breq .L31
+ 241 012e 8091 E800 		lds r24,232
+ 242 0132 85FF      		sbrs r24,5
+ 243 0134 00C0      		rjmp .L31
+ 244 0136 6701      		movw r12,r14
+ 245 0138 8FEF      		ldi r24,-1
+ 246 013a C81A      		sub r12,r24
+ 247 013c D80A      		sbc r13,r24
+ 248 013e 6D2F      		mov r22,r29
+ 249 0140 C701      		movw r24,r14
+ 250 0142 0E94 0000 		call usb_mem_read_byte
+ 251 0146 8093 F100 		sts 241,r24
+ 252 014a 0150      		subi r16,1
+ 253 014c 1109      		sbc r17,__zero_reg__
+ 254 014e 7601      		movw r14,r12
+ 255 0150 00C0      		rjmp .L30
+ 256               	.L31:
+ 257 0152 0E94 0000 		call usb_ep_clearIN
+ 258 0156 9091 E800 		lds r25,232
+ 259 015a 9F77      		andi r25,lo8(127)
+ 260 015c 9093 E800 		sts 232,r25
+ 261 0160 0115      		cp r16,__zero_reg__
+ 262 0162 1105      		cpc r17,__zero_reg__
+ 263 0164 01F4      		brne .L29
+ 264 0166 00C0      		rjmp .L27
+ 265               	.L34:
+ 266 0168 C3E0      		ldi r28,lo8(3)
+ 267 016a 00C0      		rjmp .L27
+ 268               	.L35:
+ 269 016c C1E0      		ldi r28,lo8(1)
+ 270               	.L27:
+ 271 016e 8C2F      		mov r24,r28
+ 272               	/* epilogue start */
+ 273 0170 DF91      		pop r29
+ 274 0172 CF91      		pop r28
+ 275 0174 1F91      		pop r17
+ 276 0176 0F91      		pop r16
+ 277 0178 FF90      		pop r15
+ 278 017a EF90      		pop r14
+ 279 017c DF90      		pop r13
+ 280 017e CF90      		pop r12
+ 281 0180 0895      		ret
+ 282               		.size	usb_ep_send_in_data, .-usb_ep_send_in_data
+ 283               	.global	usb_ep_send_control_data_chunk
+ 284               		.type	usb_ep_send_control_data_chunk, @function
+ 285               	usb_ep_send_control_data_chunk:
+GAS LISTING gpio-usb.s 			page 6
+
+
+ 286 0182 AF92      		push r10
+ 287 0184 BF92      		push r11
+ 288 0186 CF92      		push r12
+ 289 0188 DF92      		push r13
+ 290 018a EF92      		push r14
+ 291 018c FF92      		push r15
+ 292 018e 0F93      		push r16
+ 293 0190 1F93      		push r17
+ 294 0192 CF93      		push r28
+ 295 0194 DF93      		push r29
+ 296               	/* prologue: function */
+ 297               	/* frame size = 0 */
+ 298               	/* stack size = 10 */
+ 299               	.L__stack_usage = 10
+ 300 0196 6C01      		movw r12,r24
+ 301 0198 8B01      		movw r16,r22
+ 302 019a E42E      		mov r14,r20
+ 303 019c 0E94 0000 		call usb_ep_getbufsize
+ 304 01a0 F82E      		mov r15,r24
+ 305               	.L44:
+ 306 01a2 8091 0000 		lds r24,g_usb_dev
+ 307 01a6 8C71      		andi r24,lo8(28)
+ 308 01a8 01F0      		breq .L52
+ 309 01aa 8091 E800 		lds r24,232
+ 310 01ae 83FD      		sbrc r24,3
+ 311 01b0 00C0      		rjmp .L53
+ 312 01b2 8091 E800 		lds r24,232
+ 313 01b6 D82F      		mov r29,r24
+ 314 01b8 D470      		andi r29,lo8(4)
+ 315 01ba 82FF      		sbrs r24,2
+ 316 01bc 00C0      		rjmp .L43
+ 317 01be 0E94 0000 		call usb_ep_clearOUT
+ 318 01c2 D2E0      		ldi r29,lo8(2)
+ 319 01c4 00C0      		rjmp .L55
+ 320               	.L43:
+ 321 01c6 8091 E800 		lds r24,232
+ 322 01ca 80FF      		sbrs r24,0
+ 323 01cc 00C0      		rjmp .L44
+ 324 01ce C091 F200 		lds r28,242
+ 325               	.L45:
+ 326 01d2 0115      		cp r16,__zero_reg__
+ 327 01d4 1105      		cpc r17,__zero_reg__
+ 328 01d6 01F0      		breq .L46
+ 329 01d8 CF15      		cp r28,r15
+ 330 01da 00F4      		brsh .L57
+ 331 01dc 5601      		movw r10,r12
+ 332 01de 8FEF      		ldi r24,-1
+ 333 01e0 A81A      		sub r10,r24
+ 334 01e2 B80A      		sbc r11,r24
+ 335 01e4 6E2D      		mov r22,r14
+ 336 01e6 C601      		movw r24,r12
+ 337 01e8 0E94 0000 		call usb_mem_read_byte
+ 338 01ec 8093 F100 		sts 241,r24
+ 339 01f0 0150      		subi r16,1
+ 340 01f2 1109      		sbc r17,__zero_reg__
+ 341 01f4 CF5F      		subi r28,lo8(-(1))
+ 342 01f6 6501      		movw r12,r10
+GAS LISTING gpio-usb.s 			page 7
+
+
+ 343 01f8 00C0      		rjmp .L45
+ 344               	.L52:
+ 345 01fa D3E0      		ldi r29,lo8(3)
+ 346 01fc 00C0      		rjmp .L55
+ 347               	.L53:
+ 348 01fe D1E0      		ldi r29,lo8(1)
+ 349 0200 00C0      		rjmp .L55
+ 350               	.L46:
+ 351 0202 CF11      		cpse r28,r15
+ 352 0204 00C0      		rjmp .L55
+ 353               	.L50:
+ 354 0206 0E94 0000 		call usb_ep_clearIN
+ 355 020a 0115      		cp r16,__zero_reg__
+ 356 020c 1105      		cpc r17,__zero_reg__
+ 357 020e 01F4      		brne .L44
+ 358 0210 00C0      		rjmp .L55
+ 359               	.L57:
+ 360 0212 CF11      		cpse r28,r15
+ 361 0214 00C0      		rjmp .L44
+ 362 0216 00C0      		rjmp .L50
+ 363               	.L55:
+ 364 0218 8D2F      		mov r24,r29
+ 365               	/* epilogue start */
+ 366 021a DF91      		pop r29
+ 367 021c CF91      		pop r28
+ 368 021e 1F91      		pop r17
+ 369 0220 0F91      		pop r16
+ 370 0222 FF90      		pop r15
+ 371 0224 EF90      		pop r14
+ 372 0226 DF90      		pop r13
+ 373 0228 CF90      		pop r12
+ 374 022a BF90      		pop r11
+ 375 022c AF90      		pop r10
+ 376 022e 0895      		ret
+ 377               		.size	usb_ep_send_control_data_chunk, .-usb_ep_send_control_data_chunk
+ 378               	.global	usb_ep_send_control_data_finish
+ 379               		.type	usb_ep_send_control_data_finish, @function
+ 380               	usb_ep_send_control_data_finish:
+ 381 0230 CF93      		push r28
+ 382               	/* prologue: function */
+ 383               	/* frame size = 0 */
+ 384               	/* stack size = 1 */
+ 385               	.L__stack_usage = 1
+ 386               	.L63:
+ 387 0232 8091 0000 		lds r24,g_usb_dev
+ 388 0236 8C71      		andi r24,lo8(28)
+ 389 0238 01F4      		brne .L59
+ 390               	.L65:
+ 391 023a C3E0      		ldi r28,lo8(3)
+ 392 023c 00C0      		rjmp .L60
+ 393               	.L59:
+ 394 023e 8091 E800 		lds r24,232
+ 395 0242 83FF      		sbrs r24,3
+ 396 0244 00C0      		rjmp .L61
+ 397               	.L66:
+ 398 0246 C1E0      		ldi r28,lo8(1)
+ 399 0248 00C0      		rjmp .L60
+GAS LISTING gpio-usb.s 			page 8
+
+
+ 400               	.L61:
+ 401 024a 8091 E800 		lds r24,232
+ 402 024e C82F      		mov r28,r24
+ 403 0250 C470      		andi r28,lo8(4)
+ 404 0252 82FF      		sbrs r24,2
+ 405 0254 00C0      		rjmp .L62
+ 406 0256 0E94 0000 		call usb_ep_clearOUT
+ 407 025a C2E0      		ldi r28,lo8(2)
+ 408 025c 00C0      		rjmp .L60
+ 409               	.L62:
+ 410 025e 8091 E800 		lds r24,232
+ 411 0262 80FF      		sbrs r24,0
+ 412 0264 00C0      		rjmp .L63
+ 413 0266 0E94 0000 		call usb_ep_clearIN
+ 414               	.L64:
+ 415 026a 8091 E800 		lds r24,232
+ 416 026e 82FD      		sbrc r24,2
+ 417 0270 00C0      		rjmp .L72
+ 418 0272 8091 0000 		lds r24,g_usb_dev
+ 419 0276 8C71      		andi r24,lo8(28)
+ 420 0278 01F0      		breq .L65
+ 421 027a 8091 E800 		lds r24,232
+ 422 027e 83FF      		sbrs r24,3
+ 423 0280 00C0      		rjmp .L64
+ 424 0282 00C0      		rjmp .L66
+ 425               	.L72:
+ 426 0284 0E94 0000 		call usb_ep_clearOUT
+ 427               	.L60:
+ 428 0288 8C2F      		mov r24,r28
+ 429               	/* epilogue start */
+ 430 028a CF91      		pop r28
+ 431 028c 0895      		ret
+ 432               		.size	usb_ep_send_control_data_finish, .-usb_ep_send_control_data_finish
+ 433               	.global	usb_ep_send_control_data
+ 434               		.type	usb_ep_send_control_data, @function
+ 435               	usb_ep_send_control_data:
+ 436               	/* prologue: function */
+ 437               	/* frame size = 0 */
+ 438               	/* stack size = 0 */
+ 439               	.L__stack_usage = 0
+ 440 028e 6217      		cp r22,r18
+ 441 0290 7307      		cpc r23,r19
+ 442 0292 00F4      		brsh .L74
+ 443 0294 9B01      		movw r18,r22
+ 444               	.L74:
+ 445 0296 B901      		movw r22,r18
+ 446 0298 0E94 0000 		call usb_ep_send_control_data_chunk
+ 447 029c 8111      		cpse r24,__zero_reg__
+ 448 029e 00C0      		rjmp .L75
+ 449 02a0 0C94 0000 		jmp usb_ep_send_control_data_finish
+ 450               	.L75:
+ 451 02a4 0895      		ret
+ 452               		.size	usb_ep_send_control_data, .-usb_ep_send_control_data
+ 453               	.global	usb_ep_recv_control_data_chunk
+ 454               		.type	usb_ep_recv_control_data_chunk, @function
+ 455               	usb_ep_recv_control_data_chunk:
+ 456 02a6 AF92      		push r10
+GAS LISTING gpio-usb.s 			page 9
+
+
+ 457 02a8 BF92      		push r11
+ 458 02aa CF92      		push r12
+ 459 02ac DF92      		push r13
+ 460 02ae EF92      		push r14
+ 461 02b0 FF92      		push r15
+ 462 02b2 1F93      		push r17
+ 463 02b4 CF93      		push r28
+ 464 02b6 DF93      		push r29
+ 465               	/* prologue: function */
+ 466               	/* frame size = 0 */
+ 467               	/* stack size = 9 */
+ 468               	.L__stack_usage = 9
+ 469 02b8 6C01      		movw r12,r24
+ 470 02ba 5B01      		movw r10,r22
+ 471 02bc 7A01      		movw r14,r20
+ 472 02be FB01      		movw r30,r22
+ 473 02c0 1182      		std Z+1,__zero_reg__
+ 474 02c2 1082      		st Z,__zero_reg__
+ 475 02c4 452B      		or r20,r21
+ 476 02c6 01F0      		breq .L84
+ 477 02c8 C0E0      		ldi r28,0
+ 478 02ca D0E0      		ldi r29,0
+ 479               	.L78:
+ 480 02cc 8091 0000 		lds r24,g_usb_dev
+ 481 02d0 8C71      		andi r24,lo8(28)
+ 482 02d2 01F0      		breq .L85
+ 483 02d4 8091 E800 		lds r24,232
+ 484 02d8 182F      		mov r17,r24
+ 485 02da 1870      		andi r17,lo8(8)
+ 486 02dc 83FD      		sbrc r24,3
+ 487 02de 00C0      		rjmp .L86
+ 488 02e0 8091 E800 		lds r24,232
+ 489 02e4 82FF      		sbrs r24,2
+ 490 02e6 00C0      		rjmp .L78
+ 491               	.L79:
+ 492 02e8 8091 F200 		lds r24,242
+ 493 02ec 8823      		tst r24
+ 494 02ee 01F0      		breq .L80
+ 495 02f0 CE15      		cp r28,r14
+ 496 02f2 DF05      		cpc r29,r15
+ 497 02f4 00F4      		brsh .L80
+ 498 02f6 8091 F100 		lds r24,241
+ 499 02fa F601      		movw r30,r12
+ 500 02fc 8083      		st Z,r24
+ 501 02fe 2196      		adiw r28,1
+ 502 0300 C601      		movw r24,r12
+ 503 0302 0196      		adiw r24,1
+ 504 0304 6C01      		movw r12,r24
+ 505 0306 00C0      		rjmp .L79
+ 506               	.L80:
+ 507 0308 8091 F200 		lds r24,242
+ 508 030c 8111      		cpse r24,__zero_reg__
+ 509 030e 00C0      		rjmp .L82
+ 510 0310 0E94 0000 		call usb_ep_clearOUT
+ 511               	.L82:
+ 512 0314 CE15      		cp r28,r14
+ 513 0316 DF05      		cpc r29,r15
+GAS LISTING gpio-usb.s 			page 10
+
+
+ 514 0318 00F0      		brlo .L78
+ 515 031a F501      		movw r30,r10
+ 516 031c D183      		std Z+1,r29
+ 517 031e C083      		st Z,r28
+ 518 0320 00C0      		rjmp .L77
+ 519               	.L84:
+ 520 0322 10E0      		ldi r17,0
+ 521 0324 00C0      		rjmp .L77
+ 522               	.L85:
+ 523 0326 13E0      		ldi r17,lo8(3)
+ 524 0328 00C0      		rjmp .L77
+ 525               	.L86:
+ 526 032a 11E0      		ldi r17,lo8(1)
+ 527               	.L77:
+ 528 032c 812F      		mov r24,r17
+ 529               	/* epilogue start */
+ 530 032e DF91      		pop r29
+ 531 0330 CF91      		pop r28
+ 532 0332 1F91      		pop r17
+ 533 0334 FF90      		pop r15
+ 534 0336 EF90      		pop r14
+ 535 0338 DF90      		pop r13
+ 536 033a CF90      		pop r12
+ 537 033c BF90      		pop r11
+ 538 033e AF90      		pop r10
+ 539 0340 0895      		ret
+ 540               		.size	usb_ep_recv_control_data_chunk, .-usb_ep_recv_control_data_chunk
+ 541               	.global	usb_ep_recv_control_data_finish
+ 542               		.type	usb_ep_recv_control_data_finish, @function
+ 543               	usb_ep_recv_control_data_finish:
+ 544               	/* prologue: function */
+ 545               	/* frame size = 0 */
+ 546               	/* stack size = 0 */
+ 547               	.L__stack_usage = 0
+ 548 0342 0E94 0000 		call usb_ep_clearOUT
+ 549 0346 0C94 0000 		jmp usb_ep_send_zlp
+ 550               		.size	usb_ep_recv_control_data_finish, .-usb_ep_recv_control_data_finish
+ 551               	.global	usb_ep_recv_control_data
+ 552               		.type	usb_ep_recv_control_data, @function
+ 553               	usb_ep_recv_control_data:
+ 554               	/* prologue: function */
+ 555               	/* frame size = 0 */
+ 556               	/* stack size = 0 */
+ 557               	.L__stack_usage = 0
+ 558 034a 0E94 0000 		call usb_ep_recv_control_data_chunk
+ 559 034e 8111      		cpse r24,__zero_reg__
+ 560 0350 00C0      		rjmp .L93
+ 561 0352 0C94 0000 		jmp usb_ep_recv_control_data_finish
+ 562               	.L93:
+ 563 0356 0895      		ret
+ 564               		.size	usb_ep_recv_control_data, .-usb_ep_recv_control_data
+ 565               	.global	usb_ep_setup
+ 566               		.type	usb_ep_setup, @function
+ 567               	usb_ep_setup:
+ 568               	/* prologue: function */
+ 569               	/* frame size = 0 */
+ 570               	/* stack size = 0 */
+GAS LISTING gpio-usb.s 			page 11
+
+
+ 571               	.L__stack_usage = 0
+ 572 0358 4850      		subi r20,lo8(-(-8))
+ 573 035a 4931      		cpi r20,lo8(25)
+ 574 035c 00F4      		brsh .L96
+ 575 035e E42F      		mov r30,r20
+ 576 0360 F0E0      		ldi r31,0
+ 577 0362 E050      		subi r30,lo8(-(CSWTCH.133))
+ 578 0364 F040      		sbci r31,hi8(-(CSWTCH.133))
+ 579 0366 3081      		ld r19,Z
+ 580 0368 00C0      		rjmp .L95
+ 581               	.L96:
+ 582 036a 32E3      		ldi r19,lo8(50)
+ 583               	.L95:
+ 584 036c 982F      		mov r25,r24
+ 585 036e 9770      		andi r25,lo8(7)
+ 586 0370 9093 E900 		sts 233,r25
+ 587 0374 9091 EB00 		lds r25,235
+ 588 0378 9160      		ori r25,lo8(1)
+ 589 037a 9093 EB00 		sts 235,r25
+ 590 037e 6295      		swap r22
+ 591 0380 660F      		lsl r22
+ 592 0382 660F      		lsl r22
+ 593 0384 607C      		andi r22,lo8(-64)
+ 594 0386 881F      		rol r24
+ 595 0388 8827      		clr r24
+ 596 038a 881F      		rol r24
+ 597 038c 862B      		or r24,r22
+ 598 038e 8093 EC00 		sts 236,r24
+ 599 0392 A22F      		mov r26,r18
+ 600 0394 A170      		andi r26,1
+ 601 0396 B0E0      		ldi r27,0
+ 602 0398 AA0F      		lsl r26
+ 603 039a BB1F      		rol r27
+ 604 039c AA0F      		lsl r26
+ 605 039e BB1F      		rol r27
+ 606 03a0 A32B      		or r26,r19
+ 607 03a2 A093 ED00 		sts 237,r26
+ 608 03a6 1092 F000 		sts 240,__zero_reg__
+ 609 03aa 0895      		ret
+ 610               		.size	usb_ep_setup, .-usb_ep_setup
+ 611               	.global	usb_ep_setup_control
+ 612               		.type	usb_ep_setup_control, @function
+ 613               	usb_ep_setup_control:
+ 614               	/* prologue: function */
+ 615               	/* frame size = 0 */
+ 616               	/* stack size = 0 */
+ 617               	.L__stack_usage = 0
+ 618 03ac E0E0      		ldi r30,lo8(g_usb_dev)
+ 619 03ae F0E0      		ldi r31,hi8(g_usb_dev)
+ 620 03b0 6285      		ldd r22,Z+10
+ 621 03b2 8281      		ldd r24,Z+2
+ 622 03b4 9381      		ldd r25,Z+3
+ 623 03b6 0796      		adiw r24,7
+ 624 03b8 0E94 0000 		call usb_mem_read_byte
+ 625 03bc 20E0      		ldi r18,0
+ 626 03be 482F      		mov r20,r24
+ 627 03c0 60E0      		ldi r22,0
+GAS LISTING gpio-usb.s 			page 12
+
+
+ 628 03c2 80E0      		ldi r24,0
+ 629 03c4 0C94 0000 		jmp usb_ep_setup
+ 630               		.size	usb_ep_setup_control, .-usb_ep_setup_control
+ 631               	.global	usb_intr_endofreset
+ 632               		.type	usb_intr_endofreset, @function
+ 633               	usb_intr_endofreset:
+ 634               	/* prologue: function */
+ 635               	/* frame size = 0 */
+ 636               	/* stack size = 0 */
+ 637               	.L__stack_usage = 0
+ 638 03c8 0E94 0000 		call usb_ep_setup_control
+ 639 03cc E0E0      		ldi r30,lo8(g_usb_dev)
+ 640 03ce F0E0      		ldi r31,hi8(g_usb_dev)
+ 641 03d0 84E0      		ldi r24,lo8(4)
+ 642 03d2 8083      		st Z,r24
+ 643 03d4 1182      		std Z+1,__zero_reg__
+ 644 03d6 0895      		ret
+ 645               		.size	usb_intr_endofreset, .-usb_intr_endofreset
+ 646               	.global	__vector_11
+ 647               		.type	__vector_11, @function
+ 648               	__vector_11:
+ 649 03d8 1F92      		push r1
+ 650 03da 0F92      		push r0
+ 651 03dc 0FB6      		in r0,__SREG__
+ 652 03de 0F92      		push r0
+ 653 03e0 1124      		clr __zero_reg__
+ 654 03e2 1F93      		push r17
+ 655 03e4 2F93      		push r18
+ 656 03e6 3F93      		push r19
+ 657 03e8 4F93      		push r20
+ 658 03ea 5F93      		push r21
+ 659 03ec 6F93      		push r22
+ 660 03ee 7F93      		push r23
+ 661 03f0 8F93      		push r24
+ 662 03f2 9F93      		push r25
+ 663 03f4 AF93      		push r26
+ 664 03f6 BF93      		push r27
+ 665 03f8 EF93      		push r30
+ 666 03fa FF93      		push r31
+ 667 03fc CF93      		push r28
+ 668 03fe DF93      		push r29
+ 669 0400 00D0      		rcall .
+ 670 0402 CDB7      		in r28,__SP_L__
+ 671 0404 DEB7      		in r29,__SP_H__
+ 672               	/* prologue: Signal */
+ 673               	/* frame size = 2 */
+ 674               	/* stack size = 20 */
+ 675               	.L__stack_usage = 20
+ 676 0406 8091 E100 		lds r24,225
+ 677 040a 8A83      		std Y+2,r24
+ 678 040c 8091 E200 		lds r24,226
+ 679 0410 8983      		std Y+1,r24
+ 680 0412 1091 E900 		lds r17,233
+ 681 0416 8A81      		ldd r24,Y+2
+ 682 0418 8A81      		ldd r24,Y+2
+ 683 041a 8A81      		ldd r24,Y+2
+ 684 041c 8A81      		ldd r24,Y+2
+GAS LISTING gpio-usb.s 			page 13
+
+
+ 685 041e 83FF      		sbrs r24,3
+ 686 0420 00C0      		rjmp .L100
+ 687 0422 8981      		ldd r24,Y+1
+ 688 0424 83FD      		sbrc r24,3
+ 689 0426 0E94 0000 		call usb_intr_endofreset
+ 690               	.L101:
+ 691 042a 8091 E100 		lds r24,225
+ 692 042e 877F      		andi r24,lo8(-9)
+ 693 0430 8093 E100 		sts 225,r24
+ 694               	.L100:
+ 695 0434 8A81      		ldd r24,Y+2
+ 696 0436 8A81      		ldd r24,Y+2
+ 697 0438 1092 E100 		sts 225,__zero_reg__
+ 698 043c 1093 E900 		sts 233,r17
+ 699               	/* epilogue start */
+ 700 0440 0F90      		pop __tmp_reg__
+ 701 0442 0F90      		pop __tmp_reg__
+ 702 0444 DF91      		pop r29
+ 703 0446 CF91      		pop r28
+ 704 0448 FF91      		pop r31
+ 705 044a EF91      		pop r30
+ 706 044c BF91      		pop r27
+ 707 044e AF91      		pop r26
+ 708 0450 9F91      		pop r25
+ 709 0452 8F91      		pop r24
+ 710 0454 7F91      		pop r23
+ 711 0456 6F91      		pop r22
+ 712 0458 5F91      		pop r21
+ 713 045a 4F91      		pop r20
+ 714 045c 3F91      		pop r19
+ 715 045e 2F91      		pop r18
+ 716 0460 1F91      		pop r17
+ 717 0462 0F90      		pop r0
+ 718 0464 0FBE      		out __SREG__,r0
+ 719 0466 0F90      		pop r0
+ 720 0468 1F90      		pop r1
+ 721 046a 1895      		reti
+ 722               		.size	__vector_11, .-__vector_11
+ 723               	.global	usb_init
+ 724               		.type	usb_init, @function
+ 725               	usb_init:
+ 726 046c EF92      		push r14
+ 727 046e 0F93      		push r16
+ 728               	/* prologue: function */
+ 729               	/* frame size = 0 */
+ 730               	/* stack size = 2 */
+ 731               	.L__stack_usage = 2
+ 732 0470 5BE0      		ldi r21,lo8(11)
+ 733 0472 E0E0      		ldi r30,lo8(g_usb_dev)
+ 734 0474 F0E0      		ldi r31,hi8(g_usb_dev)
+ 735 0476 DF01      		movw r26,r30
+ 736               		0:
+ 737 0478 1D92      		st X+,__zero_reg__
+ 738 047a 5A95      		dec r21
+ 739 047c 01F4      		brne 0b
+ 740 047e 1092 0000 		sts g_usb_dev,__zero_reg__
+ 741 0482 9093 0000 		sts g_usb_dev+2+1,r25
+GAS LISTING gpio-usb.s 			page 14
+
+
+ 742 0486 8093 0000 		sts g_usb_dev+2,r24
+ 743 048a 7093 0000 		sts g_usb_dev+4+1,r23
+ 744 048e 6093 0000 		sts g_usb_dev+4,r22
+ 745 0492 4093 0000 		sts g_usb_dev+6,r20
+ 746 0496 3093 0000 		sts g_usb_dev+7+1,r19
+ 747 049a 2093 0000 		sts g_usb_dev+7,r18
+ 748 049e 0093 0000 		sts g_usb_dev+9,r16
+ 749 04a2 E092 0000 		sts g_usb_dev+10,r14
+ 750 04a6 80E2      		ldi r24,lo8(32)
+ 751 04a8 8093 D800 		sts 216,r24
+ 752 04ac 1092 FB00 		sts 251,__zero_reg__
+ 753 04b0 19BC      		out 0x29,__zero_reg__
+ 754 04b2 82E0      		ldi r24,lo8(2)
+ 755 04b4 89BD      		out 0x29,r24
+ 756               	.L109:
+ 757 04b6 09B4      		in __tmp_reg__,0x29
+ 758 04b8 00FE      		sbrs __tmp_reg__,0
+ 759 04ba 00C0      		rjmp .L109
+ 760 04bc 80EA      		ldi r24,lo8(-96)
+ 761 04be 8093 D800 		sts 216,r24
+ 762 04c2 80E8      		ldi r24,lo8(-128)
+ 763 04c4 8093 D800 		sts 216,r24
+ 764 04c8 1092 E200 		sts 226,__zero_reg__
+ 765 04cc 1092 E100 		sts 225,__zero_reg__
+ 766 04d0 89E0      		ldi r24,lo8(9)
+ 767 04d2 8093 E200 		sts 226,r24
+ 768 04d6 1092 E000 		sts 224,__zero_reg__
+ 769 04da 84E0      		ldi r24,lo8(4)
+ 770 04dc 8093 0000 		sts g_usb_dev,r24
+ 771               	/* epilogue start */
+ 772 04e0 0F91      		pop r16
+ 773 04e2 EF90      		pop r14
+ 774 04e4 0895      		ret
+ 775               		.size	usb_init, .-usb_init
+ 776               	.global	__vector_15
+ 777               		.type	__vector_15, @function
+ 778               	__vector_15:
+ 779 04e6 1F92      		push r1
+ 780 04e8 0F92      		push r0
+ 781 04ea 0FB6      		in r0,__SREG__
+ 782 04ec 0F92      		push r0
+ 783 04ee 1124      		clr __zero_reg__
+ 784 04f0 8F93      		push r24
+ 785 04f2 9F93      		push r25
+ 786               	/* prologue: Signal */
+ 787               	/* frame size = 0 */
+ 788               	/* stack size = 5 */
+ 789               	.L__stack_usage = 5
+ 790 04f4 8091 8800 		lds r24,136
+ 791 04f8 9091 8900 		lds r25,136+1
+ 792 04fc 8153      		subi r24,49
+ 793 04fe 984F      		sbci r25,-8
+ 794 0500 9093 8900 		sts 136+1,r25
+ 795 0504 8093 8800 		sts 136,r24
+ 796 0508 8091 0000 		lds r24,g_avr_timer
+ 797 050c 8823      		tst r24
+ 798 050e 01F0      		breq .L112
+GAS LISTING gpio-usb.s 			page 15
+
+
+ 799 0510 8091 0000 		lds r24,g_avr_timer
+ 800 0514 8150      		subi r24,lo8(-(-1))
+ 801 0516 8093 0000 		sts g_avr_timer,r24
+ 802               	.L112:
+ 803 051a 8091 0000 		lds r24,g_pdi_timer
+ 804 051e 8823      		tst r24
+ 805 0520 01F0      		breq .L113
+ 806 0522 8091 0000 		lds r24,g_pdi_timer
+ 807 0526 8150      		subi r24,lo8(-(-1))
+ 808 0528 8093 0000 		sts g_pdi_timer,r24
+ 809               	.L113:
+ 810 052c 8091 0000 		lds r24,g_nvmc_timer
+ 811 0530 8823      		tst r24
+ 812 0532 01F0      		breq .L111
+ 813 0534 8091 0000 		lds r24,g_nvmc_timer
+ 814 0538 8150      		subi r24,lo8(-(-1))
+ 815 053a 8093 0000 		sts g_nvmc_timer,r24
+ 816               	.L111:
+ 817               	/* epilogue start */
+ 818 053e 9F91      		pop r25
+ 819 0540 8F91      		pop r24
+ 820 0542 0F90      		pop r0
+ 821 0544 0FBE      		out __SREG__,r0
+ 822 0546 0F90      		pop r0
+ 823 0548 1F90      		pop r1
+ 824 054a 1895      		reti
+ 825               		.size	__vector_15, .-__vector_15
+ 826               	.global	avr_clkwait
+ 827               		.type	avr_clkwait, @function
+ 828               	avr_clkwait:
+ 829               	/* prologue: function */
+ 830               	/* frame size = 0 */
+ 831               	/* stack size = 0 */
+ 832               	.L__stack_usage = 0
+ 833 054c 8091 0000 		lds r24,g_avr_clk_wait
+ 834               	.L125:
+ 835 0550 9DE0      		ldi r25,lo8(13)
+ 836 0552 9A95      		1: dec r25
+ 837 0554 01F4      		brne 1b
+ 838 0556 0000      		nop
+ 839 0558 9FEF      		ldi r25,lo8(-1)
+ 840 055a 980F      		add r25,r24
+ 841 055c 8823      		tst r24
+ 842 055e 01F0      		breq .L127
+ 843 0560 892F      		mov r24,r25
+ 844 0562 00C0      		rjmp .L125
+ 845               	.L127:
+ 846               	/* epilogue start */
+ 847 0564 0895      		ret
+ 848               		.size	avr_clkwait, .-avr_clkwait
+ 849               	.global	avr_sendbyte
+ 850               		.type	avr_sendbyte, @function
+ 851               	avr_sendbyte:
+ 852 0566 1F93      		push r17
+ 853 0568 CF93      		push r28
+ 854 056a DF93      		push r29
+ 855               	/* prologue: function */
+GAS LISTING gpio-usb.s 			page 16
+
+
+ 856               	/* frame size = 0 */
+ 857               	/* stack size = 3 */
+ 858               	.L__stack_usage = 3
+ 859 056c 182F      		mov r17,r24
+ 860 056e 8091 0000 		lds r24,g_avr_flags
+ 861 0572 C82F      		mov r28,r24
+ 862 0574 C270      		andi r28,lo8(2)
+ 863 0576 81FF      		sbrs r24,1
+ 864 0578 00C0      		rjmp .L129
+ 865 057a 2998      		cbi 0x5,1
+ 866 057c D0E0      		ldi r29,0
+ 867 057e C0E0      		ldi r28,0
+ 868               	.L133:
+ 869 0580 17FF      		sbrs r17,7
+ 870 0582 00C0      		rjmp .L130
+ 871 0584 2A9A      		sbi 0x5,2
+ 872 0586 00C0      		rjmp .L131
+ 873               	.L130:
+ 874 0588 2A98      		cbi 0x5,2
+ 875               	.L131:
+ 876 058a 110F      		lsl r17
+ 877 058c 0E94 0000 		call avr_clkwait
+ 878 0590 CC0F      		lsl r28
+ 879 0592 1B99      		sbic 0x3,3
+ 880 0594 C160      		ori r28,lo8(1)
+ 881               	.L132:
+ 882 0596 299A      		sbi 0x5,1
+ 883 0598 0E94 0000 		call avr_clkwait
+ 884 059c 2998      		cbi 0x5,1
+ 885 059e DF5F      		subi r29,lo8(-(1))
+ 886 05a0 D830      		cpi r29,lo8(8)
+ 887 05a2 01F4      		brne .L133
+ 888               	.L129:
+ 889 05a4 8C2F      		mov r24,r28
+ 890               	/* epilogue start */
+ 891 05a6 DF91      		pop r29
+ 892 05a8 CF91      		pop r28
+ 893 05aa 1F91      		pop r17
+ 894 05ac 0895      		ret
+ 895               		.size	avr_sendbyte, .-avr_sendbyte
+ 896               	.global	cmd_avr_init
+ 897               		.type	cmd_avr_init, @function
+ 898               	cmd_avr_init:
+ 899               	/* prologue: function */
+ 900               	/* frame size = 0 */
+ 901               	/* stack size = 0 */
+ 902               	.L__stack_usage = 0
+ 903 05ae 84B1      		in r24,0x4
+ 904 05b0 807E      		andi r24,lo8(-32)
+ 905 05b2 84B9      		out 0x4,r24
+ 906 05b4 85B1      		in r24,0x5
+ 907 05b6 807F      		andi r24,lo8(-16)
+ 908 05b8 85B9      		out 0x5,r24
+ 909 05ba 2C9A      		sbi 0x5,4
+ 910 05bc 84B1      		in r24,0x4
+ 911 05be 8761      		ori r24,lo8(23)
+ 912 05c0 84B9      		out 0x4,r24
+GAS LISTING gpio-usb.s 			page 17
+
+
+ 913 05c2 8091 0000 		lds r24,g_avr_flags
+ 914 05c6 817F      		andi r24,lo8(-15)
+ 915 05c8 8160      		ori r24,lo8(1)
+ 916 05ca 8093 0000 		sts g_avr_flags,r24
+ 917 05ce 0C94 0000 		jmp usb_ep_send_zlp
+ 918               		.size	cmd_avr_init, .-cmd_avr_init
+ 919               	.global	cmd_avr_exit
+ 920               		.type	cmd_avr_exit, @function
+ 921               	cmd_avr_exit:
+ 922               	/* prologue: function */
+ 923               	/* frame size = 0 */
+ 924               	/* stack size = 0 */
+ 925               	.L__stack_usage = 0
+ 926 05d2 84B1      		in r24,0x4
+ 927 05d4 807E      		andi r24,lo8(-32)
+ 928 05d6 84B9      		out 0x4,r24
+ 929 05d8 85B1      		in r24,0x5
+ 930 05da 8F61      		ori r24,lo8(31)
+ 931 05dc 85B9      		out 0x5,r24
+ 932 05de 8091 0000 		lds r24,g_avr_flags
+ 933 05e2 807F      		andi r24,lo8(-16)
+ 934 05e4 8093 0000 		sts g_avr_flags,r24
+ 935 05e8 0C94 0000 		jmp usb_ep_send_zlp
+ 936               		.size	cmd_avr_exit, .-cmd_avr_exit
+ 937               	.global	cmd_avr_progmode
+ 938               		.type	cmd_avr_progmode, @function
+ 939               	cmd_avr_progmode:
+ 940 05ec CF93      		push r28
+ 941 05ee DF93      		push r29
+ 942 05f0 1F92      		push __zero_reg__
+ 943 05f2 CDB7      		in r28,__SP_L__
+ 944 05f4 DEB7      		in r29,__SP_H__
+ 945               	/* prologue: function */
+ 946               	/* frame size = 1 */
+ 947               	/* stack size = 3 */
+ 948               	.L__stack_usage = 3
+ 949 05f6 8983      		std Y+1,r24
+ 950 05f8 9A01      		movw r18,r20
+ 951 05fa 8091 0000 		lds r24,g_avr_flags
+ 952 05fe 80FF      		sbrs r24,0
+ 953 0600 00C0      		rjmp .L143
+ 954 0602 8981      		ldd r24,Y+1
+ 955 0604 81FF      		sbrs r24,1
+ 956 0606 00C0      		rjmp .L144
+ 957 0608 6093 0000 		sts g_avr_clk_wait,r22
+ 958 060c 8091 0000 		lds r24,g_avr_flags
+ 959 0610 982F      		mov r25,r24
+ 960 0612 917F      		andi r25,lo8(-15)
+ 961 0614 8981      		ldd r24,Y+1
+ 962 0616 8E70      		andi r24,lo8(14)
+ 963 0618 892B      		or r24,r25
+ 964 061a 8093 0000 		sts g_avr_flags,r24
+ 965 061e 85B1      		in r24,0x5
+ 966 0620 887F      		andi r24,lo8(-8)
+ 967 0622 85B9      		out 0x5,r24
+ 968 0624 2C9A      		sbi 0x5,4
+ 969 0626 8AE1      		ldi r24,lo8(26)
+GAS LISTING gpio-usb.s 			page 18
+
+
+ 970 0628 8A95      		1: dec r24
+ 971 062a 01F4      		brne 1b
+ 972 062c 00C0      		rjmp .
+ 973 062e 2C98      		cbi 0x5,4
+ 974 0630 00C0      		rjmp .L145
+ 975               	.L144:
+ 976 0632 2C9A      		sbi 0x5,4
+ 977 0634 85B1      		in r24,0x5
+ 978 0636 887F      		andi r24,lo8(-8)
+ 979 0638 85B9      		out 0x5,r24
+ 980               	.L143:
+ 981 063a 8091 0000 		lds r24,g_avr_flags
+ 982 063e 817F      		andi r24,lo8(-15)
+ 983 0640 8093 0000 		sts g_avr_flags,r24
+ 984 0644 1092 0000 		sts g_avr_clk_wait,__zero_reg__
+ 985               	.L145:
+ 986 0648 40E0      		ldi r20,0
+ 987 064a 61E0      		ldi r22,lo8(1)
+ 988 064c 70E0      		ldi r23,0
+ 989 064e 80E0      		ldi r24,lo8(g_avr_flags)
+ 990 0650 90E0      		ldi r25,hi8(g_avr_flags)
+ 991 0652 0E94 0000 		call usb_ep_send_control_data
+ 992               	/* epilogue start */
+ 993 0656 0F90      		pop __tmp_reg__
+ 994 0658 DF91      		pop r29
+ 995 065a CF91      		pop r28
+ 996 065c 0895      		ret
+ 997               		.size	cmd_avr_progmode, .-cmd_avr_progmode
+ 998               	.global	cmd_avr_rawcmd
+ 999               		.type	cmd_avr_rawcmd, @function
+ 1000               	cmd_avr_rawcmd:
+ 1001 065e DF92      		push r13
+ 1002 0660 EF92      		push r14
+ 1003 0662 FF92      		push r15
+ 1004 0664 0F93      		push r16
+ 1005 0666 1F93      		push r17
+ 1006 0668 CF93      		push r28
+ 1007 066a DF93      		push r29
+ 1008 066c 00D0      		rcall .
+ 1009 066e 1F92      		push __zero_reg__
+ 1010 0670 CDB7      		in r28,__SP_L__
+ 1011 0672 DEB7      		in r29,__SP_H__
+ 1012               	/* prologue: function */
+ 1013               	/* frame size = 3 */
+ 1014               	/* stack size = 10 */
+ 1015               	.L__stack_usage = 10
+ 1016 0674 D82E      		mov r13,r24
+ 1017 0676 F62E      		mov r15,r22
+ 1018 0678 E72E      		mov r14,r23
+ 1019 067a 8A01      		movw r16,r20
+ 1020 067c 892F      		mov r24,r25
+ 1021 067e 0E94 0000 		call avr_sendbyte
+ 1022 0682 8D2D      		mov r24,r13
+ 1023 0684 0E94 0000 		call avr_sendbyte
+ 1024 0688 8983      		std Y+1,r24
+ 1025 068a 8E2D      		mov r24,r14
+ 1026 068c 0E94 0000 		call avr_sendbyte
+GAS LISTING gpio-usb.s 			page 19
+
+
+ 1027 0690 8A83      		std Y+2,r24
+ 1028 0692 8F2D      		mov r24,r15
+ 1029 0694 0E94 0000 		call avr_sendbyte
+ 1030 0698 8B83      		std Y+3,r24
+ 1031 069a 9801      		movw r18,r16
+ 1032 069c 40E0      		ldi r20,0
+ 1033 069e 63E0      		ldi r22,lo8(3)
+ 1034 06a0 70E0      		ldi r23,0
+ 1035 06a2 CE01      		movw r24,r28
+ 1036 06a4 0196      		adiw r24,1
+ 1037 06a6 0E94 0000 		call usb_ep_send_control_data
+ 1038               	/* epilogue start */
+ 1039 06aa 0F90      		pop __tmp_reg__
+ 1040 06ac 0F90      		pop __tmp_reg__
+ 1041 06ae 0F90      		pop __tmp_reg__
+ 1042 06b0 DF91      		pop r29
+ 1043 06b2 CF91      		pop r28
+ 1044 06b4 1F91      		pop r17
+ 1045 06b6 0F91      		pop r16
+ 1046 06b8 FF90      		pop r15
+ 1047 06ba EF90      		pop r14
+ 1048 06bc DF90      		pop r13
+ 1049 06be 0895      		ret
+ 1050               		.size	cmd_avr_rawcmd, .-cmd_avr_rawcmd
+ 1051               	.global	avr_sendcmd
+ 1052               		.type	avr_sendcmd, @function
+ 1053               	avr_sendcmd:
+ 1054 06c0 FF92      		push r15
+ 1055 06c2 0F93      		push r16
+ 1056 06c4 1F93      		push r17
+ 1057 06c6 CF93      		push r28
+ 1058 06c8 DF93      		push r29
+ 1059               	/* prologue: function */
+ 1060               	/* frame size = 0 */
+ 1061               	/* stack size = 5 */
+ 1062               	.L__stack_usage = 5
+ 1063 06ca D82F      		mov r29,r24
+ 1064 06cc C62F      		mov r28,r22
+ 1065 06ce 142F      		mov r17,r20
+ 1066 06d0 F22E      		mov r15,r18
+ 1067 06d2 0E94 0000 		call avr_sendbyte
+ 1068 06d6 8C2F      		mov r24,r28
+ 1069 06d8 0E94 0000 		call avr_sendbyte
+ 1070 06dc 082F      		mov r16,r24
+ 1071 06de 812F      		mov r24,r17
+ 1072 06e0 0E94 0000 		call avr_sendbyte
+ 1073 06e4 182F      		mov r17,r24
+ 1074 06e6 8F2D      		mov r24,r15
+ 1075 06e8 0E94 0000 		call avr_sendbyte
+ 1076 06ec D013      		cpse r29,r16
+ 1077 06ee 00C0      		rjmp .L151
+ 1078 06f0 C117      		cp r28,r17
+ 1079 06f2 01F0      		breq .L152
+ 1080               	.L151:
+ 1081 06f4 9091 0000 		lds r25,g_avr_error
+ 1082 06f8 9160      		ori r25,lo8(1)
+ 1083 06fa 9093 0000 		sts g_avr_error,r25
+GAS LISTING gpio-usb.s 			page 20
+
+
+ 1084               	.L152:
+ 1085               	/* epilogue start */
+ 1086 06fe DF91      		pop r29
+ 1087 0700 CF91      		pop r28
+ 1088 0702 1F91      		pop r17
+ 1089 0704 0F91      		pop r16
+ 1090 0706 FF90      		pop r15
+ 1091 0708 0895      		ret
+ 1092               		.size	avr_sendcmd, .-avr_sendcmd
+ 1093               	.global	cmd_avr_readflash
+ 1094               		.type	cmd_avr_readflash, @function
+ 1095               	cmd_avr_readflash:
+ 1096 070a EF92      		push r14
+ 1097 070c FF92      		push r15
+ 1098 070e 0F93      		push r16
+ 1099 0710 1F93      		push r17
+ 1100 0712 CF93      		push r28
+ 1101 0714 DF93      		push r29
+ 1102 0716 00D0      		rcall .
+ 1103 0718 CDB7      		in r28,__SP_L__
+ 1104 071a DEB7      		in r29,__SP_H__
+ 1105               	/* prologue: function */
+ 1106               	/* frame size = 2 */
+ 1107               	/* stack size = 8 */
+ 1108               	.L__stack_usage = 8
+ 1109 071c 8C01      		movw r16,r24
+ 1110 071e 7B01      		movw r14,r22
+ 1111               	.L154:
+ 1112 0720 E114      		cp r14,__zero_reg__
+ 1113 0722 F104      		cpc r15,__zero_reg__
+ 1114 0724 01F0      		breq .L158
+ 1115 0726 20E0      		ldi r18,0
+ 1116 0728 402F      		mov r20,r16
+ 1117 072a 612F      		mov r22,r17
+ 1118 072c 80E2      		ldi r24,lo8(32)
+ 1119 072e 0E94 0000 		call avr_sendcmd
+ 1120 0732 8983      		std Y+1,r24
+ 1121 0734 20E0      		ldi r18,0
+ 1122 0736 402F      		mov r20,r16
+ 1123 0738 612F      		mov r22,r17
+ 1124 073a 88E2      		ldi r24,lo8(40)
+ 1125 073c 0E94 0000 		call avr_sendcmd
+ 1126 0740 8A83      		std Y+2,r24
+ 1127 0742 40E0      		ldi r20,0
+ 1128 0744 62E0      		ldi r22,lo8(2)
+ 1129 0746 70E0      		ldi r23,0
+ 1130 0748 CE01      		movw r24,r28
+ 1131 074a 0196      		adiw r24,1
+ 1132 074c 0E94 0000 		call usb_ep_send_control_data_chunk
+ 1133 0750 8111      		cpse r24,__zero_reg__
+ 1134 0752 00C0      		rjmp .L153
+ 1135 0754 0F5F      		subi r16,-1
+ 1136 0756 1F4F      		sbci r17,-1
+ 1137 0758 82E0      		ldi r24,2
+ 1138 075a E81A      		sub r14,r24
+ 1139 075c F108      		sbc r15,__zero_reg__
+ 1140 075e 00C0      		rjmp .L154
+GAS LISTING gpio-usb.s 			page 21
+
+
+ 1141               	.L158:
+ 1142 0760 0E94 0000 		call usb_ep_send_control_data_finish
+ 1143               	.L153:
+ 1144               	/* epilogue start */
+ 1145 0764 0F90      		pop __tmp_reg__
+ 1146 0766 0F90      		pop __tmp_reg__
+ 1147 0768 DF91      		pop r29
+ 1148 076a CF91      		pop r28
+ 1149 076c 1F91      		pop r17
+ 1150 076e 0F91      		pop r16
+ 1151 0770 FF90      		pop r15
+ 1152 0772 EF90      		pop r14
+ 1153 0774 0895      		ret
+ 1154               		.size	cmd_avr_readflash, .-cmd_avr_readflash
+ 1155               	.global	cmd_avr_readeeprom
+ 1156               		.type	cmd_avr_readeeprom, @function
+ 1157               	cmd_avr_readeeprom:
+ 1158 0776 EF92      		push r14
+ 1159 0778 FF92      		push r15
+ 1160 077a 0F93      		push r16
+ 1161 077c 1F93      		push r17
+ 1162 077e CF93      		push r28
+ 1163 0780 DF93      		push r29
+ 1164 0782 1F92      		push __zero_reg__
+ 1165 0784 CDB7      		in r28,__SP_L__
+ 1166 0786 DEB7      		in r29,__SP_H__
+ 1167               	/* prologue: function */
+ 1168               	/* frame size = 1 */
+ 1169               	/* stack size = 7 */
+ 1170               	.L__stack_usage = 7
+ 1171 0788 8C01      		movw r16,r24
+ 1172 078a 7B01      		movw r14,r22
+ 1173               	.L160:
+ 1174 078c E114      		cp r14,__zero_reg__
+ 1175 078e F104      		cpc r15,__zero_reg__
+ 1176 0790 01F0      		breq .L164
+ 1177 0792 20E0      		ldi r18,0
+ 1178 0794 402F      		mov r20,r16
+ 1179 0796 612F      		mov r22,r17
+ 1180 0798 80EA      		ldi r24,lo8(-96)
+ 1181 079a 0E94 0000 		call avr_sendcmd
+ 1182 079e 8983      		std Y+1,r24
+ 1183 07a0 40E0      		ldi r20,0
+ 1184 07a2 61E0      		ldi r22,lo8(1)
+ 1185 07a4 70E0      		ldi r23,0
+ 1186 07a6 CE01      		movw r24,r28
+ 1187 07a8 0196      		adiw r24,1
+ 1188 07aa 0E94 0000 		call usb_ep_send_control_data_chunk
+ 1189 07ae 8111      		cpse r24,__zero_reg__
+ 1190 07b0 00C0      		rjmp .L159
+ 1191 07b2 0F5F      		subi r16,-1
+ 1192 07b4 1F4F      		sbci r17,-1
+ 1193 07b6 81E0      		ldi r24,1
+ 1194 07b8 E81A      		sub r14,r24
+ 1195 07ba F108      		sbc r15,__zero_reg__
+ 1196 07bc 00C0      		rjmp .L160
+ 1197               	.L164:
+GAS LISTING gpio-usb.s 			page 22
+
+
+ 1198 07be 0E94 0000 		call usb_ep_send_control_data_finish
+ 1199               	.L159:
+ 1200               	/* epilogue start */
+ 1201 07c2 0F90      		pop __tmp_reg__
+ 1202 07c4 DF91      		pop r29
+ 1203 07c6 CF91      		pop r28
+ 1204 07c8 1F91      		pop r17
+ 1205 07ca 0F91      		pop r16
+ 1206 07cc FF90      		pop r15
+ 1207 07ce EF90      		pop r14
+ 1208 07d0 0895      		ret
+ 1209               		.size	cmd_avr_readeeprom, .-cmd_avr_readeeprom
+ 1210               	.global	avr_poll_and_return
+ 1211               		.type	avr_poll_and_return, @function
+ 1212               	avr_poll_and_return:
+ 1213               	/* prologue: function */
+ 1214               	/* frame size = 0 */
+ 1215               	/* stack size = 0 */
+ 1216               	.L__stack_usage = 0
+ 1217 07d2 8091 0000 		lds r24,g_avr_flags
+ 1218 07d6 8C70      		andi r24,lo8(12)
+ 1219 07d8 8430      		cpi r24,lo8(4)
+ 1220 07da 01F0      		breq .L167
+ 1221 07dc 8830      		cpi r24,lo8(8)
+ 1222 07de 01F0      		breq .L168
+ 1223 07e0 8111      		cpse r24,__zero_reg__
+ 1224 07e2 00C0      		rjmp .L177
+ 1225 07e4 8CE0      		ldi r24,lo8(12)
+ 1226 07e6 8093 0000 		sts g_avr_timer,r24
+ 1227               	.L172:
+ 1228 07ea 20E0      		ldi r18,0
+ 1229 07ec 40E0      		ldi r20,0
+ 1230 07ee 60E0      		ldi r22,0
+ 1231 07f0 80EF      		ldi r24,lo8(-16)
+ 1232 07f2 0E94 0000 		call avr_sendcmd
+ 1233 07f6 80FF      		sbrs r24,0
+ 1234 07f8 00C0      		rjmp .L165
+ 1235 07fa 8091 0000 		lds r24,g_avr_timer
+ 1236 07fe 8111      		cpse r24,__zero_reg__
+ 1237 0800 00C0      		rjmp .L172
+ 1238 0802 8091 0000 		lds r24,g_avr_error
+ 1239 0806 8260      		ori r24,lo8(2)
+ 1240 0808 8093 0000 		sts g_avr_error,r24
+ 1241 080c 0895      		ret
+ 1242               	.L167:
+ 1243 080e 85E0      		ldi r24,lo8(5)
+ 1244 0810 00C0      		rjmp .L178
+ 1245               	.L168:
+ 1246 0812 89E0      		ldi r24,lo8(9)
+ 1247 0814 00C0      		rjmp .L178
+ 1248               	.L177:
+ 1249 0816 81E2      		ldi r24,lo8(33)
+ 1250               	.L178:
+ 1251 0818 8093 0000 		sts g_avr_timer,r24
+ 1252               	.L173:
+ 1253 081c 8091 0000 		lds r24,g_avr_timer
+ 1254 0820 8823      		tst r24
+GAS LISTING gpio-usb.s 			page 23
+
+
+ 1255 0822 01F0      		breq .L165
+ 1256               	/* #APP */
+ 1257               	 ;  370 "gpio-usb.c" 1
+ 1258 0824 8895      		sleep
+ 1259               		
+ 1260               	 ;  0 "" 2
+ 1261               	/* #NOAPP */
+ 1262 0826 00C0      		rjmp .L173
+ 1263               	.L165:
+ 1264 0828 0895      		ret
+ 1265               		.size	avr_poll_and_return, .-avr_poll_and_return
+ 1266               	.global	cmd_avr_writeflashpage
+ 1267               		.type	cmd_avr_writeflashpage, @function
+ 1268               	cmd_avr_writeflashpage:
+ 1269 082a CF92      		push r12
+ 1270 082c DF92      		push r13
+ 1271 082e EF92      		push r14
+ 1272 0830 FF92      		push r15
+ 1273 0832 0F93      		push r16
+ 1274 0834 1F93      		push r17
+ 1275 0836 CF93      		push r28
+ 1276 0838 DF93      		push r29
+ 1277 083a 00D0      		rcall .
+ 1278 083c 00D0      		rcall .
+ 1279 083e CDB7      		in r28,__SP_L__
+ 1280 0840 DEB7      		in r29,__SP_H__
+ 1281               	/* prologue: function */
+ 1282               	/* frame size = 4 */
+ 1283               	/* stack size = 12 */
+ 1284               	.L__stack_usage = 12
+ 1285 0842 6C01      		movw r12,r24
+ 1286 0844 7B01      		movw r14,r22
+ 1287 0846 00E0      		ldi r16,0
+ 1288 0848 10E0      		ldi r17,0
+ 1289               	.L180:
+ 1290 084a 82E0      		ldi r24,2
+ 1291 084c E816      		cp r14,r24
+ 1292 084e F104      		cpc r15,__zero_reg__
+ 1293 0850 00F0      		brlo .L184
+ 1294 0852 42E0      		ldi r20,lo8(2)
+ 1295 0854 50E0      		ldi r21,0
+ 1296 0856 BE01      		movw r22,r28
+ 1297 0858 6F5F      		subi r22,-1
+ 1298 085a 7F4F      		sbci r23,-1
+ 1299 085c CE01      		movw r24,r28
+ 1300 085e 0396      		adiw r24,3
+ 1301 0860 0E94 0000 		call usb_ep_recv_control_data_chunk
+ 1302 0864 8111      		cpse r24,__zero_reg__
+ 1303 0866 00C0      		rjmp .L179
+ 1304 0868 2B81      		ldd r18,Y+3
+ 1305 086a 402F      		mov r20,r16
+ 1306 086c 612F      		mov r22,r17
+ 1307 086e 80E4      		ldi r24,lo8(64)
+ 1308 0870 0E94 0000 		call avr_sendcmd
+ 1309 0874 2C81      		ldd r18,Y+4
+ 1310 0876 402F      		mov r20,r16
+ 1311 0878 612F      		mov r22,r17
+GAS LISTING gpio-usb.s 			page 24
+
+
+ 1312 087a 88E4      		ldi r24,lo8(72)
+ 1313 087c 0E94 0000 		call avr_sendcmd
+ 1314 0880 82E0      		ldi r24,2
+ 1315 0882 E81A      		sub r14,r24
+ 1316 0884 F108      		sbc r15,__zero_reg__
+ 1317 0886 0F5F      		subi r16,-1
+ 1318 0888 1F4F      		sbci r17,-1
+ 1319 088a 00C0      		rjmp .L180
+ 1320               	.L184:
+ 1321 088c 20E0      		ldi r18,0
+ 1322 088e 4C2D      		mov r20,r12
+ 1323 0890 6D2D      		mov r22,r13
+ 1324 0892 8CE4      		ldi r24,lo8(76)
+ 1325 0894 0E94 0000 		call avr_sendcmd
+ 1326 0898 0E94 0000 		call avr_poll_and_return
+ 1327 089c 0E94 0000 		call usb_ep_recv_control_data_finish
+ 1328               	.L179:
+ 1329               	/* epilogue start */
+ 1330 08a0 0F90      		pop __tmp_reg__
+ 1331 08a2 0F90      		pop __tmp_reg__
+ 1332 08a4 0F90      		pop __tmp_reg__
+ 1333 08a6 0F90      		pop __tmp_reg__
+ 1334 08a8 DF91      		pop r29
+ 1335 08aa CF91      		pop r28
+ 1336 08ac 1F91      		pop r17
+ 1337 08ae 0F91      		pop r16
+ 1338 08b0 FF90      		pop r15
+ 1339 08b2 EF90      		pop r14
+ 1340 08b4 DF90      		pop r13
+ 1341 08b6 CF90      		pop r12
+ 1342 08b8 0895      		ret
+ 1343               		.size	cmd_avr_writeflashpage, .-cmd_avr_writeflashpage
+ 1344               	.global	cmd_avr_writeeeprompage
+ 1345               		.type	cmd_avr_writeeeprompage, @function
+ 1346               	cmd_avr_writeeeprompage:
+ 1347 08ba CF92      		push r12
+ 1348 08bc DF92      		push r13
+ 1349 08be EF92      		push r14
+ 1350 08c0 FF92      		push r15
+ 1351 08c2 0F93      		push r16
+ 1352 08c4 1F93      		push r17
+ 1353 08c6 CF93      		push r28
+ 1354 08c8 DF93      		push r29
+ 1355 08ca 00D0      		rcall .
+ 1356 08cc 1F92      		push __zero_reg__
+ 1357 08ce CDB7      		in r28,__SP_L__
+ 1358 08d0 DEB7      		in r29,__SP_H__
+ 1359               	/* prologue: function */
+ 1360               	/* frame size = 3 */
+ 1361               	/* stack size = 11 */
+ 1362               	.L__stack_usage = 11
+ 1363 08d2 6C01      		movw r12,r24
+ 1364 08d4 7B01      		movw r14,r22
+ 1365 08d6 00E0      		ldi r16,0
+ 1366 08d8 10E0      		ldi r17,0
+ 1367               	.L186:
+ 1368 08da E114      		cp r14,__zero_reg__
+GAS LISTING gpio-usb.s 			page 25
+
+
+ 1369 08dc F104      		cpc r15,__zero_reg__
+ 1370 08de 01F0      		breq .L190
+ 1371 08e0 41E0      		ldi r20,lo8(1)
+ 1372 08e2 50E0      		ldi r21,0
+ 1373 08e4 BE01      		movw r22,r28
+ 1374 08e6 6F5F      		subi r22,-1
+ 1375 08e8 7F4F      		sbci r23,-1
+ 1376 08ea CE01      		movw r24,r28
+ 1377 08ec 0396      		adiw r24,3
+ 1378 08ee 0E94 0000 		call usb_ep_recv_control_data_chunk
+ 1379 08f2 8111      		cpse r24,__zero_reg__
+ 1380 08f4 00C0      		rjmp .L185
+ 1381 08f6 2B81      		ldd r18,Y+3
+ 1382 08f8 402F      		mov r20,r16
+ 1383 08fa 612F      		mov r22,r17
+ 1384 08fc 81EC      		ldi r24,lo8(-63)
+ 1385 08fe 0E94 0000 		call avr_sendcmd
+ 1386 0902 81E0      		ldi r24,1
+ 1387 0904 E81A      		sub r14,r24
+ 1388 0906 F108      		sbc r15,__zero_reg__
+ 1389 0908 0F5F      		subi r16,-1
+ 1390 090a 1F4F      		sbci r17,-1
+ 1391 090c 00C0      		rjmp .L186
+ 1392               	.L190:
+ 1393 090e 20E0      		ldi r18,0
+ 1394 0910 4C2D      		mov r20,r12
+ 1395 0912 6D2D      		mov r22,r13
+ 1396 0914 82EC      		ldi r24,lo8(-62)
+ 1397 0916 0E94 0000 		call avr_sendcmd
+ 1398 091a 0E94 0000 		call avr_poll_and_return
+ 1399 091e 0E94 0000 		call usb_ep_recv_control_data_finish
+ 1400               	.L185:
+ 1401               	/* epilogue start */
+ 1402 0922 0F90      		pop __tmp_reg__
+ 1403 0924 0F90      		pop __tmp_reg__
+ 1404 0926 0F90      		pop __tmp_reg__
+ 1405 0928 DF91      		pop r29
+ 1406 092a CF91      		pop r28
+ 1407 092c 1F91      		pop r17
+ 1408 092e 0F91      		pop r16
+ 1409 0930 FF90      		pop r15
+ 1410 0932 EF90      		pop r14
+ 1411 0934 DF90      		pop r13
+ 1412 0936 CF90      		pop r12
+ 1413 0938 0895      		ret
+ 1414               		.size	cmd_avr_writeeeprompage, .-cmd_avr_writeeeprompage
+ 1415               	.global	pdi_off
+ 1416               		.type	pdi_off, @function
+ 1417               	pdi_off:
+ 1418               	/* prologue: function */
+ 1419               	/* frame size = 0 */
+ 1420               	/* stack size = 0 */
+ 1421               	.L__stack_usage = 0
+ 1422 093a 1092 C800 		sts 200,__zero_reg__
+ 1423 093e 1092 C900 		sts 201,__zero_reg__
+ 1424 0942 1092 CA00 		sts 202,__zero_reg__
+ 1425 0946 1092 CB00 		sts 203,__zero_reg__
+GAS LISTING gpio-usb.s 			page 26
+
+
+ 1426 094a 5298      		cbi 0xa,2
+ 1427 094c 5A98      		cbi 0xb,2
+ 1428 094e 539A      		sbi 0xa,3
+ 1429 0950 5B98      		cbi 0xb,3
+ 1430 0952 559A      		sbi 0xa,5
+ 1431 0954 5D9A      		sbi 0xb,5
+ 1432 0956 0895      		ret
+ 1433               		.size	pdi_off, .-pdi_off
+ 1434               	.global	pdi_enter
+ 1435               		.type	pdi_enter, @function
+ 1436               	pdi_enter:
+ 1437               	/* prologue: function */
+ 1438               	/* frame size = 0 */
+ 1439               	/* stack size = 0 */
+ 1440               	.L__stack_usage = 0
+ 1441 0958 0C94 0000 		jmp pdi_off
+ 1442               		.size	pdi_enter, .-pdi_enter
+ 1443               	.global	pdi_leave
+ 1444               		.type	pdi_leave, @function
+ 1445               	pdi_leave:
+ 1446               	/* prologue: function */
+ 1447               	/* frame size = 0 */
+ 1448               	/* stack size = 0 */
+ 1449               	.L__stack_usage = 0
+ 1450 095c 1092 C800 		sts 200,__zero_reg__
+ 1451 0960 1092 C900 		sts 201,__zero_reg__
+ 1452 0964 1092 CA00 		sts 202,__zero_reg__
+ 1453 0968 1092 CB00 		sts 203,__zero_reg__
+ 1454 096c 5598      		cbi 0xa,5
+ 1455 096e 5D9A      		sbi 0xb,5
+ 1456 0970 5298      		cbi 0xa,2
+ 1457 0972 5A9A      		sbi 0xb,2
+ 1458 0974 5398      		cbi 0xa,3
+ 1459 0976 5B9A      		sbi 0xb,3
+ 1460 0978 0895      		ret
+ 1461               		.size	pdi_leave, .-pdi_leave
+ 1462               	.global	pdi_start
+ 1463               		.type	pdi_start, @function
+ 1464               	pdi_start:
+ 1465               	/* prologue: function */
+ 1466               	/* frame size = 0 */
+ 1467               	/* stack size = 0 */
+ 1468               	.L__stack_usage = 0
+ 1469 097a 0E94 0000 		call pdi_off
+ 1470 097e 5B9A      		sbi 0xb,3
+ 1471 0980 85E8      		ldi r24,lo8(-123)
+ 1472 0982 8A95      		1: dec r24
+ 1473 0984 01F4      		brne 1b
+ 1474 0986 0000      		nop
+ 1475 0988 87E2      		ldi r24,lo8(39)
+ 1476 098a 90E0      		ldi r25,0
+ 1477 098c 9093 CD00 		sts 204+1,r25
+ 1478 0990 8093 CC00 		sts 204,r24
+ 1479 0994 1092 C800 		sts 200,__zero_reg__
+ 1480 0998 E9EC      		ldi r30,lo8(-55)
+ 1481 099a F0E0      		ldi r31,0
+ 1482 099c 1082      		st Z,__zero_reg__
+GAS LISTING gpio-usb.s 			page 27
+
+
+ 1483 099e 8FE6      		ldi r24,lo8(111)
+ 1484 09a0 8093 CA00 		sts 202,r24
+ 1485 09a4 1092 CB00 		sts 203,__zero_reg__
+ 1486 09a8 8081      		ld r24,Z
+ 1487 09aa 8061      		ori r24,lo8(16)
+ 1488 09ac 8083      		st Z,r24
+ 1489 09ae 8FE8      		ldi r24,lo8(399)
+ 1490 09b0 91E0      		ldi r25,hi8(399)
+ 1491 09b2 0197      		1: sbiw r24,1
+ 1492 09b4 01F4      		brne 1b
+ 1493 09b6 00C0      		rjmp .
+ 1494 09b8 0000      		nop
+ 1495 09ba 0895      		ret
+ 1496               		.size	pdi_start, .-pdi_start
+ 1497               	.global	pdi_write
+ 1498               		.type	pdi_write, @function
+ 1499               	pdi_write:
+ 1500 09bc EF92      		push r14
+ 1501 09be FF92      		push r15
+ 1502 09c0 0F93      		push r16
+ 1503 09c2 1F93      		push r17
+ 1504 09c4 CF93      		push r28
+ 1505 09c6 DF93      		push r29
+ 1506 09c8 00D0      		rcall .
+ 1507 09ca 1F92      		push __zero_reg__
+ 1508 09cc CDB7      		in r28,__SP_L__
+ 1509 09ce DEB7      		in r29,__SP_H__
+ 1510               	/* prologue: function */
+ 1511               	/* frame size = 3 */
+ 1512               	/* stack size = 9 */
+ 1513               	.L__stack_usage = 9
+ 1514 09d0 8C01      		movw r16,r24
+ 1515 09d2 7B01      		movw r14,r22
+ 1516               	.L196:
+ 1517 09d4 8091 C800 		lds r24,200
+ 1518 09d8 87FF      		sbrs r24,7
+ 1519 09da 00C0      		rjmp .L223
+ 1520 09dc 8091 CE00 		lds r24,206
+ 1521 09e0 00C0      		rjmp .L196
+ 1522               	.L223:
+ 1523 09e2 8091 C900 		lds r24,201
+ 1524 09e6 8860      		ori r24,lo8(8)
+ 1525 09e8 8093 C900 		sts 201,r24
+ 1526               	.L198:
+ 1527 09ec 8091 C800 		lds r24,200
+ 1528 09f0 85FF      		sbrs r24,5
+ 1529 09f2 00C0      		rjmp .L198
+ 1530 09f4 8091 C800 		lds r24,200
+ 1531 09f8 8064      		ori r24,lo8(64)
+ 1532 09fa 8093 C800 		sts 200,r24
+ 1533 09fe 0115      		cp r16,__zero_reg__
+ 1534 0a00 1105      		cpc r17,__zero_reg__
+ 1535 0a02 01F0      		breq .L199
+ 1536 0a04 F801      		movw r30,r16
+ 1537 0a06 8081      		ld r24,Z
+ 1538 0a08 8B83      		std Y+3,r24
+ 1539 0a0a 0F5F      		subi r16,-1
+GAS LISTING gpio-usb.s 			page 28
+
+
+ 1540 0a0c 1F4F      		sbci r17,-1
+ 1541 0a0e 00C0      		rjmp .L200
+ 1542               	.L199:
+ 1543 0a10 41E0      		ldi r20,lo8(1)
+ 1544 0a12 50E0      		ldi r21,0
+ 1545 0a14 BE01      		movw r22,r28
+ 1546 0a16 6F5F      		subi r22,-1
+ 1547 0a18 7F4F      		sbci r23,-1
+ 1548 0a1a CE01      		movw r24,r28
+ 1549 0a1c 0396      		adiw r24,3
+ 1550 0a1e 0E94 0000 		call usb_ep_recv_control_data_chunk
+ 1551 0a22 8111      		cpse r24,__zero_reg__
+ 1552 0a24 00C0      		rjmp .L201
+ 1553 0a26 8981      		ldd r24,Y+1
+ 1554 0a28 9A81      		ldd r25,Y+2
+ 1555 0a2a 0197      		sbiw r24,1
+ 1556 0a2c 01F0      		breq .L200
+ 1557               	.L201:
+ 1558 0a2e 85E1      		ldi r24,lo8(21)
+ 1559 0a30 00C0      		rjmp .L202
+ 1560               	.L200:
+ 1561 0a32 8B81      		ldd r24,Y+3
+ 1562 0a34 8093 CE00 		sts 206,r24
+ 1563               	.L203:
+ 1564 0a38 8091 C800 		lds r24,200
+ 1565 0a3c 86FF      		sbrs r24,6
+ 1566 0a3e 00C0      		rjmp .L203
+ 1567 0a40 8091 C800 		lds r24,200
+ 1568 0a44 8064      		ori r24,lo8(64)
+ 1569 0a46 8093 C800 		sts 200,r24
+ 1570 0a4a 85E0      		ldi r24,lo8(5)
+ 1571 0a4c 8093 0000 		sts g_pdi_timer,r24
+ 1572               	.L204:
+ 1573 0a50 8091 C800 		lds r24,200
+ 1574 0a54 87FD      		sbrc r24,7
+ 1575 0a56 00C0      		rjmp .L224
+ 1576 0a58 8091 0000 		lds r24,g_pdi_timer
+ 1577 0a5c 8111      		cpse r24,__zero_reg__
+ 1578 0a5e 00C0      		rjmp .L204
+ 1579 0a60 8AE0      		ldi r24,lo8(10)
+ 1580               	.L202:
+ 1581 0a62 9091 C900 		lds r25,201
+ 1582 0a66 977F      		andi r25,lo8(-9)
+ 1583 0a68 9093 C900 		sts 201,r25
+ 1584 0a6c 5398      		cbi 0xa,3
+ 1585 0a6e 5B98      		cbi 0xb,3
+ 1586               	/* epilogue start */
+ 1587 0a70 0F90      		pop __tmp_reg__
+ 1588 0a72 0F90      		pop __tmp_reg__
+ 1589 0a74 0F90      		pop __tmp_reg__
+ 1590 0a76 DF91      		pop r29
+ 1591 0a78 CF91      		pop r28
+ 1592 0a7a 1F91      		pop r17
+ 1593 0a7c 0F91      		pop r16
+ 1594 0a7e FF90      		pop r15
+ 1595 0a80 EF90      		pop r14
+ 1596 0a82 0895      		ret
+GAS LISTING gpio-usb.s 			page 29
+
+
+ 1597               	.L224:
+ 1598 0a84 8091 C800 		lds r24,200
+ 1599 0a88 2091 CE00 		lds r18,206
+ 1600 0a8c 9B81      		ldd r25,Y+3
+ 1601 0a8e 2913      		cpse r18,r25
+ 1602 0a90 00C0      		rjmp .L214
+ 1603 0a92 8C71      		andi r24,lo8(28)
+ 1604 0a94 01F4      		brne .L214
+ 1605 0a96 E114      		cp r14,__zero_reg__
+ 1606 0a98 F104      		cpc r15,__zero_reg__
+ 1607 0a9a 01F0      		breq .L225
+ 1608 0a9c F1E0      		ldi r31,1
+ 1609 0a9e EF1A      		sub r14,r31
+ 1610 0aa0 F108      		sbc r15,__zero_reg__
+ 1611 0aa2 00C0      		rjmp .L198
+ 1612               	.L225:
+ 1613 0aa4 80E0      		ldi r24,0
+ 1614 0aa6 00C0      		rjmp .L202
+ 1615               	.L214:
+ 1616 0aa8 84E0      		ldi r24,lo8(4)
+ 1617 0aaa 00C0      		rjmp .L202
+ 1618               		.size	pdi_write, .-pdi_write
+ 1619               	.global	pdi_read
+ 1620               		.type	pdi_read, @function
+ 1621               	pdi_read:
+ 1622               	/* prologue: function */
+ 1623               	/* frame size = 0 */
+ 1624               	/* stack size = 0 */
+ 1625               	.L__stack_usage = 0
+ 1626 0aac FC01      		movw r30,r24
+ 1627 0aae 85E0      		ldi r24,lo8(5)
+ 1628 0ab0 8093 0000 		sts g_pdi_timer,r24
+ 1629               	.L227:
+ 1630 0ab4 8091 C800 		lds r24,200
+ 1631 0ab8 87FD      		sbrc r24,7
+ 1632 0aba 00C0      		rjmp .L232
+ 1633 0abc 8091 0000 		lds r24,g_pdi_timer
+ 1634 0ac0 8111      		cpse r24,__zero_reg__
+ 1635 0ac2 00C0      		rjmp .L227
+ 1636 0ac4 8BE0      		ldi r24,lo8(11)
+ 1637 0ac6 0895      		ret
+ 1638               	.L232:
+ 1639 0ac8 9091 C800 		lds r25,200
+ 1640 0acc 2091 CE00 		lds r18,206
+ 1641 0ad0 892F      		mov r24,r25
+ 1642 0ad2 8C71      		andi r24,lo8(28)
+ 1643 0ad4 01F4      		brne .L231
+ 1644 0ad6 2083      		st Z,r18
+ 1645 0ad8 0895      		ret
+ 1646               	.L231:
+ 1647 0ada 85E0      		ldi r24,lo8(5)
+ 1648 0adc 0895      		ret
+ 1649               		.size	pdi_read, .-pdi_read
+ 1650               	.global	pdi_cmd
+ 1651               		.type	pdi_cmd, @function
+ 1652               	pdi_cmd:
+ 1653 0ade DF92      		push r13
+GAS LISTING gpio-usb.s 			page 30
+
+
+ 1654 0ae0 EF92      		push r14
+ 1655 0ae2 FF92      		push r15
+ 1656 0ae4 0F93      		push r16
+ 1657 0ae6 1F93      		push r17
+ 1658 0ae8 CF93      		push r28
+ 1659 0aea DF93      		push r29
+ 1660               	/* prologue: function */
+ 1661               	/* frame size = 0 */
+ 1662               	/* stack size = 7 */
+ 1663               	.L__stack_usage = 7
+ 1664 0aec D62F      		mov r29,r22
+ 1665 0aee 6623      		tst r22
+ 1666 0af0 01F4      		brne .+2
+ 1667 0af2 00C0      		rjmp .L250
+ 1668 0af4 FC01      		movw r30,r24
+ 1669 0af6 D080      		ld r13,Z
+ 1670 0af8 2115      		cp r18,__zero_reg__
+ 1671 0afa 3105      		cpc r19,__zero_reg__
+ 1672 0afc 01F0      		breq .L235
+ 1673 0afe F901      		movw r30,r18
+ 1674 0b00 1082      		st Z,__zero_reg__
+ 1675               	.L235:
+ 1676 0b02 CD2D      		mov r28,r13
+ 1677 0b04 C07E      		andi r28,lo8(-32)
+ 1678 0b06 C036      		cpi r28,lo8(96)
+ 1679 0b08 01F4      		brne .+2
+ 1680 0b0a 00C0      		rjmp .L236
+ 1681 0b0c 8901      		movw r16,r18
+ 1682 0b0e 7A01      		movw r14,r20
+ 1683 0b10 FC01      		movw r30,r24
+ 1684 0b12 C136      		cpi r28,lo8(97)
+ 1685 0b14 00F4      		brsh .L237
+ 1686 0b16 C032      		cpi r28,lo8(32)
+ 1687 0b18 01F4      		brne .+2
+ 1688 0b1a 00C0      		rjmp .L238
+ 1689 0b1c C034      		cpi r28,lo8(64)
+ 1690 0b1e 01F4      		brne .+2
+ 1691 0b20 00C0      		rjmp .L239
+ 1692 0b22 C111      		cpse r28,__zero_reg__
+ 1693 0b24 00C0      		rjmp .L251
+ 1694 0b26 00C0      		rjmp .L277
+ 1695               	.L237:
+ 1696 0b28 C03A      		cpi r28,lo8(-96)
+ 1697 0b2a 01F4      		brne .+2
+ 1698 0b2c 00C0      		rjmp .L241
+ 1699 0b2e 00F4      		brsh .L242
+ 1700 0b30 C038      		cpi r28,lo8(-128)
+ 1701 0b32 01F4      		brne .+2
+ 1702 0b34 00C0      		rjmp .L243
+ 1703 0b36 00C0      		rjmp .L251
+ 1704               	.L242:
+ 1705 0b38 C03C      		cpi r28,lo8(-64)
+ 1706 0b3a 01F4      		brne .+2
+ 1707 0b3c 00C0      		rjmp .L244
+ 1708 0b3e C03E      		cpi r28,lo8(-32)
+ 1709 0b40 01F4      		brne .+2
+ 1710 0b42 00C0      		rjmp .L245
+GAS LISTING gpio-usb.s 			page 31
+
+
+ 1711 0b44 00C0      		rjmp .L251
+ 1712               	.L277:
+ 1713 0b46 2D2D      		mov r18,r13
+ 1714 0b48 2C70      		andi r18,lo8(12)
+ 1715 0b4a 2695      		lsr r18
+ 1716 0b4c 2695      		lsr r18
+ 1717 0b4e 2F5F      		subi r18,lo8(-(1))
+ 1718 0b50 30E0      		ldi r19,0
+ 1719 0b52 C901      		movw r24,r18
+ 1720 0b54 0196      		adiw r24,1
+ 1721 0b56 6D2F      		mov r22,r29
+ 1722 0b58 70E0      		ldi r23,0
+ 1723 0b5a 8617      		cp r24,r22
+ 1724 0b5c 9707      		cpc r25,r23
+ 1725 0b5e 01F0      		breq .+2
+ 1726 0b60 00C0      		rjmp .L265
+ 1727 0b62 B901      		movw r22,r18
+ 1728 0b64 CF01      		movw r24,r30
+ 1729 0b66 0E94 0000 		call pdi_write
+ 1730 0b6a 8111      		cpse r24,__zero_reg__
+ 1731 0b6c 00C0      		rjmp .L262
+ 1732 0b6e 6D2D      		mov r22,r13
+ 1733 0b70 6370      		andi r22,lo8(3)
+ 1734 0b72 DD24      		clr r13
+ 1735 0b74 D394      		inc r13
+ 1736 0b76 D60E      		add r13,r22
+ 1737 0b78 D0E0      		ldi r29,0
+ 1738               	.L246:
+ 1739 0b7a C701      		movw r24,r14
+ 1740 0b7c 8D0F      		add r24,r29
+ 1741 0b7e 911D      		adc r25,__zero_reg__
+ 1742 0b80 0E94 0000 		call pdi_read
+ 1743 0b84 8111      		cpse r24,__zero_reg__
+ 1744 0b86 00C0      		rjmp .L262
+ 1745 0b88 DF5F      		subi r29,lo8(-(1))
+ 1746 0b8a DD15      		cp r29,r13
+ 1747 0b8c 00F0      		brlo .L246
+ 1748 0b8e 0115      		cp r16,__zero_reg__
+ 1749 0b90 1105      		cpc r17,__zero_reg__
+ 1750 0b92 01F4      		brne .+2
+ 1751 0b94 00C0      		rjmp .L272
+ 1752 0b96 F801      		movw r30,r16
+ 1753 0b98 D082      		st Z,r13
+ 1754 0b9a 00C0      		rjmp .L234
+ 1755               	.L239:
+ 1756 0b9c 8D2D      		mov r24,r13
+ 1757 0b9e 8C70      		andi r24,lo8(12)
+ 1758 0ba0 8695      		lsr r24
+ 1759 0ba2 8695      		lsr r24
+ 1760 0ba4 8F5F      		subi r24,lo8(-(1))
+ 1761 0ba6 6D2D      		mov r22,r13
+ 1762 0ba8 6370      		andi r22,lo8(3)
+ 1763 0baa 6F5F      		subi r22,lo8(-(1))
+ 1764 0bac 70E0      		ldi r23,0
+ 1765 0bae 680F      		add r22,r24
+ 1766 0bb0 711D      		adc r23,__zero_reg__
+ 1767 0bb2 00C0      		rjmp .L276
+GAS LISTING gpio-usb.s 			page 32
+
+
+ 1768               	.L238:
+ 1769 0bb4 D130      		cpi r29,lo8(1)
+ 1770 0bb6 01F0      		breq .+2
+ 1771 0bb8 00C0      		rjmp .L265
+ 1772 0bba 60E0      		ldi r22,0
+ 1773 0bbc 70E0      		ldi r23,0
+ 1774 0bbe 0E94 0000 		call pdi_write
+ 1775 0bc2 8111      		cpse r24,__zero_reg__
+ 1776 0bc4 00C0      		rjmp .L262
+ 1777 0bc6 6D2D      		mov r22,r13
+ 1778 0bc8 6370      		andi r22,lo8(3)
+ 1779 0bca DD24      		clr r13
+ 1780 0bcc D394      		inc r13
+ 1781 0bce D60E      		add r13,r22
+ 1782 0bd0 D0E0      		ldi r29,0
+ 1783               	.L248:
+ 1784 0bd2 C701      		movw r24,r14
+ 1785 0bd4 8D0F      		add r24,r29
+ 1786 0bd6 911D      		adc r25,__zero_reg__
+ 1787 0bd8 0E94 0000 		call pdi_read
+ 1788 0bdc 8111      		cpse r24,__zero_reg__
+ 1789 0bde 00C0      		rjmp .L262
+ 1790 0be0 DF5F      		subi r29,lo8(-(1))
+ 1791 0be2 DD15      		cp r29,r13
+ 1792 0be4 00F0      		brlo .L248
+ 1793 0be6 0115      		cp r16,__zero_reg__
+ 1794 0be8 1105      		cpc r17,__zero_reg__
+ 1795 0bea 01F0      		breq .L272
+ 1796 0bec F801      		movw r30,r16
+ 1797 0bee D082      		st Z,r13
+ 1798 0bf0 00C0      		rjmp .L272
+ 1799               	.L236:
+ 1800 0bf2 6D2D      		mov r22,r13
+ 1801 0bf4 6370      		andi r22,lo8(3)
+ 1802 0bf6 DD24      		clr r13
+ 1803 0bf8 D394      		inc r13
+ 1804 0bfa D60E      		add r13,r22
+ 1805 0bfc 2D2D      		mov r18,r13
+ 1806 0bfe 30E0      		ldi r19,0
+ 1807 0c00 A901      		movw r20,r18
+ 1808 0c02 4F5F      		subi r20,-1
+ 1809 0c04 5F4F      		sbci r21,-1
+ 1810 0c06 6D2F      		mov r22,r29
+ 1811 0c08 70E0      		ldi r23,0
+ 1812 0c0a 4617      		cp r20,r22
+ 1813 0c0c 5707      		cpc r21,r23
+ 1814 0c0e 01F4      		brne .L265
+ 1815 0c10 B901      		movw r22,r18
+ 1816 0c12 00C0      		rjmp .L274
+ 1817               	.L243:
+ 1818 0c14 D130      		cpi r29,lo8(1)
+ 1819 0c16 01F4      		brne .L265
+ 1820 0c18 60E0      		ldi r22,0
+ 1821 0c1a 70E0      		ldi r23,0
+ 1822 0c1c 0E94 0000 		call pdi_write
+ 1823 0c20 8111      		cpse r24,__zero_reg__
+ 1824 0c22 00C0      		rjmp .L262
+GAS LISTING gpio-usb.s 			page 33
+
+
+ 1825 0c24 C701      		movw r24,r14
+ 1826 0c26 0E94 0000 		call pdi_read
+ 1827 0c2a 8111      		cpse r24,__zero_reg__
+ 1828 0c2c 00C0      		rjmp .L262
+ 1829 0c2e F801      		movw r30,r16
+ 1830 0c30 D083      		st Z,r29
+ 1831               	.L272:
+ 1832 0c32 C0E0      		ldi r28,0
+ 1833 0c34 00C0      		rjmp .L234
+ 1834               	.L244:
+ 1835 0c36 D230      		cpi r29,lo8(2)
+ 1836 0c38 01F4      		brne .L265
+ 1837 0c3a 61E0      		ldi r22,lo8(1)
+ 1838 0c3c 70E0      		ldi r23,0
+ 1839 0c3e 00C0      		rjmp .L273
+ 1840               	.L241:
+ 1841 0c40 6D2D      		mov r22,r13
+ 1842 0c42 6370      		andi r22,lo8(3)
+ 1843 0c44 91E0      		ldi r25,lo8(1)
+ 1844 0c46 960F      		add r25,r22
+ 1845 0c48 692F      		mov r22,r25
+ 1846 0c4a 70E0      		ldi r23,0
+ 1847               	.L276:
+ 1848 0c4c 9B01      		movw r18,r22
+ 1849 0c4e 2F5F      		subi r18,-1
+ 1850 0c50 3F4F      		sbci r19,-1
+ 1851 0c52 8D2F      		mov r24,r29
+ 1852 0c54 90E0      		ldi r25,0
+ 1853 0c56 2817      		cp r18,r24
+ 1854 0c58 3907      		cpc r19,r25
+ 1855 0c5a 01F4      		brne .L265
+ 1856 0c5c 00C0      		rjmp .L273
+ 1857               	.L245:
+ 1858 0c5e D930      		cpi r29,lo8(9)
+ 1859 0c60 01F4      		brne .L265
+ 1860 0c62 68E0      		ldi r22,lo8(8)
+ 1861 0c64 70E0      		ldi r23,0
+ 1862               	.L273:
+ 1863 0c66 CF01      		movw r24,r30
+ 1864               	.L274:
+ 1865               	/* epilogue start */
+ 1866 0c68 DF91      		pop r29
+ 1867 0c6a CF91      		pop r28
+ 1868 0c6c 1F91      		pop r17
+ 1869 0c6e 0F91      		pop r16
+ 1870 0c70 FF90      		pop r15
+ 1871 0c72 EF90      		pop r14
+ 1872 0c74 DF90      		pop r13
+ 1873 0c76 0C94 0000 		jmp pdi_write
+ 1874               	.L250:
+ 1875 0c7a C1E0      		ldi r28,lo8(1)
+ 1876 0c7c 00C0      		rjmp .L234
+ 1877               	.L251:
+ 1878 0c7e C2E0      		ldi r28,lo8(2)
+ 1879 0c80 00C0      		rjmp .L234
+ 1880               	.L262:
+ 1881 0c82 C82F      		mov r28,r24
+GAS LISTING gpio-usb.s 			page 34
+
+
+ 1882 0c84 00C0      		rjmp .L234
+ 1883               	.L265:
+ 1884 0c86 C3E0      		ldi r28,lo8(3)
+ 1885               	.L234:
+ 1886 0c88 8C2F      		mov r24,r28
+ 1887               	/* epilogue start */
+ 1888 0c8a DF91      		pop r29
+ 1889 0c8c CF91      		pop r28
+ 1890 0c8e 1F91      		pop r17
+ 1891 0c90 0F91      		pop r16
+ 1892 0c92 FF90      		pop r15
+ 1893 0c94 EF90      		pop r14
+ 1894 0c96 DF90      		pop r13
+ 1895 0c98 0895      		ret
+ 1896               		.size	pdi_cmd, .-pdi_cmd
+ 1897               	.global	pdi_cmd_lds_byte
+ 1898               		.type	pdi_cmd_lds_byte, @function
+ 1899               	pdi_cmd_lds_byte:
+ 1900 0c9a CF93      		push r28
+ 1901 0c9c DF93      		push r29
+ 1902 0c9e 00D0      		rcall .
+ 1903 0ca0 00D0      		rcall .
+ 1904 0ca2 00D0      		rcall .
+ 1905 0ca4 CDB7      		in r28,__SP_L__
+ 1906 0ca6 DEB7      		in r29,__SP_H__
+ 1907               	/* prologue: function */
+ 1908               	/* frame size = 6 */
+ 1909               	/* stack size = 8 */
+ 1910               	.L__stack_usage = 8
+ 1911 0ca8 2CE0      		ldi r18,lo8(12)
+ 1912 0caa 2983      		std Y+1,r18
+ 1913 0cac 6A83      		std Y+2,r22
+ 1914 0cae 7B83      		std Y+3,r23
+ 1915 0cb0 8C83      		std Y+4,r24
+ 1916 0cb2 9D83      		std Y+5,r25
+ 1917 0cb4 20E0      		ldi r18,0
+ 1918 0cb6 30E0      		ldi r19,0
+ 1919 0cb8 65E0      		ldi r22,lo8(5)
+ 1920 0cba CE01      		movw r24,r28
+ 1921 0cbc 0196      		adiw r24,1
+ 1922 0cbe 0E94 0000 		call pdi_cmd
+ 1923               	/* epilogue start */
+ 1924 0cc2 2696      		adiw r28,6
+ 1925 0cc4 0FB6      		in __tmp_reg__,__SREG__
+ 1926 0cc6 F894      		cli
+ 1927 0cc8 DEBF      		out __SP_H__,r29
+ 1928 0cca 0FBE      		out __SREG__,__tmp_reg__
+ 1929 0ccc CDBF      		out __SP_L__,r28
+ 1930 0cce DF91      		pop r29
+ 1931 0cd0 CF91      		pop r28
+ 1932 0cd2 0895      		ret
+ 1933               		.size	pdi_cmd_lds_byte, .-pdi_cmd_lds_byte
+ 1934               	.global	pdi_cmd_sts_byte
+ 1935               		.type	pdi_cmd_sts_byte, @function
+ 1936               	pdi_cmd_sts_byte:
+ 1937 0cd4 CF93      		push r28
+ 1938 0cd6 DF93      		push r29
+GAS LISTING gpio-usb.s 			page 35
+
+
+ 1939 0cd8 00D0      		rcall .
+ 1940 0cda 00D0      		rcall .
+ 1941 0cdc 00D0      		rcall .
+ 1942 0cde CDB7      		in r28,__SP_L__
+ 1943 0ce0 DEB7      		in r29,__SP_H__
+ 1944               	/* prologue: function */
+ 1945               	/* frame size = 6 */
+ 1946               	/* stack size = 8 */
+ 1947               	.L__stack_usage = 8
+ 1948 0ce2 2CE4      		ldi r18,lo8(76)
+ 1949 0ce4 2983      		std Y+1,r18
+ 1950 0ce6 6A83      		std Y+2,r22
+ 1951 0ce8 7B83      		std Y+3,r23
+ 1952 0cea 8C83      		std Y+4,r24
+ 1953 0cec 9D83      		std Y+5,r25
+ 1954 0cee 4E83      		std Y+6,r20
+ 1955 0cf0 20E0      		ldi r18,0
+ 1956 0cf2 30E0      		ldi r19,0
+ 1957 0cf4 40E0      		ldi r20,0
+ 1958 0cf6 50E0      		ldi r21,0
+ 1959 0cf8 66E0      		ldi r22,lo8(6)
+ 1960 0cfa CE01      		movw r24,r28
+ 1961 0cfc 0196      		adiw r24,1
+ 1962 0cfe 0E94 0000 		call pdi_cmd
+ 1963               	/* epilogue start */
+ 1964 0d02 2696      		adiw r28,6
+ 1965 0d04 0FB6      		in __tmp_reg__,__SREG__
+ 1966 0d06 F894      		cli
+ 1967 0d08 DEBF      		out __SP_H__,r29
+ 1968 0d0a 0FBE      		out __SREG__,__tmp_reg__
+ 1969 0d0c CDBF      		out __SP_L__,r28
+ 1970 0d0e DF91      		pop r29
+ 1971 0d10 CF91      		pop r28
+ 1972 0d12 0895      		ret
+ 1973               		.size	pdi_cmd_sts_byte, .-pdi_cmd_sts_byte
+ 1974               	.global	pdi_cmd_st_ptr
+ 1975               		.type	pdi_cmd_st_ptr, @function
+ 1976               	pdi_cmd_st_ptr:
+ 1977 0d14 CF93      		push r28
+ 1978 0d16 DF93      		push r29
+ 1979 0d18 00D0      		rcall .
+ 1980 0d1a 00D0      		rcall .
+ 1981 0d1c 1F92      		push __zero_reg__
+ 1982 0d1e CDB7      		in r28,__SP_L__
+ 1983 0d20 DEB7      		in r29,__SP_H__
+ 1984               	/* prologue: function */
+ 1985               	/* frame size = 5 */
+ 1986               	/* stack size = 7 */
+ 1987               	.L__stack_usage = 7
+ 1988 0d22 2BE6      		ldi r18,lo8(107)
+ 1989 0d24 2983      		std Y+1,r18
+ 1990 0d26 6A83      		std Y+2,r22
+ 1991 0d28 7B83      		std Y+3,r23
+ 1992 0d2a 8C83      		std Y+4,r24
+ 1993 0d2c 9D83      		std Y+5,r25
+ 1994 0d2e 20E0      		ldi r18,0
+ 1995 0d30 30E0      		ldi r19,0
+GAS LISTING gpio-usb.s 			page 36
+
+
+ 1996 0d32 40E0      		ldi r20,0
+ 1997 0d34 50E0      		ldi r21,0
+ 1998 0d36 65E0      		ldi r22,lo8(5)
+ 1999 0d38 CE01      		movw r24,r28
+ 2000 0d3a 0196      		adiw r24,1
+ 2001 0d3c 0E94 0000 		call pdi_cmd
+ 2002               	/* epilogue start */
+ 2003 0d40 0F90      		pop __tmp_reg__
+ 2004 0d42 0F90      		pop __tmp_reg__
+ 2005 0d44 0F90      		pop __tmp_reg__
+ 2006 0d46 0F90      		pop __tmp_reg__
+ 2007 0d48 0F90      		pop __tmp_reg__
+ 2008 0d4a DF91      		pop r29
+ 2009 0d4c CF91      		pop r28
+ 2010 0d4e 0895      		ret
+ 2011               		.size	pdi_cmd_st_ptr, .-pdi_cmd_st_ptr
+ 2012               	.global	pdi_cmd_stcs
+ 2013               		.type	pdi_cmd_stcs, @function
+ 2014               	pdi_cmd_stcs:
+ 2015 0d50 CF93      		push r28
+ 2016 0d52 DF93      		push r29
+ 2017 0d54 00D0      		rcall .
+ 2018 0d56 CDB7      		in r28,__SP_L__
+ 2019 0d58 DEB7      		in r29,__SP_H__
+ 2020               	/* prologue: function */
+ 2021               	/* frame size = 2 */
+ 2022               	/* stack size = 4 */
+ 2023               	.L__stack_usage = 4
+ 2024 0d5a 8F70      		andi r24,lo8(15)
+ 2025 0d5c 806C      		ori r24,lo8(-64)
+ 2026 0d5e 8983      		std Y+1,r24
+ 2027 0d60 6A83      		std Y+2,r22
+ 2028 0d62 20E0      		ldi r18,0
+ 2029 0d64 30E0      		ldi r19,0
+ 2030 0d66 40E0      		ldi r20,0
+ 2031 0d68 50E0      		ldi r21,0
+ 2032 0d6a 62E0      		ldi r22,lo8(2)
+ 2033 0d6c CE01      		movw r24,r28
+ 2034 0d6e 0196      		adiw r24,1
+ 2035 0d70 0E94 0000 		call pdi_cmd
+ 2036               	/* epilogue start */
+ 2037 0d74 0F90      		pop __tmp_reg__
+ 2038 0d76 0F90      		pop __tmp_reg__
+ 2039 0d78 DF91      		pop r29
+ 2040 0d7a CF91      		pop r28
+ 2041 0d7c 0895      		ret
+ 2042               		.size	pdi_cmd_stcs, .-pdi_cmd_stcs
+ 2043               	.global	pdi_cmd_ldcs
+ 2044               		.type	pdi_cmd_ldcs, @function
+ 2045               	pdi_cmd_ldcs:
+ 2046 0d7e CF93      		push r28
+ 2047 0d80 DF93      		push r29
+ 2048 0d82 00D0      		rcall .
+ 2049 0d84 CDB7      		in r28,__SP_L__
+ 2050 0d86 DEB7      		in r29,__SP_H__
+ 2051               	/* prologue: function */
+ 2052               	/* frame size = 2 */
+GAS LISTING gpio-usb.s 			page 37
+
+
+ 2053               	/* stack size = 4 */
+ 2054               	.L__stack_usage = 4
+ 2055 0d88 AB01      		movw r20,r22
+ 2056 0d8a 8F70      		andi r24,lo8(15)
+ 2057 0d8c 8068      		ori r24,lo8(-128)
+ 2058 0d8e 8983      		std Y+1,r24
+ 2059 0d90 20E0      		ldi r18,0
+ 2060 0d92 30E0      		ldi r19,0
+ 2061 0d94 61E0      		ldi r22,lo8(1)
+ 2062 0d96 CE01      		movw r24,r28
+ 2063 0d98 0196      		adiw r24,1
+ 2064 0d9a 0E94 0000 		call pdi_cmd
+ 2065               	/* epilogue start */
+ 2066 0d9e 0F90      		pop __tmp_reg__
+ 2067 0da0 0F90      		pop __tmp_reg__
+ 2068 0da2 DF91      		pop r29
+ 2069 0da4 CF91      		pop r28
+ 2070 0da6 0895      		ret
+ 2071               		.size	pdi_cmd_ldcs, .-pdi_cmd_ldcs
+ 2072               	.global	pdi_cmd_key_nvm
+ 2073               		.type	pdi_cmd_key_nvm, @function
+ 2074               	pdi_cmd_key_nvm:
+ 2075 0da8 CF93      		push r28
+ 2076 0daa DF93      		push r29
+ 2077 0dac CDB7      		in r28,__SP_L__
+ 2078 0dae DEB7      		in r29,__SP_H__
+ 2079 0db0 2997      		sbiw r28,9
+ 2080 0db2 0FB6      		in __tmp_reg__,__SREG__
+ 2081 0db4 F894      		cli
+ 2082 0db6 DEBF      		out __SP_H__,r29
+ 2083 0db8 0FBE      		out __SREG__,__tmp_reg__
+ 2084 0dba CDBF      		out __SP_L__,r28
+ 2085               	/* prologue: function */
+ 2086               	/* frame size = 9 */
+ 2087               	/* stack size = 11 */
+ 2088               	.L__stack_usage = 11
+ 2089 0dbc 80EE      		ldi r24,lo8(-32)
+ 2090 0dbe 8983      		std Y+1,r24
+ 2091 0dc0 8FEF      		ldi r24,lo8(-1)
+ 2092 0dc2 8A83      		std Y+2,r24
+ 2093 0dc4 88E8      		ldi r24,lo8(-120)
+ 2094 0dc6 8B83      		std Y+3,r24
+ 2095 0dc8 88ED      		ldi r24,lo8(-40)
+ 2096 0dca 8C83      		std Y+4,r24
+ 2097 0dcc 8DEC      		ldi r24,lo8(-51)
+ 2098 0dce 8D83      		std Y+5,r24
+ 2099 0dd0 85E4      		ldi r24,lo8(69)
+ 2100 0dd2 8E83      		std Y+6,r24
+ 2101 0dd4 8BEA      		ldi r24,lo8(-85)
+ 2102 0dd6 8F83      		std Y+7,r24
+ 2103 0dd8 89E8      		ldi r24,lo8(-119)
+ 2104 0dda 8887      		std Y+8,r24
+ 2105 0ddc 82E1      		ldi r24,lo8(18)
+ 2106 0dde 8987      		std Y+9,r24
+ 2107 0de0 20E0      		ldi r18,0
+ 2108 0de2 30E0      		ldi r19,0
+ 2109 0de4 40E0      		ldi r20,0
+GAS LISTING gpio-usb.s 			page 38
+
+
+ 2110 0de6 50E0      		ldi r21,0
+ 2111 0de8 69E0      		ldi r22,lo8(9)
+ 2112 0dea CE01      		movw r24,r28
+ 2113 0dec 0196      		adiw r24,1
+ 2114 0dee 0E94 0000 		call pdi_cmd
+ 2115               	/* epilogue start */
+ 2116 0df2 2996      		adiw r28,9
+ 2117 0df4 0FB6      		in __tmp_reg__,__SREG__
+ 2118 0df6 F894      		cli
+ 2119 0df8 DEBF      		out __SP_H__,r29
+ 2120 0dfa 0FBE      		out __SREG__,__tmp_reg__
+ 2121 0dfc CDBF      		out __SP_L__,r28
+ 2122 0dfe DF91      		pop r29
+ 2123 0e00 CF91      		pop r28
+ 2124 0e02 0895      		ret
+ 2125               		.size	pdi_cmd_key_nvm, .-pdi_cmd_key_nvm
+ 2126               	.global	pdi_cmd_repeat
+ 2127               		.type	pdi_cmd_repeat, @function
+ 2128               	pdi_cmd_repeat:
+ 2129 0e04 CF93      		push r28
+ 2130 0e06 DF93      		push r29
+ 2131 0e08 00D0      		rcall .
+ 2132 0e0a 1F92      		push __zero_reg__
+ 2133 0e0c CDB7      		in r28,__SP_L__
+ 2134 0e0e DEB7      		in r29,__SP_H__
+ 2135               	/* prologue: function */
+ 2136               	/* frame size = 3 */
+ 2137               	/* stack size = 5 */
+ 2138               	.L__stack_usage = 5
+ 2139 0e10 21EA      		ldi r18,lo8(-95)
+ 2140 0e12 2983      		std Y+1,r18
+ 2141 0e14 8A83      		std Y+2,r24
+ 2142 0e16 9B83      		std Y+3,r25
+ 2143 0e18 20E0      		ldi r18,0
+ 2144 0e1a 30E0      		ldi r19,0
+ 2145 0e1c 40E0      		ldi r20,0
+ 2146 0e1e 50E0      		ldi r21,0
+ 2147 0e20 63E0      		ldi r22,lo8(3)
+ 2148 0e22 CE01      		movw r24,r28
+ 2149 0e24 0196      		adiw r24,1
+ 2150 0e26 0E94 0000 		call pdi_cmd
+ 2151               	/* epilogue start */
+ 2152 0e2a 0F90      		pop __tmp_reg__
+ 2153 0e2c 0F90      		pop __tmp_reg__
+ 2154 0e2e 0F90      		pop __tmp_reg__
+ 2155 0e30 DF91      		pop r29
+ 2156 0e32 CF91      		pop r28
+ 2157 0e34 0895      		ret
+ 2158               		.size	pdi_cmd_repeat, .-pdi_cmd_repeat
+ 2159               	.global	pdi_cmd_load
+ 2160               		.type	pdi_cmd_load, @function
+ 2161               	pdi_cmd_load:
+ 2162 0e36 EF92      		push r14
+ 2163 0e38 FF92      		push r15
+ 2164 0e3a 0F93      		push r16
+ 2165 0e3c 1F93      		push r17
+ 2166 0e3e CF93      		push r28
+GAS LISTING gpio-usb.s 			page 39
+
+
+ 2167 0e40 DF93      		push r29
+ 2168 0e42 00D0      		rcall .
+ 2169 0e44 CDB7      		in r28,__SP_L__
+ 2170 0e46 DEB7      		in r29,__SP_H__
+ 2171               	/* prologue: function */
+ 2172               	/* frame size = 2 */
+ 2173               	/* stack size = 8 */
+ 2174               	.L__stack_usage = 8
+ 2175 0e48 7A01      		movw r14,r20
+ 2176 0e4a 8901      		movw r16,r18
+ 2177 0e4c 0E94 0000 		call pdi_cmd_st_ptr
+ 2178 0e50 8111      		cpse r24,__zero_reg__
+ 2179 0e52 00C0      		rjmp .L297
+ 2180 0e54 C801      		movw r24,r16
+ 2181 0e56 0E94 0000 		call pdi_cmd_repeat
+ 2182 0e5a 8111      		cpse r24,__zero_reg__
+ 2183 0e5c 00C0      		rjmp .L297
+ 2184 0e5e 84E2      		ldi r24,lo8(36)
+ 2185 0e60 8983      		std Y+1,r24
+ 2186 0e62 60E0      		ldi r22,0
+ 2187 0e64 70E0      		ldi r23,0
+ 2188 0e66 CE01      		movw r24,r28
+ 2189 0e68 0196      		adiw r24,1
+ 2190 0e6a 0E94 0000 		call pdi_write
+ 2191 0e6e 8111      		cpse r24,__zero_reg__
+ 2192 0e70 00C0      		rjmp .L297
+ 2193               	.L291:
+ 2194 0e72 E114      		cp r14,__zero_reg__
+ 2195 0e74 F104      		cpc r15,__zero_reg__
+ 2196 0e76 01F0      		breq .L287
+ 2197 0e78 C701      		movw r24,r14
+ 2198 0e7a 0E94 0000 		call pdi_read
+ 2199 0e7e 9FEF      		ldi r25,-1
+ 2200 0e80 E91A      		sub r14,r25
+ 2201 0e82 F90A      		sbc r15,r25
+ 2202 0e84 8823      		tst r24
+ 2203 0e86 01F0      		breq .L289
+ 2204 0e88 00C0      		rjmp .L297
+ 2205               	.L287:
+ 2206 0e8a CE01      		movw r24,r28
+ 2207 0e8c 0196      		adiw r24,1
+ 2208 0e8e 0E94 0000 		call pdi_read
+ 2209 0e92 8111      		cpse r24,__zero_reg__
+ 2210 0e94 00C0      		rjmp .L297
+ 2211 0e96 40E0      		ldi r20,0
+ 2212 0e98 61E0      		ldi r22,lo8(1)
+ 2213 0e9a 70E0      		ldi r23,0
+ 2214 0e9c CE01      		movw r24,r28
+ 2215 0e9e 0196      		adiw r24,1
+ 2216 0ea0 0E94 0000 		call usb_ep_send_control_data_chunk
+ 2217 0ea4 8111      		cpse r24,__zero_reg__
+ 2218 0ea6 00C0      		rjmp .L295
+ 2219               	.L289:
+ 2220 0ea8 0115      		cp r16,__zero_reg__
+ 2221 0eaa 1105      		cpc r17,__zero_reg__
+ 2222 0eac 01F0      		breq .L296
+ 2223 0eae 0150      		subi r16,1
+GAS LISTING gpio-usb.s 			page 40
+
+
+ 2224 0eb0 1109      		sbc r17,__zero_reg__
+ 2225 0eb2 00C0      		rjmp .L291
+ 2226               	.L296:
+ 2227 0eb4 80E0      		ldi r24,0
+ 2228 0eb6 00C0      		rjmp .L297
+ 2229               	.L295:
+ 2230 0eb8 84E1      		ldi r24,lo8(20)
+ 2231               	.L297:
+ 2232               	/* epilogue start */
+ 2233 0eba 0F90      		pop __tmp_reg__
+ 2234 0ebc 0F90      		pop __tmp_reg__
+ 2235 0ebe DF91      		pop r29
+ 2236 0ec0 CF91      		pop r28
+ 2237 0ec2 1F91      		pop r17
+ 2238 0ec4 0F91      		pop r16
+ 2239 0ec6 FF90      		pop r15
+ 2240 0ec8 EF90      		pop r14
+ 2241 0eca 0895      		ret
+ 2242               		.size	pdi_cmd_load, .-pdi_cmd_load
+ 2243               	.global	pdi_cmd_store
+ 2244               		.type	pdi_cmd_store, @function
+ 2245               	pdi_cmd_store:
+ 2246 0ecc EF92      		push r14
+ 2247 0ece FF92      		push r15
+ 2248 0ed0 0F93      		push r16
+ 2249 0ed2 1F93      		push r17
+ 2250 0ed4 CF93      		push r28
+ 2251 0ed6 DF93      		push r29
+ 2252 0ed8 00D0      		rcall .
+ 2253 0eda CDB7      		in r28,__SP_L__
+ 2254 0edc DEB7      		in r29,__SP_H__
+ 2255               	/* prologue: function */
+ 2256               	/* frame size = 2 */
+ 2257               	/* stack size = 8 */
+ 2258               	.L__stack_usage = 8
+ 2259 0ede 7A01      		movw r14,r20
+ 2260 0ee0 8901      		movw r16,r18
+ 2261 0ee2 0E94 0000 		call pdi_cmd_st_ptr
+ 2262 0ee6 8111      		cpse r24,__zero_reg__
+ 2263 0ee8 00C0      		rjmp .L299
+ 2264 0eea C801      		movw r24,r16
+ 2265 0eec 0E94 0000 		call pdi_cmd_repeat
+ 2266 0ef0 8111      		cpse r24,__zero_reg__
+ 2267 0ef2 00C0      		rjmp .L299
+ 2268 0ef4 84E6      		ldi r24,lo8(100)
+ 2269 0ef6 8983      		std Y+1,r24
+ 2270 0ef8 60E0      		ldi r22,0
+ 2271 0efa 70E0      		ldi r23,0
+ 2272 0efc CE01      		movw r24,r28
+ 2273 0efe 0196      		adiw r24,1
+ 2274 0f00 0E94 0000 		call pdi_write
+ 2275 0f04 8111      		cpse r24,__zero_reg__
+ 2276 0f06 00C0      		rjmp .L299
+ 2277 0f08 B801      		movw r22,r16
+ 2278 0f0a C701      		movw r24,r14
+ 2279 0f0c 0E94 0000 		call pdi_write
+ 2280               	.L299:
+GAS LISTING gpio-usb.s 			page 41
+
+
+ 2281               	/* epilogue start */
+ 2282 0f10 0F90      		pop __tmp_reg__
+ 2283 0f12 0F90      		pop __tmp_reg__
+ 2284 0f14 DF91      		pop r29
+ 2285 0f16 CF91      		pop r28
+ 2286 0f18 1F91      		pop r17
+ 2287 0f1a 0F91      		pop r16
+ 2288 0f1c FF90      		pop r15
+ 2289 0f1e EF90      		pop r14
+ 2290 0f20 0895      		ret
+ 2291               		.size	pdi_cmd_store, .-pdi_cmd_store
+ 2292               	.global	nvmc_init
+ 2293               		.type	nvmc_init, @function
+ 2294               	nvmc_init:
+ 2295 0f22 1F93      		push r17
+ 2296 0f24 CF93      		push r28
+ 2297 0f26 DF93      		push r29
+ 2298 0f28 1F92      		push __zero_reg__
+ 2299 0f2a CDB7      		in r28,__SP_L__
+ 2300 0f2c DEB7      		in r29,__SP_H__
+ 2301               	/* prologue: function */
+ 2302               	/* frame size = 1 */
+ 2303               	/* stack size = 4 */
+ 2304               	.L__stack_usage = 4
+ 2305 0f2e 69E5      		ldi r22,lo8(89)
+ 2306 0f30 81E0      		ldi r24,lo8(1)
+ 2307 0f32 0E94 0000 		call pdi_cmd_stcs
+ 2308 0f36 182F      		mov r17,r24
+ 2309 0f38 8111      		cpse r24,__zero_reg__
+ 2310 0f3a 00C0      		rjmp .L304
+ 2311 0f3c 8AE1      		ldi r24,lo8(26)
+ 2312 0f3e 8A95      		1: dec r24
+ 2313 0f40 01F4      		brne 1b
+ 2314 0f42 00C0      		rjmp .
+ 2315 0f44 BE01      		movw r22,r28
+ 2316 0f46 6F5F      		subi r22,-1
+ 2317 0f48 7F4F      		sbci r23,-1
+ 2318 0f4a 81E0      		ldi r24,lo8(1)
+ 2319 0f4c 0E94 0000 		call pdi_cmd_ldcs
+ 2320 0f50 182F      		mov r17,r24
+ 2321 0f52 8111      		cpse r24,__zero_reg__
+ 2322 0f54 00C0      		rjmp .L304
+ 2323 0f56 8981      		ldd r24,Y+1
+ 2324 0f58 80FF      		sbrs r24,0
+ 2325 0f5a 00C0      		rjmp .L307
+ 2326 0f5c 0E94 0000 		call pdi_cmd_key_nvm
+ 2327 0f60 182F      		mov r17,r24
+ 2328 0f62 8111      		cpse r24,__zero_reg__
+ 2329 0f64 00C0      		rjmp .L304
+ 2330 0f66 8FEC      		ldi r24,lo8(1999)
+ 2331 0f68 97E0      		ldi r25,hi8(1999)
+ 2332 0f6a 0197      		1: sbiw r24,1
+ 2333 0f6c 01F4      		brne 1b
+ 2334 0f6e 00C0      		rjmp .
+ 2335 0f70 0000      		nop
+ 2336 0f72 84E6      		ldi r24,lo8(100)
+ 2337 0f74 8093 0000 		sts g_nvmc_timer,r24
+GAS LISTING gpio-usb.s 			page 42
+
+
+ 2338               	.L306:
+ 2339 0f78 BE01      		movw r22,r28
+ 2340 0f7a 6F5F      		subi r22,-1
+ 2341 0f7c 7F4F      		sbci r23,-1
+ 2342 0f7e 80E0      		ldi r24,0
+ 2343 0f80 0E94 0000 		call pdi_cmd_ldcs
+ 2344 0f84 182F      		mov r17,r24
+ 2345 0f86 8111      		cpse r24,__zero_reg__
+ 2346 0f88 00C0      		rjmp .L304
+ 2347 0f8a 8981      		ldd r24,Y+1
+ 2348 0f8c 81FD      		sbrc r24,1
+ 2349 0f8e 00C0      		rjmp .L308
+ 2350 0f90 8091 0000 		lds r24,g_nvmc_timer
+ 2351 0f94 8111      		cpse r24,__zero_reg__
+ 2352 0f96 00C0      		rjmp .L306
+ 2353 0f98 1CE0      		ldi r17,lo8(12)
+ 2354 0f9a 00C0      		rjmp .L304
+ 2355               	.L307:
+ 2356 0f9c 13E6      		ldi r17,lo8(99)
+ 2357               	.L304:
+ 2358 0f9e 0E94 0000 		call pdi_off
+ 2359 0fa2 812F      		mov r24,r17
+ 2360 0fa4 00C0      		rjmp .L305
+ 2361               	.L308:
+ 2362 0fa6 80E0      		ldi r24,0
+ 2363               	.L305:
+ 2364               	/* epilogue start */
+ 2365 0fa8 0F90      		pop __tmp_reg__
+ 2366 0faa DF91      		pop r29
+ 2367 0fac CF91      		pop r28
+ 2368 0fae 1F91      		pop r17
+ 2369 0fb0 0895      		ret
+ 2370               		.size	nvmc_init, .-nvmc_init
+ 2371               	.global	nvmc_exit
+ 2372               		.type	nvmc_exit, @function
+ 2373               	nvmc_exit:
+ 2374               	/* prologue: function */
+ 2375               	/* frame size = 0 */
+ 2376               	/* stack size = 0 */
+ 2377               	.L__stack_usage = 0
+ 2378 0fb2 60E0      		ldi r22,0
+ 2379 0fb4 80E0      		ldi r24,0
+ 2380 0fb6 0E94 0000 		call pdi_cmd_stcs
+ 2381 0fba 60E0      		ldi r22,0
+ 2382 0fbc 81E0      		ldi r24,lo8(1)
+ 2383 0fbe 0C94 0000 		jmp pdi_cmd_stcs
+ 2384               		.size	nvmc_exit, .-nvmc_exit
+ 2385               	.global	nvmc_set_cmd
+ 2386               		.type	nvmc_set_cmd, @function
+ 2387               	nvmc_set_cmd:
+ 2388               	/* prologue: function */
+ 2389               	/* frame size = 0 */
+ 2390               	/* stack size = 0 */
+ 2391               	.L__stack_usage = 0
+ 2392 0fc2 482F      		mov r20,r24
+ 2393 0fc4 6AEC      		ldi r22,lo8(-54)
+ 2394 0fc6 71E0      		ldi r23,lo8(1)
+GAS LISTING gpio-usb.s 			page 43
+
+
+ 2395 0fc8 80E0      		ldi r24,0
+ 2396 0fca 91E0      		ldi r25,lo8(1)
+ 2397 0fcc 0C94 0000 		jmp pdi_cmd_sts_byte
+ 2398               		.size	nvmc_set_cmd, .-nvmc_set_cmd
+ 2399               	.global	nvmc_trigger_cmdex
+ 2400               		.type	nvmc_trigger_cmdex, @function
+ 2401               	nvmc_trigger_cmdex:
+ 2402               	/* prologue: function */
+ 2403               	/* frame size = 0 */
+ 2404               	/* stack size = 0 */
+ 2405               	.L__stack_usage = 0
+ 2406 0fd0 41E0      		ldi r20,lo8(1)
+ 2407 0fd2 6BEC      		ldi r22,lo8(-53)
+ 2408 0fd4 71E0      		ldi r23,lo8(1)
+ 2409 0fd6 80E0      		ldi r24,0
+ 2410 0fd8 91E0      		ldi r25,lo8(1)
+ 2411 0fda 0C94 0000 		jmp pdi_cmd_sts_byte
+ 2412               		.size	nvmc_trigger_cmdex, .-nvmc_trigger_cmdex
+ 2413               	.global	nvmc_nvmbusy_wait
+ 2414               		.type	nvmc_nvmbusy_wait, @function
+ 2415               	nvmc_nvmbusy_wait:
+ 2416 0fde CF93      		push r28
+ 2417 0fe0 DF93      		push r29
+ 2418 0fe2 1F92      		push __zero_reg__
+ 2419 0fe4 CDB7      		in r28,__SP_L__
+ 2420 0fe6 DEB7      		in r29,__SP_H__
+ 2421               	/* prologue: function */
+ 2422               	/* frame size = 1 */
+ 2423               	/* stack size = 3 */
+ 2424               	.L__stack_usage = 3
+ 2425 0fe8 8AE0      		ldi r24,lo8(10)
+ 2426 0fea 8093 0000 		sts g_nvmc_timer,r24
+ 2427               	.L314:
+ 2428 0fee 87EC      		ldi r24,lo8(199)
+ 2429 0ff0 90E0      		ldi r25,hi8(199)
+ 2430 0ff2 0197      		1: sbiw r24,1
+ 2431 0ff4 01F4      		brne 1b
+ 2432 0ff6 00C0      		rjmp .
+ 2433 0ff8 0000      		nop
+ 2434 0ffa AE01      		movw r20,r28
+ 2435 0ffc 4F5F      		subi r20,-1
+ 2436 0ffe 5F4F      		sbci r21,-1
+ 2437 1000 6FEC      		ldi r22,lo8(-49)
+ 2438 1002 71E0      		ldi r23,lo8(1)
+ 2439 1004 80E0      		ldi r24,0
+ 2440 1006 91E0      		ldi r25,lo8(1)
+ 2441 1008 0E94 0000 		call pdi_cmd_lds_byte
+ 2442 100c 8111      		cpse r24,__zero_reg__
+ 2443 100e 00C0      		rjmp .L313
+ 2444 1010 8981      		ldd r24,Y+1
+ 2445 1012 87FF      		sbrs r24,7
+ 2446 1014 00C0      		rjmp .L316
+ 2447 1016 8091 0000 		lds r24,g_nvmc_timer
+ 2448 101a 8111      		cpse r24,__zero_reg__
+ 2449 101c 00C0      		rjmp .L314
+ 2450 101e 8EE0      		ldi r24,lo8(14)
+ 2451 1020 00C0      		rjmp .L313
+GAS LISTING gpio-usb.s 			page 44
+
+
+ 2452               	.L316:
+ 2453 1022 80E0      		ldi r24,0
+ 2454               	.L313:
+ 2455               	/* epilogue start */
+ 2456 1024 0F90      		pop __tmp_reg__
+ 2457 1026 DF91      		pop r29
+ 2458 1028 CF91      		pop r28
+ 2459 102a 0895      		ret
+ 2460               		.size	nvmc_nvmbusy_wait, .-nvmc_nvmbusy_wait
+ 2461               	.global	nvmc_read_nvm
+ 2462               		.type	nvmc_read_nvm, @function
+ 2463               	nvmc_read_nvm:
+ 2464 102c CF92      		push r12
+ 2465 102e DF92      		push r13
+ 2466 1030 EF92      		push r14
+ 2467 1032 FF92      		push r15
+ 2468 1034 CF93      		push r28
+ 2469 1036 DF93      		push r29
+ 2470               	/* prologue: function */
+ 2471               	/* frame size = 0 */
+ 2472               	/* stack size = 6 */
+ 2473               	.L__stack_usage = 6
+ 2474 1038 6B01      		movw r12,r22
+ 2475 103a 7C01      		movw r14,r24
+ 2476 103c EA01      		movw r28,r20
+ 2477 103e 83E4      		ldi r24,lo8(67)
+ 2478 1040 0E94 0000 		call nvmc_set_cmd
+ 2479 1044 8111      		cpse r24,__zero_reg__
+ 2480 1046 00C0      		rjmp .L318
+ 2481 1048 9E01      		movw r18,r28
+ 2482 104a 40E0      		ldi r20,0
+ 2483 104c 50E0      		ldi r21,0
+ 2484 104e C701      		movw r24,r14
+ 2485 1050 B601      		movw r22,r12
+ 2486               	/* epilogue start */
+ 2487 1052 DF91      		pop r29
+ 2488 1054 CF91      		pop r28
+ 2489 1056 FF90      		pop r15
+ 2490 1058 EF90      		pop r14
+ 2491 105a DF90      		pop r13
+ 2492 105c CF90      		pop r12
+ 2493 105e 0C94 0000 		jmp pdi_cmd_load
+ 2494               	.L318:
+ 2495               	/* epilogue start */
+ 2496 1062 DF91      		pop r29
+ 2497 1064 CF91      		pop r28
+ 2498 1066 FF90      		pop r15
+ 2499 1068 EF90      		pop r14
+ 2500 106a DF90      		pop r13
+ 2501 106c CF90      		pop r12
+ 2502 106e 0895      		ret
+ 2503               		.size	nvmc_read_nvm, .-nvmc_read_nvm
+ 2504               	.global	nvmc_erase_chip
+ 2505               		.type	nvmc_erase_chip, @function
+ 2506               	nvmc_erase_chip:
+ 2507 1070 1F93      		push r17
+ 2508 1072 CF93      		push r28
+GAS LISTING gpio-usb.s 			page 45
+
+
+ 2509 1074 DF93      		push r29
+ 2510 1076 1F92      		push __zero_reg__
+ 2511 1078 CDB7      		in r28,__SP_L__
+ 2512 107a DEB7      		in r29,__SP_H__
+ 2513               	/* prologue: function */
+ 2514               	/* frame size = 1 */
+ 2515               	/* stack size = 4 */
+ 2516               	.L__stack_usage = 4
+ 2517 107c 8230      		cpi r24,lo8(2)
+ 2518 107e 01F0      		breq .L321
+ 2519 1080 00F0      		brlo .L329
+ 2520 1082 8330      		cpi r24,lo8(3)
+ 2521 1084 01F4      		brne .L335
+ 2522 1086 90E3      		ldi r25,lo8(48)
+ 2523 1088 00C0      		rjmp .L322
+ 2524               	.L321:
+ 2525 108a 98E6      		ldi r25,lo8(104)
+ 2526 108c 00C0      		rjmp .L322
+ 2527               	.L329:
+ 2528 108e 90E4      		ldi r25,lo8(64)
+ 2529               	.L322:
+ 2530 1090 182F      		mov r17,r24
+ 2531 1092 892F      		mov r24,r25
+ 2532 1094 0E94 0000 		call nvmc_set_cmd
+ 2533 1098 8111      		cpse r24,__zero_reg__
+ 2534 109a 00C0      		rjmp .L320
+ 2535 109c 0E94 0000 		call nvmc_trigger_cmdex
+ 2536 10a0 8111      		cpse r24,__zero_reg__
+ 2537 10a2 00C0      		rjmp .L320
+ 2538 10a4 1111      		cpse r17,__zero_reg__
+ 2539 10a6 00C0      		rjmp .L324
+ 2540 10a8 82E3      		ldi r24,lo8(50)
+ 2541 10aa 8093 0000 		sts g_nvmc_timer,r24
+ 2542               	.L327:
+ 2543 10ae 87EE      		ldi r24,lo8(999)
+ 2544 10b0 93E0      		ldi r25,hi8(999)
+ 2545 10b2 0197      		1: sbiw r24,1
+ 2546 10b4 01F4      		brne 1b
+ 2547 10b6 00C0      		rjmp .
+ 2548 10b8 0000      		nop
+ 2549 10ba BE01      		movw r22,r28
+ 2550 10bc 6F5F      		subi r22,-1
+ 2551 10be 7F4F      		sbci r23,-1
+ 2552 10c0 80E0      		ldi r24,0
+ 2553 10c2 0E94 0000 		call pdi_cmd_ldcs
+ 2554 10c6 8111      		cpse r24,__zero_reg__
+ 2555 10c8 00C0      		rjmp .L320
+ 2556 10ca 8981      		ldd r24,Y+1
+ 2557 10cc 81FD      		sbrc r24,1
+ 2558 10ce 00C0      		rjmp .L326
+ 2559 10d0 8091 0000 		lds r24,g_nvmc_timer
+ 2560 10d4 8111      		cpse r24,__zero_reg__
+ 2561 10d6 00C0      		rjmp .L327
+ 2562 10d8 8DE0      		ldi r24,lo8(13)
+ 2563 10da 00C0      		rjmp .L320
+ 2564               	.L326:
+ 2565 10dc 80E0      		ldi r24,0
+GAS LISTING gpio-usb.s 			page 46
+
+
+ 2566 10de 00C0      		rjmp .L320
+ 2567               	.L324:
+ 2568 10e0 0E94 0000 		call nvmc_nvmbusy_wait
+ 2569 10e4 00C0      		rjmp .L320
+ 2570               	.L335:
+ 2571 10e6 8FE0      		ldi r24,lo8(15)
+ 2572               	.L320:
+ 2573               	/* epilogue start */
+ 2574 10e8 0F90      		pop __tmp_reg__
+ 2575 10ea DF91      		pop r29
+ 2576 10ec CF91      		pop r28
+ 2577 10ee 1F91      		pop r17
+ 2578 10f0 0895      		ret
+ 2579               		.size	nvmc_erase_chip, .-nvmc_erase_chip
+ 2580               	.global	nvmc_flash_write_page
+ 2581               		.type	nvmc_flash_write_page, @function
+ 2582               	nvmc_flash_write_page:
+ 2583 10f2 CF92      		push r12
+ 2584 10f4 DF92      		push r13
+ 2585 10f6 EF92      		push r14
+ 2586 10f8 FF92      		push r15
+ 2587 10fa CF93      		push r28
+ 2588 10fc DF93      		push r29
+ 2589               	/* prologue: function */
+ 2590               	/* frame size = 0 */
+ 2591               	/* stack size = 6 */
+ 2592               	.L__stack_usage = 6
+ 2593 10fe 6B01      		movw r12,r22
+ 2594 1100 7C01      		movw r14,r24
+ 2595 1102 EA01      		movw r28,r20
+ 2596 1104 86E2      		ldi r24,lo8(38)
+ 2597 1106 0E94 0000 		call nvmc_set_cmd
+ 2598 110a 8111      		cpse r24,__zero_reg__
+ 2599 110c 00C0      		rjmp .L337
+ 2600 110e 0E94 0000 		call nvmc_trigger_cmdex
+ 2601 1112 8111      		cpse r24,__zero_reg__
+ 2602 1114 00C0      		rjmp .L337
+ 2603 1116 0E94 0000 		call nvmc_nvmbusy_wait
+ 2604 111a 8111      		cpse r24,__zero_reg__
+ 2605 111c 00C0      		rjmp .L337
+ 2606 111e 83E2      		ldi r24,lo8(35)
+ 2607 1120 0E94 0000 		call nvmc_set_cmd
+ 2608 1124 8111      		cpse r24,__zero_reg__
+ 2609 1126 00C0      		rjmp .L337
+ 2610 1128 80E4      		ldi r24,64
+ 2611 112a E80E      		add r14,r24
+ 2612 112c F11C      		adc r15,__zero_reg__
+ 2613 112e CC0C      		lsl r12
+ 2614 1130 DD1C      		rol r13
+ 2615 1132 EE1C      		rol r14
+ 2616 1134 FF1C      		rol r15
+ 2617 1136 9E01      		movw r18,r28
+ 2618 1138 40E0      		ldi r20,0
+ 2619 113a 50E0      		ldi r21,0
+ 2620 113c C701      		movw r24,r14
+ 2621 113e B601      		movw r22,r12
+ 2622 1140 0E94 0000 		call pdi_cmd_store
+GAS LISTING gpio-usb.s 			page 47
+
+
+ 2623 1144 8111      		cpse r24,__zero_reg__
+ 2624 1146 00C0      		rjmp .L337
+ 2625 1148 8FE2      		ldi r24,lo8(47)
+ 2626 114a 0E94 0000 		call nvmc_set_cmd
+ 2627 114e 8111      		cpse r24,__zero_reg__
+ 2628 1150 00C0      		rjmp .L337
+ 2629 1152 45E5      		ldi r20,lo8(85)
+ 2630 1154 C701      		movw r24,r14
+ 2631 1156 B601      		movw r22,r12
+ 2632 1158 0E94 0000 		call pdi_cmd_sts_byte
+ 2633 115c 8111      		cpse r24,__zero_reg__
+ 2634 115e 00C0      		rjmp .L337
+ 2635               	/* epilogue start */
+ 2636 1160 DF91      		pop r29
+ 2637 1162 CF91      		pop r28
+ 2638 1164 FF90      		pop r15
+ 2639 1166 EF90      		pop r14
+ 2640 1168 DF90      		pop r13
+ 2641 116a CF90      		pop r12
+ 2642 116c 0C94 0000 		jmp nvmc_nvmbusy_wait
+ 2643               	.L337:
+ 2644               	/* epilogue start */
+ 2645 1170 DF91      		pop r29
+ 2646 1172 CF91      		pop r28
+ 2647 1174 FF90      		pop r15
+ 2648 1176 EF90      		pop r14
+ 2649 1178 DF90      		pop r13
+ 2650 117a CF90      		pop r12
+ 2651 117c 0895      		ret
+ 2652               		.size	nvmc_flash_write_page, .-nvmc_flash_write_page
+ 2653               	.global	nvmc_flash_read
+ 2654               		.type	nvmc_flash_read, @function
+ 2655               	nvmc_flash_read:
+ 2656               	/* prologue: function */
+ 2657               	/* frame size = 0 */
+ 2658               	/* stack size = 0 */
+ 2659               	.L__stack_usage = 0
+ 2660 117e DC01      		movw r26,r24
+ 2661 1180 CB01      		movw r24,r22
+ 2662 1182 A05C      		subi r26,-64
+ 2663 1184 BF4F      		sbci r27,-1
+ 2664 1186 BC01      		movw r22,r24
+ 2665 1188 CD01      		movw r24,r26
+ 2666 118a 660F      		lsl r22
+ 2667 118c 771F      		rol r23
+ 2668 118e 881F      		rol r24
+ 2669 1190 991F      		rol r25
+ 2670 1192 0C94 0000 		jmp nvmc_read_nvm
+ 2671               		.size	nvmc_flash_read, .-nvmc_flash_read
+ 2672               	.global	nvmc_eeprom_write
+ 2673               		.type	nvmc_eeprom_write, @function
+ 2674               	nvmc_eeprom_write:
+ 2675 1196 CF92      		push r12
+ 2676 1198 DF92      		push r13
+ 2677 119a EF92      		push r14
+ 2678 119c FF92      		push r15
+ 2679 119e CF93      		push r28
+GAS LISTING gpio-usb.s 			page 48
+
+
+ 2680 11a0 DF93      		push r29
+ 2681               	/* prologue: function */
+ 2682               	/* frame size = 0 */
+ 2683               	/* stack size = 6 */
+ 2684               	.L__stack_usage = 6
+ 2685 11a2 6B01      		movw r12,r22
+ 2686 11a4 7C01      		movw r14,r24
+ 2687 11a6 EA01      		movw r28,r20
+ 2688 11a8 86E3      		ldi r24,lo8(54)
+ 2689 11aa 0E94 0000 		call nvmc_set_cmd
+ 2690 11ae 8111      		cpse r24,__zero_reg__
+ 2691 11b0 00C0      		rjmp .L347
+ 2692 11b2 0E94 0000 		call nvmc_trigger_cmdex
+ 2693 11b6 8111      		cpse r24,__zero_reg__
+ 2694 11b8 00C0      		rjmp .L347
+ 2695 11ba 0E94 0000 		call nvmc_nvmbusy_wait
+ 2696 11be 8111      		cpse r24,__zero_reg__
+ 2697 11c0 00C0      		rjmp .L347
+ 2698 11c2 83E3      		ldi r24,lo8(51)
+ 2699 11c4 0E94 0000 		call nvmc_set_cmd
+ 2700 11c8 8111      		cpse r24,__zero_reg__
+ 2701 11ca 00C0      		rjmp .L347
+ 2702 11cc 8CE8      		ldi r24,-116
+ 2703 11ce E80E      		add r14,r24
+ 2704 11d0 F11C      		adc r15,__zero_reg__
+ 2705 11d2 9E01      		movw r18,r28
+ 2706 11d4 40E0      		ldi r20,0
+ 2707 11d6 50E0      		ldi r21,0
+ 2708 11d8 C701      		movw r24,r14
+ 2709 11da B601      		movw r22,r12
+ 2710 11dc 0E94 0000 		call pdi_cmd_store
+ 2711 11e0 8111      		cpse r24,__zero_reg__
+ 2712 11e2 00C0      		rjmp .L347
+ 2713 11e4 85E3      		ldi r24,lo8(53)
+ 2714 11e6 0E94 0000 		call nvmc_set_cmd
+ 2715 11ea 8111      		cpse r24,__zero_reg__
+ 2716 11ec 00C0      		rjmp .L347
+ 2717 11ee 45E5      		ldi r20,lo8(85)
+ 2718 11f0 C701      		movw r24,r14
+ 2719 11f2 B601      		movw r22,r12
+ 2720 11f4 0E94 0000 		call pdi_cmd_sts_byte
+ 2721 11f8 8111      		cpse r24,__zero_reg__
+ 2722 11fa 00C0      		rjmp .L347
+ 2723               	/* epilogue start */
+ 2724 11fc DF91      		pop r29
+ 2725 11fe CF91      		pop r28
+ 2726 1200 FF90      		pop r15
+ 2727 1202 EF90      		pop r14
+ 2728 1204 DF90      		pop r13
+ 2729 1206 CF90      		pop r12
+ 2730 1208 0C94 0000 		jmp nvmc_nvmbusy_wait
+ 2731               	.L347:
+ 2732               	/* epilogue start */
+ 2733 120c DF91      		pop r29
+ 2734 120e CF91      		pop r28
+ 2735 1210 FF90      		pop r15
+ 2736 1212 EF90      		pop r14
+GAS LISTING gpio-usb.s 			page 49
+
+
+ 2737 1214 DF90      		pop r13
+ 2738 1216 CF90      		pop r12
+ 2739 1218 0895      		ret
+ 2740               		.size	nvmc_eeprom_write, .-nvmc_eeprom_write
+ 2741               	.global	nvmc_eeprom_read
+ 2742               		.type	nvmc_eeprom_read, @function
+ 2743               	nvmc_eeprom_read:
+ 2744               	/* prologue: function */
+ 2745               	/* frame size = 0 */
+ 2746               	/* stack size = 0 */
+ 2747               	.L__stack_usage = 0
+ 2748 121a 8457      		subi r24,116
+ 2749 121c 9F4F      		sbci r25,-1
+ 2750 121e 0C94 0000 		jmp nvmc_read_nvm
+ 2751               		.size	nvmc_eeprom_read, .-nvmc_eeprom_read
+ 2752               	.global	nvmc_fuse_write
+ 2753               		.type	nvmc_fuse_write, @function
+ 2754               	nvmc_fuse_write:
+ 2755 1222 1F93      		push r17
+ 2756 1224 CF93      		push r28
+ 2757 1226 DF93      		push r29
+ 2758               	/* prologue: function */
+ 2759               	/* frame size = 0 */
+ 2760               	/* stack size = 3 */
+ 2761               	.L__stack_usage = 3
+ 2762 1228 EC01      		movw r28,r24
+ 2763 122a 162F      		mov r17,r22
+ 2764 122c 8CE4      		ldi r24,lo8(76)
+ 2765 122e 0E94 0000 		call nvmc_set_cmd
+ 2766 1232 8111      		cpse r24,__zero_reg__
+ 2767 1234 00C0      		rjmp .L357
+ 2768 1236 CE01      		movw r24,r28
+ 2769 1238 A0E0      		ldi r26,0
+ 2770 123a B0E0      		ldi r27,0
+ 2771 123c BC01      		movw r22,r24
+ 2772 123e CD01      		movw r24,r26
+ 2773 1240 605E      		subi r22,-32
+ 2774 1242 7F4F      		sbci r23,-1
+ 2775 1244 8047      		sbci r24,112
+ 2776 1246 9F4F      		sbci r25,-1
+ 2777 1248 412F      		mov r20,r17
+ 2778 124a 0E94 0000 		call pdi_cmd_sts_byte
+ 2779 124e 8111      		cpse r24,__zero_reg__
+ 2780 1250 00C0      		rjmp .L357
+ 2781               	/* epilogue start */
+ 2782 1252 DF91      		pop r29
+ 2783 1254 CF91      		pop r28
+ 2784 1256 1F91      		pop r17
+ 2785 1258 0C94 0000 		jmp nvmc_nvmbusy_wait
+ 2786               	.L357:
+ 2787               	/* epilogue start */
+ 2788 125c DF91      		pop r29
+ 2789 125e CF91      		pop r28
+ 2790 1260 1F91      		pop r17
+ 2791 1262 0895      		ret
+ 2792               		.size	nvmc_fuse_write, .-nvmc_fuse_write
+ 2793               	.global	nvmc_fuse_read
+GAS LISTING gpio-usb.s 			page 50
+
+
+ 2794               		.type	nvmc_fuse_read, @function
+ 2795               	nvmc_fuse_read:
+ 2796               	/* prologue: function */
+ 2797               	/* frame size = 0 */
+ 2798               	/* stack size = 0 */
+ 2799               	.L__stack_usage = 0
+ 2800 1264 A0E0      		ldi r26,0
+ 2801 1266 B0E0      		ldi r27,0
+ 2802 1268 BC01      		movw r22,r24
+ 2803 126a CD01      		movw r24,r26
+ 2804 126c 605E      		subi r22,-32
+ 2805 126e 7F4F      		sbci r23,-1
+ 2806 1270 8047      		sbci r24,112
+ 2807 1272 9F4F      		sbci r25,-1
+ 2808 1274 40E0      		ldi r20,0
+ 2809 1276 50E0      		ldi r21,0
+ 2810 1278 0C94 0000 		jmp nvmc_read_nvm
+ 2811               		.size	nvmc_fuse_read, .-nvmc_fuse_read
+ 2812               	.global	nvmc_signaturerow_read
+ 2813               		.type	nvmc_signaturerow_read, @function
+ 2814               	nvmc_signaturerow_read:
+ 2815               	/* prologue: function */
+ 2816               	/* frame size = 0 */
+ 2817               	/* stack size = 0 */
+ 2818               	.L__stack_usage = 0
+ 2819 127c AB01      		movw r20,r22
+ 2820 127e A0E0      		ldi r26,0
+ 2821 1280 B0E0      		ldi r27,0
+ 2822 1282 BC01      		movw r22,r24
+ 2823 1284 CD01      		movw r24,r26
+ 2824 1286 7E5F      		subi r23,-2
+ 2825 1288 8147      		sbci r24,113
+ 2826 128a 9F4F      		sbci r25,-1
+ 2827 128c 0C94 0000 		jmp nvmc_read_nvm
+ 2828               		.size	nvmc_signaturerow_read, .-nvmc_signaturerow_read
+ 2829               	.global	nvmc_read_dev_sign
+ 2830               		.type	nvmc_read_dev_sign, @function
+ 2831               	nvmc_read_dev_sign:
+ 2832               	/* prologue: function */
+ 2833               	/* frame size = 0 */
+ 2834               	/* stack size = 0 */
+ 2835               	.L__stack_usage = 0
+ 2836 1290 9C01      		movw r18,r24
+ 2837 1292 40E0      		ldi r20,0
+ 2838 1294 50E0      		ldi r21,0
+ 2839 1296 60E9      		ldi r22,lo8(-112)
+ 2840 1298 70E0      		ldi r23,0
+ 2841 129a 80E0      		ldi r24,0
+ 2842 129c 91E0      		ldi r25,lo8(1)
+ 2843 129e 0C94 0000 		jmp pdi_cmd_load
+ 2844               		.size	nvmc_read_dev_sign, .-nvmc_read_dev_sign
+ 2845               	.global	pdi_exec
+ 2846               		.type	pdi_exec, @function
+ 2847               	pdi_exec:
+ 2848 12a2 CF92      		push r12
+ 2849 12a4 DF92      		push r13
+ 2850 12a6 EF92      		push r14
+GAS LISTING gpio-usb.s 			page 51
+
+
+ 2851 12a8 FF92      		push r15
+ 2852 12aa 0F93      		push r16
+ 2853 12ac 1F93      		push r17
+ 2854 12ae CF93      		push r28
+ 2855 12b0 DF93      		push r29
+ 2856 12b2 CDB7      		in r28,__SP_L__
+ 2857 12b4 DEB7      		in r29,__SP_H__
+ 2858 12b6 6597      		sbiw r28,21
+ 2859 12b8 0FB6      		in __tmp_reg__,__SREG__
+ 2860 12ba F894      		cli
+ 2861 12bc DEBF      		out __SP_H__,r29
+ 2862 12be 0FBE      		out __SREG__,__tmp_reg__
+ 2863 12c0 CDBF      		out __SP_L__,r28
+ 2864               	/* prologue: function */
+ 2865               	/* frame size = 21 */
+ 2866               	/* stack size = 29 */
+ 2867               	.L__stack_usage = 29
+ 2868 12c2 FC01      		movw r30,r24
+ 2869 12c4 E280      		ldd r14,Z+2
+ 2870 12c6 F380      		ldd r15,Z+3
+ 2871 12c8 A481      		ldd r26,Z+4
+ 2872 12ca B581      		ldd r27,Z+5
+ 2873 12cc 0681      		ldd r16,Z+6
+ 2874 12ce 1781      		ldd r17,Z+7
+ 2875 12d0 21E0      		ldi r18,lo8(1)
+ 2876 12d2 2093 0000 		sts g_pdi_last_rc,r18
+ 2877 12d6 9181      		ldd r25,Z+1
+ 2878 12d8 9235      		cpi r25,lo8(82)
+ 2879 12da 01F4      		brne .+2
+ 2880 12dc 00C0      		rjmp .L365
+ 2881 12de 00F4      		brsh .L366
+ 2882 12e0 9534      		cpi r25,lo8(69)
+ 2883 12e2 01F4      		brne .+2
+ 2884 12e4 00C0      		rjmp .L367
+ 2885 12e6 00F4      		brsh .L368
+ 2886 12e8 9334      		cpi r25,lo8(67)
+ 2887 12ea 01F4      		brne .+2
+ 2888 12ec 00C0      		rjmp .L369
+ 2889 12ee 00F0      		brlo .+2
+ 2890 12f0 00C0      		rjmp .L370
+ 2891 12f2 9234      		cpi r25,lo8(66)
+ 2892 12f4 01F0      		breq .L371
+ 2893 12f6 00C0      		rjmp .L363
+ 2894               	.L368:
+ 2895 12f8 9734      		cpi r25,lo8(71)
+ 2896 12fa 01F4      		brne .+2
+ 2897 12fc 00C0      		rjmp .L372
+ 2898 12fe 00F4      		brsh .+2
+ 2899 1300 00C0      		rjmp .L373
+ 2900 1302 9834      		cpi r25,lo8(72)
+ 2901 1304 01F4      		brne .+2
+ 2902 1306 00C0      		rjmp .L374
+ 2903 1308 9934      		cpi r25,lo8(73)
+ 2904 130a 01F4      		brne .+2
+ 2905 130c 00C0      		rjmp .L375
+ 2906 130e 00C0      		rjmp .L363
+ 2907               	.L366:
+GAS LISTING gpio-usb.s 			page 52
+
+
+ 2908 1310 9735      		cpi r25,lo8(87)
+ 2909 1312 01F4      		brne .+2
+ 2910 1314 00C0      		rjmp .L376
+ 2911 1316 00F4      		brsh .L377
+ 2912 1318 9435      		cpi r25,lo8(84)
+ 2913 131a 01F4      		brne .+2
+ 2914 131c 00C0      		rjmp .L378
+ 2915 131e 00F4      		brsh .+2
+ 2916 1320 00C0      		rjmp .L379
+ 2917 1322 9535      		cpi r25,lo8(85)
+ 2918 1324 01F4      		brne .+2
+ 2919 1326 00C0      		rjmp .L380
+ 2920 1328 9635      		cpi r25,lo8(86)
+ 2921 132a 01F4      		brne .+2
+ 2922 132c 00C0      		rjmp .L381
+ 2923 132e 00C0      		rjmp .L363
+ 2924               	.L377:
+ 2925 1330 9935      		cpi r25,lo8(89)
+ 2926 1332 01F4      		brne .+2
+ 2927 1334 00C0      		rjmp .L382
+ 2928 1336 00F4      		brsh .+2
+ 2929 1338 00C0      		rjmp .L383
+ 2930 133a 9036      		cpi r25,lo8(96)
+ 2931 133c 01F4      		brne .+2
+ 2932 133e 00C0      		rjmp .L384
+ 2933 1340 9136      		cpi r25,lo8(97)
+ 2934 1342 01F0      		breq .+2
+ 2935 1344 00C0      		rjmp .L363
+ 2936 1346 8E2D      		mov r24,r14
+ 2937 1348 0E94 0000 		call nvmc_erase_chip
+ 2938 134c 00C0      		rjmp .L427
+ 2939               	.L371:
+ 2940 134e A801      		movw r20,r16
+ 2941 1350 0530      		cpi r16,5
+ 2942 1352 1105      		cpc r17,__zero_reg__
+ 2943 1354 00F0      		brlo .L386
+ 2944 1356 44E0      		ldi r20,lo8(4)
+ 2945 1358 50E0      		ldi r21,0
+ 2946               	.L386:
+ 2947 135a 042F      		mov r16,r20
+ 2948 135c 4111      		cpse r20,__zero_reg__
+ 2949 135e 00C0      		rjmp .L387
+ 2950 1360 01E0      		ldi r16,lo8(1)
+ 2951               	.L387:
+ 2952 1362 8FEF      		ldi r24,lo8(-1)
+ 2953 1364 800F      		add r24,r16
+ 2954 1366 8C60      		ori r24,lo8(12)
+ 2955 1368 8983      		std Y+1,r24
+ 2956 136a AA83      		std Y+2,r26
+ 2957 136c BB83      		std Y+3,r27
+ 2958 136e EC82      		std Y+4,r14
+ 2959 1370 FD82      		std Y+5,r15
+ 2960 1372 9E01      		movw r18,r28
+ 2961 1374 2B5E      		subi r18,-21
+ 2962 1376 3F4F      		sbci r19,-1
+ 2963 1378 AE01      		movw r20,r28
+ 2964 137a 435F      		subi r20,-13
+GAS LISTING gpio-usb.s 			page 53
+
+
+ 2965 137c 5F4F      		sbci r21,-1
+ 2966 137e 65E0      		ldi r22,lo8(5)
+ 2967 1380 CE01      		movw r24,r28
+ 2968 1382 0196      		adiw r24,1
+ 2969 1384 0E94 0000 		call pdi_cmd
+ 2970 1388 8093 0000 		sts g_pdi_last_rc,r24
+ 2971 138c 00C0      		rjmp .L426
+ 2972               	.L369:
+ 2973 138e 1C8A      		std Y+20,__zero_reg__
+ 2974 1390 1B8A      		std Y+19,__zero_reg__
+ 2975 1392 A801      		movw r20,r16
+ 2976 1394 0530      		cpi r16,5
+ 2977 1396 1105      		cpc r17,__zero_reg__
+ 2978 1398 00F0      		brlo .L388
+ 2979 139a 44E0      		ldi r20,lo8(4)
+ 2980 139c 50E0      		ldi r21,0
+ 2981               	.L388:
+ 2982 139e 4111      		cpse r20,__zero_reg__
+ 2983 13a0 00C0      		rjmp .L389
+ 2984 13a2 41E0      		ldi r20,lo8(1)
+ 2985               	.L389:
+ 2986 13a4 8FEF      		ldi r24,lo8(-1)
+ 2987 13a6 840F      		add r24,r20
+ 2988 13a8 8C64      		ori r24,lo8(76)
+ 2989 13aa 8983      		std Y+1,r24
+ 2990 13ac AA83      		std Y+2,r26
+ 2991 13ae BB83      		std Y+3,r27
+ 2992 13b0 EC82      		std Y+4,r14
+ 2993 13b2 FD82      		std Y+5,r15
+ 2994 13b4 50E0      		ldi r21,0
+ 2995 13b6 BE01      		movw r22,r28
+ 2996 13b8 6D5E      		subi r22,-19
+ 2997 13ba 7F4F      		sbci r23,-1
+ 2998 13bc CE01      		movw r24,r28
+ 2999 13be 0696      		adiw r24,6
+ 3000 13c0 0E94 0000 		call usb_ep_recv_control_data
+ 3001 13c4 6B89      		ldd r22,Y+19
+ 3002 13c6 6B5F      		subi r22,lo8(-(5))
+ 3003 13c8 00C0      		rjmp .L428
+ 3004               	.L370:
+ 3005 13ca A801      		movw r20,r16
+ 3006 13cc 0530      		cpi r16,5
+ 3007 13ce 1105      		cpc r17,__zero_reg__
+ 3008 13d0 00F0      		brlo .L390
+ 3009 13d2 44E0      		ldi r20,lo8(4)
+ 3010 13d4 50E0      		ldi r21,0
+ 3011               	.L390:
+ 3012 13d6 042F      		mov r16,r20
+ 3013 13d8 4111      		cpse r20,__zero_reg__
+ 3014 13da 00C0      		rjmp .L391
+ 3015 13dc 01E0      		ldi r16,lo8(1)
+ 3016               	.L391:
+ 3017 13de EE2D      		mov r30,r14
+ 3018 13e0 EC70      		andi r30,lo8(12)
+ 3019 13e2 9FEF      		ldi r25,lo8(-1)
+ 3020 13e4 900F      		add r25,r16
+ 3021 13e6 E062      		ori r30,lo8(32)
+GAS LISTING gpio-usb.s 			page 54
+
+
+ 3022 13e8 E92B      		or r30,r25
+ 3023 13ea E983      		std Y+1,r30
+ 3024 13ec 9E01      		movw r18,r28
+ 3025 13ee 2B5E      		subi r18,-21
+ 3026 13f0 3F4F      		sbci r19,-1
+ 3027 13f2 AE01      		movw r20,r28
+ 3028 13f4 435F      		subi r20,-13
+ 3029 13f6 5F4F      		sbci r21,-1
+ 3030 13f8 61E0      		ldi r22,lo8(1)
+ 3031 13fa CE01      		movw r24,r28
+ 3032 13fc 0196      		adiw r24,1
+ 3033 13fe 0E94 0000 		call pdi_cmd
+ 3034               	.L426:
+ 3035 1402 202F      		mov r18,r16
+ 3036 1404 30E0      		ldi r19,0
+ 3037 1406 6D89      		ldd r22,Y+21
+ 3038 1408 70E0      		ldi r23,0
+ 3039               	.L431:
+ 3040 140a 40E0      		ldi r20,0
+ 3041 140c CE01      		movw r24,r28
+ 3042 140e 0D96      		adiw r24,13
+ 3043 1410 0E94 0000 		call usb_ep_send_control_data
+ 3044 1414 00C0      		rjmp .L363
+ 3045               	.L367:
+ 3046 1416 1C8A      		std Y+20,__zero_reg__
+ 3047 1418 1B8A      		std Y+19,__zero_reg__
+ 3048 141a A801      		movw r20,r16
+ 3049 141c 0530      		cpi r16,5
+ 3050 141e 1105      		cpc r17,__zero_reg__
+ 3051 1420 00F0      		brlo .L392
+ 3052 1422 44E0      		ldi r20,lo8(4)
+ 3053 1424 50E0      		ldi r21,0
+ 3054               	.L392:
+ 3055 1426 4111      		cpse r20,__zero_reg__
+ 3056 1428 00C0      		rjmp .L393
+ 3057 142a 41E0      		ldi r20,lo8(1)
+ 3058               	.L393:
+ 3059 142c EE2D      		mov r30,r14
+ 3060 142e EC70      		andi r30,lo8(12)
+ 3061 1430 9FEF      		ldi r25,lo8(-1)
+ 3062 1432 940F      		add r25,r20
+ 3063 1434 E066      		ori r30,lo8(96)
+ 3064 1436 E92B      		or r30,r25
+ 3065 1438 E983      		std Y+1,r30
+ 3066               	.L430:
+ 3067 143a 50E0      		ldi r21,0
+ 3068               	.L429:
+ 3069 143c BE01      		movw r22,r28
+ 3070 143e 6D5E      		subi r22,-19
+ 3071 1440 7F4F      		sbci r23,-1
+ 3072 1442 CE01      		movw r24,r28
+ 3073 1444 0296      		adiw r24,2
+ 3074 1446 0E94 0000 		call usb_ep_recv_control_data
+ 3075 144a 6B89      		ldd r22,Y+19
+ 3076 144c 6F5F      		subi r22,lo8(-(1))
+ 3077               	.L428:
+ 3078 144e 9E01      		movw r18,r28
+GAS LISTING gpio-usb.s 			page 55
+
+
+ 3079 1450 2B5E      		subi r18,-21
+ 3080 1452 3F4F      		sbci r19,-1
+ 3081 1454 AE01      		movw r20,r28
+ 3082 1456 435F      		subi r20,-13
+ 3083 1458 5F4F      		sbci r21,-1
+ 3084 145a CE01      		movw r24,r28
+ 3085 145c 0196      		adiw r24,1
+ 3086 145e 0E94 0000 		call pdi_cmd
+ 3087 1462 8093 0000 		sts g_pdi_last_rc,r24
+ 3088 1466 00C0      		rjmp .L363
+ 3089               	.L373:
+ 3090 1468 EE2D      		mov r30,r14
+ 3091 146a EF70      		andi r30,lo8(15)
+ 3092 146c E068      		ori r30,lo8(-128)
+ 3093 146e E983      		std Y+1,r30
+ 3094 1470 9E01      		movw r18,r28
+ 3095 1472 2B5E      		subi r18,-21
+ 3096 1474 3F4F      		sbci r19,-1
+ 3097 1476 AE01      		movw r20,r28
+ 3098 1478 435F      		subi r20,-13
+ 3099 147a 5F4F      		sbci r21,-1
+ 3100 147c 61E0      		ldi r22,lo8(1)
+ 3101 147e CE01      		movw r24,r28
+ 3102 1480 0196      		adiw r24,1
+ 3103 1482 0E94 0000 		call pdi_cmd
+ 3104 1486 8093 0000 		sts g_pdi_last_rc,r24
+ 3105 148a 6D89      		ldd r22,Y+21
+ 3106 148c 70E0      		ldi r23,0
+ 3107 148e 9801      		movw r18,r16
+ 3108 1490 00C0      		rjmp .L431
+ 3109               	.L372:
+ 3110 1492 EE2D      		mov r30,r14
+ 3111 1494 EF70      		andi r30,lo8(15)
+ 3112 1496 E06C      		ori r30,lo8(-64)
+ 3113 1498 E983      		std Y+1,r30
+ 3114 149a AA83      		std Y+2,r26
+ 3115 149c 9E01      		movw r18,r28
+ 3116 149e 2B5E      		subi r18,-21
+ 3117 14a0 3F4F      		sbci r19,-1
+ 3118 14a2 AE01      		movw r20,r28
+ 3119 14a4 435F      		subi r20,-13
+ 3120 14a6 5F4F      		sbci r21,-1
+ 3121 14a8 62E0      		ldi r22,lo8(2)
+ 3122 14aa CE01      		movw r24,r28
+ 3123 14ac 0196      		adiw r24,1
+ 3124 14ae 0E94 0000 		call pdi_cmd
+ 3125 14b2 00C0      		rjmp .L427
+ 3126               	.L374:
+ 3127 14b4 1C8A      		std Y+20,__zero_reg__
+ 3128 14b6 1B8A      		std Y+19,__zero_reg__
+ 3129 14b8 A801      		movw r20,r16
+ 3130 14ba 0530      		cpi r16,5
+ 3131 14bc 1105      		cpc r17,__zero_reg__
+ 3132 14be 00F0      		brlo .L394
+ 3133 14c0 44E0      		ldi r20,lo8(4)
+ 3134 14c2 50E0      		ldi r21,0
+ 3135               	.L394:
+GAS LISTING gpio-usb.s 			page 56
+
+
+ 3136 14c4 4111      		cpse r20,__zero_reg__
+ 3137 14c6 00C0      		rjmp .L395
+ 3138 14c8 41E0      		ldi r20,lo8(1)
+ 3139               	.L395:
+ 3140 14ca 8FEF      		ldi r24,lo8(-1)
+ 3141 14cc 840F      		add r24,r20
+ 3142 14ce 806A      		ori r24,lo8(-96)
+ 3143 14d0 8983      		std Y+1,r24
+ 3144 14d2 00C0      		rjmp .L430
+ 3145               	.L375:
+ 3146 14d4 1C8A      		std Y+20,__zero_reg__
+ 3147 14d6 1B8A      		std Y+19,__zero_reg__
+ 3148 14d8 80EE      		ldi r24,lo8(-32)
+ 3149 14da 8983      		std Y+1,r24
+ 3150 14dc A801      		movw r20,r16
+ 3151 14de 0930      		cpi r16,9
+ 3152 14e0 1105      		cpc r17,__zero_reg__
+ 3153 14e2 00F4      		brsh .+2
+ 3154 14e4 00C0      		rjmp .L429
+ 3155 14e6 48E0      		ldi r20,lo8(8)
+ 3156 14e8 50E0      		ldi r21,0
+ 3157 14ea 00C0      		rjmp .L429
+ 3158               	.L382:
+ 3159 14ec 0115      		cp r16,__zero_reg__
+ 3160 14ee 1105      		cpc r17,__zero_reg__
+ 3161 14f0 01F0      		breq .L397
+ 3162 14f2 A801      		movw r20,r16
+ 3163 14f4 4150      		subi r20,1
+ 3164 14f6 5109      		sbc r21,__zero_reg__
+ 3165 14f8 8701      		movw r16,r14
+ 3166 14fa 20E0      		ldi r18,0
+ 3167 14fc 30E0      		ldi r19,0
+ 3168 14fe 7801      		movw r14,r16
+ 3169 1500 DD24      		clr r13
+ 3170 1502 CC24      		clr r12
+ 3171 1504 8D01      		movw r16,r26
+ 3172 1506 20E0      		ldi r18,0
+ 3173 1508 30E0      		ldi r19,0
+ 3174 150a C701      		movw r24,r14
+ 3175 150c B601      		movw r22,r12
+ 3176 150e 602B      		or r22,r16
+ 3177 1510 712B      		or r23,r17
+ 3178 1512 822B      		or r24,r18
+ 3179 1514 932B      		or r25,r19
+ 3180 1516 0E94 0000 		call nvmc_read_nvm
+ 3181               	.L424:
+ 3182 151a 8093 0000 		sts g_pdi_last_rc,r24
+ 3183               	.L397:
+ 3184 151e 0E94 0000 		call usb_ep_send_control_data_finish
+ 3185 1522 00C0      		rjmp .L363
+ 3186               	.L365:
+ 3187 1524 0115      		cp r16,__zero_reg__
+ 3188 1526 1105      		cpc r17,__zero_reg__
+ 3189 1528 01F0      		breq .L397
+ 3190 152a A801      		movw r20,r16
+ 3191 152c 4150      		subi r20,1
+ 3192 152e 5109      		sbc r21,__zero_reg__
+GAS LISTING gpio-usb.s 			page 57
+
+
+ 3193 1530 8701      		movw r16,r14
+ 3194 1532 20E0      		ldi r18,0
+ 3195 1534 30E0      		ldi r19,0
+ 3196 1536 7801      		movw r14,r16
+ 3197 1538 DD24      		clr r13
+ 3198 153a CC24      		clr r12
+ 3199 153c 8D01      		movw r16,r26
+ 3200 153e 20E0      		ldi r18,0
+ 3201 1540 30E0      		ldi r19,0
+ 3202 1542 C701      		movw r24,r14
+ 3203 1544 B601      		movw r22,r12
+ 3204 1546 602B      		or r22,r16
+ 3205 1548 712B      		or r23,r17
+ 3206 154a 822B      		or r24,r18
+ 3207 154c 932B      		or r25,r19
+ 3208 154e 0E94 0000 		call nvmc_flash_read
+ 3209 1552 00C0      		rjmp .L424
+ 3210               	.L378:
+ 3211 1554 0115      		cp r16,__zero_reg__
+ 3212 1556 1105      		cpc r17,__zero_reg__
+ 3213 1558 01F0      		breq .L397
+ 3214 155a A801      		movw r20,r16
+ 3215 155c 4150      		subi r20,1
+ 3216 155e 5109      		sbc r21,__zero_reg__
+ 3217 1560 8701      		movw r16,r14
+ 3218 1562 20E0      		ldi r18,0
+ 3219 1564 30E0      		ldi r19,0
+ 3220 1566 7801      		movw r14,r16
+ 3221 1568 DD24      		clr r13
+ 3222 156a CC24      		clr r12
+ 3223 156c 8D01      		movw r16,r26
+ 3224 156e 20E0      		ldi r18,0
+ 3225 1570 30E0      		ldi r19,0
+ 3226 1572 C701      		movw r24,r14
+ 3227 1574 B601      		movw r22,r12
+ 3228 1576 602B      		or r22,r16
+ 3229 1578 712B      		or r23,r17
+ 3230 157a 822B      		or r24,r18
+ 3231 157c 932B      		or r25,r19
+ 3232 157e 0E94 0000 		call nvmc_eeprom_read
+ 3233 1582 00C0      		rjmp .L424
+ 3234               	.L381:
+ 3235 1584 012B      		or r16,r17
+ 3236 1586 01F0      		breq .L397
+ 3237 1588 C701      		movw r24,r14
+ 3238 158a 0E94 0000 		call nvmc_fuse_read
+ 3239 158e 00C0      		rjmp .L424
+ 3240               	.L383:
+ 3241 1590 0115      		cp r16,__zero_reg__
+ 3242 1592 1105      		cpc r17,__zero_reg__
+ 3243 1594 01F0      		breq .L397
+ 3244 1596 B801      		movw r22,r16
+ 3245 1598 6150      		subi r22,1
+ 3246 159a 7109      		sbc r23,__zero_reg__
+ 3247 159c C701      		movw r24,r14
+ 3248 159e 0E94 0000 		call nvmc_signaturerow_read
+ 3249 15a2 00C0      		rjmp .L424
+GAS LISTING gpio-usb.s 			page 58
+
+
+ 3250               	.L379:
+ 3251 15a4 0115      		cp r16,__zero_reg__
+ 3252 15a6 1105      		cpc r17,__zero_reg__
+ 3253 15a8 01F0      		breq .L398
+ 3254 15aa A801      		movw r20,r16
+ 3255 15ac 4150      		subi r20,1
+ 3256 15ae 5109      		sbc r21,__zero_reg__
+ 3257 15b0 8701      		movw r16,r14
+ 3258 15b2 20E0      		ldi r18,0
+ 3259 15b4 30E0      		ldi r19,0
+ 3260 15b6 7801      		movw r14,r16
+ 3261 15b8 DD24      		clr r13
+ 3262 15ba CC24      		clr r12
+ 3263 15bc 8D01      		movw r16,r26
+ 3264 15be 20E0      		ldi r18,0
+ 3265 15c0 30E0      		ldi r19,0
+ 3266 15c2 C701      		movw r24,r14
+ 3267 15c4 B601      		movw r22,r12
+ 3268 15c6 602B      		or r22,r16
+ 3269 15c8 712B      		or r23,r17
+ 3270 15ca 822B      		or r24,r18
+ 3271 15cc 932B      		or r25,r19
+ 3272 15ce 0E94 0000 		call nvmc_flash_write_page
+ 3273               	.L425:
+ 3274 15d2 8093 0000 		sts g_pdi_last_rc,r24
+ 3275               	.L398:
+ 3276 15d6 0E94 0000 		call usb_ep_recv_control_data_finish
+ 3277 15da 00C0      		rjmp .L363
+ 3278               	.L380:
+ 3279 15dc 0115      		cp r16,__zero_reg__
+ 3280 15de 1105      		cpc r17,__zero_reg__
+ 3281 15e0 01F0      		breq .L398
+ 3282 15e2 A801      		movw r20,r16
+ 3283 15e4 4150      		subi r20,1
+ 3284 15e6 5109      		sbc r21,__zero_reg__
+ 3285 15e8 8701      		movw r16,r14
+ 3286 15ea 20E0      		ldi r18,0
+ 3287 15ec 30E0      		ldi r19,0
+ 3288 15ee 7801      		movw r14,r16
+ 3289 15f0 DD24      		clr r13
+ 3290 15f2 CC24      		clr r12
+ 3291 15f4 8D01      		movw r16,r26
+ 3292 15f6 20E0      		ldi r18,0
+ 3293 15f8 30E0      		ldi r19,0
+ 3294 15fa C701      		movw r24,r14
+ 3295 15fc B601      		movw r22,r12
+ 3296 15fe 602B      		or r22,r16
+ 3297 1600 712B      		or r23,r17
+ 3298 1602 822B      		or r24,r18
+ 3299 1604 932B      		or r25,r19
+ 3300 1606 0E94 0000 		call nvmc_eeprom_write
+ 3301 160a 00C0      		rjmp .L425
+ 3302               	.L376:
+ 3303 160c 6A2F      		mov r22,r26
+ 3304 160e C701      		movw r24,r14
+ 3305 1610 0E94 0000 		call nvmc_fuse_write
+ 3306 1614 00C0      		rjmp .L427
+GAS LISTING gpio-usb.s 			page 59
+
+
+ 3307               	.L384:
+ 3308 1616 0115      		cp r16,__zero_reg__
+ 3309 1618 1105      		cpc r17,__zero_reg__
+ 3310 161a 01F4      		brne .+2
+ 3311 161c 00C0      		rjmp .L397
+ 3312 161e C801      		movw r24,r16
+ 3313 1620 0197      		sbiw r24,1
+ 3314 1622 8430      		cpi r24,4
+ 3315 1624 9105      		cpc r25,__zero_reg__
+ 3316 1626 00F0      		brlo .L399
+ 3317 1628 83E0      		ldi r24,lo8(3)
+ 3318 162a 90E0      		ldi r25,0
+ 3319               	.L399:
+ 3320 162c 0E94 0000 		call nvmc_read_dev_sign
+ 3321 1630 00C0      		rjmp .L424
+ 3322               	.L427:
+ 3323 1632 8093 0000 		sts g_pdi_last_rc,r24
+ 3324 1636 0E94 0000 		call usb_ep_send_zlp
+ 3325               	.L363:
+ 3326               	/* epilogue start */
+ 3327 163a 6596      		adiw r28,21
+ 3328 163c 0FB6      		in __tmp_reg__,__SREG__
+ 3329 163e F894      		cli
+ 3330 1640 DEBF      		out __SP_H__,r29
+ 3331 1642 0FBE      		out __SREG__,__tmp_reg__
+ 3332 1644 CDBF      		out __SP_L__,r28
+ 3333 1646 DF91      		pop r29
+ 3334 1648 CF91      		pop r28
+ 3335 164a 1F91      		pop r17
+ 3336 164c 0F91      		pop r16
+ 3337 164e FF90      		pop r15
+ 3338 1650 EF90      		pop r14
+ 3339 1652 DF90      		pop r13
+ 3340 1654 CF90      		pop r12
+ 3341 1656 0895      		ret
+ 3342               		.size	pdi_exec, .-pdi_exec
+ 3343               	.global	usb_event_set_configuration
+ 3344               		.type	usb_event_set_configuration, @function
+ 3345               	usb_event_set_configuration:
+ 3346               	/* prologue: function */
+ 3347               	/* frame size = 0 */
+ 3348               	/* stack size = 0 */
+ 3349               	.L__stack_usage = 0
+ 3350 1658 0895      		ret
+ 3351               		.size	usb_event_set_configuration, .-usb_event_set_configuration
+ 3352               	.global	usb_event_ep0_request
+ 3353               		.type	usb_event_ep0_request, @function
+ 3354               	usb_event_ep0_request:
+ 3355 165a EF92      		push r14
+ 3356 165c FF92      		push r15
+ 3357 165e 1F93      		push r17
+ 3358 1660 CF93      		push r28
+ 3359 1662 DF93      		push r29
+ 3360 1664 00D0      		rcall .
+ 3361 1666 CDB7      		in r28,__SP_L__
+ 3362 1668 DEB7      		in r29,__SP_H__
+ 3363               	/* prologue: function */
+GAS LISTING gpio-usb.s 			page 60
+
+
+ 3364               	/* frame size = 2 */
+ 3365               	/* stack size = 7 */
+ 3366               	.L__stack_usage = 7
+ 3367 166a FC01      		movw r30,r24
+ 3368 166c 2081      		ld r18,Z
+ 3369 166e 322F      		mov r19,r18
+ 3370 1670 3F77      		andi r19,lo8(127)
+ 3371 1672 3134      		cpi r19,lo8(65)
+ 3372 1674 01F0      		breq .+2
+ 3373 1676 00C0      		rjmp .L473
+ 3374 1678 7C01      		movw r14,r24
+ 3375 167a 9181      		ldd r25,Z+1
+ 3376 167c 27FD      		sbrc r18,7
+ 3377 167e 00C0      		rjmp .L435
+ 3378 1680 9A34      		cpi r25,lo8(74)
+ 3379 1682 00F4      		brsh .L436
+ 3380 1684 9734      		cpi r25,lo8(71)
+ 3381 1686 00F0      		brlo .+2
+ 3382 1688 00C0      		rjmp .L437
+ 3383 168a 9531      		cpi r25,lo8(21)
+ 3384 168c 01F4      		brne .+2
+ 3385 168e 00C0      		rjmp .L438
+ 3386 1690 00F4      		brsh .L439
+ 3387 1692 9930      		cpi r25,lo8(9)
+ 3388 1694 01F0      		breq .L440
+ 3389 1696 9431      		cpi r25,lo8(20)
+ 3390 1698 01F4      		brne .+2
+ 3391 169a 00C0      		rjmp .L441
+ 3392 169c 9830      		cpi r25,lo8(8)
+ 3393 169e 01F0      		breq .+2
+ 3394 16a0 00C0      		rjmp .L473
+ 3395 16a2 0E94 0000 		call usb_ep_clearSETUP
+ 3396 16a6 0E94 0000 		call cmd_avr_init
+ 3397 16aa 00C0      		rjmp .L530
+ 3398               	.L439:
+ 3399 16ac 9134      		cpi r25,lo8(65)
+ 3400 16ae 01F4      		brne .+2
+ 3401 16b0 00C0      		rjmp .L443
+ 3402 16b2 00F4      		brsh .L444
+ 3403 16b4 9034      		cpi r25,lo8(64)
+ 3404 16b6 01F4      		brne .+2
+ 3405 16b8 00C0      		rjmp .L445
+ 3406 16ba 00C0      		rjmp .L473
+ 3407               	.L444:
+ 3408 16bc 9334      		cpi r25,lo8(67)
+ 3409 16be 01F4      		brne .+2
+ 3410 16c0 00C0      		rjmp .L437
+ 3411 16c2 9534      		cpi r25,lo8(69)
+ 3412 16c4 01F4      		brne .+2
+ 3413 16c6 00C0      		rjmp .L437
+ 3414 16c8 00C0      		rjmp .L473
+ 3415               	.L436:
+ 3416 16ca 9135      		cpi r25,lo8(81)
+ 3417 16cc 01F4      		brne .+2
+ 3418 16ce 00C0      		rjmp .L443
+ 3419 16d0 00F4      		brsh .L446
+ 3420 16d2 9C34      		cpi r25,lo8(76)
+GAS LISTING gpio-usb.s 			page 61
+
+
+ 3421 16d4 01F0      		breq .L447
+ 3422 16d6 9035      		cpi r25,lo8(80)
+ 3423 16d8 01F4      		brne .+2
+ 3424 16da 00C0      		rjmp .L448
+ 3425 16dc 9B34      		cpi r25,lo8(75)
+ 3426 16de 01F0      		breq .+2
+ 3427 16e0 00C0      		rjmp .L473
+ 3428 16e2 0E94 0000 		call usb_ep_clearSETUP
+ 3429 16e6 0E94 0000 		call pdi_off
+ 3430 16ea 8091 0000 		lds r24,g_pdi_flags
+ 3431 16ee 8160      		ori r24,lo8(1)
+ 3432 16f0 00C0      		rjmp .L528
+ 3433               	.L446:
+ 3434 16f2 9535      		cpi r25,lo8(85)
+ 3435 16f4 01F4      		brne .+2
+ 3436 16f6 00C0      		rjmp .L437
+ 3437 16f8 00F4      		brsh .L450
+ 3438 16fa 9335      		cpi r25,lo8(83)
+ 3439 16fc 01F4      		brne .+2
+ 3440 16fe 00C0      		rjmp .L437
+ 3441 1700 00C0      		rjmp .L473
+ 3442               	.L450:
+ 3443 1702 9735      		cpi r25,lo8(87)
+ 3444 1704 01F4      		brne .+2
+ 3445 1706 00C0      		rjmp .L437
+ 3446 1708 9136      		cpi r25,lo8(97)
+ 3447 170a 01F4      		brne .+2
+ 3448 170c 00C0      		rjmp .L437
+ 3449 170e 00C0      		rjmp .L473
+ 3450               	.L440:
+ 3451 1710 0E94 0000 		call usb_ep_clearSETUP
+ 3452 1714 0E94 0000 		call cmd_avr_exit
+ 3453               	.L530:
+ 3454 1718 10E0      		ldi r17,0
+ 3455 171a 00C0      		rjmp .L434
+ 3456               	.L441:
+ 3457 171c 0E94 0000 		call usb_ep_clearSETUP
+ 3458 1720 F701      		movw r30,r14
+ 3459 1722 6681      		ldd r22,Z+6
+ 3460 1724 7781      		ldd r23,Z+7
+ 3461 1726 8281      		ldd r24,Z+2
+ 3462 1728 9381      		ldd r25,Z+3
+ 3463 172a 0E94 0000 		call cmd_avr_writeflashpage
+ 3464 172e 00C0      		rjmp .L530
+ 3465               	.L438:
+ 3466 1730 0E94 0000 		call usb_ep_clearSETUP
+ 3467 1734 F701      		movw r30,r14
+ 3468 1736 6681      		ldd r22,Z+6
+ 3469 1738 7781      		ldd r23,Z+7
+ 3470 173a 8281      		ldd r24,Z+2
+ 3471 173c 9381      		ldd r25,Z+3
+ 3472 173e 0E94 0000 		call cmd_avr_writeeeprompage
+ 3473 1742 00C0      		rjmp .L530
+ 3474               	.L447:
+ 3475 1744 0E94 0000 		call usb_ep_clearSETUP
+ 3476 1748 1092 0000 		sts g_pdi_flags,__zero_reg__
+ 3477 174c 0E94 0000 		call pdi_leave
+GAS LISTING gpio-usb.s 			page 62
+
+
+ 3478 1750 00C0      		rjmp .L453
+ 3479               	.L445:
+ 3480 1752 0E94 0000 		call usb_ep_clearSETUP
+ 3481 1756 8091 0000 		lds r24,g_pdi_flags
+ 3482 175a 80FF      		sbrs r24,0
+ 3483 175c 00C0      		rjmp .L451
+ 3484 175e 8091 0000 		lds r24,g_pdi_flags
+ 3485 1762 81FD      		sbrc r24,1
+ 3486 1764 00C0      		rjmp .L452
+ 3487 1766 0E94 0000 		call pdi_start
+ 3488 176a 8091 0000 		lds r24,g_pdi_flags
+ 3489 176e 8260      		ori r24,lo8(2)
+ 3490               	.L528:
+ 3491 1770 8093 0000 		sts g_pdi_flags,r24
+ 3492               	.L452:
+ 3493 1774 1092 0000 		sts g_pdi_last_rc,__zero_reg__
+ 3494 1778 00C0      		rjmp .L453
+ 3495               	.L448:
+ 3496 177a 0E94 0000 		call usb_ep_clearSETUP
+ 3497 177e 8091 0000 		lds r24,g_pdi_flags
+ 3498 1782 80FD      		sbrc r24,0
+ 3499 1784 00C0      		rjmp .L533
+ 3500               	.L451:
+ 3501 1786 84E6      		ldi r24,lo8(100)
+ 3502 1788 8093 0000 		sts g_pdi_last_rc,r24
+ 3503               	.L453:
+ 3504 178c 0E94 0000 		call usb_ep_send_zlp
+ 3505 1790 00C0      		rjmp .L530
+ 3506               	.L533:
+ 3507 1792 1092 0000 		sts g_pdi_last_rc,__zero_reg__
+ 3508 1796 8091 0000 		lds r24,g_pdi_flags
+ 3509 179a 82FD      		sbrc r24,2
+ 3510 179c 00C0      		rjmp .L453
+ 3511 179e 8091 0000 		lds r24,g_pdi_flags
+ 3512 17a2 81FD      		sbrc r24,1
+ 3513 17a4 00C0      		rjmp .L455
+ 3514 17a6 0E94 0000 		call pdi_start
+ 3515 17aa 8091 0000 		lds r24,g_pdi_flags
+ 3516 17ae 8260      		ori r24,lo8(2)
+ 3517 17b0 8093 0000 		sts g_pdi_flags,r24
+ 3518               	.L455:
+ 3519 17b4 0E94 0000 		call nvmc_init
+ 3520 17b8 8093 0000 		sts g_pdi_last_rc,r24
+ 3521 17bc 8111      		cpse r24,__zero_reg__
+ 3522 17be 00C0      		rjmp .L453
+ 3523 17c0 8091 0000 		lds r24,g_pdi_flags
+ 3524 17c4 8460      		ori r24,lo8(4)
+ 3525 17c6 8093 0000 		sts g_pdi_flags,r24
+ 3526 17ca 00C0      		rjmp .L453
+ 3527               	.L443:
+ 3528 17cc 0E94 0000 		call usb_ep_clearSETUP
+ 3529 17d0 8091 0000 		lds r24,g_pdi_flags
+ 3530 17d4 80FF      		sbrs r24,0
+ 3531 17d6 00C0      		rjmp .L451
+ 3532 17d8 0E94 0000 		call nvmc_exit
+ 3533 17dc 0E94 0000 		call pdi_off
+ 3534 17e0 8091 0000 		lds r24,g_pdi_flags
+GAS LISTING gpio-usb.s 			page 63
+
+
+ 3535 17e4 897F      		andi r24,lo8(-7)
+ 3536 17e6 00C0      		rjmp .L528
+ 3537               	.L437:
+ 3538 17e8 0E94 0000 		call usb_ep_clearSETUP
+ 3539 17ec 8091 0000 		lds r24,g_pdi_flags
+ 3540 17f0 182F      		mov r17,r24
+ 3541 17f2 1170      		andi r17,lo8(1)
+ 3542 17f4 80FF      		sbrs r24,0
+ 3543 17f6 00C0      		rjmp .L457
+ 3544 17f8 8091 0000 		lds r24,g_pdi_flags
+ 3545 17fc 182F      		mov r17,r24
+ 3546 17fe 1270      		andi r17,lo8(2)
+ 3547 1800 81FF      		sbrs r24,1
+ 3548 1802 00C0      		rjmp .L458
+ 3549               	.L470:
+ 3550 1804 C701      		movw r24,r14
+ 3551 1806 0E94 0000 		call pdi_exec
+ 3552 180a 00C0      		rjmp .L530
+ 3553               	.L458:
+ 3554 180c 85E6      		ldi r24,lo8(101)
+ 3555 180e 00C0      		rjmp .L531
+ 3556               	.L457:
+ 3557 1810 84E6      		ldi r24,lo8(100)
+ 3558               	.L531:
+ 3559 1812 8093 0000 		sts g_pdi_last_rc,r24
+ 3560 1816 0E94 0000 		call usb_ep_send_zlp
+ 3561 181a 00C0      		rjmp .L434
+ 3562               	.L435:
+ 3563 181c 9634      		cpi r25,lo8(70)
+ 3564 181e 01F4      		brne .+2
+ 3565 1820 00C0      		rjmp .L459
+ 3566 1822 00F4      		brsh .L460
+ 3567 1824 9331      		cpi r25,lo8(19)
+ 3568 1826 01F4      		brne .+2
+ 3569 1828 00C0      		rjmp .L461
+ 3570 182a 00F4      		brsh .L462
+ 3571 182c 9131      		cpi r25,lo8(17)
+ 3572 182e 01F4      		brne .+2
+ 3573 1830 00C0      		rjmp .L463
+ 3574 1832 00F0      		brlo .+2
+ 3575 1834 00C0      		rjmp .L464
+ 3576 1836 9031      		cpi r25,lo8(16)
+ 3577 1838 01F0      		breq .+2
+ 3578 183a 00C0      		rjmp .L473
+ 3579 183c 0E94 0000 		call usb_ep_clearSETUP
+ 3580 1840 F701      		movw r30,r14
+ 3581 1842 4681      		ldd r20,Z+6
+ 3582 1844 5781      		ldd r21,Z+7
+ 3583 1846 6281      		ldd r22,Z+2
+ 3584 1848 8381      		ldd r24,Z+3
+ 3585 184a 0E94 0000 		call cmd_avr_progmode
+ 3586 184e 00C0      		rjmp .L530
+ 3587               	.L462:
+ 3588 1850 9234      		cpi r25,lo8(66)
+ 3589 1852 01F4      		brne .+2
+ 3590 1854 00C0      		rjmp .L459
+ 3591 1856 9434      		cpi r25,lo8(68)
+GAS LISTING gpio-usb.s 			page 64
+
+
+ 3592 1858 01F4      		brne .+2
+ 3593 185a 00C0      		rjmp .L459
+ 3594 185c 9032      		cpi r25,lo8(32)
+ 3595 185e 01F0      		breq .+2
+ 3596 1860 00C0      		rjmp .L473
+ 3597 1862 0E94 0000 		call usb_ep_clearSETUP
+ 3598 1866 8091 0000 		lds r24,g_avr_flags
+ 3599 186a 8983      		std Y+1,r24
+ 3600 186c 8091 0000 		lds r24,g_avr_error
+ 3601 1870 8A83      		std Y+2,r24
+ 3602 1872 1092 0000 		sts g_avr_error,__zero_reg__
+ 3603 1876 F701      		movw r30,r14
+ 3604 1878 2681      		ldd r18,Z+6
+ 3605 187a 3781      		ldd r19,Z+7
+ 3606 187c 40E0      		ldi r20,0
+ 3607 187e 62E0      		ldi r22,lo8(2)
+ 3608 1880 70E0      		ldi r23,0
+ 3609 1882 00C0      		rjmp .L532
+ 3610               	.L460:
+ 3611 1884 9635      		cpi r25,lo8(86)
+ 3612 1886 01F4      		brne .+2
+ 3613 1888 00C0      		rjmp .L459
+ 3614 188a 00F4      		brsh .L467
+ 3615 188c 9235      		cpi r25,lo8(82)
+ 3616 188e 01F4      		brne .+2
+ 3617 1890 00C0      		rjmp .L459
+ 3618 1892 9435      		cpi r25,lo8(84)
+ 3619 1894 01F0      		breq .L459
+ 3620 1896 9A34      		cpi r25,lo8(74)
+ 3621 1898 01F0      		breq .+2
+ 3622 189a 00C0      		rjmp .L473
+ 3623 189c 0E94 0000 		call usb_ep_clearSETUP
+ 3624 18a0 8091 0000 		lds r24,g_pdi_last_rc
+ 3625 18a4 8983      		std Y+1,r24
+ 3626 18a6 1092 0000 		sts g_pdi_last_rc,__zero_reg__
+ 3627 18aa F701      		movw r30,r14
+ 3628 18ac 2681      		ldd r18,Z+6
+ 3629 18ae 3781      		ldd r19,Z+7
+ 3630 18b0 40E0      		ldi r20,0
+ 3631 18b2 61E0      		ldi r22,lo8(1)
+ 3632 18b4 70E0      		ldi r23,0
+ 3633 18b6 00C0      		rjmp .L532
+ 3634               	.L467:
+ 3635 18b8 9835      		cpi r25,lo8(88)
+ 3636 18ba 00F4      		brsh .+2
+ 3637 18bc 00C0      		rjmp .L473
+ 3638 18be 9A35      		cpi r25,lo8(90)
+ 3639 18c0 00F0      		brlo .L459
+ 3640 18c2 9036      		cpi r25,lo8(96)
+ 3641 18c4 01F0      		breq .L459
+ 3642 18c6 00C0      		rjmp .L473
+ 3643               	.L463:
+ 3644 18c8 0E94 0000 		call usb_ep_clearSETUP
+ 3645 18cc F701      		movw r30,r14
+ 3646 18ce 4681      		ldd r20,Z+6
+ 3647 18d0 5781      		ldd r21,Z+7
+ 3648 18d2 6481      		ldd r22,Z+4
+GAS LISTING gpio-usb.s 			page 65
+
+
+ 3649 18d4 7581      		ldd r23,Z+5
+ 3650 18d6 8281      		ldd r24,Z+2
+ 3651 18d8 9381      		ldd r25,Z+3
+ 3652 18da 0E94 0000 		call cmd_avr_rawcmd
+ 3653 18de 00C0      		rjmp .L530
+ 3654               	.L464:
+ 3655 18e0 0E94 0000 		call usb_ep_clearSETUP
+ 3656 18e4 F701      		movw r30,r14
+ 3657 18e6 6681      		ldd r22,Z+6
+ 3658 18e8 7781      		ldd r23,Z+7
+ 3659 18ea 8281      		ldd r24,Z+2
+ 3660 18ec 9381      		ldd r25,Z+3
+ 3661 18ee 0E94 0000 		call cmd_avr_readflash
+ 3662 18f2 00C0      		rjmp .L530
+ 3663               	.L461:
+ 3664 18f4 0E94 0000 		call usb_ep_clearSETUP
+ 3665 18f8 F701      		movw r30,r14
+ 3666 18fa 6681      		ldd r22,Z+6
+ 3667 18fc 7781      		ldd r23,Z+7
+ 3668 18fe 8281      		ldd r24,Z+2
+ 3669 1900 9381      		ldd r25,Z+3
+ 3670 1902 0E94 0000 		call cmd_avr_readeeprom
+ 3671 1906 00C0      		rjmp .L530
+ 3672               	.L532:
+ 3673 1908 CE01      		movw r24,r28
+ 3674 190a 0196      		adiw r24,1
+ 3675 190c 0E94 0000 		call usb_ep_send_control_data
+ 3676 1910 00C0      		rjmp .L530
+ 3677               	.L459:
+ 3678 1912 0E94 0000 		call usb_ep_clearSETUP
+ 3679 1916 8091 0000 		lds r24,g_pdi_flags
+ 3680 191a 182F      		mov r17,r24
+ 3681 191c 1170      		andi r17,lo8(1)
+ 3682 191e 80FF      		sbrs r24,0
+ 3683 1920 00C0      		rjmp .L469
+ 3684 1922 8091 0000 		lds r24,g_pdi_flags
+ 3685 1926 182F      		mov r17,r24
+ 3686 1928 1270      		andi r17,lo8(2)
+ 3687 192a 81FD      		sbrc r24,1
+ 3688 192c 00C0      		rjmp .L470
+ 3689 192e 85E6      		ldi r24,lo8(101)
+ 3690 1930 00C0      		rjmp .L529
+ 3691               	.L469:
+ 3692 1932 84E6      		ldi r24,lo8(100)
+ 3693               	.L529:
+ 3694 1934 8093 0000 		sts g_pdi_last_rc,r24
+ 3695 1938 0E94 0000 		call usb_ep_send_control_data_finish
+ 3696 193c 00C0      		rjmp .L434
+ 3697               	.L473:
+ 3698 193e 11E0      		ldi r17,lo8(1)
+ 3699               	.L434:
+ 3700 1940 812F      		mov r24,r17
+ 3701               	/* epilogue start */
+ 3702 1942 0F90      		pop __tmp_reg__
+ 3703 1944 0F90      		pop __tmp_reg__
+ 3704 1946 DF91      		pop r29
+ 3705 1948 CF91      		pop r28
+GAS LISTING gpio-usb.s 			page 66
+
+
+ 3706 194a 1F91      		pop r17
+ 3707 194c FF90      		pop r15
+ 3708 194e EF90      		pop r14
+ 3709 1950 0895      		ret
+ 3710               		.size	usb_event_ep0_request, .-usb_event_ep0_request
+ 3711               	.global	usb_ep0_task
+ 3712               		.type	usb_ep0_task, @function
+ 3713               	usb_ep0_task:
+ 3714 1952 CF92      		push r12
+ 3715 1954 DF92      		push r13
+ 3716 1956 FF92      		push r15
+ 3717 1958 0F93      		push r16
+ 3718 195a 1F93      		push r17
+ 3719 195c CF93      		push r28
+ 3720 195e DF93      		push r29
+ 3721 1960 CDB7      		in r28,__SP_L__
+ 3722 1962 DEB7      		in r29,__SP_H__
+ 3723 1964 2897      		sbiw r28,8
+ 3724 1966 0FB6      		in __tmp_reg__,__SREG__
+ 3725 1968 F894      		cli
+ 3726 196a DEBF      		out __SP_H__,r29
+ 3727 196c 0FBE      		out __SREG__,__tmp_reg__
+ 3728 196e CDBF      		out __SP_L__,r28
+ 3729               	/* prologue: function */
+ 3730               	/* frame size = 8 */
+ 3731               	/* stack size = 15 */
+ 3732               	.L__stack_usage = 15
+ 3733 1970 1092 E900 		sts 233,__zero_reg__
+ 3734 1974 8091 E800 		lds r24,232
+ 3735 1978 83FF      		sbrs r24,3
+ 3736 197a 00C0      		rjmp .L534
+ 3737 197c 68E0      		ldi r22,lo8(8)
+ 3738 197e CE01      		movw r24,r28
+ 3739 1980 0196      		adiw r24,1
+ 3740 1982 0E94 0000 		call usb_ep_read_data
+ 3741 1986 8981      		ldd r24,Y+1
+ 3742 1988 982F      		mov r25,r24
+ 3743 198a 9076      		andi r25,lo8(96)
+ 3744 198c 01F0      		breq .+2
+ 3745 198e 00C0      		rjmp .L537
+ 3746 1990 9A81      		ldd r25,Y+2
+ 3747 1992 9630      		cpi r25,lo8(6)
+ 3748 1994 01F0      		breq .L538
+ 3749 1996 00F4      		brsh .L539
+ 3750 1998 9530      		cpi r25,lo8(5)
+ 3751 199a 01F4      		brne .+2
+ 3752 199c 00C0      		rjmp .L540
+ 3753 199e 00C0      		rjmp .L537
+ 3754               	.L539:
+ 3755 19a0 9830      		cpi r25,lo8(8)
+ 3756 19a2 01F0      		breq .L541
+ 3757 19a4 9930      		cpi r25,lo8(9)
+ 3758 19a6 01F4      		brne .+2
+ 3759 19a8 00C0      		rjmp .L542
+ 3760 19aa 00C0      		rjmp .L537
+ 3761               	.L541:
+ 3762 19ac 8038      		cpi r24,lo8(-128)
+GAS LISTING gpio-usb.s 			page 67
+
+
+ 3763 19ae 01F0      		breq .+2
+ 3764 19b0 00C0      		rjmp .L537
+ 3765 19b2 8091 0000 		lds r24,g_usb_dev
+ 3766 19b6 8871      		andi r24,lo8(24)
+ 3767 19b8 01F4      		brne .+2
+ 3768 19ba 00C0      		rjmp .L537
+ 3769 19bc 0E94 0000 		call usb_ep_clearSETUP
+ 3770 19c0 21E0      		ldi r18,lo8(1)
+ 3771 19c2 30E0      		ldi r19,0
+ 3772 19c4 40E0      		ldi r20,0
+ 3773 19c6 61E0      		ldi r22,lo8(1)
+ 3774 19c8 70E0      		ldi r23,0
+ 3775 19ca 80E0      		ldi r24,lo8(g_usb_dev+1)
+ 3776 19cc 90E0      		ldi r25,hi8(g_usb_dev+1)
+ 3777 19ce 00C0      		rjmp .L569
+ 3778               	.L538:
+ 3779 19d0 8038      		cpi r24,lo8(-128)
+ 3780 19d2 01F0      		breq .+2
+ 3781 19d4 00C0      		rjmp .L537
+ 3782 19d6 0B81      		ldd r16,Y+3
+ 3783 19d8 1C81      		ldd r17,Y+4
+ 3784 19da 812F      		mov r24,r17
+ 3785 19dc 90E0      		ldi r25,0
+ 3786 19de 8230      		cpi r24,2
+ 3787 19e0 9105      		cpc r25,__zero_reg__
+ 3788 19e2 01F0      		breq .L544
+ 3789 19e4 8330      		cpi r24,3
+ 3790 19e6 9105      		cpc r25,__zero_reg__
+ 3791 19e8 01F0      		breq .L545
+ 3792 19ea 0197      		sbiw r24,1
+ 3793 19ec 01F0      		breq .+2
+ 3794 19ee 00C0      		rjmp .L537
+ 3795 19f0 0E94 0000 		call usb_ep_clearSETUP
+ 3796 19f4 2F81      		ldd r18,Y+7
+ 3797 19f6 3885      		ldd r19,Y+8
+ 3798 19f8 4091 0000 		lds r20,g_usb_dev+10
+ 3799 19fc 62E1      		ldi r22,lo8(18)
+ 3800 19fe 70E0      		ldi r23,0
+ 3801 1a00 8091 0000 		lds r24,g_usb_dev+2
+ 3802 1a04 9091 0000 		lds r25,g_usb_dev+2+1
+ 3803 1a08 00C0      		rjmp .L569
+ 3804               	.L544:
+ 3805 1a0a 0111      		cpse r16,__zero_reg__
+ 3806 1a0c 00C0      		rjmp .L537
+ 3807 1a0e 0E94 0000 		call usb_ep_clearSETUP
+ 3808 1a12 2F81      		ldd r18,Y+7
+ 3809 1a14 3885      		ldd r19,Y+8
+ 3810 1a16 4091 0000 		lds r20,g_usb_dev+10
+ 3811 1a1a 6091 0000 		lds r22,g_usb_dev+6
+ 3812 1a1e 70E0      		ldi r23,0
+ 3813 1a20 8091 0000 		lds r24,g_usb_dev+4
+ 3814 1a24 9091 0000 		lds r25,g_usb_dev+4+1
+ 3815               	.L569:
+ 3816 1a28 0E94 0000 		call usb_ep_send_control_data
+ 3817 1a2c 00C0      		rjmp .L543
+ 3818               	.L545:
+ 3819 1a2e 8091 0000 		lds r24,g_usb_dev+9
+GAS LISTING gpio-usb.s 			page 68
+
+
+ 3820 1a32 0817      		cp r16,r24
+ 3821 1a34 00F0      		brlo .+2
+ 3822 1a36 00C0      		rjmp .L537
+ 3823 1a38 0E94 0000 		call usb_ep_clearSETUP
+ 3824 1a3c F090 0000 		lds r15,g_usb_dev+10
+ 3825 1a40 8091 0000 		lds r24,g_usb_dev+7
+ 3826 1a44 9091 0000 		lds r25,g_usb_dev+7+1
+ 3827 1a48 1127      		clr r17
+ 3828 1a4a 21E0      		ldi r18,lo8(1)
+ 3829 1a4c F216      		cp r15,r18
+ 3830 1a4e 01F0      		breq .L548
+ 3831 1a50 22E0      		ldi r18,lo8(2)
+ 3832 1a52 F212      		cpse r15,r18
+ 3833 1a54 00C0      		rjmp .L571
+ 3834 1a56 000F      		lsl r16
+ 3835 1a58 111F      		rol r17
+ 3836 1a5a 800F      		add r24,r16
+ 3837 1a5c 911F      		adc r25,r17
+ 3838 1a5e 0E94 0000 		call __eerd_word_usb162
+ 3839 1a62 8C01      		movw r16,r24
+ 3840 1a64 00C0      		rjmp .L550
+ 3841               	.L548:
+ 3842 1a66 000F      		lsl r16
+ 3843 1a68 111F      		rol r17
+ 3844 1a6a FC01      		movw r30,r24
+ 3845 1a6c E00F      		add r30,r16
+ 3846 1a6e F11F      		adc r31,r17
+ 3847               	/* #APP */
+ 3848               	 ;  366 "../avrutilslib/usb/usb.c" 1
+ 3849 1a70 0591      		lpm r16, Z+
+ 3850 1a72 1491      		lpm r17, Z
+ 3851               		
+ 3852               	 ;  0 "" 2
+ 3853               	/* #NOAPP */
+ 3854 1a74 00C0      		rjmp .L550
+ 3855               	.L571:
+ 3856 1a76 000F      		lsl r16
+ 3857 1a78 111F      		rol r17
+ 3858 1a7a FC01      		movw r30,r24
+ 3859 1a7c E00F      		add r30,r16
+ 3860 1a7e F11F      		adc r31,r17
+ 3861 1a80 0081      		ld r16,Z
+ 3862 1a82 1181      		ldd r17,Z+1
+ 3863               	.L550:
+ 3864 1a84 CF80      		ldd r12,Y+7
+ 3865 1a86 D884      		ldd r13,Y+8
+ 3866 1a88 6F2D      		mov r22,r15
+ 3867 1a8a C801      		movw r24,r16
+ 3868 1a8c 0E94 0000 		call usb_mem_read_byte
+ 3869 1a90 682F      		mov r22,r24
+ 3870 1a92 70E0      		ldi r23,0
+ 3871 1a94 9601      		movw r18,r12
+ 3872 1a96 4F2D      		mov r20,r15
+ 3873 1a98 C801      		movw r24,r16
+ 3874 1a9a 00C0      		rjmp .L569
+ 3875               	.L540:
+ 3876 1a9c 8111      		cpse r24,__zero_reg__
+GAS LISTING gpio-usb.s 			page 69
+
+
+ 3877 1a9e 00C0      		rjmp .L537
+ 3878 1aa0 8091 0000 		lds r24,g_usb_dev
+ 3879 1aa4 8C70      		andi r24,lo8(12)
+ 3880 1aa6 01F0      		breq .L537
+ 3881 1aa8 1B81      		ldd r17,Y+3
+ 3882 1aaa 1F77      		andi r17,lo8(127)
+ 3883 1aac 0E94 0000 		call usb_ep_clearSETUP
+ 3884 1ab0 1093 E300 		sts 227,r17
+ 3885 1ab4 0E94 0000 		call usb_ep_send_zlp
+ 3886 1ab8 8091 E300 		lds r24,227
+ 3887 1abc 8068      		ori r24,lo8(-128)
+ 3888 1abe 8093 E300 		sts 227,r24
+ 3889 1ac2 1123      		tst r17
+ 3890 1ac4 01F0      		breq .L551
+ 3891 1ac6 88E0      		ldi r24,lo8(8)
+ 3892 1ac8 00C0      		rjmp .L570
+ 3893               	.L551:
+ 3894 1aca 84E0      		ldi r24,lo8(4)
+ 3895               	.L570:
+ 3896 1acc 8093 0000 		sts g_usb_dev,r24
+ 3897 1ad0 00C0      		rjmp .L543
+ 3898               	.L542:
+ 3899 1ad2 8111      		cpse r24,__zero_reg__
+ 3900 1ad4 00C0      		rjmp .L537
+ 3901 1ad6 8091 0000 		lds r24,g_usb_dev
+ 3902 1ada 8871      		andi r24,lo8(24)
+ 3903 1adc 01F0      		breq .L537
+ 3904 1ade 1B81      		ldd r17,Y+3
+ 3905 1ae0 1111      		cpse r17,__zero_reg__
+ 3906 1ae2 00C0      		rjmp .L552
+ 3907 1ae4 88E0      		ldi r24,lo8(8)
+ 3908 1ae6 8093 0000 		sts g_usb_dev,r24
+ 3909 1aea 1092 0000 		sts g_usb_dev+1,__zero_reg__
+ 3910 1aee 00C0      		rjmp .L553
+ 3911               	.L552:
+ 3912 1af0 6091 0000 		lds r22,g_usb_dev+10
+ 3913 1af4 8091 0000 		lds r24,g_usb_dev+4
+ 3914 1af8 9091 0000 		lds r25,g_usb_dev+4+1
+ 3915 1afc 0596      		adiw r24,5
+ 3916 1afe 0E94 0000 		call usb_mem_read_byte
+ 3917 1b02 1813      		cpse r17,r24
+ 3918 1b04 00C0      		rjmp .L537
+ 3919 1b06 80E1      		ldi r24,lo8(16)
+ 3920 1b08 8093 0000 		sts g_usb_dev,r24
+ 3921 1b0c 1093 0000 		sts g_usb_dev+1,r17
+ 3922 1b10 1092 E900 		sts 233,__zero_reg__
+ 3923               	.L553:
+ 3924 1b14 0E94 0000 		call usb_ep_clearSETUP
+ 3925 1b18 0E94 0000 		call usb_ep_send_zlp
+ 3926 1b1c 00C0      		rjmp .L543
+ 3927               	.L537:
+ 3928 1b1e CE01      		movw r24,r28
+ 3929 1b20 0196      		adiw r24,1
+ 3930 1b22 0E94 0000 		call usb_event_ep0_request
+ 3931               	.L555:
+ 3932 1b26 1092 E900 		sts 233,__zero_reg__
+ 3933 1b2a 8823      		tst r24
+GAS LISTING gpio-usb.s 			page 70
+
+
+ 3934 1b2c 01F0      		breq .L534
+ 3935 1b2e 0E94 0000 		call usb_ep_clearSETUP
+ 3936 1b32 8091 EB00 		lds r24,235
+ 3937 1b36 8062      		ori r24,lo8(32)
+ 3938 1b38 8093 EB00 		sts 235,r24
+ 3939 1b3c 00C0      		rjmp .L534
+ 3940               	.L543:
+ 3941 1b3e 80E0      		ldi r24,0
+ 3942 1b40 00C0      		rjmp .L555
+ 3943               	.L534:
+ 3944               	/* epilogue start */
+ 3945 1b42 2896      		adiw r28,8
+ 3946 1b44 0FB6      		in __tmp_reg__,__SREG__
+ 3947 1b46 F894      		cli
+ 3948 1b48 DEBF      		out __SP_H__,r29
+ 3949 1b4a 0FBE      		out __SREG__,__tmp_reg__
+ 3950 1b4c CDBF      		out __SP_L__,r28
+ 3951 1b4e DF91      		pop r29
+ 3952 1b50 CF91      		pop r28
+ 3953 1b52 1F91      		pop r17
+ 3954 1b54 0F91      		pop r16
+ 3955 1b56 FF90      		pop r15
+ 3956 1b58 DF90      		pop r13
+ 3957 1b5a CF90      		pop r12
+ 3958 1b5c 0895      		ret
+ 3959               		.size	usb_ep0_task, .-usb_ep0_task
+ 3960               	.global	__vector_18
+ 3961               		.type	__vector_18, @function
+ 3962               	__vector_18:
+ 3963 1b5e 1F92      		push r1
+ 3964 1b60 0F92      		push r0
+ 3965 1b62 0FB6      		in r0,__SREG__
+ 3966 1b64 0F92      		push r0
+ 3967 1b66 1124      		clr __zero_reg__
+ 3968 1b68 8F93      		push r24
+ 3969 1b6a 9F93      		push r25
+ 3970               	/* prologue: Signal */
+ 3971               	/* frame size = 0 */
+ 3972               	/* stack size = 5 */
+ 3973               	.L__stack_usage = 5
+ 3974 1b6c 8091 0000 		lds r24,g_led_counter
+ 3975 1b70 8F5F      		subi r24,lo8(-(1))
+ 3976 1b72 8093 0000 		sts g_led_counter,r24
+ 3977 1b76 8A30      		cpi r24,lo8(10)
+ 3978 1b78 00F0      		brlo .L572
+ 3979 1b7a 95B1      		in r25,0x5
+ 3980 1b7c 80E2      		ldi r24,lo8(32)
+ 3981 1b7e 8927      		eor r24,r25
+ 3982 1b80 85B9      		out 0x5,r24
+ 3983 1b82 1092 0000 		sts g_led_counter,__zero_reg__
+ 3984               	.L572:
+ 3985               	/* epilogue start */
+ 3986 1b86 9F91      		pop r25
+ 3987 1b88 8F91      		pop r24
+ 3988 1b8a 0F90      		pop r0
+ 3989 1b8c 0FBE      		out __SREG__,r0
+ 3990 1b8e 0F90      		pop r0
+GAS LISTING gpio-usb.s 			page 71
+
+
+ 3991 1b90 1F90      		pop r1
+ 3992 1b92 1895      		reti
+ 3993               		.size	__vector_18, .-__vector_18
+ 3994               		.section	.text.startup,"ax",@progbits
+ 3995               	.global	main
+ 3996               		.type	main, @function
+ 3997               	main:
+ 3998               	/* prologue: function */
+ 3999               	/* frame size = 0 */
+ 4000               	/* stack size = 0 */
+ 4001               	.L__stack_usage = 0
+ 4002               	/* #APP */
+ 4003               	 ;  1628 "gpio-usb.c" 1
+ 4004 0000 F894      		cli
+ 4005               	 ;  0 "" 2
+ 4006               	/* #NOAPP */
+ 4007 0002 0E94 0000 		call init_system
+ 4008 0006 EE24      		clr r14
+ 4009 0008 E394      		inc r14
+ 4010 000a 04E0      		ldi r16,lo8(4)
+ 4011 000c 20E0      		ldi r18,lo8(g_strings_P)
+ 4012 000e 30E0      		ldi r19,hi8(g_strings_P)
+ 4013 0010 42E1      		ldi r20,lo8(18)
+ 4014 0012 60E0      		ldi r22,lo8(g_config_1_P)
+ 4015 0014 70E0      		ldi r23,hi8(g_config_1_P)
+ 4016 0016 80E0      		ldi r24,lo8(g_device_desc_P)
+ 4017 0018 90E0      		ldi r25,hi8(g_device_desc_P)
+ 4018 001a 0E94 0000 		call usb_init
+ 4019 001e 83B7      		in r24,0x33
+ 4020 0020 817F      		andi r24,lo8(-15)
+ 4021 0022 83BF      		out 0x33,r24
+ 4022 0024 83B7      		in r24,0x33
+ 4023 0026 8160      		ori r24,lo8(1)
+ 4024 0028 83BF      		out 0x33,r24
+ 4025               	/* #APP */
+ 4026               	 ;  1638 "gpio-usb.c" 1
+ 4027 002a 7894      		sei
+ 4028               	 ;  0 "" 2
+ 4029               	/* #NOAPP */
+ 4030               	.L575:
+ 4031 002c 0E94 0000 		call usb_ep0_task
+ 4032 0030 00C0      		rjmp .L575
+ 4033               		.size	main, .-main
+ 4034               		.section	.rodata
+ 4035               		.type	CSWTCH.133, @object
+ 4036               		.size	CSWTCH.133, 25
+ 4037               	CSWTCH.133:
+ 4038 0000 02        		.byte	2
+ 4039 0001 32        		.byte	50
+ 4040 0002 32        		.byte	50
+ 4041 0003 32        		.byte	50
+ 4042 0004 32        		.byte	50
+ 4043 0005 32        		.byte	50
+ 4044 0006 32        		.byte	50
+ 4045 0007 32        		.byte	50
+ 4046 0008 12        		.byte	18
+ 4047 0009 32        		.byte	50
+GAS LISTING gpio-usb.s 			page 72
+
+
+ 4048 000a 32        		.byte	50
+ 4049 000b 32        		.byte	50
+ 4050 000c 32        		.byte	50
+ 4051 000d 32        		.byte	50
+ 4052 000e 32        		.byte	50
+ 4053 000f 32        		.byte	50
+ 4054 0010 32        		.byte	50
+ 4055 0011 32        		.byte	50
+ 4056 0012 32        		.byte	50
+ 4057 0013 32        		.byte	50
+ 4058 0014 32        		.byte	50
+ 4059 0015 32        		.byte	50
+ 4060 0016 32        		.byte	50
+ 4061 0017 32        		.byte	50
+ 4062 0018 22        		.byte	34
+ 4063               		.section	.progmem.data,"a",@progbits
+ 4064               		.type	epsizemap.2209, @object
+ 4065               		.size	epsizemap.2209, 4
+ 4066               	epsizemap.2209:
+ 4067 0000 08        		.byte	8
+ 4068 0001 10        		.byte	16
+ 4069 0002 20        		.byte	32
+ 4070 0003 40        		.byte	64
+ 4071               		.local	g_led_counter
+ 4072               		.comm	g_led_counter,1,1
+ 4073               	.global	g_strings_P
+ 4074               		.type	g_strings_P, @object
+ 4075               		.size	g_strings_P, 8
+ 4076               	g_strings_P:
+ 4077 0004 0000      		.word	g_string0_P
+ 4078 0006 0000      		.word	g_string1_P
+ 4079 0008 0000      		.word	g_string2_P
+ 4080 000a 0000      		.word	g_string3_P
+ 4081               	.global	g_string3_P
+ 4082               		.type	g_string3_P, @object
+ 4083               		.size	g_string3_P, 2
+ 4084               	g_string3_P:
+ 4085 000c 0C        		.byte	12
+ 4086 000d 03        		.byte	3
+ 4087 000e 5600      		.string	"V"
+ 4088 0010 2000      		.string	" "
+ 4089 0012 3100      		.string	"1"
+ 4090 0014 2E00      		.string	"."
+ 4091 0016 3200      		.string	"2"
+ 4092 0018 00        		.string	""
+ 4093 0019 00        		.string	""
+ 4094               	.global	g_string2_P
+ 4095               		.type	g_string2_P, @object
+ 4096               		.size	g_string2_P, 2
+ 4097               	g_string2_P:
+ 4098 001a 12        		.byte	18
+ 4099 001b 03        		.byte	3
+ 4100 001c 6700      		.string	"g"
+ 4101 001e 7000      		.string	"p"
+ 4102 0020 6900      		.string	"i"
+ 4103 0022 6F00      		.string	"o"
+ 4104 0024 2D00      		.string	"-"
+GAS LISTING gpio-usb.s 			page 73
+
+
+ 4105 0026 7500      		.string	"u"
+ 4106 0028 7300      		.string	"s"
+ 4107 002a 6200      		.string	"b"
+ 4108 002c 00        		.string	""
+ 4109 002d 00        		.string	""
+ 4110               	.global	g_string1_P
+ 4111               		.type	g_string1_P, @object
+ 4112               		.size	g_string1_P, 2
+ 4113               	g_string1_P:
+ 4114 002e 44        		.byte	68
+ 4115 002f 03        		.byte	3
+ 4116 0030 5400      		.string	"T"
+ 4117 0032 6800      		.string	"h"
+ 4118 0034 6F00      		.string	"o"
+ 4119 0036 6D00      		.string	"m"
+ 4120 0038 6100      		.string	"a"
+ 4121 003a 7300      		.string	"s"
+ 4122 003c 2000      		.string	" "
+ 4123 003e 4D00      		.string	"M"
+ 4124 0040 6100      		.string	"a"
+ 4125 0042 6900      		.string	"i"
+ 4126 0044 6500      		.string	"e"
+ 4127 0046 7200      		.string	"r"
+ 4128 0048 2000      		.string	" "
+ 4129 004a 3C00      		.string	"<"
+ 4130 004c 6200      		.string	"b"
+ 4131 004e 6100      		.string	"a"
+ 4132 0050 6C00      		.string	"l"
+ 4133 0052 6100      		.string	"a"
+ 4134 0054 6700      		.string	"g"
+ 4135 0056 6900      		.string	"i"
+ 4136 0058 4000      		.string	"@"
+ 4137 005a 6A00      		.string	"j"
+ 4138 005c 7500      		.string	"u"
+ 4139 005e 7300      		.string	"s"
+ 4140 0060 7400      		.string	"t"
+ 4141 0062 6D00      		.string	"m"
+ 4142 0064 6100      		.string	"a"
+ 4143 0066 6900      		.string	"i"
+ 4144 0068 6C00      		.string	"l"
+ 4145 006a 2E00      		.string	"."
+ 4146 006c 6400      		.string	"d"
+ 4147 006e 6500      		.string	"e"
+ 4148 0070 3E00      		.string	">"
+ 4149 0072 00        		.string	""
+ 4150 0073 00        		.string	""
+ 4151               	.global	g_string0_P
+ 4152               		.type	g_string0_P, @object
+ 4153               		.size	g_string0_P, 2
+ 4154               	g_string0_P:
+ 4155 0074 04        		.byte	4
+ 4156 0075 03        		.byte	3
+ 4157 0076 0904      		.word	1033
+ 4158               	.global	g_config_1_P
+ 4159               		.type	g_config_1_P, @object
+ 4160               		.size	g_config_1_P, 18
+ 4161               	g_config_1_P:
+GAS LISTING gpio-usb.s 			page 74
+
+
+ 4162 0078 09        		.byte	9
+ 4163 0079 02        		.byte	2
+ 4164 007a 1200      		.word	18
+ 4165 007c 01        		.byte	1
+ 4166 007d 01        		.byte	1
+ 4167 007e 00        		.byte	0
+ 4168 007f 80        		.byte	-128
+ 4169 0080 19        		.byte	25
+ 4170 0081 09        		.byte	9
+ 4171 0082 04        		.byte	4
+ 4172 0083 00        		.byte	0
+ 4173 0084 00        		.byte	0
+ 4174 0085 00        		.byte	0
+ 4175 0086 FF        		.byte	-1
+ 4176 0087 FF        		.byte	-1
+ 4177 0088 FF        		.byte	-1
+ 4178 0089 00        		.byte	0
+ 4179               	.global	g_device_desc_P
+ 4180               		.type	g_device_desc_P, @object
+ 4181               		.size	g_device_desc_P, 18
+ 4182               	g_device_desc_P:
+ 4183 008a 12        		.byte	18
+ 4184 008b 01        		.byte	1
+ 4185 008c 1001      		.word	272
+ 4186 008e FF        		.byte	-1
+ 4187 008f FF        		.byte	-1
+ 4188 0090 FF        		.byte	-1
+ 4189 0091 40        		.byte	64
+ 4190 0092 23F1      		.word	-3805
+ 4191 0094 01A0      		.word	-24575
+ 4192 0096 0001      		.word	256
+ 4193 0098 01        		.byte	1
+ 4194 0099 02        		.byte	2
+ 4195 009a 03        		.byte	3
+ 4196 009b 01        		.byte	1
+ 4197               	.global	g_pdi_flags
+ 4198               		.section .bss
+ 4199               		.type	g_pdi_flags, @object
+ 4200               		.size	g_pdi_flags, 1
+ 4201               	g_pdi_flags:
+ 4202 0000 00        		.zero	1
+ 4203               	.global	g_pdi_last_rc
+ 4204               		.type	g_pdi_last_rc, @object
+ 4205               		.size	g_pdi_last_rc, 1
+ 4206               	g_pdi_last_rc:
+ 4207 0001 00        		.zero	1
+ 4208               	.global	g_nvmc_timer
+ 4209               		.type	g_nvmc_timer, @object
+ 4210               		.size	g_nvmc_timer, 1
+ 4211               	g_nvmc_timer:
+ 4212 0002 00        		.zero	1
+ 4213               	.global	g_pdi_timer
+ 4214               		.type	g_pdi_timer, @object
+ 4215               		.size	g_pdi_timer, 1
+ 4216               	g_pdi_timer:
+ 4217 0003 00        		.zero	1
+ 4218               	.global	g_avr_timer
+GAS LISTING gpio-usb.s 			page 75
+
+
+ 4219               		.type	g_avr_timer, @object
+ 4220               		.size	g_avr_timer, 1
+ 4221               	g_avr_timer:
+ 4222 0004 00        		.zero	1
+ 4223               	.global	g_avr_clk_wait
+ 4224               		.type	g_avr_clk_wait, @object
+ 4225               		.size	g_avr_clk_wait, 1
+ 4226               	g_avr_clk_wait:
+ 4227 0005 00        		.zero	1
+ 4228               	.global	g_avr_error
+ 4229               		.type	g_avr_error, @object
+ 4230               		.size	g_avr_error, 1
+ 4231               	g_avr_error:
+ 4232 0006 00        		.zero	1
+ 4233               	.global	g_avr_flags
+ 4234               		.type	g_avr_flags, @object
+ 4235               		.size	g_avr_flags, 1
+ 4236               	g_avr_flags:
+ 4237 0007 00        		.zero	1
+ 4238               		.comm	g_usb_dev,11,1
+ 4239               		.ident	"GCC: (Gentoo 4.9.3 p1.3, pie-0.6.3) 4.9.3"
+ 4240               	.global __do_copy_data
+ 4241               	.global __do_clear_bss
+GAS LISTING gpio-usb.s 			page 76
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gpio-usb.c
+          gpio-usb.s:2      *ABS*:000000000000003e __SP_H__
+          gpio-usb.s:3      *ABS*:000000000000003d __SP_L__
+          gpio-usb.s:4      *ABS*:000000000000003f __SREG__
+          gpio-usb.s:5      *ABS*:0000000000000000 __tmp_reg__
+          gpio-usb.s:6      *ABS*:0000000000000001 __zero_reg__
+          gpio-usb.s:9      .text:0000000000000000 usb_ep_clearSETUP
+          gpio-usb.s:22     .text:000000000000000c usb_ep_clearIN
+          gpio-usb.s:35     .text:0000000000000018 usb_ep_clearOUT
+          gpio-usb.s:48     .text:0000000000000024 init_system
+          gpio-usb.s:100    .text:000000000000007e usb_ep_read_data
+          gpio-usb.s:120    .text:0000000000000092 usb_ep_waitIN
+                            *COM*:000000000000000b g_usb_dev
+          gpio-usb.s:140    .text:00000000000000aa usb_ep_send_zlp
+          gpio-usb.s:155    .text:00000000000000bc usb_mem_read_byte
+          gpio-usb.s:181    .text:00000000000000d4 usb_ep_getbufsize
+          gpio-usb.s:4066   .progmem.data:0000000000000000 epsizemap.2209
+          gpio-usb.s:202    .text:00000000000000e6 usb_ep_send_in_data
+          gpio-usb.s:285    .text:0000000000000182 usb_ep_send_control_data_chunk
+          gpio-usb.s:380    .text:0000000000000230 usb_ep_send_control_data_finish
+          gpio-usb.s:435    .text:000000000000028e usb_ep_send_control_data
+          gpio-usb.s:455    .text:00000000000002a6 usb_ep_recv_control_data_chunk
+          gpio-usb.s:543    .text:0000000000000342 usb_ep_recv_control_data_finish
+          gpio-usb.s:553    .text:000000000000034a usb_ep_recv_control_data
+          gpio-usb.s:567    .text:0000000000000358 usb_ep_setup
+          gpio-usb.s:4037   .rodata:0000000000000000 CSWTCH.133
+          gpio-usb.s:613    .text:00000000000003ac usb_ep_setup_control
+          gpio-usb.s:633    .text:00000000000003c8 usb_intr_endofreset
+          gpio-usb.s:648    .text:00000000000003d8 __vector_11
+          gpio-usb.s:725    .text:000000000000046c usb_init
+          gpio-usb.s:778    .text:00000000000004e6 __vector_15
+          gpio-usb.s:4221   .bss:0000000000000004 g_avr_timer
+          gpio-usb.s:4216   .bss:0000000000000003 g_pdi_timer
+          gpio-usb.s:4211   .bss:0000000000000002 g_nvmc_timer
+          gpio-usb.s:828    .text:000000000000054c avr_clkwait
+          gpio-usb.s:4226   .bss:0000000000000005 g_avr_clk_wait
+          gpio-usb.s:851    .text:0000000000000566 avr_sendbyte
+          gpio-usb.s:4236   .bss:0000000000000007 g_avr_flags
+          gpio-usb.s:898    .text:00000000000005ae cmd_avr_init
+          gpio-usb.s:921    .text:00000000000005d2 cmd_avr_exit
+          gpio-usb.s:939    .text:00000000000005ec cmd_avr_progmode
+          gpio-usb.s:1000   .text:000000000000065e cmd_avr_rawcmd
+          gpio-usb.s:1053   .text:00000000000006c0 avr_sendcmd
+          gpio-usb.s:4231   .bss:0000000000000006 g_avr_error
+          gpio-usb.s:1095   .text:000000000000070a cmd_avr_readflash
+          gpio-usb.s:1157   .text:0000000000000776 cmd_avr_readeeprom
+          gpio-usb.s:1212   .text:00000000000007d2 avr_poll_and_return
+          gpio-usb.s:1268   .text:000000000000082a cmd_avr_writeflashpage
+          gpio-usb.s:1346   .text:00000000000008ba cmd_avr_writeeeprompage
+          gpio-usb.s:1417   .text:000000000000093a pdi_off
+          gpio-usb.s:1436   .text:0000000000000958 pdi_enter
+          gpio-usb.s:1445   .text:000000000000095c pdi_leave
+          gpio-usb.s:1464   .text:000000000000097a pdi_start
+          gpio-usb.s:1499   .text:00000000000009bc pdi_write
+          gpio-usb.s:1621   .text:0000000000000aac pdi_read
+          gpio-usb.s:1652   .text:0000000000000ade pdi_cmd
+GAS LISTING gpio-usb.s 			page 77
+
+
+          gpio-usb.s:1899   .text:0000000000000c9a pdi_cmd_lds_byte
+          gpio-usb.s:1936   .text:0000000000000cd4 pdi_cmd_sts_byte
+          gpio-usb.s:1976   .text:0000000000000d14 pdi_cmd_st_ptr
+          gpio-usb.s:2014   .text:0000000000000d50 pdi_cmd_stcs
+          gpio-usb.s:2045   .text:0000000000000d7e pdi_cmd_ldcs
+          gpio-usb.s:2074   .text:0000000000000da8 pdi_cmd_key_nvm
+          gpio-usb.s:2128   .text:0000000000000e04 pdi_cmd_repeat
+          gpio-usb.s:2161   .text:0000000000000e36 pdi_cmd_load
+          gpio-usb.s:2245   .text:0000000000000ecc pdi_cmd_store
+          gpio-usb.s:2294   .text:0000000000000f22 nvmc_init
+          gpio-usb.s:2373   .text:0000000000000fb2 nvmc_exit
+          gpio-usb.s:2387   .text:0000000000000fc2 nvmc_set_cmd
+          gpio-usb.s:2401   .text:0000000000000fd0 nvmc_trigger_cmdex
+          gpio-usb.s:2415   .text:0000000000000fde nvmc_nvmbusy_wait
+          gpio-usb.s:2463   .text:000000000000102c nvmc_read_nvm
+          gpio-usb.s:2506   .text:0000000000001070 nvmc_erase_chip
+          gpio-usb.s:2582   .text:00000000000010f2 nvmc_flash_write_page
+          gpio-usb.s:2655   .text:000000000000117e nvmc_flash_read
+          gpio-usb.s:2674   .text:0000000000001196 nvmc_eeprom_write
+          gpio-usb.s:2743   .text:000000000000121a nvmc_eeprom_read
+          gpio-usb.s:2754   .text:0000000000001222 nvmc_fuse_write
+          gpio-usb.s:2795   .text:0000000000001264 nvmc_fuse_read
+          gpio-usb.s:2814   .text:000000000000127c nvmc_signaturerow_read
+          gpio-usb.s:2831   .text:0000000000001290 nvmc_read_dev_sign
+          gpio-usb.s:2847   .text:00000000000012a2 pdi_exec
+          gpio-usb.s:4206   .bss:0000000000000001 g_pdi_last_rc
+          gpio-usb.s:3345   .text:0000000000001658 usb_event_set_configuration
+          gpio-usb.s:3354   .text:000000000000165a usb_event_ep0_request
+          gpio-usb.s:4201   .bss:0000000000000000 g_pdi_flags
+          gpio-usb.s:3713   .text:0000000000001952 usb_ep0_task
+          gpio-usb.s:3962   .text:0000000000001b5e __vector_18
+                             .bss:0000000000000008 g_led_counter
+          gpio-usb.s:3997   .text.startup:0000000000000000 main
+          gpio-usb.s:4076   .progmem.data:0000000000000004 g_strings_P
+          gpio-usb.s:4161   .progmem.data:0000000000000078 g_config_1_P
+          gpio-usb.s:4182   .progmem.data:000000000000008a g_device_desc_P
+          gpio-usb.s:4154   .progmem.data:0000000000000074 g_string0_P
+          gpio-usb.s:4113   .progmem.data:000000000000002e g_string1_P
+          gpio-usb.s:4097   .progmem.data:000000000000001a g_string2_P
+          gpio-usb.s:4084   .progmem.data:000000000000000c g_string3_P
+
+UNDEFINED SYMBOLS
+__eerd_byte_usb162
+__eerd_word_usb162
+__do_copy_data
+__do_clear_bss

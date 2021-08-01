@@ -1,0 +1,6 @@
+y
+readfuses
+writefuse 2 0xbf
+writefuse 4 0xf2
+writefuse 5 0xe2
+readfuses

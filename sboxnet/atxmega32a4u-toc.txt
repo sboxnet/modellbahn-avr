@@ -1,0 +1,26 @@
+atxmega32a4u
+============
+
+Device Datasheet:
+-----------------
+
+Interrupt Vectors:
+
+- Datasheet Page 30
+0x05E TCE0_INT_base Timer/counter 0 on port E interrupt base
+TCE0_OVF_vect    _VECTOR(47)
+USARTE0_RXC_vect _VECTOR(58)
+USARTE0_TXC_vect _VECTOR(60)
+TCE0_CCA_vect    _VECTOR(49)
+TCE0_OVF_vect    _VECTOR(47)
+
+32.2 Alternate Pin Functions
+- Datasheet Page 58ff
+
+
+XMEGA AU MANUAL
+---------------
+
+13.13.14 REMAP – Pin Remap register
+
+The pin remap functionality is available for PORTC - PORTF only.

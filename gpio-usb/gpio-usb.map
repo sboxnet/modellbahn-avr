@@ -1,0 +1,534 @@
+Archive member included to satisfy reference by file (symbol)
+
+/usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+                              /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o (exit)
+/usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+                              gpio-usb.o (__do_copy_data)
+/usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+                              gpio-usb.o (__do_clear_bss)
+/usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_byte_at90usb162.o)
+                              gpio-usb.o (__eerd_byte_usb162)
+/usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o)
+                              gpio-usb.o (__eerd_word_usb162)
+/usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_block_at90usb162.o)
+                              /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o) (__eerd_blraw_usb162)
+
+Allocating common symbols
+Common symbol       size              file
+
+g_usb_dev           0xb               gpio-usb.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x0000000000000000 0x0000000000010000 xr
+data             0x0000000000800060 0x000000000000ffa0 rw !x
+eeprom           0x0000000000810000 0x0000000000010000 rw !x
+fuse             0x0000000000820000 0x0000000000000400 rw !x
+lock             0x0000000000830000 0x0000000000000400 rw !x
+signature        0x0000000000840000 0x0000000000000400 rw !x
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+LOAD gpio-usb.o
+START GROUP
+LOAD /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a
+LOAD /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libm.a
+LOAD /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a
+END GROUP
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x0000000000000000     0x1d54
+ *(.vectors)
+ .vectors       0x0000000000000000       0x74 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+                0x0000000000000000                __vectors
+                0x0000000000000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x0000000000000074                . = ALIGN (0x2)
+                0x0000000000000074                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x0000000000000074        0x0 linker stubs
+ *(.trampolines*)
+                0x0000000000000074                __trampolines_end = .
+ *(.progmem*)
+ .progmem.data  0x0000000000000074       0x9c gpio-usb.o
+                0x0000000000000078                g_strings_P
+                0x0000000000000080                g_string3_P
+                0x000000000000008e                g_string2_P
+                0x00000000000000a2                g_string1_P
+                0x00000000000000e8                g_string0_P
+                0x00000000000000ec                g_config_1_P
+                0x00000000000000fe                g_device_desc_P
+                0x0000000000000110                . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000000000000110                __ctors_start = .
+ *(.ctors)
+                0x0000000000000110                __ctors_end = .
+                0x0000000000000110                __dtors_start = .
+ *(.dtors)
+                0x0000000000000110                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x0000000000000110        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+                0x0000000000000110                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000000000000110        0xc /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000000000000011c       0x16 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+                0x000000000000011c                __do_copy_data
+ .init4         0x0000000000000132       0x10 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+                0x0000000000000132                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x0000000000000142        0x8 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+ *(.init9)
+ *(.text)
+ .text          0x000000000000014a        0x4 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+                0x000000000000014a                __vector_22
+                0x000000000000014a                __vector_28
+                0x000000000000014a                __vector_1
+                0x000000000000014a                __vector_24
+                0x000000000000014a                __vector_12
+                0x000000000000014a                __bad_interrupt
+                0x000000000000014a                __vector_6
+                0x000000000000014a                __vector_3
+                0x000000000000014a                __vector_23
+                0x000000000000014a                __vector_25
+                0x000000000000014a                __vector_13
+                0x000000000000014a                __vector_17
+                0x000000000000014a                __vector_19
+                0x000000000000014a                __vector_7
+                0x000000000000014a                __vector_27
+                0x000000000000014a                __vector_5
+                0x000000000000014a                __vector_4
+                0x000000000000014a                __vector_9
+                0x000000000000014a                __vector_2
+                0x000000000000014a                __vector_21
+                0x000000000000014a                __vector_8
+                0x000000000000014a                __vector_26
+                0x000000000000014a                __vector_14
+                0x000000000000014a                __vector_10
+                0x000000000000014a                __vector_16
+                0x000000000000014a                __vector_20
+ .text          0x000000000000014e     0x1b94 gpio-usb.o
+                0x00000000000001cc                usb_ep_read_data
+                0x00000000000001e0                usb_ep_waitIN
+                0x00000000000001f8                usb_ep_send_zlp
+                0x000000000000020a                usb_mem_read_byte
+                0x0000000000000222                usb_ep_getbufsize
+                0x0000000000000234                usb_ep_send_in_data
+                0x00000000000002d0                usb_ep_send_control_data_chunk
+                0x000000000000037e                usb_ep_send_control_data_finish
+                0x00000000000003dc                usb_ep_send_control_data
+                0x00000000000003f4                usb_ep_recv_control_data_chunk
+                0x0000000000000490                usb_ep_recv_control_data_finish
+                0x0000000000000498                usb_ep_recv_control_data
+                0x00000000000004a6                usb_ep_setup
+                0x00000000000004fa                usb_ep_setup_control
+                0x0000000000000516                usb_intr_endofreset
+                0x0000000000000526                __vector_11
+                0x00000000000005ba                usb_init
+                0x0000000000000634                __vector_15
+                0x000000000000069a                avr_clkwait
+                0x00000000000006b4                avr_sendbyte
+                0x00000000000006fc                cmd_avr_init
+                0x0000000000000720                cmd_avr_exit
+                0x000000000000073a                cmd_avr_progmode
+                0x00000000000007ac                cmd_avr_rawcmd
+                0x000000000000080e                avr_sendcmd
+                0x0000000000000858                cmd_avr_readflash
+                0x00000000000008c4                cmd_avr_readeeprom
+                0x0000000000000920                avr_poll_and_return
+                0x0000000000000978                cmd_avr_writeflashpage
+                0x0000000000000a08                cmd_avr_writeeeprompage
+                0x0000000000000a88                pdi_off
+                0x0000000000000aa6                pdi_enter
+                0x0000000000000aaa                pdi_leave
+                0x0000000000000ac8                pdi_start
+                0x0000000000000b0a                pdi_write
+                0x0000000000000bfa                pdi_read
+                0x0000000000000c2c                pdi_cmd
+                0x0000000000000de8                pdi_cmd_lds_byte
+                0x0000000000000e22                pdi_cmd_sts_byte
+                0x0000000000000e62                pdi_cmd_st_ptr
+                0x0000000000000e9e                pdi_cmd_stcs
+                0x0000000000000ecc                pdi_cmd_ldcs
+                0x0000000000000ef6                pdi_cmd_key_nvm
+                0x0000000000000f52                pdi_cmd_repeat
+                0x0000000000000f84                pdi_cmd_load
+                0x000000000000101a                pdi_cmd_store
+                0x0000000000001070                nvmc_init
+                0x0000000000001100                nvmc_exit
+                0x0000000000001110                nvmc_set_cmd
+                0x000000000000111e                nvmc_trigger_cmdex
+                0x000000000000112c                nvmc_nvmbusy_wait
+                0x000000000000117a                nvmc_read_nvm
+                0x00000000000011be                nvmc_erase_chip
+                0x0000000000001240                nvmc_flash_write_page
+                0x00000000000012cc                nvmc_flash_read
+                0x00000000000012e4                nvmc_eeprom_write
+                0x0000000000001368                nvmc_eeprom_read
+                0x0000000000001370                nvmc_fuse_write
+                0x00000000000013b2                nvmc_fuse_read
+                0x00000000000013ca                nvmc_signaturerow_read
+                0x00000000000013de                nvmc_read_dev_sign
+                0x00000000000013f0                pdi_exec
+                0x00000000000017a6                usb_event_set_configuration
+                0x00000000000017a8                usb_event_ep0_request
+                0x0000000000001aa0                usb_ep0_task
+                0x0000000000001cac                __vector_18
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_byte_at90usb162.o)
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o)
+ .text          0x0000000000001ce2        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_block_at90usb162.o)
+                0x0000000000001ce2                . = ALIGN (0x2)
+ *(.text.*)
+ .text.startup  0x0000000000001ce2       0x32 gpio-usb.o
+                0x0000000000001ce2                main
+ .text.libgcc.mul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc   0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x0000000000001d14        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x0000000000001d14       0x10 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_byte_at90usb162.o)
+                0x0000000000001d14                __eerd_byte_usb162
+ .text.avr-libc
+                0x0000000000001d24        0xc /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o)
+                0x0000000000001d24                __eerd_word_usb162
+ .text.avr-libc
+                0x0000000000001d30       0x20 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_block_at90usb162.o)
+                0x0000000000001d30                __eerd_block_usb162
+                0x0000000000001d34                __eerd_blraw_usb162
+                0x0000000000001d50                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x0000000000001d50        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+                0x0000000000001d50                exit
+                0x0000000000001d50                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x0000000000001d50        0x4 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ *(.fini0)
+                0x0000000000001d54                _etext = .
+
+.data           0x0000000000800100       0x1a load address 0x0000000000001d54
+                0x0000000000800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+ .data          0x0000000000800100        0x0 gpio-usb.o
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_byte_at90usb162.o)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_block_at90usb162.o)
+ *(.data*)
+ *(.rodata)
+ .rodata        0x0000000000800100       0x19 gpio-usb.o
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x000000000080011a                . = ALIGN (0x2)
+ *fill*         0x0000000000800119        0x1 
+                0x000000000080011a                _edata = .
+                0x000000000080011a                PROVIDE (__data_end, .)
+
+.bss            0x000000000080011a       0x14
+                0x000000000080011a                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x000000000080011a        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/crtusb162.o
+ .bss           0x000000000080011a        0x9 gpio-usb.o
+                0x000000000080011a                g_pdi_flags
+                0x000000000080011b                g_pdi_last_rc
+                0x000000000080011c                g_nvmc_timer
+                0x000000000080011d                g_pdi_timer
+                0x000000000080011e                g_avr_timer
+                0x000000000080011f                g_avr_clk_wait
+                0x0000000000800120                g_avr_error
+                0x0000000000800121                g_avr_flags
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_exit.o)
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_copy_data.o)
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/avr35/libgcc.a(_clear_bss.o)
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_byte_at90usb162.o)
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_word_at90usb162.o)
+ .bss           0x0000000000800123        0x0 /usr/lib/gcc/avr/4.9.3/../../../../avr/lib/avr35/libc.a(eerd_block_at90usb162.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x0000000000800123        0xb gpio-usb.o
+                0x0000000000800123                g_usb_dev
+                0x000000000080012e                PROVIDE (__bss_end, .)
+                0x0000000000001d54                __data_load_start = LOADADDR (.data)
+                0x0000000000001d6e                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x000000000080012e        0x0
+                [!provide]                        PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                [!provide]                        PROVIDE (__noinit_end, .)
+                0x000000000080012e                _end = .
+                [!provide]                        PROVIDE (__heap_start, .)
+
+.eeprom         0x0000000000810000        0x0
+ *(.eeprom*)
+                0x0000000000810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000       0x2a
+ *(.comment)
+ .comment       0x0000000000000000       0x2a gpio-usb.o
+                                         0x2b (size before relaxing)
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info .gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line .debug_line.* .debug_line_end)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges
+ *(.debug_ranges)
+
+.debug_macro
+ *(.debug_macro)
+OUTPUT(gpio-usb.avr elf32-avr)
+LOAD linker stubs

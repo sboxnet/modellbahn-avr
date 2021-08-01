@@ -1,0 +1,6 @@
+atxmega32a4
+===========
+
+0x0000 - 0x77ff Application Section (64kb-4kb=32kw-2kw=60kb=30kw)
+0x7800 - 0x7fff Application Table Section (4kb=2kw)
+0x8000 - 0x87ff Boot Section (4kb = 2kw)

@@ -1,0 +1,8 @@
+2   weichen-servo
+4   weichen-servo
+5   gbmelder
+7   gbmelder
+8   dccgen
+9   ?
+10  gbmelder
+12  booster

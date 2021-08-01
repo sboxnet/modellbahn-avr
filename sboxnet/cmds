@@ -1,0 +1,4 @@
+progflash bin:bootloader-32.bin 0x3800
+progflash bin:build/booster-32.bin
+puteeprom 0x300 0
+

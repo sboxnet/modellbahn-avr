@@ -1,0 +1,1892 @@
+GAS LISTING test-sboxnet.s 			page 1
+
+
+   1               		.file	"test-sboxnet.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               		.type	sboxnet_crc8_add, @function
+  10               	sboxnet_crc8_add:
+  11               	/* prologue: function */
+  12               	/* frame size = 0 */
+  13               	/* stack size = 0 */
+  14               	.L__stack_usage = 0
+  15               	/* #APP */
+  16               	 ;  321 "/usr/avr/include/util/crc16.h" 1
+  17 0000 8627      			eor	r24, r22
+  18 0002 98E0      			ldi	r25, 8
+  19 0004 6CE8      			ldi	r22, 0x8C
+  20 0006 8695      		1:	lsr	r24
+  21 0008 00F4      			brcc	2f
+  22 000a 8627      			eor	r24, r22
+  23 000c 9A95      		2:	dec	r25
+  24 000e 01F4      			brne	1b
+  25               		
+  26               	 ;  0 "" 2
+  27               	/* #NOAPP */
+  28 0010 0895      		ret
+  29               		.size	sboxnet_crc8_add, .-sboxnet_crc8_add
+  30               		.type	sboxnet_recv_buf_write, @function
+  31               	sboxnet_recv_buf_write:
+  32               	/* prologue: function */
+  33               	/* frame size = 0 */
+  34               	/* stack size = 0 */
+  35               	.L__stack_usage = 0
+  36 0012 9091 0000 		lds r25,g_sboxnet_dev_def+12
+  37 0016 2091 0000 		lds r18,g_sboxnet_dev_def+10
+  38 001a 920F      		add r25,r18
+  39 001c 903A      		cpi r25,lo8(-96)
+  40 001e 00F4      		brsh .L5
+  41 0020 2F5F      		subi r18,lo8(-(1))
+  42 0022 2093 0000 		sts g_sboxnet_dev_def+10,r18
+  43 0026 9091 0000 		lds r25,g_sboxnet_dev_def+9
+  44 002a E92F      		mov r30,r25
+  45 002c F0E0      		ldi r31,0
+  46 002e E050      		subi r30,lo8(-(g_sboxnet_dev_def+8))
+  47 0030 F040      		sbci r31,hi8(-(g_sboxnet_dev_def+8))
+  48 0032 8583      		std Z+5,r24
+  49 0034 81E0      		ldi r24,lo8(1)
+  50 0036 890F      		add r24,r25
+  51 0038 803A      		cpi r24,lo8(-96)
+  52 003a 00F4      		brsh .L4
+  53 003c 8093 0000 		sts g_sboxnet_dev_def+9,r24
+  54 0040 00C0      		rjmp .L6
+  55               	.L4:
+  56 0042 1092 0000 		sts g_sboxnet_dev_def+9,__zero_reg__
+  57               	.L6:
+GAS LISTING test-sboxnet.s 			page 2
+
+
+  58 0046 81E0      		ldi r24,lo8(1)
+  59 0048 0895      		ret
+  60               	.L5:
+  61 004a 80E0      		ldi r24,0
+  62 004c 0895      		ret
+  63               		.size	sboxnet_recv_buf_write, .-sboxnet_recv_buf_write
+  64               		.type	sboxnet_set_timer, @function
+  65               	sboxnet_set_timer:
+  66               	/* prologue: function */
+  67               	/* frame size = 0 */
+  68               	/* stack size = 0 */
+  69               	.L__stack_usage = 0
+  70 004e E0E0      		ldi r30,0
+  71 0050 F8E0      		ldi r31,lo8(8)
+  72 0052 20A1      		ldd r18,Z+32
+  73 0054 31A1      		ldd r19,Z+33
+  74 0056 280F      		add r18,r24
+  75 0058 391F      		adc r19,r25
+  76 005a 3327      		clr r19
+  77 005c 20A7      		std Z+40,r18
+  78 005e 31A7      		std Z+41,r19
+  79 0060 80E1      		ldi r24,lo8(16)
+  80 0062 8487      		std Z+12,r24
+  81 0064 8781      		ldd r24,Z+7
+  82 0066 8C7F      		andi r24,lo8(-4)
+  83 0068 8160      		ori r24,lo8(1)
+  84 006a 8783      		std Z+7,r24
+  85 006c 0895      		ret
+  86               		.size	sboxnet_set_timer, .-sboxnet_set_timer
+  87               		.type	lcd_ks0070_write4, @function
+  88               	lcd_ks0070_write4:
+  89               	/* prologue: function */
+  90               	/* frame size = 0 */
+  91               	/* stack size = 0 */
+  92               	.L__stack_usage = 0
+  93 006e 9091 6406 		lds r25,1636
+  94 0072 9778      		andi r25,lo8(-121)
+  95 0074 6F70      		andi r22,lo8(15)
+  96 0076 28E0      		ldi r18,lo8(8)
+  97 0078 629F      		mul r22,r18
+  98 007a B001      		movw r22,r0
+  99 007c 1124      		clr __zero_reg__
+ 100 007e 962B      		or r25,r22
+ 101 0080 9093 6406 		sts 1636,r25
+ 102 0084 8823      		tst r24
+ 103 0086 01F0      		breq .L10
+ 104 0088 80E8      		ldi r24,lo8(-128)
+ 105 008a 8093 6506 		sts 1637,r24
+ 106 008e 00C0      		rjmp .L11
+ 107               	.L10:
+ 108 0090 80E8      		ldi r24,lo8(-128)
+ 109 0092 8093 6606 		sts 1638,r24
+ 110               	.L11:
+ 111 0096 81E0      		ldi r24,lo8(1)
+ 112 0098 8093 8506 		sts 1669,r24
+ 113 009c 9AE0      		ldi r25,lo8(10)
+ 114 009e 9A95      		1: dec r25
+GAS LISTING test-sboxnet.s 			page 3
+
+
+ 115 00a0 01F4      		brne 1b
+ 116 00a2 00C0      		rjmp .
+ 117 00a4 8093 8606 		sts 1670,r24
+ 118 00a8 0895      		ret
+ 119               		.size	lcd_ks0070_write4, .-lcd_ks0070_write4
+ 120               		.type	lcd_ks0070_write, @function
+ 121               	lcd_ks0070_write:
+ 122 00aa CF93      		push r28
+ 123 00ac DF93      		push r29
+ 124               	/* prologue: function */
+ 125               	/* frame size = 0 */
+ 126               	/* stack size = 2 */
+ 127               	.L__stack_usage = 2
+ 128 00ae C82F      		mov r28,r24
+ 129 00b0 D62F      		mov r29,r22
+ 130 00b2 6295      		swap r22
+ 131 00b4 6F70      		andi r22,lo8(15)
+ 132 00b6 0E94 0000 		call lcd_ks0070_write4
+ 133 00ba 6D2F      		mov r22,r29
+ 134 00bc 8C2F      		mov r24,r28
+ 135               	/* epilogue start */
+ 136 00be DF91      		pop r29
+ 137 00c0 CF91      		pop r28
+ 138 00c2 0C94 0000 		jmp lcd_ks0070_write4
+ 139               		.size	lcd_ks0070_write, .-lcd_ks0070_write
+ 140               		.type	lcd_ks0070_command, @function
+ 141               	lcd_ks0070_command:
+ 142               	/* prologue: function */
+ 143               	/* frame size = 0 */
+ 144               	/* stack size = 0 */
+ 145               	.L__stack_usage = 0
+ 146 00c6 682F      		mov r22,r24
+ 147 00c8 80E0      		ldi r24,0
+ 148 00ca 0E94 0000 		call lcd_ks0070_write
+ 149 00ce 87E6      		ldi r24,lo8(359)
+ 150 00d0 91E0      		ldi r25,hi8(359)
+ 151 00d2 0197      		1: sbiw r24,1
+ 152 00d4 01F4      		brne 1b
+ 153 00d6 00C0      		rjmp .
+ 154 00d8 0000      		nop
+ 155 00da 0895      		ret
+ 156               		.size	lcd_ks0070_command, .-lcd_ks0070_command
+ 157               		.type	lcd_set_cursor, @function
+ 158               	lcd_set_cursor:
+ 159               	/* prologue: function */
+ 160               	/* frame size = 0 */
+ 161               	/* stack size = 0 */
+ 162               	.L__stack_usage = 0
+ 163 00dc 6150      		subi r22,lo8(-(-1))
+ 164 00de 6330      		cpi r22,lo8(3)
+ 165 00e0 00F4      		brsh .L16
+ 166 00e2 E62F      		mov r30,r22
+ 167 00e4 F0E0      		ldi r31,0
+ 168 00e6 E050      		subi r30,lo8(-(CSWTCH.45))
+ 169 00e8 F040      		sbci r31,hi8(-(CSWTCH.45))
+ 170 00ea 9081      		ld r25,Z
+ 171 00ec 00C0      		rjmp .L15
+GAS LISTING test-sboxnet.s 			page 4
+
+
+ 172               	.L16:
+ 173 00ee 90E0      		ldi r25,0
+ 174               	.L15:
+ 175 00f0 890F      		add r24,r25
+ 176 00f2 8068      		ori r24,lo8(-128)
+ 177 00f4 0C94 0000 		jmp lcd_ks0070_command
+ 178               		.size	lcd_set_cursor, .-lcd_set_cursor
+ 179               		.type	lcd_ks0070_data, @function
+ 180               	lcd_ks0070_data:
+ 181               	/* prologue: function */
+ 182               	/* frame size = 0 */
+ 183               	/* stack size = 0 */
+ 184               	.L__stack_usage = 0
+ 185 00f8 682F      		mov r22,r24
+ 186 00fa 81E0      		ldi r24,lo8(1)
+ 187 00fc 0E94 0000 		call lcd_ks0070_write
+ 188 0100 8FE8      		ldi r24,lo8(399)
+ 189 0102 91E0      		ldi r25,hi8(399)
+ 190 0104 0197      		1: sbiw r24,1
+ 191 0106 01F4      		brne 1b
+ 192 0108 00C0      		rjmp .
+ 193 010a 0000      		nop
+ 194 010c 0895      		ret
+ 195               		.size	lcd_ks0070_data, .-lcd_ks0070_data
+ 196               		.type	lcd_str, @function
+ 197               	lcd_str:
+ 198 010e CF93      		push r28
+ 199 0110 DF93      		push r29
+ 200               	/* prologue: function */
+ 201               	/* frame size = 0 */
+ 202               	/* stack size = 2 */
+ 203               	.L__stack_usage = 2
+ 204 0112 EC01      		movw r28,r24
+ 205               	.L19:
+ 206 0114 8881      		ld r24,Y
+ 207 0116 8823      		tst r24
+ 208 0118 01F0      		breq .L21
+ 209 011a 0E94 0000 		call lcd_ks0070_data
+ 210 011e 2196      		adiw r28,1
+ 211 0120 00C0      		rjmp .L19
+ 212               	.L21:
+ 213               	/* epilogue start */
+ 214 0122 DF91      		pop r29
+ 215 0124 CF91      		pop r28
+ 216 0126 0895      		ret
+ 217               		.size	lcd_str, .-lcd_str
+ 218               		.type	lcd_ks0070_display_clear, @function
+ 219               	lcd_ks0070_display_clear:
+ 220               	/* prologue: function */
+ 221               	/* frame size = 0 */
+ 222               	/* stack size = 0 */
+ 223               	.L__stack_usage = 0
+ 224 0128 81E0      		ldi r24,lo8(1)
+ 225 012a 0E94 0000 		call lcd_ks0070_command
+ 226 012e 8FE7      		ldi r24,lo8(15999)
+ 227 0130 9EE3      		ldi r25,hi8(15999)
+ 228 0132 0197      		1: sbiw r24,1
+GAS LISTING test-sboxnet.s 			page 5
+
+
+ 229 0134 01F4      		brne 1b
+ 230 0136 00C0      		rjmp .
+ 231 0138 0000      		nop
+ 232 013a 0895      		ret
+ 233               		.size	lcd_ks0070_display_clear, .-lcd_ks0070_display_clear
+ 234               		.type	lcd_itoa, @function
+ 235               	lcd_itoa:
+ 236 013c CF93      		push r28
+ 237 013e DF93      		push r29
+ 238 0140 CDB7      		in r28,__SP_L__
+ 239 0142 DEB7      		in r29,__SP_H__
+ 240 0144 2797      		sbiw r28,7
+ 241 0146 CDBF      		out __SP_L__,r28
+ 242 0148 DEBF      		out __SP_H__,r29
+ 243               	/* prologue: function */
+ 244               	/* frame size = 7 */
+ 245               	/* stack size = 9 */
+ 246               	.L__stack_usage = 9
+ 247 014a 4AE0      		ldi r20,lo8(10)
+ 248 014c 50E0      		ldi r21,0
+ 249 014e BE01      		movw r22,r28
+ 250 0150 6F5F      		subi r22,-1
+ 251 0152 7F4F      		sbci r23,-1
+ 252 0154 0E94 0000 		call itoa
+ 253 0158 CE01      		movw r24,r28
+ 254 015a 0196      		adiw r24,1
+ 255 015c 0E94 0000 		call lcd_str
+ 256               	/* epilogue start */
+ 257 0160 2796      		adiw r28,7
+ 258 0162 CDBF      		out __SP_L__,r28
+ 259 0164 DEBF      		out __SP_H__,r29
+ 260 0166 DF91      		pop r29
+ 261 0168 CF91      		pop r28
+ 262 016a 0895      		ret
+ 263               		.size	lcd_itoa, .-lcd_itoa
+ 264               		.type	lcd_ks0070_init, @function
+ 265               	lcd_ks0070_init:
+ 266               	/* prologue: function */
+ 267               	/* frame size = 0 */
+ 268               	/* stack size = 0 */
+ 269               	.L__stack_usage = 0
+ 270 016c E0E6      		ldi r30,lo8(96)
+ 271 016e F6E0      		ldi r31,lo8(6)
+ 272 0170 88E7      		ldi r24,lo8(120)
+ 273 0172 8683      		std Z+6,r24
+ 274 0174 8183      		std Z+1,r24
+ 275 0176 80E8      		ldi r24,lo8(-128)
+ 276 0178 8683      		std Z+6,r24
+ 277 017a 8183      		std Z+1,r24
+ 278 017c E0E8      		ldi r30,lo8(-128)
+ 279 017e F6E0      		ldi r31,lo8(6)
+ 280 0180 81E0      		ldi r24,lo8(1)
+ 281 0182 8683      		std Z+6,r24
+ 282 0184 8183      		std Z+1,r24
+ 283 0186 63E0      		ldi r22,lo8(3)
+ 284 0188 80E0      		ldi r24,0
+ 285 018a 0E94 0000 		call lcd_ks0070_write4
+GAS LISTING test-sboxnet.s 			page 6
+
+
+ 286 018e 8FE3      		ldi r24,lo8(-25537)
+ 287 0190 9CE9      		ldi r25,hi8(-25537)
+ 288 0192 0197      		1: sbiw r24,1
+ 289 0194 01F4      		brne 1b
+ 290 0196 00C0      		rjmp .
+ 291 0198 0000      		nop
+ 292 019a 63E0      		ldi r22,lo8(3)
+ 293 019c 80E0      		ldi r24,0
+ 294 019e 0E94 0000 		call lcd_ks0070_write4
+ 295 01a2 8FEB      		ldi r24,lo8(959)
+ 296 01a4 93E0      		ldi r25,hi8(959)
+ 297 01a6 0197      		1: sbiw r24,1
+ 298 01a8 01F4      		brne 1b
+ 299 01aa 00C0      		rjmp .
+ 300 01ac 0000      		nop
+ 301 01ae 63E0      		ldi r22,lo8(3)
+ 302 01b0 80E0      		ldi r24,0
+ 303 01b2 0E94 0000 		call lcd_ks0070_write4
+ 304 01b6 8FEB      		ldi r24,lo8(959)
+ 305 01b8 93E0      		ldi r25,hi8(959)
+ 306 01ba 0197      		1: sbiw r24,1
+ 307 01bc 01F4      		brne 1b
+ 308 01be 00C0      		rjmp .
+ 309 01c0 0000      		nop
+ 310 01c2 62E0      		ldi r22,lo8(2)
+ 311 01c4 80E0      		ldi r24,0
+ 312 01c6 0E94 0000 		call lcd_ks0070_write4
+ 313 01ca 8FEB      		ldi r24,lo8(959)
+ 314 01cc 93E0      		ldi r25,hi8(959)
+ 315 01ce 0197      		1: sbiw r24,1
+ 316 01d0 01F4      		brne 1b
+ 317 01d2 00C0      		rjmp .
+ 318 01d4 0000      		nop
+ 319 01d6 88E2      		ldi r24,lo8(40)
+ 320 01d8 0E94 0000 		call lcd_ks0070_command
+ 321 01dc 8CE0      		ldi r24,lo8(12)
+ 322 01de 0E94 0000 		call lcd_ks0070_command
+ 323 01e2 0E94 0000 		call lcd_ks0070_display_clear
+ 324 01e6 86E0      		ldi r24,lo8(6)
+ 325 01e8 0C94 0000 		jmp lcd_ks0070_command
+ 326               		.size	lcd_ks0070_init, .-lcd_ks0070_init
+ 327               		.type	lcd_str_P, @function
+ 328               	lcd_str_P:
+ 329 01ec CF93      		push r28
+ 330 01ee DF93      		push r29
+ 331               	/* prologue: function */
+ 332               	/* frame size = 0 */
+ 333               	/* stack size = 2 */
+ 334               	.L__stack_usage = 2
+ 335 01f0 EC01      		movw r28,r24
+ 336               	.L28:
+ 337 01f2 FE01      		movw r30,r28
+ 338               	/* #APP */
+ 339               	 ;  208 "../../avrutilslib/lcd.c" 1
+ 340 01f4 8491      		lpm r24, Z
+ 341               		
+ 342               	 ;  0 "" 2
+GAS LISTING test-sboxnet.s 			page 7
+
+
+ 343               	/* #NOAPP */
+ 344 01f6 8823      		tst r24
+ 345 01f8 01F0      		breq .L29
+ 346 01fa 0E94 0000 		call lcd_ks0070_data
+ 347 01fe 2196      		adiw r28,1
+ 348 0200 00C0      		rjmp .L28
+ 349               	.L29:
+ 350               	/* epilogue start */
+ 351 0202 DF91      		pop r29
+ 352 0204 CF91      		pop r28
+ 353 0206 0895      		ret
+ 354               		.size	lcd_str_P, .-lcd_str_P
+ 355               	.global	sboxnet_prandom
+ 356               		.type	sboxnet_prandom, @function
+ 357               	sboxnet_prandom:
+ 358               	/* prologue: function */
+ 359               	/* frame size = 0 */
+ 360               	/* stack size = 0 */
+ 361               	.L__stack_usage = 0
+ 362 0208 E0E0      		ldi r30,lo8(g_sboxnet_dev_def+7)
+ 363 020a F0E0      		ldi r31,hi8(g_sboxnet_dev_def+7)
+ 364 020c 9081      		ld r25,Z
+ 365 020e 892F      		mov r24,r25
+ 366 0210 880F      		lsl r24
+ 367 0212 8927      		eor r24,r25
+ 368 0214 982F      		mov r25,r24
+ 369 0216 9695      		lsr r25
+ 370 0218 9827      		eor r25,r24
+ 371 021a 892F      		mov r24,r25
+ 372 021c 880F      		lsl r24
+ 373 021e 880F      		lsl r24
+ 374 0220 8927      		eor r24,r25
+ 375 0222 8083      		st Z,r24
+ 376 0224 0895      		ret
+ 377               		.size	sboxnet_prandom, .-sboxnet_prandom
+ 378               		.type	sboxnet_check_try_transmit, @function
+ 379               	sboxnet_check_try_transmit:
+ 380               	/* prologue: function */
+ 381               	/* frame size = 0 */
+ 382               	/* stack size = 0 */
+ 383               	.L__stack_usage = 0
+ 384 0226 E0E0      		ldi r30,lo8(g_sboxnet_dev_def)
+ 385 0228 F0E0      		ldi r31,hi8(g_sboxnet_dev_def)
+ 386 022a 8481      		ldd r24,Z+4
+ 387 022c 8823      		tst r24
+ 388 022e 01F0      		breq .L31
+ 389 0230 9381      		ldd r25,Z+3
+ 390 0232 9813      		cpse r25,r24
+ 391 0234 00C0      		rjmp .L31
+ 392 0236 8081      		ld r24,Z
+ 393 0238 8111      		cpse r24,__zero_reg__
+ 394 023a 00C0      		rjmp .L31
+ 395 023c 0E94 0000 		call sboxnet_prandom
+ 396 0240 8F70      		andi r24,lo8(15)
+ 397 0242 8C5E      		subi r24,lo8(-(20))
+ 398 0244 91E0      		ldi r25,lo8(1)
+ 399 0246 9093 4C06 		sts 1612,r25
+GAS LISTING test-sboxnet.s 			page 8
+
+
+ 400 024a 9093 0000 		sts g_sboxnet_dev_def,r25
+ 401 024e 90E0      		ldi r25,0
+ 402 0250 CC96      		adiw r24,60
+ 403 0252 0C94 0000 		jmp sboxnet_set_timer
+ 404               	.L31:
+ 405 0256 0895      		ret
+ 406               		.size	sboxnet_check_try_transmit, .-sboxnet_check_try_transmit
+ 407               	.global	sboxnet_init
+ 408               		.type	sboxnet_init, @function
+ 409               	sboxnet_init:
+ 410               	/* prologue: function */
+ 411               	/* frame size = 0 */
+ 412               	/* stack size = 0 */
+ 413               	.L__stack_usage = 0
+ 414 0258 83EE      		ldi r24,lo8(-29)
+ 415 025a E0E0      		ldi r30,lo8(g_sboxnet_dev_def)
+ 416 025c F0E0      		ldi r31,hi8(g_sboxnet_dev_def)
+ 417 025e DF01      		movw r26,r30
+ 418               		0:
+ 419 0260 1D92      		st X+,__zero_reg__
+ 420 0262 8A95      		dec r24
+ 421 0264 01F4      		brne 0b
+ 422 0266 8091 5400 		lds r24,84
+ 423 026a 8093 0000 		sts g_sboxnet_dev_def+7,r24
+ 424 026e E0E4      		ldi r30,lo8(64)
+ 425 0270 F6E0      		ldi r31,lo8(6)
+ 426 0272 94E0      		ldi r25,lo8(4)
+ 427 0274 9283      		std Z+2,r25
+ 428 0276 8289      		ldd r24,Z+18
+ 429 0278 877C      		andi r24,lo8(-57)
+ 430 027a 8861      		ori r24,lo8(24)
+ 431 027c 828B      		std Z+18,r24
+ 432 027e 88E0      		ldi r24,lo8(8)
+ 433 0280 8583      		std Z+5,r24
+ 434 0282 8183      		std Z+1,r24
+ 435 0284 8185      		ldd r24,Z+9
+ 436 0286 8C7F      		andi r24,lo8(-4)
+ 437 0288 8187      		std Z+9,r24
+ 438 028a 9287      		std Z+10,r25
+ 439 028c 81E0      		ldi r24,lo8(1)
+ 440 028e 8487      		std Z+12,r24
+ 441 0290 E0EA      		ldi r30,lo8(-96)
+ 442 0292 F8E0      		ldi r31,lo8(8)
+ 443 0294 1782      		std Z+7,__zero_reg__
+ 444 0296 8FE0      		ldi r24,lo8(15)
+ 445 0298 8683      		std Z+6,r24
+ 446 029a 80E4      		ldi r24,lo8(64)
+ 447 029c 8183      		std Z+1,r24
+ 448 029e 1382      		std Z+3,__zero_reg__
+ 449 02a0 82E0      		ldi r24,lo8(2)
+ 450 02a2 8483      		std Z+4,r24
+ 451 02a4 87E2      		ldi r24,lo8(39)
+ 452 02a6 8583      		std Z+5,r24
+ 453 02a8 0895      		ret
+ 454               		.size	sboxnet_init, .-sboxnet_init
+ 455               	.global	sboxnet_receiver_enable
+ 456               		.type	sboxnet_receiver_enable, @function
+GAS LISTING test-sboxnet.s 			page 9
+
+
+ 457               	sboxnet_receiver_enable:
+ 458               	/* prologue: function */
+ 459               	/* frame size = 0 */
+ 460               	/* stack size = 0 */
+ 461               	.L__stack_usage = 0
+ 462 02aa E0E0      		ldi r30,lo8(g_sboxnet_dev_def+8)
+ 463 02ac F0E0      		ldi r31,hi8(g_sboxnet_dev_def+8)
+ 464 02ae 1282      		std Z+2,__zero_reg__
+ 465 02b0 8381      		ldd r24,Z+3
+ 466 02b2 8183      		std Z+1,r24
+ 467 02b4 E0EA      		ldi r30,lo8(-96)
+ 468 02b6 F8E0      		ldi r31,lo8(8)
+ 469 02b8 8381      		ldd r24,Z+3
+ 470 02ba 8F7C      		andi r24,lo8(-49)
+ 471 02bc 8061      		ori r24,lo8(16)
+ 472 02be 8383      		std Z+3,r24
+ 473 02c0 8481      		ldd r24,Z+4
+ 474 02c2 8261      		ori r24,lo8(18)
+ 475 02c4 8483      		std Z+4,r24
+ 476 02c6 0895      		ret
+ 477               		.size	sboxnet_receiver_enable, .-sboxnet_receiver_enable
+ 478               		.type	sboxnet_timer_bit, @function
+ 479               	sboxnet_timer_bit:
+ 480               	/* prologue: function */
+ 481               	/* frame size = 0 */
+ 482               	/* stack size = 0 */
+ 483               	.L__stack_usage = 0
+ 484 02c8 8091 0708 		lds r24,2055
+ 485 02cc 8C7F      		andi r24,lo8(-4)
+ 486 02ce 8093 0708 		sts 2055,r24
+ 487 02d2 8091 0000 		lds r24,g_sboxnet_dev_def
+ 488 02d6 8130      		cpi r24,lo8(1)
+ 489 02d8 01F0      		breq .+2
+ 490 02da 00C0      		rjmp .L39
+ 491 02dc 9091 0000 		lds r25,g_sboxnet_dev_def+4
+ 492 02e0 9923      		tst r25
+ 493 02e2 01F4      		brne .+2
+ 494 02e4 00C0      		rjmp .L40
+ 495 02e6 8091 0000 		lds r24,g_sboxnet_dev_def+3
+ 496 02ea 8913      		cpse r24,r25
+ 497 02ec 00C0      		rjmp .L40
+ 498 02ee E82F      		mov r30,r24
+ 499 02f0 F0E0      		ldi r31,0
+ 500 02f2 E050      		subi r30,lo8(-(g_sboxnet_dev_def+172))
+ 501 02f4 F040      		sbci r31,hi8(-(g_sboxnet_dev_def+172))
+ 502 02f6 2081      		ld r18,Z
+ 503 02f8 98E0      		ldi r25,lo8(8)
+ 504 02fa 9093 4506 		sts 1605,r25
+ 505 02fe 9091 A408 		lds r25,2212
+ 506 0302 9960      		ori r25,lo8(9)
+ 507 0304 9093 A408 		sts 2212,r25
+ 508 0308 9091 4C06 		lds r25,1612
+ 509 030c 90FD      		sbrc r25,0
+ 510 030e 00C0      		rjmp .L41
+ 511 0310 9091 4806 		lds r25,1608
+ 512 0314 92FD      		sbrc r25,2
+ 513 0316 00C0      		rjmp .L42
+GAS LISTING test-sboxnet.s 			page 10
+
+
+ 514               	.L41:
+ 515 0318 0E94 0000 		call sboxnet_prandom
+ 516 031c 8F70      		andi r24,lo8(15)
+ 517 031e 91E0      		ldi r25,lo8(1)
+ 518 0320 9093 4C06 		sts 1612,r25
+ 519 0324 9093 0000 		sts g_sboxnet_dev_def,r25
+ 520 0328 90E0      		ldi r25,0
+ 521 032a CC96      		adiw r24,60
+ 522 032c 00C0      		rjmp .L55
+ 523               	.L42:
+ 524 032e 9091 A408 		lds r25,2212
+ 525 0332 9F7E      		andi r25,lo8(-17)
+ 526 0334 9093 A408 		sts 2212,r25
+ 527 0338 9091 A308 		lds r25,2211
+ 528 033c 937C      		andi r25,lo8(-61)
+ 529 033e 9093 A308 		sts 2211,r25
+ 530 0342 9091 A408 		lds r25,2212
+ 531 0346 9061      		ori r25,lo8(16)
+ 532 0348 9093 A408 		sts 2212,r25
+ 533 034c 9091 A308 		lds r25,2211
+ 534 0350 9460      		ori r25,lo8(4)
+ 535 0352 9093 A308 		sts 2211,r25
+ 536 0356 2093 A008 		sts 2208,r18
+ 537 035a 9091 A408 		lds r25,2212
+ 538 035e 9D7F      		andi r25,lo8(-3)
+ 539 0360 9093 A408 		sts 2212,r25
+ 540 0364 8150      		subi r24,lo8(-(-1))
+ 541 0366 8093 0000 		sts g_sboxnet_dev_def+3,r24
+ 542 036a 83E0      		ldi r24,lo8(3)
+ 543 036c 8093 0000 		sts g_sboxnet_dev_def,r24
+ 544 0370 0895      		ret
+ 545               	.L40:
+ 546 0372 1092 0000 		sts g_sboxnet_dev_def,__zero_reg__
+ 547 0376 0895      		ret
+ 548               	.L39:
+ 549 0378 8230      		cpi r24,lo8(2)
+ 550 037a 01F4      		brne .L44
+ 551 037c 81E0      		ldi r24,lo8(1)
+ 552 037e 8093 4C06 		sts 1612,r24
+ 553 0382 88E0      		ldi r24,lo8(8)
+ 554 0384 8093 4506 		sts 1605,r24
+ 555 0388 84E0      		ldi r24,lo8(4)
+ 556 038a 8093 0000 		sts g_sboxnet_dev_def,r24
+ 557 038e 00C0      		rjmp .L56
+ 558               	.L44:
+ 559 0390 8430      		cpi r24,lo8(4)
+ 560 0392 01F4      		brne .L38
+ 561 0394 8091 4C06 		lds r24,1612
+ 562 0398 80FF      		sbrs r24,0
+ 563 039a 00C0      		rjmp .L45
+ 564 039c 8091 4806 		lds r24,1608
+ 565 03a0 82FF      		sbrs r24,2
+ 566 03a2 00C0      		rjmp .L45
+ 567 03a4 0E94 0000 		call sboxnet_receiver_enable
+ 568 03a8 1092 0000 		sts g_sboxnet_dev_def,__zero_reg__
+ 569 03ac 0C94 0000 		jmp sboxnet_check_try_transmit
+ 570               	.L45:
+GAS LISTING test-sboxnet.s 			page 11
+
+
+ 571 03b0 81E0      		ldi r24,lo8(1)
+ 572 03b2 8093 4C06 		sts 1612,r24
+ 573               	.L56:
+ 574 03b6 80E1      		ldi r24,lo8(16)
+ 575 03b8 90E0      		ldi r25,0
+ 576               	.L55:
+ 577 03ba 0C94 0000 		jmp sboxnet_set_timer
+ 578               	.L38:
+ 579 03be 0895      		ret
+ 580               		.size	sboxnet_timer_bit, .-sboxnet_timer_bit
+ 581               	.global	__vector_25
+ 582               		.type	__vector_25, @function
+ 583               	__vector_25:
+ 584 03c0 1F92      		push r1
+ 585 03c2 0F92      		push r0
+ 586 03c4 0FB6      		in r0,__SREG__
+ 587 03c6 0F92      		push r0
+ 588 03c8 1124      		clr __zero_reg__
+ 589 03ca 0F93      		push r16
+ 590 03cc 1F93      		push r17
+ 591 03ce 2F93      		push r18
+ 592 03d0 3F93      		push r19
+ 593 03d2 4F93      		push r20
+ 594 03d4 5F93      		push r21
+ 595 03d6 6F93      		push r22
+ 596 03d8 7F93      		push r23
+ 597 03da 8F93      		push r24
+ 598 03dc 9F93      		push r25
+ 599 03de AF93      		push r26
+ 600 03e0 BF93      		push r27
+ 601 03e2 EF93      		push r30
+ 602 03e4 FF93      		push r31
+ 603 03e6 CF93      		push r28
+ 604 03e8 DF93      		push r29
+ 605 03ea 1F92      		push __zero_reg__
+ 606 03ec CDB7      		in r28,__SP_L__
+ 607 03ee DEB7      		in r29,__SP_H__
+ 608               	/* prologue: Signal */
+ 609               	/* frame size = 1 */
+ 610               	/* stack size = 20 */
+ 611               	.L__stack_usage = 20
+ 612 03f0 00E0      		ldi r16,lo8(g_sboxnet_dev_def)
+ 613 03f2 10E0      		ldi r17,hi8(g_sboxnet_dev_def)
+ 614 03f4 2091 A108 		lds r18,2209
+ 615 03f8 2983      		std Y+1,r18
+ 616 03fa 3981      		ldd r19,Y+1
+ 617 03fc 8091 A008 		lds r24,2208
+ 618 0400 922F      		mov r25,r18
+ 619 0402 9C71      		andi r25,lo8(28)
+ 620 0404 9983      		std Y+1,r25
+ 621 0406 F801      		movw r30,r16
+ 622 0408 9923      		tst r25
+ 623 040a 01F0      		breq .L58
+ 624 040c ED52      		subi r30,45
+ 625 040e FF4F      		sbci r31,-1
+ 626 0410 8081      		ld r24,Z
+ 627 0412 9181      		ldd r25,Z+1
+GAS LISTING test-sboxnet.s 			page 12
+
+
+ 628 0414 0196      		adiw r24,1
+ 629 0416 8083      		st Z,r24
+ 630 0418 9183      		std Z+1,r25
+ 631 041a 24FF      		sbrs r18,4
+ 632 041c 00C0      		rjmp .L59
+ 633 041e F801      		movw r30,r16
+ 634 0420 EB52      		subi r30,43
+ 635 0422 FF4F      		sbci r31,-1
+ 636 0424 8081      		ld r24,Z
+ 637 0426 9181      		ldd r25,Z+1
+ 638 0428 0196      		adiw r24,1
+ 639 042a 8083      		st Z,r24
+ 640 042c 9183      		std Z+1,r25
+ 641               	.L59:
+ 642 042e 23FF      		sbrs r18,3
+ 643 0430 00C0      		rjmp .L60
+ 644 0432 F801      		movw r30,r16
+ 645 0434 E752      		subi r30,39
+ 646 0436 FF4F      		sbci r31,-1
+ 647 0438 8081      		ld r24,Z
+ 648 043a 9181      		ldd r25,Z+1
+ 649 043c 0196      		adiw r24,1
+ 650 043e 8083      		st Z,r24
+ 651 0440 9183      		std Z+1,r25
+ 652               	.L60:
+ 653 0442 22FF      		sbrs r18,2
+ 654 0444 00C0      		rjmp .L62
+ 655 0446 F801      		movw r30,r16
+ 656 0448 E952      		subi r30,41
+ 657 044a FF4F      		sbci r31,-1
+ 658 044c 00C0      		rjmp .L85
+ 659               	.L58:
+ 660 044e 9285      		ldd r25,Z+10
+ 661 0450 30FF      		sbrs r19,0
+ 662 0452 00C0      		rjmp .L63
+ 663 0454 9923      		tst r25
+ 664 0456 01F0      		breq .L64
+ 665 0458 E552      		subi r30,37
+ 666 045a FF4F      		sbci r31,-1
+ 667 045c 2081      		ld r18,Z
+ 668 045e 3181      		ldd r19,Z+1
+ 669 0460 2F5F      		subi r18,-1
+ 670 0462 3F4F      		sbci r19,-1
+ 671 0464 2083      		st Z,r18
+ 672 0466 3183      		std Z+1,r19
+ 673 0468 F801      		movw r30,r16
+ 674 046a ED52      		subi r30,45
+ 675 046c FF4F      		sbci r31,-1
+ 676 046e 2081      		ld r18,Z
+ 677 0470 3181      		ldd r19,Z+1
+ 678 0472 2F5F      		subi r18,-1
+ 679 0474 3F4F      		sbci r19,-1
+ 680 0476 2083      		st Z,r18
+ 681 0478 3183      		std Z+1,r19
+ 682 047a E0E0      		ldi r30,lo8(g_sboxnet_dev_def+8)
+ 683 047c F0E0      		ldi r31,hi8(g_sboxnet_dev_def+8)
+ 684 047e 1282      		std Z+2,__zero_reg__
+GAS LISTING test-sboxnet.s 			page 13
+
+
+ 685 0480 9381      		ldd r25,Z+3
+ 686 0482 9183      		std Z+1,r25
+ 687               	.L64:
+ 688 0484 9091 0000 		lds r25,g_dev_addr
+ 689 0488 8917      		cp r24,r25
+ 690 048a 01F0      		breq .L65
+ 691 048c 8F3F      		cpi r24,lo8(-1)
+ 692 048e 01F0      		breq .+2
+ 693 0490 00C0      		rjmp .L62
+ 694               	.L65:
+ 695 0492 9091 A408 		lds r25,2212
+ 696 0496 9D7F      		andi r25,lo8(-3)
+ 697 0498 9093 A408 		sts 2212,r25
+ 698 049c 0E94 0000 		call sboxnet_recv_buf_write
+ 699 04a0 F801      		movw r30,r16
+ 700 04a2 8823      		tst r24
+ 701 04a4 01F0      		breq .L84
+ 702 04a6 EF53      		subi r30,63
+ 703 04a8 FF4F      		sbci r31,-1
+ 704 04aa 8081      		ld r24,Z
+ 705 04ac 9181      		ldd r25,Z+1
+ 706 04ae 0196      		adiw r24,1
+ 707 04b0 8083      		st Z,r24
+ 708 04b2 9183      		std Z+1,r25
+ 709 04b4 85E0      		ldi r24,lo8(5)
+ 710 04b6 F801      		movw r30,r16
+ 711 04b8 8683      		std Z+6,r24
+ 712 04ba 00C0      		rjmp .L57
+ 713               	.L63:
+ 714 04bc F801      		movw r30,r16
+ 715 04be 2681      		ldd r18,Z+6
+ 716 04c0 9217      		cp r25,r18
+ 717 04c2 00F0      		brlo .L70
+ 718 04c4 E352      		subi r30,35
+ 719 04c6 FF4F      		sbci r31,-1
+ 720 04c8 00C0      		rjmp .L83
+ 721               	.L70:
+ 722 04ca 9230      		cpi r25,lo8(2)
+ 723 04cc 01F4      		brne .L71
+ 724 04ce 982F      		mov r25,r24
+ 725 04d0 9F70      		andi r25,lo8(15)
+ 726 04d2 9B5F      		subi r25,lo8(-(5))
+ 727 04d4 F801      		movw r30,r16
+ 728 04d6 9683      		std Z+6,r25
+ 729               	.L71:
+ 730 04d8 0E94 0000 		call sboxnet_recv_buf_write
+ 731 04dc F801      		movw r30,r16
+ 732 04de 8111      		cpse r24,__zero_reg__
+ 733 04e0 00C0      		rjmp .L72
+ 734               	.L84:
+ 735 04e2 E752      		subi r30,39
+ 736 04e4 FF4F      		sbci r31,-1
+ 737               	.L83:
+ 738 04e6 8081      		ld r24,Z
+ 739 04e8 9181      		ldd r25,Z+1
+ 740 04ea 0196      		adiw r24,1
+ 741 04ec 8083      		st Z,r24
+GAS LISTING test-sboxnet.s 			page 14
+
+
+ 742 04ee 9183      		std Z+1,r25
+ 743               	.L69:
+ 744 04f0 F801      		movw r30,r16
+ 745 04f2 ED52      		subi r30,45
+ 746 04f4 FF4F      		sbci r31,-1
+ 747 04f6 00C0      		rjmp .L85
+ 748               	.L72:
+ 749 04f8 EF53      		subi r30,63
+ 750 04fa FF4F      		sbci r31,-1
+ 751 04fc 8081      		ld r24,Z
+ 752 04fe 9181      		ldd r25,Z+1
+ 753 0500 0196      		adiw r24,1
+ 754 0502 8083      		st Z,r24
+ 755 0504 9183      		std Z+1,r25
+ 756 0506 F801      		movw r30,r16
+ 757 0508 9285      		ldd r25,Z+10
+ 758 050a 8681      		ldd r24,Z+6
+ 759 050c 9813      		cpse r25,r24
+ 760 050e 00C0      		rjmp .L57
+ 761 0510 1682      		std Z+6,__zero_reg__
+ 762 0512 8091 A408 		lds r24,2212
+ 763 0516 8260      		ori r24,lo8(2)
+ 764 0518 8093 A408 		sts 2212,r24
+ 765 051c 9091 0000 		lds r25,g_sboxnet_dev_def+12
+ 766 0520 8091 0000 		lds r24,g_sboxnet_dev_def+10
+ 767 0524 890F      		add r24,r25
+ 768 0526 8093 0000 		sts g_sboxnet_dev_def+12,r24
+ 769 052a 1092 0000 		sts g_sboxnet_dev_def+10,__zero_reg__
+ 770 052e 8091 0000 		lds r24,g_sboxnet_dev_def+9
+ 771 0532 8093 0000 		sts g_sboxnet_dev_def+11,r24
+ 772 0536 00C0      		rjmp .L57
+ 773               	.L85:
+ 774 0538 8081      		ld r24,Z
+ 775 053a 9181      		ldd r25,Z+1
+ 776 053c 0196      		adiw r24,1
+ 777 053e 8083      		st Z,r24
+ 778 0540 9183      		std Z+1,r25
+ 779               	.L62:
+ 780 0542 F801      		movw r30,r16
+ 781 0544 1682      		std Z+6,__zero_reg__
+ 782 0546 8091 A408 		lds r24,2212
+ 783 054a 8260      		ori r24,lo8(2)
+ 784 054c 8093 A408 		sts 2212,r24
+ 785 0550 E0E0      		ldi r30,lo8(g_sboxnet_dev_def+8)
+ 786 0552 F0E0      		ldi r31,hi8(g_sboxnet_dev_def+8)
+ 787 0554 1282      		std Z+2,__zero_reg__
+ 788 0556 8381      		ldd r24,Z+3
+ 789 0558 8183      		std Z+1,r24
+ 790               	.L57:
+ 791               	/* epilogue start */
+ 792 055a 0F90      		pop __tmp_reg__
+ 793 055c DF91      		pop r29
+ 794 055e CF91      		pop r28
+ 795 0560 FF91      		pop r31
+ 796 0562 EF91      		pop r30
+ 797 0564 BF91      		pop r27
+ 798 0566 AF91      		pop r26
+GAS LISTING test-sboxnet.s 			page 15
+
+
+ 799 0568 9F91      		pop r25
+ 800 056a 8F91      		pop r24
+ 801 056c 7F91      		pop r23
+ 802 056e 6F91      		pop r22
+ 803 0570 5F91      		pop r21
+ 804 0572 4F91      		pop r20
+ 805 0574 3F91      		pop r19
+ 806 0576 2F91      		pop r18
+ 807 0578 1F91      		pop r17
+ 808 057a 0F91      		pop r16
+ 809 057c 0F90      		pop r0
+ 810 057e 0FBE      		out __SREG__,r0
+ 811 0580 0F90      		pop r0
+ 812 0582 1F90      		pop r1
+ 813 0584 1895      		reti
+ 814               		.size	__vector_25, .-__vector_25
+ 815               	.global	__vector_27
+ 816               		.type	__vector_27, @function
+ 817               	__vector_27:
+ 818 0586 1F92      		push r1
+ 819 0588 0F92      		push r0
+ 820 058a 0FB6      		in r0,__SREG__
+ 821 058c 0F92      		push r0
+ 822 058e 1124      		clr __zero_reg__
+ 823 0590 2F93      		push r18
+ 824 0592 3F93      		push r19
+ 825 0594 4F93      		push r20
+ 826 0596 5F93      		push r21
+ 827 0598 6F93      		push r22
+ 828 059a 7F93      		push r23
+ 829 059c 8F93      		push r24
+ 830 059e 9F93      		push r25
+ 831 05a0 AF93      		push r26
+ 832 05a2 BF93      		push r27
+ 833 05a4 CF93      		push r28
+ 834 05a6 DF93      		push r29
+ 835 05a8 EF93      		push r30
+ 836 05aa FF93      		push r31
+ 837               	/* prologue: Signal */
+ 838               	/* frame size = 0 */
+ 839               	/* stack size = 17 */
+ 840               	.L__stack_usage = 17
+ 841 05ac C0E0      		ldi r28,lo8(g_sboxnet_dev_def)
+ 842 05ae D0E0      		ldi r29,hi8(g_sboxnet_dev_def)
+ 843 05b0 8091 A108 		lds r24,2209
+ 844 05b4 382F      		mov r19,r24
+ 845 05b6 3471      		andi r19,lo8(20)
+ 846 05b8 4091 A008 		lds r20,2208
+ 847 05bc 9B81      		ldd r25,Y+3
+ 848 05be FE01      		movw r30,r28
+ 849 05c0 E90F      		add r30,r25
+ 850 05c2 F11D      		adc r31,__zero_reg__
+ 851 05c4 E355      		subi r30,83
+ 852 05c6 FF4F      		sbci r31,-1
+ 853 05c8 9081      		ld r25,Z
+ 854 05ca 21E0      		ldi r18,lo8(1)
+ 855 05cc 4913      		cpse r20,r25
+GAS LISTING test-sboxnet.s 			page 16
+
+
+ 856 05ce 00C0      		rjmp .L87
+ 857 05d0 20E0      		ldi r18,0
+ 858               	.L87:
+ 859 05d2 87FF      		sbrs r24,7
+ 860 05d4 00C0      		rjmp .L88
+ 861 05d6 3323      		tst r19
+ 862 05d8 01F0      		breq .L89
+ 863               	.L92:
+ 864 05da FE01      		movw r30,r28
+ 865 05dc E353      		subi r30,51
+ 866 05de FF4F      		sbci r31,-1
+ 867 05e0 8081      		ld r24,Z
+ 868 05e2 9181      		ldd r25,Z+1
+ 869 05e4 0196      		adiw r24,1
+ 870 05e6 8083      		st Z,r24
+ 871 05e8 9183      		std Z+1,r25
+ 872 05ea 00C0      		rjmp .L90
+ 873               	.L89:
+ 874 05ec 2223      		tst r18
+ 875 05ee 01F4      		brne .+2
+ 876 05f0 00C0      		rjmp .L91
+ 877 05f2 00C0      		rjmp .L90
+ 878               	.L88:
+ 879 05f4 FE01      		movw r30,r28
+ 880 05f6 E553      		subi r30,53
+ 881 05f8 FF4F      		sbci r31,-1
+ 882 05fa 8081      		ld r24,Z
+ 883 05fc 9181      		ldd r25,Z+1
+ 884 05fe 0196      		adiw r24,1
+ 885 0600 8083      		st Z,r24
+ 886 0602 9183      		std Z+1,r25
+ 887 0604 3111      		cpse r19,__zero_reg__
+ 888 0606 00C0      		rjmp .L92
+ 889               	.L90:
+ 890 0608 2223      		tst r18
+ 891 060a 01F0      		breq .L94
+ 892 060c FE01      		movw r30,r28
+ 893 060e E153      		subi r30,49
+ 894 0610 FF4F      		sbci r31,-1
+ 895 0612 8081      		ld r24,Z
+ 896 0614 9181      		ldd r25,Z+1
+ 897 0616 0196      		adiw r24,1
+ 898 0618 8083      		st Z,r24
+ 899 061a 9183      		std Z+1,r25
+ 900               	.L94:
+ 901 061c 88E0      		ldi r24,lo8(8)
+ 902 061e 8093 4606 		sts 1606,r24
+ 903 0622 8091 A408 		lds r24,2212
+ 904 0626 877E      		andi r24,lo8(-25)
+ 905 0628 8093 A408 		sts 2212,r24
+ 906 062c 8091 A308 		lds r24,2211
+ 907 0630 837F      		andi r24,lo8(-13)
+ 908 0632 8093 A308 		sts 2211,r24
+ 909 0636 82E0      		ldi r24,lo8(2)
+ 910 0638 8883      		st Y,r24
+ 911 063a FE01      		movw r30,r28
+ 912 063c E753      		subi r30,55
+GAS LISTING test-sboxnet.s 			page 17
+
+
+ 913 063e FF4F      		sbci r31,-1
+ 914 0640 8081      		ld r24,Z
+ 915 0642 9181      		ldd r25,Z+1
+ 916 0644 0196      		adiw r24,1
+ 917 0646 8083      		st Z,r24
+ 918 0648 9183      		std Z+1,r25
+ 919 064a 8A81      		ldd r24,Y+2
+ 920 064c 8823      		tst r24
+ 921 064e 01F0      		breq .L95
+ 922 0650 8150      		subi r24,lo8(-(-1))
+ 923 0652 8A83      		std Y+2,r24
+ 924 0654 8C81      		ldd r24,Y+4
+ 925 0656 8B83      		std Y+3,r24
+ 926 0658 CF52      		subi r28,47
+ 927 065a DF4F      		sbci r29,-1
+ 928 065c 00C0      		rjmp .L103
+ 929               	.L95:
+ 930 065e 1C82      		std Y+4,__zero_reg__
+ 931 0660 1B82      		std Y+3,__zero_reg__
+ 932 0662 CF51      		subi r28,31
+ 933 0664 DF4F      		sbci r29,-1
+ 934               	.L103:
+ 935 0666 8881      		ld r24,Y
+ 936 0668 9981      		ldd r25,Y+1
+ 937 066a 0196      		adiw r24,1
+ 938 066c 8883      		st Y,r24
+ 939 066e 9983      		std Y+1,r25
+ 940 0670 80E4      		ldi r24,lo8(64)
+ 941 0672 90E0      		ldi r25,0
+ 942 0674 0E94 0000 		call sboxnet_set_timer
+ 943 0678 00C0      		rjmp .L86
+ 944               	.L91:
+ 945 067a 8091 A408 		lds r24,2212
+ 946 067e 8F7E      		andi r24,lo8(-17)
+ 947 0680 8093 A408 		sts 2212,r24
+ 948 0684 8091 A308 		lds r24,2211
+ 949 0688 8F7C      		andi r24,lo8(-49)
+ 950 068a 8093 A308 		sts 2211,r24
+ 951 068e 8091 A408 		lds r24,2212
+ 952 0692 8061      		ori r24,lo8(16)
+ 953 0694 8093 A408 		sts 2212,r24
+ 954 0698 8B81      		ldd r24,Y+3
+ 955 069a 8823      		tst r24
+ 956 069c 01F0      		breq .L98
+ 957 069e 8150      		subi r24,lo8(-(-1))
+ 958 06a0 8B83      		std Y+3,r24
+ 959 06a2 8091 A408 		lds r24,2212
+ 960 06a6 8E7F      		andi r24,lo8(-2)
+ 961 06a8 8093 A408 		sts 2212,r24
+ 962 06ac 8B81      		ldd r24,Y+3
+ 963 06ae FE01      		movw r30,r28
+ 964 06b0 E80F      		add r30,r24
+ 965 06b2 F11D      		adc r31,__zero_reg__
+ 966 06b4 E355      		subi r30,83
+ 967 06b6 FF4F      		sbci r31,-1
+ 968 06b8 8081      		ld r24,Z
+ 969 06ba 8093 A008 		sts 2208,r24
+GAS LISTING test-sboxnet.s 			page 18
+
+
+ 970 06be 00C0      		rjmp .L99
+ 971               	.L98:
+ 972 06c0 8091 A308 		lds r24,2211
+ 973 06c4 837F      		andi r24,lo8(-13)
+ 974 06c6 8093 A308 		sts 2211,r24
+ 975 06ca 1C82      		std Y+4,__zero_reg__
+ 976 06cc 0E94 0000 		call sboxnet_receiver_enable
+ 977 06d0 8881      		ld r24,Y
+ 978 06d2 8330      		cpi r24,lo8(3)
+ 979 06d4 01F4      		brne .L99
+ 980 06d6 1882      		st Y,__zero_reg__
+ 981               	.L99:
+ 982 06d8 CB53      		subi r28,59
+ 983 06da DF4F      		sbci r29,-1
+ 984 06dc 8881      		ld r24,Y
+ 985 06de 9981      		ldd r25,Y+1
+ 986 06e0 0196      		adiw r24,1
+ 987 06e2 8883      		st Y,r24
+ 988 06e4 9983      		std Y+1,r25
+ 989               	.L86:
+ 990               	/* epilogue start */
+ 991 06e6 FF91      		pop r31
+ 992 06e8 EF91      		pop r30
+ 993 06ea DF91      		pop r29
+ 994 06ec CF91      		pop r28
+ 995 06ee BF91      		pop r27
+ 996 06f0 AF91      		pop r26
+ 997 06f2 9F91      		pop r25
+ 998 06f4 8F91      		pop r24
+ 999 06f6 7F91      		pop r23
+ 1000 06f8 6F91      		pop r22
+ 1001 06fa 5F91      		pop r21
+ 1002 06fc 4F91      		pop r20
+ 1003 06fe 3F91      		pop r19
+ 1004 0700 2F91      		pop r18
+ 1005 0702 0F90      		pop r0
+ 1006 0704 0FBE      		out __SREG__,r0
+ 1007 0706 0F90      		pop r0
+ 1008 0708 1F90      		pop r1
+ 1009 070a 1895      		reti
+ 1010               		.size	__vector_27, .-__vector_27
+ 1011               	.global	sboxnet_receive_msg
+ 1012               		.type	sboxnet_receive_msg, @function
+ 1013               	sboxnet_receive_msg:
+ 1014 070c 0F93      		push r16
+ 1015 070e 1F93      		push r17
+ 1016 0710 CF93      		push r28
+ 1017 0712 DF93      		push r29
+ 1018               	/* prologue: function */
+ 1019               	/* frame size = 0 */
+ 1020               	/* stack size = 4 */
+ 1021               	.L__stack_usage = 4
+ 1022 0714 EC01      		movw r28,r24
+ 1023 0716 4FB7      		in r20,__SREG__
+ 1024               	/* #APP */
+ 1025               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1026 0718 F894      		cli
+GAS LISTING test-sboxnet.s 			page 19
+
+
+ 1027               	 ;  0 "" 2
+ 1028               	/* #NOAPP */
+ 1029 071a 8091 0000 		lds r24,g_sboxnet_dev_def+12
+ 1030 071e 8530      		cpi r24,lo8(5)
+ 1031 0720 00F4      		brsh .L116
+ 1032 0722 10E0      		ldi r17,0
+ 1033 0724 00C0      		rjmp .L106
+ 1034               	.L116:
+ 1035 0726 DE01      		movw r26,r28
+ 1036 0728 35E0      		ldi r19,lo8(5)
+ 1037 072a 10E0      		ldi r17,0
+ 1038               	.L105:
+ 1039 072c 8091 0000 		lds r24,g_sboxnet_dev_def+12
+ 1040 0730 8823      		tst r24
+ 1041 0732 01F0      		breq .L106
+ 1042 0734 1317      		cp r17,r19
+ 1043 0736 00F4      		brsh .L106
+ 1044 0738 8150      		subi r24,lo8(-(-1))
+ 1045 073a 8093 0000 		sts g_sboxnet_dev_def+12,r24
+ 1046 073e 8091 0000 		lds r24,g_sboxnet_dev_def+8
+ 1047 0742 90E0      		ldi r25,0
+ 1048 0744 8050      		subi r24,lo8(-(g_sboxnet_dev_def+8))
+ 1049 0746 9040      		sbci r25,hi8(-(g_sboxnet_dev_def+8))
+ 1050 0748 FC01      		movw r30,r24
+ 1051 074a 2581      		ldd r18,Z+5
+ 1052 074c 1230      		cpi r17,lo8(2)
+ 1053 074e 01F4      		brne .L107
+ 1054 0750 822F      		mov r24,r18
+ 1055 0752 8F70      		andi r24,lo8(15)
+ 1056 0754 380F      		add r19,r24
+ 1057               	.L107:
+ 1058 0756 CD01      		movw r24,r26
+ 1059 0758 0196      		adiw r24,1
+ 1060 075a 2C93      		st X,r18
+ 1061 075c 2091 0000 		lds r18,g_sboxnet_dev_def+8
+ 1062 0760 2F5F      		subi r18,lo8(-(1))
+ 1063 0762 203A      		cpi r18,lo8(-96)
+ 1064 0764 00F4      		brsh .L108
+ 1065 0766 2093 0000 		sts g_sboxnet_dev_def+8,r18
+ 1066 076a 00C0      		rjmp .L109
+ 1067               	.L108:
+ 1068 076c 1092 0000 		sts g_sboxnet_dev_def+8,__zero_reg__
+ 1069               	.L109:
+ 1070 0770 1F5F      		subi r17,lo8(-(1))
+ 1071 0772 DC01      		movw r26,r24
+ 1072 0774 00C0      		rjmp .L105
+ 1073               	.L106:
+ 1074 0776 4FBF      		out __SREG__,r20
+ 1075 0778 1123      		tst r17
+ 1076 077a 01F0      		breq .L117
+ 1077 077c 8FEF      		ldi r24,lo8(-1)
+ 1078 077e 00E0      		ldi r16,0
+ 1079               	.L112:
+ 1080 0780 0117      		cp r16,r17
+ 1081 0782 00F4      		brsh .L124
+ 1082 0784 0430      		cpi r16,lo8(4)
+ 1083 0786 01F0      		breq .L113
+GAS LISTING test-sboxnet.s 			page 20
+
+
+ 1084 0788 FE01      		movw r30,r28
+ 1085 078a E00F      		add r30,r16
+ 1086 078c F11D      		adc r31,__zero_reg__
+ 1087 078e 6081      		ld r22,Z
+ 1088 0790 0E94 0000 		call sboxnet_crc8_add
+ 1089               	.L113:
+ 1090 0794 0F5F      		subi r16,lo8(-(1))
+ 1091 0796 00C0      		rjmp .L112
+ 1092               	.L124:
+ 1093 0798 6C81      		ldd r22,Y+4
+ 1094 079a 0E94 0000 		call sboxnet_crc8_add
+ 1095 079e 8823      		tst r24
+ 1096 07a0 01F0      		breq .L115
+ 1097 07a2 8091 0000 		lds r24,g_sboxnet_dev_def+211
+ 1098 07a6 9091 0000 		lds r25,g_sboxnet_dev_def+211+1
+ 1099 07aa 0196      		adiw r24,1
+ 1100 07ac 8093 0000 		sts g_sboxnet_dev_def+211,r24
+ 1101 07b0 9093 0000 		sts g_sboxnet_dev_def+211+1,r25
+ 1102 07b4 8091 0000 		lds r24,g_sboxnet_dev_def+223
+ 1103 07b8 9091 0000 		lds r25,g_sboxnet_dev_def+223+1
+ 1104 07bc 0196      		adiw r24,1
+ 1105 07be 8093 0000 		sts g_sboxnet_dev_def+223,r24
+ 1106 07c2 9093 0000 		sts g_sboxnet_dev_def+223+1,r25
+ 1107 07c6 82E0      		ldi r24,lo8(2)
+ 1108 07c8 00C0      		rjmp .L111
+ 1109               	.L115:
+ 1110 07ca 8091 0000 		lds r24,g_sboxnet_dev_def+195
+ 1111 07ce 9091 0000 		lds r25,g_sboxnet_dev_def+195+1
+ 1112 07d2 0196      		adiw r24,1
+ 1113 07d4 8093 0000 		sts g_sboxnet_dev_def+195,r24
+ 1114 07d8 9093 0000 		sts g_sboxnet_dev_def+195+1,r25
+ 1115 07dc 80E0      		ldi r24,0
+ 1116 07de 00C0      		rjmp .L111
+ 1117               	.L117:
+ 1118 07e0 81E0      		ldi r24,lo8(1)
+ 1119               	.L111:
+ 1120               	/* epilogue start */
+ 1121 07e2 DF91      		pop r29
+ 1122 07e4 CF91      		pop r28
+ 1123 07e6 1F91      		pop r17
+ 1124 07e8 0F91      		pop r16
+ 1125 07ea 0895      		ret
+ 1126               		.size	sboxnet_receive_msg, .-sboxnet_receive_msg
+ 1127               	.global	sboxnet_send_msg
+ 1128               		.type	sboxnet_send_msg, @function
+ 1129               	sboxnet_send_msg:
+ 1130 07ec BF92      		push r11
+ 1131 07ee CF92      		push r12
+ 1132 07f0 DF92      		push r13
+ 1133 07f2 EF92      		push r14
+ 1134 07f4 FF92      		push r15
+ 1135 07f6 0F93      		push r16
+ 1136 07f8 1F93      		push r17
+ 1137 07fa CF93      		push r28
+ 1138 07fc DF93      		push r29
+ 1139               	/* prologue: function */
+ 1140               	/* frame size = 0 */
+GAS LISTING test-sboxnet.s 			page 21
+
+
+ 1141               	/* stack size = 9 */
+ 1142               	.L__stack_usage = 9
+ 1143 07fe EC01      		movw r28,r24
+ 1144               	.L126:
+ 1145 0800 8091 0000 		lds r24,g_sboxnet_dev_def+4
+ 1146 0804 8111      		cpse r24,__zero_reg__
+ 1147 0806 00C0      		rjmp .L126
+ 1148 0808 8091 0000 		lds r24,g_dev_addr
+ 1149 080c 8983      		std Y+1,r24
+ 1150 080e DA80      		ldd r13,Y+2
+ 1151 0810 8D2D      		mov r24,r13
+ 1152 0812 8F70      		andi r24,lo8(15)
+ 1153 0814 D82E      		mov r13,r24
+ 1154 0816 95E0      		ldi r25,lo8(5)
+ 1155 0818 D90E      		add r13,r25
+ 1156 081a ED2C      		mov r14,r13
+ 1157 081c F12C      		mov r15,__zero_reg__
+ 1158 081e 8701      		movw r16,r14
+ 1159 0820 0050      		subi r16,lo8(-(g_sboxnet_dev_def+173))
+ 1160 0822 1040      		sbci r17,hi8(-(g_sboxnet_dev_def+173))
+ 1161 0824 C12C      		mov r12,__zero_reg__
+ 1162 0826 8FEF      		ldi r24,lo8(-1)
+ 1163               	.L128:
+ 1164 0828 FE01      		movw r30,r28
+ 1165 082a EC0D      		add r30,r12
+ 1166 082c F11D      		adc r31,__zero_reg__
+ 1167 082e B080      		ld r11,Z
+ 1168 0830 E4E0      		ldi r30,lo8(4)
+ 1169 0832 CE16      		cp r12,r30
+ 1170 0834 01F0      		breq .L127
+ 1171 0836 6B2D      		mov r22,r11
+ 1172 0838 0E94 0000 		call sboxnet_crc8_add
+ 1173               	.L127:
+ 1174 083c F801      		movw r30,r16
+ 1175 083e B292      		st -Z,r11
+ 1176 0840 8F01      		movw r16,r30
+ 1177 0842 C394      		inc r12
+ 1178 0844 CD14      		cp r12,r13
+ 1179 0846 00F0      		brlo .L128
+ 1180 0848 F701      		movw r30,r14
+ 1181 084a E050      		subi r30,lo8(-(g_sboxnet_dev_def+168))
+ 1182 084c F040      		sbci r31,hi8(-(g_sboxnet_dev_def+168))
+ 1183 084e 8083      		st Z,r24
+ 1184 0850 CFB7      		in r28,__SREG__
+ 1185               	/* #APP */
+ 1186               	 ;  50 "/usr/avr/include/util/atomic.h" 1
+ 1187 0852 F894      		cli
+ 1188               	 ;  0 "" 2
+ 1189               	/* #NOAPP */
+ 1190 0854 D092 0000 		sts g_sboxnet_dev_def+4,r13
+ 1191 0858 D092 0000 		sts g_sboxnet_dev_def+3,r13
+ 1192 085c 89E1      		ldi r24,lo8(25)
+ 1193 085e 8093 0000 		sts g_sboxnet_dev_def+2,r24
+ 1194 0862 0E94 0000 		call sboxnet_check_try_transmit
+ 1195 0866 CFBF      		out __SREG__,r28
+ 1196 0868 8091 0000 		lds r24,g_sboxnet_dev_def+199
+ 1197 086c 9091 0000 		lds r25,g_sboxnet_dev_def+199+1
+GAS LISTING test-sboxnet.s 			page 22
+
+
+ 1198 0870 0196      		adiw r24,1
+ 1199 0872 8093 0000 		sts g_sboxnet_dev_def+199,r24
+ 1200 0876 9093 0000 		sts g_sboxnet_dev_def+199+1,r25
+ 1201               	/* epilogue start */
+ 1202 087a DF91      		pop r29
+ 1203 087c CF91      		pop r28
+ 1204 087e 1F91      		pop r17
+ 1205 0880 0F91      		pop r16
+ 1206 0882 FF90      		pop r15
+ 1207 0884 EF90      		pop r14
+ 1208 0886 DF90      		pop r13
+ 1209 0888 CF90      		pop r12
+ 1210 088a BF90      		pop r11
+ 1211 088c 0895      		ret
+ 1212               		.size	sboxnet_send_msg, .-sboxnet_send_msg
+ 1213               	.global	__vector_14
+ 1214               		.type	__vector_14, @function
+ 1215               	__vector_14:
+ 1216 088e 1F92      		push r1
+ 1217 0890 0F92      		push r0
+ 1218 0892 0FB6      		in r0,__SREG__
+ 1219 0894 0F92      		push r0
+ 1220 0896 1124      		clr __zero_reg__
+ 1221 0898 2F93      		push r18
+ 1222 089a 8F93      		push r24
+ 1223 089c 9F93      		push r25
+ 1224               	/* prologue: Signal */
+ 1225               	/* frame size = 0 */
+ 1226               	/* stack size = 6 */
+ 1227               	.L__stack_usage = 6
+ 1228 089e 8091 0000 		lds r24,g_lcd_timer
+ 1229 08a2 9091 0000 		lds r25,g_lcd_timer+1
+ 1230 08a6 0196      		adiw r24,1
+ 1231 08a8 8093 0000 		sts g_lcd_timer,r24
+ 1232 08ac 9093 0000 		sts g_lcd_timer+1,r25
+ 1233 08b0 8091 0000 		lds r24,g_lcd_timer
+ 1234 08b4 9091 0000 		lds r25,g_lcd_timer+1
+ 1235 08b8 8039      		cpi r24,-112
+ 1236 08ba 9140      		sbci r25,1
+ 1237 08bc 00F0      		brlo .L133
+ 1238 08be 1092 0000 		sts g_lcd_timer,__zero_reg__
+ 1239 08c2 1092 0000 		sts g_lcd_timer+1,__zero_reg__
+ 1240 08c6 81E0      		ldi r24,lo8(1)
+ 1241 08c8 8093 0000 		sts g_lcd_timedout,r24
+ 1242               	.L133:
+ 1243 08cc 8091 0000 		lds r24,g_led_timer
+ 1244 08d0 9091 0000 		lds r25,g_led_timer+1
+ 1245 08d4 0196      		adiw r24,1
+ 1246 08d6 8093 0000 		sts g_led_timer,r24
+ 1247 08da 9093 0000 		sts g_led_timer+1,r25
+ 1248 08de 8091 0000 		lds r24,g_led_timer
+ 1249 08e2 9091 0000 		lds r25,g_led_timer+1
+ 1250 08e6 883E      		cpi r24,-24
+ 1251 08e8 9340      		sbci r25,3
+ 1252 08ea 00F0      		brlo .L132
+ 1253 08ec 1092 0000 		sts g_led_timer,__zero_reg__
+ 1254 08f0 1092 0000 		sts g_led_timer+1,__zero_reg__
+GAS LISTING test-sboxnet.s 			page 23
+
+
+ 1255 08f4 80E2      		ldi r24,lo8(32)
+ 1256 08f6 8093 0706 		sts 1543,r24
+ 1257               	.L132:
+ 1258               	/* epilogue start */
+ 1259 08fa 9F91      		pop r25
+ 1260 08fc 8F91      		pop r24
+ 1261 08fe 2F91      		pop r18
+ 1262 0900 0F90      		pop r0
+ 1263 0902 0FBE      		out __SREG__,r0
+ 1264 0904 0F90      		pop r0
+ 1265 0906 1F90      		pop r1
+ 1266 0908 1895      		reti
+ 1267               		.size	__vector_14, .-__vector_14
+ 1268               	.global	__vector_16
+ 1269               		.type	__vector_16, @function
+ 1270               	__vector_16:
+ 1271 090a 1F92      		push r1
+ 1272 090c 0F92      		push r0
+ 1273 090e 0FB6      		in r0,__SREG__
+ 1274 0910 0F92      		push r0
+ 1275 0912 1124      		clr __zero_reg__
+ 1276 0914 2F93      		push r18
+ 1277 0916 3F93      		push r19
+ 1278 0918 4F93      		push r20
+ 1279 091a 5F93      		push r21
+ 1280 091c 6F93      		push r22
+ 1281 091e 7F93      		push r23
+ 1282 0920 8F93      		push r24
+ 1283 0922 9F93      		push r25
+ 1284 0924 AF93      		push r26
+ 1285 0926 BF93      		push r27
+ 1286 0928 EF93      		push r30
+ 1287 092a FF93      		push r31
+ 1288               	/* prologue: Signal */
+ 1289               	/* frame size = 0 */
+ 1290               	/* stack size = 15 */
+ 1291               	.L__stack_usage = 15
+ 1292 092c 0E94 0000 		call sboxnet_timer_bit
+ 1293               	/* epilogue start */
+ 1294 0930 FF91      		pop r31
+ 1295 0932 EF91      		pop r30
+ 1296 0934 BF91      		pop r27
+ 1297 0936 AF91      		pop r26
+ 1298 0938 9F91      		pop r25
+ 1299 093a 8F91      		pop r24
+ 1300 093c 7F91      		pop r23
+ 1301 093e 6F91      		pop r22
+ 1302 0940 5F91      		pop r21
+ 1303 0942 4F91      		pop r20
+ 1304 0944 3F91      		pop r19
+ 1305 0946 2F91      		pop r18
+ 1306 0948 0F90      		pop r0
+ 1307 094a 0FBE      		out __SREG__,r0
+ 1308 094c 0F90      		pop r0
+ 1309 094e 1F90      		pop r1
+ 1310 0950 1895      		reti
+ 1311               		.size	__vector_16, .-__vector_16
+GAS LISTING test-sboxnet.s 			page 24
+
+
+ 1312               	.global	init
+ 1313               		.type	init, @function
+ 1314               	init:
+ 1315               	/* prologue: function */
+ 1316               	/* frame size = 0 */
+ 1317               	/* stack size = 0 */
+ 1318               	.L__stack_usage = 0
+ 1319               	/* #APP */
+ 1320               	 ;  135 "test-sboxnet.c" 1
+ 1321 0952 A895      		wdr
+ 1322               	 ;  0 "" 2
+ 1323               	/* #NOAPP */
+ 1324 0954 1092 0006 		sts 1536,__zero_reg__
+ 1325 0958 9FEF      		ldi r25,lo8(-1)
+ 1326 095a 9093 B000 		sts 176,r25
+ 1327 095e 88E1      		ldi r24,lo8(24)
+ 1328 0960 8093 1006 		sts 1552,r24
+ 1329 0964 1092 2006 		sts 1568,__zero_reg__
+ 1330 0968 9093 B000 		sts 176,r25
+ 1331 096c 8093 3006 		sts 1584,r24
+ 1332 0970 1092 4006 		sts 1600,__zero_reg__
+ 1333 0974 9093 B000 		sts 176,r25
+ 1334 0978 8093 5006 		sts 1616,r24
+ 1335 097c 1092 6006 		sts 1632,__zero_reg__
+ 1336 0980 9093 B000 		sts 176,r25
+ 1337 0984 8093 7006 		sts 1648,r24
+ 1338 0988 1092 8006 		sts 1664,__zero_reg__
+ 1339 098c 9093 B000 		sts 176,r25
+ 1340 0990 8093 9006 		sts 1680,r24
+ 1341 0994 8091 5000 		lds r24,80
+ 1342 0998 8260      		ori r24,lo8(2)
+ 1343 099a 8093 5000 		sts 80,r24
+ 1344               	.L137:
+ 1345 099e 8091 5100 		lds r24,81
+ 1346 09a2 81FF      		sbrs r24,1
+ 1347 09a4 00C0      		rjmp .L137
+ 1348 09a6 88ED      		ldi r24,lo8(-40)
+ 1349 09a8 84BF      		out __CCP__,r24
+ 1350 09aa 21E0      		ldi r18,lo8(1)
+ 1351 09ac 2093 4000 		sts 64,r18
+ 1352 09b0 1092 0108 		sts 2049,__zero_reg__
+ 1353 09b4 1092 0308 		sts 2051,__zero_reg__
+ 1354 09b8 1092 0408 		sts 2052,__zero_reg__
+ 1355 09bc 2093 0608 		sts 2054,r18
+ 1356 09c0 1092 0708 		sts 2055,__zero_reg__
+ 1357 09c4 8FEF      		ldi r24,lo8(-1)
+ 1358 09c6 8093 0C08 		sts 2060,r24
+ 1359 09ca 8FEF      		ldi r24,lo8(-1)
+ 1360 09cc 90E0      		ldi r25,0
+ 1361 09ce 8093 2608 		sts 2086,r24
+ 1362 09d2 9093 2708 		sts 2086+1,r25
+ 1363 09d6 85E0      		ldi r24,lo8(5)
+ 1364 09d8 8093 0008 		sts 2048,r24
+ 1365 09dc 2093 A200 		sts 162,r18
+ 1366 09e0 80E2      		ldi r24,lo8(32)
+ 1367 09e2 8093 0106 		sts 1537,r24
+ 1368 09e6 8093 0606 		sts 1542,r24
+GAS LISTING test-sboxnet.s 			page 25
+
+
+ 1369 09ea 0895      		ret
+ 1370               		.size	init, .-init
+ 1371               		.section	.text.startup,"ax",@progbits
+ 1372               	.global	main
+ 1373               		.type	main, @function
+ 1374               	main:
+ 1375 0000 CF93      		push r28
+ 1376 0002 DF93      		push r29
+ 1377 0004 CDB7      		in r28,__SP_L__
+ 1378 0006 DEB7      		in r29,__SP_H__
+ 1379 0008 6497      		sbiw r28,20
+ 1380 000a CDBF      		out __SP_L__,r28
+ 1381 000c DEBF      		out __SP_H__,r29
+ 1382               	/* prologue: function */
+ 1383               	/* frame size = 20 */
+ 1384               	/* stack size = 22 */
+ 1385               	.L__stack_usage = 22
+ 1386 000e 0E94 0000 		call init
+ 1387 0012 80E0      		ldi r24,0
+ 1388 0014 90E0      		ldi r25,0
+ 1389 0016 0E94 0000 		call __eerd_byte_x16a4
+ 1390 001a 8093 0000 		sts g_dev_addr,r24
+ 1391 001e 0E94 0000 		call lcd_ks0070_init
+ 1392 0022 0E94 0000 		call sboxnet_init
+ 1393 0026 0E94 0000 		call sboxnet_receiver_enable
+ 1394               	/* #APP */
+ 1395               	 ;  215 "test-sboxnet.c" 1
+ 1396 002a 7894      		sei
+ 1397               	 ;  0 "" 2
+ 1398               	/* #NOAPP */
+ 1399 002c 2FEF      		ldi r18,lo8(639999)
+ 1400 002e 83EC      		ldi r24,hi8(639999)
+ 1401 0030 99E0      		ldi r25,hlo8(639999)
+ 1402 0032 2150      		1: subi r18,1
+ 1403 0034 8040      		sbci r24,0
+ 1404 0036 9040      		sbci r25,0
+ 1405 0038 01F4      		brne 1b
+ 1406 003a 00C0      		rjmp .
+ 1407 003c 0000      		nop
+ 1408 003e 00E0      		ldi r16,0
+ 1409 0040 10E0      		ldi r17,0
+ 1410               	.L143:
+ 1411 0042 CE01      		movw r24,r28
+ 1412 0044 0196      		adiw r24,1
+ 1413 0046 0E94 0000 		call sboxnet_receive_msg
+ 1414 004a 8111      		cpse r24,__zero_reg__
+ 1415 004c 00C0      		rjmp .L144
+ 1416 004e 8FE0      		ldi r24,lo8(15)
+ 1417 0050 FE01      		movw r30,r28
+ 1418 0052 3696      		adiw r30,6
+ 1419 0054 A0E0      		ldi r26,lo8(buf.4369)
+ 1420 0056 B0E0      		ldi r27,hi8(buf.4369)
+ 1421               		0:
+ 1422 0058 0190      		ld r0,Z+
+ 1423 005a 0D92      		st X+,r0
+ 1424 005c 8A95      		dec r24
+ 1425 005e 01F4      		brne 0b
+GAS LISTING test-sboxnet.s 			page 26
+
+
+ 1426 0060 00C0      		rjmp .L143
+ 1427               	.L144:
+ 1428 0062 8130      		cpi r24,lo8(1)
+ 1429 0064 01F4      		brne .L143
+ 1430 0066 8091 0000 		lds r24,g_sboxnet_dev_def+4
+ 1431 006a 8111      		cpse r24,__zero_reg__
+ 1432 006c 00C0      		rjmp .L146
+ 1433 006e 8091 0000 		lds r24,g_dev_addr
+ 1434 0072 8B30      		cpi r24,lo8(11)
+ 1435 0074 01F4      		brne .L153
+ 1436 0076 8AE0      		ldi r24,lo8(10)
+ 1437 0078 00C0      		rjmp .L147
+ 1438               	.L153:
+ 1439 007a 8BE0      		ldi r24,lo8(11)
+ 1440               	.L147:
+ 1441 007c 8983      		std Y+1,r24
+ 1442 007e 85E0      		ldi r24,lo8(5)
+ 1443 0080 8B83      		std Y+3,r24
+ 1444 0082 8AE5      		ldi r24,lo8(90)
+ 1445 0084 8C83      		std Y+4,r24
+ 1446 0086 88E4      		ldi r24,lo8(72)
+ 1447 0088 8E83      		std Y+6,r24
+ 1448 008a 85E6      		ldi r24,lo8(101)
+ 1449 008c 8F83      		std Y+7,r24
+ 1450 008e 8CE6      		ldi r24,lo8(108)
+ 1451 0090 8887      		std Y+8,r24
+ 1452 0092 8987      		std Y+9,r24
+ 1453 0094 8FE6      		ldi r24,lo8(111)
+ 1454 0096 8A87      		std Y+10,r24
+ 1455 0098 CE01      		movw r24,r28
+ 1456 009a 0196      		adiw r24,1
+ 1457 009c 0E94 0000 		call sboxnet_send_msg
+ 1458               	.L146:
+ 1459 00a0 8091 0000 		lds r24,g_lcd_timedout
+ 1460 00a4 8823      		tst r24
+ 1461 00a6 01F0      		breq .L143
+ 1462 00a8 1092 0000 		sts g_lcd_timedout,__zero_reg__
+ 1463 00ac 1F5F      		subi r17,lo8(-(1))
+ 1464 00ae 1A30      		cpi r17,lo8(10)
+ 1465 00b0 00F0      		brlo .L149
+ 1466 00b2 81E0      		ldi r24,lo8(1)
+ 1467 00b4 0111      		cpse r16,__zero_reg__
+ 1468 00b6 80E0      		ldi r24,0
+ 1469               	.L150:
+ 1470 00b8 082F      		mov r16,r24
+ 1471 00ba 0E94 0000 		call lcd_ks0070_display_clear
+ 1472 00be 10E0      		ldi r17,0
+ 1473               	.L149:
+ 1474 00c0 60E0      		ldi r22,0
+ 1475 00c2 80E0      		ldi r24,0
+ 1476 00c4 0023      		tst r16
+ 1477 00c6 01F0      		breq .L151
+ 1478 00c8 0E94 0000 		call lcd_set_cursor
+ 1479 00cc 80E0      		ldi r24,lo8(__c.4374)
+ 1480 00ce 90E0      		ldi r25,hi8(__c.4374)
+ 1481 00d0 0E94 0000 		call lcd_str_P
+ 1482 00d4 60E0      		ldi r22,0
+GAS LISTING test-sboxnet.s 			page 27
+
+
+ 1483 00d6 80E0      		ldi r24,0
+ 1484 00d8 0E94 0000 		call lcd_set_cursor
+ 1485 00dc 8091 0000 		lds r24,buf.4369
+ 1486 00e0 0E94 0000 		call lcd_ks0070_data
+ 1487 00e4 8091 0000 		lds r24,buf.4369+1
+ 1488 00e8 0E94 0000 		call lcd_ks0070_data
+ 1489 00ec 8091 0000 		lds r24,buf.4369+2
+ 1490 00f0 0E94 0000 		call lcd_ks0070_data
+ 1491 00f4 8091 0000 		lds r24,buf.4369+3
+ 1492 00f8 0E94 0000 		call lcd_ks0070_data
+ 1493 00fc 8091 0000 		lds r24,buf.4369+4
+ 1494 0100 0E94 0000 		call lcd_ks0070_data
+ 1495 0104 00C0      		rjmp .L143
+ 1496               	.L151:
+ 1497 0106 0E94 0000 		call lcd_set_cursor
+ 1498 010a 80E0      		ldi r24,lo8(__c.4376)
+ 1499 010c 90E0      		ldi r25,hi8(__c.4376)
+ 1500 010e 0E94 0000 		call lcd_str_P
+ 1501 0112 60E0      		ldi r22,0
+ 1502 0114 80E0      		ldi r24,0
+ 1503 0116 0E94 0000 		call lcd_set_cursor
+ 1504 011a 8091 0000 		lds r24,g_sboxnet_dev_def+195
+ 1505 011e 9091 0000 		lds r25,g_sboxnet_dev_def+195+1
+ 1506 0122 8F73      		andi r24,63
+ 1507 0124 9927      		clr r25
+ 1508 0126 0E94 0000 		call lcd_itoa
+ 1509 012a 60E0      		ldi r22,0
+ 1510 012c 82E0      		ldi r24,lo8(2)
+ 1511 012e 0E94 0000 		call lcd_set_cursor
+ 1512 0132 8091 0000 		lds r24,g_sboxnet_dev_def+193
+ 1513 0136 9091 0000 		lds r25,g_sboxnet_dev_def+193+1
+ 1514 013a 8F73      		andi r24,63
+ 1515 013c 9927      		clr r25
+ 1516 013e 0E94 0000 		call lcd_itoa
+ 1517 0142 61E0      		ldi r22,lo8(1)
+ 1518 0144 80E0      		ldi r24,0
+ 1519 0146 0E94 0000 		call lcd_set_cursor
+ 1520 014a 80E0      		ldi r24,lo8(__c.4378)
+ 1521 014c 90E0      		ldi r25,hi8(__c.4378)
+ 1522 014e 0E94 0000 		call lcd_str_P
+ 1523 0152 61E0      		ldi r22,lo8(1)
+ 1524 0154 80E0      		ldi r24,0
+ 1525 0156 0E94 0000 		call lcd_set_cursor
+ 1526 015a 8091 0000 		lds r24,g_sboxnet_dev_def+199
+ 1527 015e 9091 0000 		lds r25,g_sboxnet_dev_def+199+1
+ 1528 0162 8F73      		andi r24,63
+ 1529 0164 9927      		clr r25
+ 1530 0166 0E94 0000 		call lcd_itoa
+ 1531 016a 61E0      		ldi r22,lo8(1)
+ 1532 016c 82E0      		ldi r24,lo8(2)
+ 1533 016e 0E94 0000 		call lcd_set_cursor
+ 1534 0172 8091 0000 		lds r24,g_sboxnet_dev_def+197
+ 1535 0176 9091 0000 		lds r25,g_sboxnet_dev_def+197+1
+ 1536 017a 8F73      		andi r24,63
+ 1537 017c 9927      		clr r25
+ 1538 017e 0E94 0000 		call lcd_itoa
+ 1539 0182 60E0      		ldi r22,0
+GAS LISTING test-sboxnet.s 			page 28
+
+
+ 1540 0184 85E0      		ldi r24,lo8(5)
+ 1541 0186 0E94 0000 		call lcd_set_cursor
+ 1542 018a 80E0      		ldi r24,lo8(__c.4380)
+ 1543 018c 90E0      		ldi r25,hi8(__c.4380)
+ 1544 018e 0E94 0000 		call lcd_str_P
+ 1545 0192 60E0      		ldi r22,0
+ 1546 0194 85E0      		ldi r24,lo8(5)
+ 1547 0196 0E94 0000 		call lcd_set_cursor
+ 1548 019a 8091 0000 		lds r24,g_sboxnet_dev_def+201
+ 1549 019e 9091 0000 		lds r25,g_sboxnet_dev_def+201+1
+ 1550 01a2 8F73      		andi r24,63
+ 1551 01a4 9927      		clr r25
+ 1552 01a6 0E94 0000 		call lcd_itoa
+ 1553 01aa 61E0      		ldi r22,lo8(1)
+ 1554 01ac 85E0      		ldi r24,lo8(5)
+ 1555 01ae 0E94 0000 		call lcd_set_cursor
+ 1556 01b2 80E0      		ldi r24,lo8(__c.4382)
+ 1557 01b4 90E0      		ldi r25,hi8(__c.4382)
+ 1558 01b6 0E94 0000 		call lcd_str_P
+ 1559 01ba 61E0      		ldi r22,lo8(1)
+ 1560 01bc 85E0      		ldi r24,lo8(5)
+ 1561 01be 0E94 0000 		call lcd_set_cursor
+ 1562 01c2 8091 0000 		lds r24,g_sboxnet_dev_def+209
+ 1563 01c6 9091 0000 		lds r25,g_sboxnet_dev_def+209+1
+ 1564 01ca 8F73      		andi r24,63
+ 1565 01cc 9927      		clr r25
+ 1566 01ce 0E94 0000 		call lcd_itoa
+ 1567 01d2 60E0      		ldi r22,0
+ 1568 01d4 88E0      		ldi r24,lo8(8)
+ 1569 01d6 0E94 0000 		call lcd_set_cursor
+ 1570 01da 80E0      		ldi r24,lo8(__c.4384)
+ 1571 01dc 90E0      		ldi r25,hi8(__c.4384)
+ 1572 01de 0E94 0000 		call lcd_str_P
+ 1573 01e2 60E0      		ldi r22,0
+ 1574 01e4 88E0      		ldi r24,lo8(8)
+ 1575 01e6 0E94 0000 		call lcd_set_cursor
+ 1576 01ea 8091 0000 		lds r24,g_sboxnet_dev_def+211
+ 1577 01ee 9091 0000 		lds r25,g_sboxnet_dev_def+211+1
+ 1578 01f2 8F73      		andi r24,63
+ 1579 01f4 9927      		clr r25
+ 1580 01f6 0E94 0000 		call lcd_itoa
+ 1581 01fa 60E0      		ldi r22,0
+ 1582 01fc 8AE0      		ldi r24,lo8(10)
+ 1583 01fe 0E94 0000 		call lcd_set_cursor
+ 1584 0202 80E0      		ldi r24,lo8(__c.4386)
+ 1585 0204 90E0      		ldi r25,hi8(__c.4386)
+ 1586 0206 0E94 0000 		call lcd_str_P
+ 1587 020a 60E0      		ldi r22,0
+ 1588 020c 8AE0      		ldi r24,lo8(10)
+ 1589 020e 0E94 0000 		call lcd_set_cursor
+ 1590 0212 8091 0000 		lds r24,g_sboxnet_dev_def+223
+ 1591 0216 9091 0000 		lds r25,g_sboxnet_dev_def+223+1
+ 1592 021a 8770      		andi r24,7
+ 1593 021c 9927      		clr r25
+ 1594 021e 0E94 0000 		call lcd_itoa
+ 1595 0222 8091 0000 		lds r24,g_sboxnet_dev_def+213
+ 1596 0226 9091 0000 		lds r25,g_sboxnet_dev_def+213+1
+GAS LISTING test-sboxnet.s 			page 29
+
+
+ 1597 022a 8770      		andi r24,7
+ 1598 022c 9927      		clr r25
+ 1599 022e 0E94 0000 		call lcd_itoa
+ 1600 0232 8091 0000 		lds r24,g_sboxnet_dev_def+215
+ 1601 0236 9091 0000 		lds r25,g_sboxnet_dev_def+215+1
+ 1602 023a 8770      		andi r24,7
+ 1603 023c 9927      		clr r25
+ 1604 023e 0E94 0000 		call lcd_itoa
+ 1605 0242 8091 0000 		lds r24,g_sboxnet_dev_def+217
+ 1606 0246 9091 0000 		lds r25,g_sboxnet_dev_def+217+1
+ 1607 024a 8770      		andi r24,7
+ 1608 024c 9927      		clr r25
+ 1609 024e 0E94 0000 		call lcd_itoa
+ 1610 0252 8091 0000 		lds r24,g_sboxnet_dev_def+219
+ 1611 0256 9091 0000 		lds r25,g_sboxnet_dev_def+219+1
+ 1612 025a 8770      		andi r24,7
+ 1613 025c 9927      		clr r25
+ 1614 025e 0E94 0000 		call lcd_itoa
+ 1615 0262 8091 0000 		lds r24,g_sboxnet_dev_def+221
+ 1616 0266 9091 0000 		lds r25,g_sboxnet_dev_def+221+1
+ 1617 026a 8770      		andi r24,7
+ 1618 026c 9927      		clr r25
+ 1619 026e 0E94 0000 		call lcd_itoa
+ 1620 0272 61E0      		ldi r22,lo8(1)
+ 1621 0274 88E0      		ldi r24,lo8(8)
+ 1622 0276 0E94 0000 		call lcd_set_cursor
+ 1623 027a 80E0      		ldi r24,lo8(__c.4388)
+ 1624 027c 90E0      		ldi r25,hi8(__c.4388)
+ 1625 027e 0E94 0000 		call lcd_str_P
+ 1626 0282 61E0      		ldi r22,lo8(1)
+ 1627 0284 88E0      		ldi r24,lo8(8)
+ 1628 0286 0E94 0000 		call lcd_set_cursor
+ 1629 028a 8091 0000 		lds r24,g_sboxnet_dev_def+225
+ 1630 028e 9091 0000 		lds r25,g_sboxnet_dev_def+225+1
+ 1631 0292 9927      		clr r25
+ 1632 0294 0E94 0000 		call lcd_itoa
+ 1633 0298 61E0      		ldi r22,lo8(1)
+ 1634 029a 8DE0      		ldi r24,lo8(13)
+ 1635 029c 0E94 0000 		call lcd_set_cursor
+ 1636 02a0 80E0      		ldi r24,lo8(__c.4390)
+ 1637 02a2 90E0      		ldi r25,hi8(__c.4390)
+ 1638 02a4 0E94 0000 		call lcd_str_P
+ 1639 02a8 61E0      		ldi r22,lo8(1)
+ 1640 02aa 8DE0      		ldi r24,lo8(13)
+ 1641 02ac 0E94 0000 		call lcd_set_cursor
+ 1642 02b0 8091 0000 		lds r24,g_sboxnet_dev_def+203
+ 1643 02b4 9091 0000 		lds r25,g_sboxnet_dev_def+203+1
+ 1644 02b8 8770      		andi r24,7
+ 1645 02ba 9927      		clr r25
+ 1646 02bc 0E94 0000 		call lcd_itoa
+ 1647 02c0 8091 0000 		lds r24,g_sboxnet_dev_def+205
+ 1648 02c4 9091 0000 		lds r25,g_sboxnet_dev_def+205+1
+ 1649 02c8 8770      		andi r24,7
+ 1650 02ca 9927      		clr r25
+ 1651 02cc 0E94 0000 		call lcd_itoa
+ 1652 02d0 8091 0000 		lds r24,g_sboxnet_dev_def+207
+ 1653 02d4 9091 0000 		lds r25,g_sboxnet_dev_def+207+1
+GAS LISTING test-sboxnet.s 			page 30
+
+
+ 1654 02d8 8770      		andi r24,7
+ 1655 02da 9927      		clr r25
+ 1656 02dc 0E94 0000 		call lcd_itoa
+ 1657 02e0 00C0      		rjmp .L143
+ 1658               		.size	main, .-main
+ 1659               		.section	.rodata
+ 1660               		.type	CSWTCH.45, @object
+ 1661               		.size	CSWTCH.45, 3
+ 1662               	CSWTCH.45:
+ 1663 0000 40        		.byte	64
+ 1664 0001 14        		.byte	20
+ 1665 0002 54        		.byte	84
+ 1666               		.section	.progmem.data,"a",@progbits
+ 1667               		.type	__c.4390, @object
+ 1668               		.size	__c.4390, 5
+ 1669               	__c.4390:
+ 1670 0000 2020 2020 		.string	"    "
+ 1670      00
+ 1671               		.type	__c.4388, @object
+ 1672               		.size	__c.4388, 5
+ 1673               	__c.4388:
+ 1674 0005 2020 2020 		.string	"    "
+ 1674      00
+ 1675               		.type	__c.4386, @object
+ 1676               		.size	__c.4386, 5
+ 1677               	__c.4386:
+ 1678 000a 2020 2020 		.string	"    "
+ 1678      00
+ 1679               		.type	__c.4384, @object
+ 1680               		.size	__c.4384, 5
+ 1681               	__c.4384:
+ 1682 000f 2020 2020 		.string	"    "
+ 1682      00
+ 1683               		.type	__c.4382, @object
+ 1684               		.size	__c.4382, 4
+ 1685               	__c.4382:
+ 1686 0014 2020 2000 		.string	"   "
+ 1687               		.type	__c.4380, @object
+ 1688               		.size	__c.4380, 4
+ 1689               	__c.4380:
+ 1690 0018 2020 2000 		.string	"   "
+ 1691               		.type	__c.4378, @object
+ 1692               		.size	__c.4378, 5
+ 1693               	__c.4378:
+ 1694 001c 2020 2020 		.string	"    "
+ 1694      00
+ 1695               		.type	__c.4376, @object
+ 1696               		.size	__c.4376, 5
+ 1697               	__c.4376:
+ 1698 0021 2020 2020 		.string	"    "
+ 1698      00
+ 1699               		.type	__c.4374, @object
+ 1700               		.size	__c.4374, 8
+ 1701               	__c.4374:
+ 1702 0026 2020 2020 		.string	"       "
+ 1702      2020 2000 
+ 1703               		.data
+GAS LISTING test-sboxnet.s 			page 31
+
+
+ 1704               		.type	buf.4369, @object
+ 1705               		.size	buf.4369, 16
+ 1706               	buf.4369:
+ 1707 0000 6E69 7864 		.string	"nixda"
+ 1707      6100 
+ 1708 0006 0000 0000 		.zero	10
+ 1708      0000 0000 
+ 1708      0000 
+ 1709               	.global	g_led_timer
+ 1710               		.section .bss
+ 1711               		.type	g_led_timer, @object
+ 1712               		.size	g_led_timer, 2
+ 1713               	g_led_timer:
+ 1714 0000 0000      		.zero	2
+ 1715               	.global	g_lcd_timedout
+ 1716               		.type	g_lcd_timedout, @object
+ 1717               		.size	g_lcd_timedout, 1
+ 1718               	g_lcd_timedout:
+ 1719 0002 00        		.zero	1
+ 1720               	.global	g_lcd_timer
+ 1721               		.type	g_lcd_timer, @object
+ 1722               		.size	g_lcd_timer, 2
+ 1723               	g_lcd_timer:
+ 1724 0003 0000      		.zero	2
+ 1725               		.comm	g_sboxnet_dev_def,227,1
+ 1726               		.local	g_dev_addr
+ 1727               		.comm	g_dev_addr,1,1
+ 1728               		.ident	"GCC: (Gentoo 4.8.3 p1.1, pie-0.5.9) 4.8.3"
+ 1729               	.global __do_copy_data
+ 1730               	.global __do_clear_bss
+GAS LISTING test-sboxnet.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 test-sboxnet.c
+      test-sboxnet.s:2      *ABS*:000000000000003e __SP_H__
+      test-sboxnet.s:3      *ABS*:000000000000003d __SP_L__
+      test-sboxnet.s:4      *ABS*:000000000000003f __SREG__
+      test-sboxnet.s:5      *ABS*:0000000000000034 __CCP__
+      test-sboxnet.s:6      *ABS*:0000000000000000 __tmp_reg__
+      test-sboxnet.s:7      *ABS*:0000000000000001 __zero_reg__
+      test-sboxnet.s:10     .text:0000000000000000 sboxnet_crc8_add
+      test-sboxnet.s:31     .text:0000000000000012 sboxnet_recv_buf_write
+                            *COM*:00000000000000e3 g_sboxnet_dev_def
+      test-sboxnet.s:65     .text:000000000000004e sboxnet_set_timer
+      test-sboxnet.s:88     .text:000000000000006e lcd_ks0070_write4
+      test-sboxnet.s:121    .text:00000000000000aa lcd_ks0070_write
+      test-sboxnet.s:141    .text:00000000000000c6 lcd_ks0070_command
+      test-sboxnet.s:158    .text:00000000000000dc lcd_set_cursor
+      test-sboxnet.s:1662   .rodata:0000000000000000 CSWTCH.45
+      test-sboxnet.s:180    .text:00000000000000f8 lcd_ks0070_data
+      test-sboxnet.s:197    .text:000000000000010e lcd_str
+      test-sboxnet.s:219    .text:0000000000000128 lcd_ks0070_display_clear
+      test-sboxnet.s:235    .text:000000000000013c lcd_itoa
+      test-sboxnet.s:265    .text:000000000000016c lcd_ks0070_init
+      test-sboxnet.s:328    .text:00000000000001ec lcd_str_P
+      test-sboxnet.s:357    .text:0000000000000208 sboxnet_prandom
+      test-sboxnet.s:379    .text:0000000000000226 sboxnet_check_try_transmit
+      test-sboxnet.s:409    .text:0000000000000258 sboxnet_init
+      test-sboxnet.s:457    .text:00000000000002aa sboxnet_receiver_enable
+      test-sboxnet.s:479    .text:00000000000002c8 sboxnet_timer_bit
+      test-sboxnet.s:583    .text:00000000000003c0 __vector_25
+                             .bss:0000000000000005 g_dev_addr
+      test-sboxnet.s:817    .text:0000000000000586 __vector_27
+      test-sboxnet.s:1013   .text:000000000000070c sboxnet_receive_msg
+      test-sboxnet.s:1129   .text:00000000000007ec sboxnet_send_msg
+      test-sboxnet.s:1215   .text:000000000000088e __vector_14
+      test-sboxnet.s:1723   .bss:0000000000000003 g_lcd_timer
+      test-sboxnet.s:1718   .bss:0000000000000002 g_lcd_timedout
+      test-sboxnet.s:1713   .bss:0000000000000000 g_led_timer
+      test-sboxnet.s:1270   .text:000000000000090a __vector_16
+      test-sboxnet.s:1314   .text:0000000000000952 init
+      test-sboxnet.s:1374   .text.startup:0000000000000000 main
+      test-sboxnet.s:1706   .data:0000000000000000 buf.4369
+      test-sboxnet.s:1701   .progmem.data:0000000000000026 __c.4374
+      test-sboxnet.s:1697   .progmem.data:0000000000000021 __c.4376
+      test-sboxnet.s:1693   .progmem.data:000000000000001c __c.4378
+      test-sboxnet.s:1689   .progmem.data:0000000000000018 __c.4380
+      test-sboxnet.s:1685   .progmem.data:0000000000000014 __c.4382
+      test-sboxnet.s:1681   .progmem.data:000000000000000f __c.4384
+      test-sboxnet.s:1677   .progmem.data:000000000000000a __c.4386
+      test-sboxnet.s:1673   .progmem.data:0000000000000005 __c.4388
+      test-sboxnet.s:1669   .progmem.data:0000000000000000 __c.4390
+
+UNDEFINED SYMBOLS
+itoa
+__eerd_byte_x16a4
+__do_copy_data
+__do_clear_bss

@@ -1,0 +1,820 @@
+Archive member included to satisfy reference by file (symbol)
+
+c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+                              C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o (exit)
+c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+                              sboxnet2usb.o (__tablejump2__)
+c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+                              sboxnet2usb.o (__do_copy_data)
+c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+                              sboxnet2usb.o (__do_clear_bss)
+c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a(memset.o)
+                              sboxnet2usb.o (memset)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+                              sboxnet2usb.o (eeprom_read_byte)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+                              sboxnet2usb.o (eeprom_read_word)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+                              sboxnet2usb.o (eeprom_update_block)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+                              sboxnet2usb.o (eeprom_update_byte)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+                              sboxnet2usb.o (eeprom_update_word)
+C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+                              C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o) (eeprom_read_blraw)
+
+Allocating common symbols
+Common symbol       size              file
+
+g_sboxnet_addr      0x1               sboxnet2usb.o
+g_sboxnet           0x233             sboxnet2usb.o
+g_usb_dev           0xd               sboxnet2usb.o
+
+Discarded input sections
+
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .text          0x00000000        0x0 sboxnet2usb.o
+ .data          0x00000000        0x0 sboxnet2usb.o
+ .bss           0x00000000        0x0 sboxnet2usb.o
+ .text.sboxnet_all_sent
+                0x00000000       0x20 sboxnet2usb.o
+ .text.usb_ep_clearFIFOCON
+                0x00000000       0x22 sboxnet2usb.o
+ .text.usb_req_isOUT
+                0x00000000       0x28 sboxnet2usb.o
+ .text.usb_req_isIN
+                0x00000000       0x26 sboxnet2usb.o
+ .text.usb_ep_send_in_data
+                0x00000000       0xc4 sboxnet2usb.o
+ .bss.t1        0x00000000        0x1 sboxnet2usb.o
+ .bss.t2        0x00000000        0x1 sboxnet2usb.o
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.mul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a(memset.o)
+ .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a(memset.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a(memset.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00010000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000003         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+user_signatures  0x00850000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+LOAD sboxnet2usb.o
+START GROUP
+END GROUP
+START GROUP
+LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a
+LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libm.a
+LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a
+LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a
+END GROUP
+                0x00000000                __TEXT_REGION_ORIGIN__ = DEFINED (__TEXT_REGION_ORIGIN__)?__TEXT_REGION_ORIGIN__:0x0
+                0x00800060                __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x800060
+                0x00010000                __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x10000
+                0x0000ffa0                __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                0x00010000                __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x00000003]                __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                0x00000400                __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
+                0x00000400                __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
+                0x00000400                __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x2fc4
+ *(.vectors)
+ .vectors       0x00000000       0x74 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+                0x00000000                __vector_default
+                0x00000000                __vectors
+ *(.vectors)
+ *(.progmem.gcc*)
+ .progmem.gcc_sw_table.usb_ep0_task
+                0x00000074       0x1a sboxnet2usb.o
+ .progmem.gcc_sw_table.usb_event_ep0_request
+                0x0000008e       0x44 sboxnet2usb.o
+                0x000000d2                . = ALIGN (0x2)
+                0x000000d2                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000000d2        0x0 linker stubs
+ *(.trampolines*)
+                0x000000d2                __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem*)
+ .progmem.data.g_device_desc_P
+                0x000000d2       0x12 sboxnet2usb.o
+                0x000000d2                g_device_desc_P
+ .progmem.data.g_config_1_P
+                0x000000e4       0x12 sboxnet2usb.o
+                0x000000e4                g_config_1_P
+ .progmem.data.g_string0_P
+                0x000000f6        0x4 sboxnet2usb.o
+                0x000000f6                g_string0_P
+ .progmem.data.g_string1_P
+                0x000000fa       0x46 sboxnet2usb.o
+                0x000000fa                g_string1_P
+ .progmem.data.g_string2_P
+                0x00000140       0x1a sboxnet2usb.o
+                0x00000140                g_string2_P
+ .progmem.data.g_strings_P
+                0x0000015a        0x6 sboxnet2usb.o
+                0x0000015a                g_strings_P
+ .progmem.data.epsizemap.2750
+                0x00000160        0x4 sboxnet2usb.o
+                0x00000164                . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x00000164                __ctors_start = .
+ *(.ctors)
+                0x00000164                __ctors_end = .
+                0x00000164                __dtors_start = .
+ *(.dtors)
+                0x00000164                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x00000164        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+                0x00000164                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x00000164        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00000170       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_copy_data.o)
+                0x00000170                __do_copy_data
+ .init4         0x00000186       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_clear_bss.o)
+                0x00000186                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ .init8         0x00000196       0x1e sboxnet2usb.o
+                0x00000196                stack_init8
+ *(.init8)
+ *(.init9)
+ .init9         0x000001b4        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ *(.init9)
+ *(.text)
+ .text          0x000001bc        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+                0x000001bc                __vector_22
+                0x000001bc                __vector_28
+                0x000001bc                __vector_1
+                0x000001bc                __vector_24
+                0x000001bc                __vector_12
+                0x000001bc                __bad_interrupt
+                0x000001bc                __vector_6
+                0x000001bc                __vector_3
+                0x000001bc                __vector_13
+                0x000001bc                __vector_17
+                0x000001bc                __vector_19
+                0x000001bc                __vector_7
+                0x000001bc                __vector_27
+                0x000001bc                __vector_5
+                0x000001bc                __vector_4
+                0x000001bc                __vector_9
+                0x000001bc                __vector_2
+                0x000001bc                __vector_21
+                0x000001bc                __vector_15
+                0x000001bc                __vector_8
+                0x000001bc                __vector_26
+                0x000001bc                __vector_14
+                0x000001bc                __vector_10
+                0x000001bc                __vector_20
+                0x000001c0                . = ALIGN (0x2)
+ *(.text.*)
+ .text._crc_ibutton_update
+                0x000001c0       0x3a sboxnet2usb.o
+ .text.__iCliRetVal
+                0x000001fa       0x12 sboxnet2usb.o
+ .text.__iRestore
+                0x0000020c       0x2a sboxnet2usb.o
+ .text.prng_xorshift8
+                0x00000236       0x40 sboxnet2usb.o
+ .text.sboxnet_debug_inc_recverrors
+                0x00000276       0x22 sboxnet2usb.o
+ .text.sboxnet_debug_inc_recverr_dor
+                0x00000298       0x22 sboxnet2usb.o
+ .text.sboxnet_debug_inc_recv_byte
+                0x000002ba       0x22 sboxnet2usb.o
+ .text.sboxnet_crc8_init
+                0x000002dc       0x10 sboxnet2usb.o
+ .text.sboxnet_crc8_add
+                0x000002ec       0x20 sboxnet2usb.o
+ .text.sboxnet_crc8_ok
+                0x0000030c       0x1e sboxnet2usb.o
+ .text.sboxnet_prandom
+                0x0000032a       0x1e sboxnet2usb.o
+ .text.sboxnet_rb_init
+                0x00000348       0x62 sboxnet2usb.o
+ .text.sboxnet_rb_getcount
+                0x000003aa       0x20 sboxnet2usb.o
+ .text.sboxnet_rb_getfree
+                0x000003ca       0x38 sboxnet2usb.o
+ .text.sboxnet_rb_write_commit
+                0x00000402       0x84 sboxnet2usb.o
+ .text.sboxnet_rb_write_rollback
+                0x00000486       0x32 sboxnet2usb.o
+ .text.sboxnet_rb_write
+                0x000004b8       0xb4 sboxnet2usb.o
+ .text.sboxnet_rb_put_first
+                0x0000056c       0x3c sboxnet2usb.o
+ .text.sboxnet_rb_write_count
+                0x000005a8       0x20 sboxnet2usb.o
+ .text.sboxnet_rb_read_commit
+                0x000005c8       0x6a sboxnet2usb.o
+ .text.sboxnet_rb_read_rollback
+                0x00000632       0x32 sboxnet2usb.o
+ .text.sboxnet_rb_read
+                0x00000664       0xa0 sboxnet2usb.o
+ .text.sboxnet_rb_read_getone
+                0x00000704       0x5c sboxnet2usb.o
+ .text.sboxnet_rb_can_read_bytes
+                0x00000760       0x2e sboxnet2usb.o
+ .text.sboxnet_receiver_enable
+                0x0000078e       0x34 sboxnet2usb.o
+ .text.sboxnet_init
+                0x000007c2      0x126 sboxnet2usb.o
+ .text.sboxnet_deinit
+                0x000008e8       0x8e sboxnet2usb.o
+ .text.sboxnet_set_timer
+                0x00000976       0x5a sboxnet2usb.o
+ .text.sboxnet_clear_line_sensor
+                0x000009d0       0x1a sboxnet2usb.o
+ .text.sboxnet_line_sensor_changed
+                0x000009ea       0x18 sboxnet2usb.o
+ .text.sboxnet_set_backoff_with_offset
+                0x00000a02       0x30 sboxnet2usb.o
+ .text.sboxnet_intr_usart_rx
+                0x00000a32      0x29a sboxnet2usb.o
+ .text.sboxnet_check_try_transmit
+                0x00000ccc       0xba sboxnet2usb.o
+ .text.sboxnet_intr_usart_tx
+                0x00000d86      0x348 sboxnet2usb.o
+ .text.__vector_23
+                0x000010ce       0x5a sboxnet2usb.o
+                0x000010ce                __vector_23
+ .text.__vector_25
+                0x00001128       0x5a sboxnet2usb.o
+                0x00001128                __vector_25
+ .text.sboxnet_timer_bit
+                0x00001182      0x1e2 sboxnet2usb.o
+ .text.sboxnet_receive_msg
+                0x00001364      0x1ce sboxnet2usb.o
+ .text.sboxnet_send_msg
+                0x00001532      0x1f6 sboxnet2usb.o
+ .text.sboxnet_can_send_msg
+                0x00001728       0x6a sboxnet2usb.o
+ .text.sboxnet_can_read
+                0x00001792       0x4e sboxnet2usb.o
+ .text.sboxnet_can_send
+                0x000017e0       0x4e sboxnet2usb.o
+ .text.sboxnet_set_sniffer_mode
+                0x0000182e       0x32 sboxnet2usb.o
+ .text.__vector_16
+                0x00001860       0x5a sboxnet2usb.o
+                0x00001860                __vector_16
+ .text.trigger_led_msg_read
+                0x000018ba       0x50 sboxnet2usb.o
+ .text.trigger_led_msg_write
+                0x0000190a       0x50 sboxnet2usb.o
+ .text.stack_free
+                0x0000195a       0x52 sboxnet2usb.o
+ .text.stack_size
+                0x000019ac       0x1e sboxnet2usb.o
+ .text.usb_ep_isSETUP
+                0x000019ca       0x18 sboxnet2usb.o
+ .text.usb_ep_clearSETUP
+                0x000019e2       0x22 sboxnet2usb.o
+ .text.usb_ep_isIN
+                0x00001a04       0x18 sboxnet2usb.o
+                0x00001a04                usb_ep_isIN
+ .text.usb_ep_clearIN
+                0x00001a1c       0x22 sboxnet2usb.o
+ .text.usb_ep_isOUT
+                0x00001a3e       0x18 sboxnet2usb.o
+ .text.usb_ep_clearOUT
+                0x00001a56       0x22 sboxnet2usb.o
+ .text.usb_ep_set_stall
+                0x00001a78       0x22 sboxnet2usb.o
+ .text.__vector_11
+                0x00001a9a       0xf6 sboxnet2usb.o
+                0x00001a9a                __vector_11
+ .text.usb_ep_read_data
+                0x00001b90       0x48 sboxnet2usb.o
+                0x00001b90                usb_ep_read_data
+ .text.usb_ep_waitIN
+                0x00001bd8       0x2e sboxnet2usb.o
+                0x00001bd8                usb_ep_waitIN
+ .text.usb_ep_send_zlp
+                0x00001c06       0x2a sboxnet2usb.o
+                0x00001c06                usb_ep_send_zlp
+ .text.usb_mem_read_byte
+                0x00001c30       0x60 sboxnet2usb.o
+                0x00001c30                usb_mem_read_byte
+ .text.usb_ep_getbufsize
+                0x00001c90       0x40 sboxnet2usb.o
+                0x00001c90                usb_ep_getbufsize
+ .text.usb_ep_send_control_data_chunk
+                0x00001cd0       0xdc sboxnet2usb.o
+                0x00001cd0                usb_ep_send_control_data_chunk
+ .text.usb_ep_send_control_data_finish
+                0x00001dac       0x7e sboxnet2usb.o
+                0x00001dac                usb_ep_send_control_data_finish
+ .text.usb_ep_send_control_data
+                0x00001e2a       0x62 sboxnet2usb.o
+                0x00001e2a                usb_ep_send_control_data
+ .text.usb_ep_recv_control_data_chunk
+                0x00001e8c       0xe8 sboxnet2usb.o
+                0x00001e8c                usb_ep_recv_control_data_chunk
+ .text.usb_ep_recv_control_data_finish
+                0x00001f74       0x16 sboxnet2usb.o
+                0x00001f74                usb_ep_recv_control_data_finish
+ .text.usb_ep_recv_control_data
+                0x00001f8a       0x54 sboxnet2usb.o
+                0x00001f8a                usb_ep_recv_control_data
+ .text.usb_ep0_get_configuration
+                0x00001fde       0x4e sboxnet2usb.o
+ .text.usb_ep0_get_descriptor
+                0x0000202c      0x1fc sboxnet2usb.o
+ .text.usb_ep0_set_address
+                0x00002228       0x92 sboxnet2usb.o
+ .text.usb_ep0_set_configuration
+                0x000022ba       0xc0 sboxnet2usb.o
+ .text.usb_ep0_task
+                0x0000237a       0xfe sboxnet2usb.o
+                0x0000237a                usb_ep0_task
+ .text.usb_ep_setup
+                0x00002478       0xd2 sboxnet2usb.o
+                0x00002478                usb_ep_setup
+ .text.usb_ep_setup_control
+                0x0000254a       0x4a sboxnet2usb.o
+                0x0000254a                usb_ep_setup_control
+ .text.usb_intr_endofreset
+                0x00002594       0x1e sboxnet2usb.o
+                0x00002594                usb_intr_endofreset
+ .text.usb_init
+                0x000025b2      0x148 sboxnet2usb.o
+                0x000025b2                usb_init
+ .text.get_string
+                0x000026fa       0x5c sboxnet2usb.o
+                0x000026fa                get_string
+ .text.usb_event_set_configuration
+                0x00002756       0x10 sboxnet2usb.o
+                0x00002756                usb_event_set_configuration
+ .text.get_status
+                0x00002766       0x4a sboxnet2usb.o
+ .text.usb_event_ep0_request
+                0x000027b0      0x45a sboxnet2usb.o
+                0x000027b0                usb_event_ep0_request
+ .text.__vector_18
+                0x00002c0a      0x1ac sboxnet2usb.o
+                0x00002c0a                __vector_18
+ .text.init_system
+                0x00002db6       0xfe sboxnet2usb.o
+ .text.main     0x00002eb4       0x66 sboxnet2usb.o
+                0x00002eb4                main
+ .text.libgcc   0x00002f1a        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_tablejump2.o)
+                0x00002f1a                __tablejump2__
+ .text.avr-libc
+                0x00002f26        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr35\libc.a(memset.o)
+                0x00002f26                memset
+ .text.avr-libc
+                0x00002f34       0x10 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+                0x00002f34                eeprom_read_byte
+ .text.avr-libc
+                0x00002f44        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+                0x00002f44                eeprom_read_word
+ .text.avr-libc
+                0x00002f50       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+                0x00002f50                eeprom_update_block
+ .text.avr-libc
+                0x00002f70       0x24 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+                0x00002f70                eeprom_update_byte
+                0x00002f72                eeprom_update_r18
+ .text.avr-libc
+                0x00002f94        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+                0x00002f94                eeprom_update_word
+ .text.avr-libc
+                0x00002fa0       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+                0x00002fa0                eeprom_read_block
+                0x00002fa4                eeprom_read_blraw
+                0x00002fc0                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00002fc0        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+                0x00002fc0                _exit
+                0x00002fc0                exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00002fc0        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr35\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00002fc4                _etext = .
+
+.data           0x00800100        0x2 load address 0x00002fc4
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ *(.data*)
+ .data.rb.2991  0x00800100        0x1 sboxnet2usb.o
+ *(.gnu.linkonce.d*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.r*)
+                0x00800102                . = ALIGN (0x2)
+ *fill*         0x00800101        0x1 
+                0x00800102                _edata = .
+                0x00800102                PROVIDE (__data_end, .)
+
+.bss            0x00800102      0x246
+                0x00800102                PROVIDE (__bss_start, .)
+ *(.bss)
+ *(.bss*)
+ .bss.g_sboxnet_flags
+                0x00800102        0x1 sboxnet2usb.o
+                0x00800102                g_sboxnet_flags
+ .bss.g_sboxnet_status
+                0x00800103        0x1 sboxnet2usb.o
+                0x00800103                g_sboxnet_status
+ .bss.g_timer   0x00800104        0x1 sboxnet2usb.o
+                0x00800104                g_timer
+ .bss.g_timer_led_msg_read
+                0x00800105        0x1 sboxnet2usb.o
+                0x00800105                g_timer_led_msg_read
+ .bss.g_timer_led_msg_write
+                0x00800106        0x1 sboxnet2usb.o
+                0x00800106                g_timer_led_msg_write
+ *(COMMON)
+ COMMON         0x00800107      0x241 sboxnet2usb.o
+                0x00800107                g_sboxnet_addr
+                0x00800108                g_sboxnet
+                0x0080033b                g_usb_dev
+                0x00800348                PROVIDE (__bss_end, .)
+                0x00002fc4                __data_load_start = LOADADDR (.data)
+                0x00002fc6                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800348        0x0
+                [!provide]                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                [!provide]                PROVIDE (__noinit_end, .)
+                0x00800348                _end = .
+                [!provide]                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000       0x42
+ *(.eeprom*)
+ .eeprom        0x00810000       0x42 sboxnet2usb.o
+                0x00810000                eeprom
+                0x00810042                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.user_signatures
+ *(.user_signatures*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x30
+ *(.comment)
+ .comment       0x00000000       0x30 sboxnet2usb.o
+                                 0x31 (size before relaxing)
+
+.note.gnu.avr.deviceinfo
+                0x00000000       0x40
+ .note.gnu.avr.deviceinfo
+                0x00000000       0x40 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x3a0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000      0x2e0 sboxnet2usb.o
+ .debug_aranges
+                0x000002e0       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .debug_aranges
+                0x00000300       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .debug_aranges
+                0x00000320       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .debug_aranges
+                0x00000340       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .debug_aranges
+                0x00000360       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .debug_aranges
+                0x00000380       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x2d04
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x6ba C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .debug_info    0x000006ba     0x22a3 sboxnet2usb.o
+ .debug_info    0x0000295d       0x9b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .debug_info    0x000029f8       0x9b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .debug_info    0x00002a93       0x9d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .debug_info    0x00002b30       0x9c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .debug_info    0x00002bcc       0x9c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .debug_info    0x00002c68       0x9c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+
+.debug_abbrev   0x00000000      0xc19
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x65d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .debug_abbrev  0x0000065d      0x544 sboxnet2usb.o
+ .debug_abbrev  0x00000ba1       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .debug_abbrev  0x00000bb5       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .debug_abbrev  0x00000bc9       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .debug_abbrev  0x00000bdd       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .debug_abbrev  0x00000bf1       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .debug_abbrev  0x00000c05       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+
+.debug_line     0x00000000     0x26b4
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x00000000      0x145 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .debug_line    0x00000145     0x2226 sboxnet2usb.o
+ .debug_line    0x0000236b       0x7a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_byte.o)
+ .debug_line    0x000023e5       0x67 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_word.o)
+ .debug_line    0x0000244c       0xa5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_block.o)
+ .debug_line    0x000024f1       0xb6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_byte.o)
+ .debug_line    0x000025a7       0x62 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eeupd_word.o)
+ .debug_line    0x00002609       0xab C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35\libatmega32u2.a(eerd_block.o)
+
+.debug_frame    0x00000000      0xcbc
+ *(.debug_frame)
+ .debug_frame   0x00000000      0xcbc sboxnet2usb.o
+
+.debug_str      0x00000000     0x12da
+ *(.debug_str)
+ .debug_str     0x00000000      0x262 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32u2/avr35/crtatmega32u2.o
+ .debug_str     0x00000262     0x1078 sboxnet2usb.o
+                               0x112e (size before relaxing)
+
+.debug_loc      0x00000000     0x1b5a
+ *(.debug_loc)
+ .debug_loc     0x00000000     0x1b5a sboxnet2usb.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges   0x00000000      0x348
+ *(.debug_ranges)
+ .debug_ranges  0x00000000      0x348 sboxnet2usb.o
+
+.debug_macro
+ *(.debug_macro)
+OUTPUT(sboxnet2usb.elf elf32-avr)
+LOAD linker stubs
