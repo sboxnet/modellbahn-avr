@@ -90,7 +90,7 @@ struct ws_Servo {
     uint16_t perc_maxv; // Prozent für Max Wert
     uint16_t movetime;  // Bewegungszeit in us
     uint8_t  moving;    // bewegt sich der Servo gerade? (ist ein Semaphore 0=bewegt sich nicht)
-    uint8_t  retry_timer; // Timer in welcher Zeit die Rückmeldung wieder verschickt wird solange nicht bestätigt
+    uint8_t  retry_timer; // Timer in welcher Zeit die Rückmeldung wieder verschickt wird solange nicht bestätigt, wird in main heruntergezählt
     uint8_t  notack; // war die SBOXNET_CMD_FB_CHANGED schon bestätigt?
     uint8_t  last_seq; // letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
 };
@@ -126,8 +126,8 @@ struct ws_v_t ws_v = { 0 };  // Speicher für g_ Variablen
 // Struktur im EEPROM
 struct wsServoEeprom_t {
 	// 16 bytes
-    uint16_t minv; // Wert für Min Ausschlag
-    uint16_t maxv; // Wert für Max Ausschlag
+    uint16_t minv; // Wert für Min Ausschlag in Prozent * 10
+    uint16_t maxv; // Wert für Max Ausschlag in Prozent * 10
     uint16_t movetime; // Bewegungszeit in us
     uint8_t  reserved[10];  // Reserve
 };
@@ -222,6 +222,10 @@ static inline uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt) {
     return v;
 }
 
+/* void ws_set_servo_deltatime(struct ws_Servo* s)
+Servo deltatime, die Zeit für einen Servoschritt abhängig von ws_Servo.movetime, immer >= 1!
+	s	Zeiger auf den Servo, Struct ws_Servo
+*/
 static void ws_set_servo_deltatime(struct ws_Servo* s) {
     s->deltatime = (s->maxtime - s->mintime) * (100 / ws_SERVO_TIMER_CHANNEL_FREQ_HZ) / s->movetime;
     if (s->deltatime == 0) {
@@ -229,57 +233,82 @@ static void ws_set_servo_deltatime(struct ws_Servo* s) {
     }
 }
 
+/* static NOINLINE void ws_init_servos(void)
+Servo's Init.
+*/
 static NOINLINE void ws_init_servos(void) {
     uint8_t i, switchmask;
     struct ws_Servo* s;
     
     // read current switches. 2 calls needed because of key debounce.
+	// Lese die aktuellen Rückmelder, 2mal wegen Entprellung.
     ws_read_switches();
     ws_read_switches();
-    // now we have the current switches state in g_switches
+    // now we have the current switches state in ws_v.g_switches
     
     ws_v.g_servo_curpos = 0;
     ws_v.g_servo_set = ws_v.g_switches;
     ws_v.g_switches_old = ws_v.g_switches;
 	
+	// für jeden der 8 Servos
     for (i = 0, switchmask = 0x01, s = ws_v.g_servos; s != (ws_v.g_servos+ws_CHANNEL_COUNT); i++, switchmask <<= 1, s++) {
         uint16_t vmin, vmax, mtime;
+		// lese aus EEPROM: Minimalwert
         vmin = ws_get_eeprom_word(&ws_eeprom.servo[i].minv, 400);
+		// lese aus EEPROM: Maximalwert
         vmax = ws_get_eeprom_word(&ws_eeprom.servo[i].maxv, 600);
+		// lese aus EEPROM: Bewegungszeit in us
         mtime = ws_get_eeprom_word(&ws_eeprom.servo[i].movetime, 100);
         
+		// prüfe Bewegungszeit x: 20 < x < 1000 
         mtime = ws_check_servo_minmax(mtime, 20, 1000);
         
+		// Prozentwerte in Timerticks umrechnen
         vmin = ws_percent_to_servo_time(vmin);
         vmax = ws_percent_to_servo_time(vmax);
         
+		// prüfe min und max werte
         vmin = ws_check_servo_minmax(vmin, ws_SERVO_TIMER_PULS_MIN, ws_SERVO_TIMER_PULS_MAX);
         vmax = ws_check_servo_minmax(vmax, vmin, ws_SERVO_TIMER_PULS_MAX);
+		
+		// Minimale Zeit für den Servopuls in Timerticks
         s->mintime = vmin;
+		// Maximale Zeit für den Servopuls in Timerticks
         s->maxtime = vmax;
+		// Bewegungszeit für diesen Servo in us
         s->movetime = mtime;
+		// und wieder in Prozent umrechnen
         s->perc_minv = ws_servo_time_to_percent(vmin);
         s->perc_maxv = ws_servo_time_to_percent(vmax);
         
+		// Servostatus: 0:am Anfang
         s->state.curpos = 0;
+		// bewegt sich der servo gerade?
         s->moving = 0;
+		// ist Minimal Wert geändert worden? wenn ja, in das EEPROM schreiben
         s->state.minchanged = 0;
+		// ist Maximal Wert geändert worden? wenn ja, in das EEPROM schreiben
         s->state.maxchanged = 0;
+		// ist bewegungszeit geändert worden? wenn ja, in das EEPROM schreiben
         s->state.movtchanged = 0;
         // abhaengig von Servoposition-Rueckmeldung Startposition setzen und anfahren
         s->state.dstpos = 0;
         s->state.domove = 1;
+		// abhängig von der Rückmeldung Position setzen
         if (ws_v.g_switches & switchmask) {
             s->state.dstpos = 1;
             s->curtime = s->maxtime;
         } else {
             s->curtime = s->mintime;
         }
-        
+        // war die SBOXNET_CMD_FB_CHANGED schon bestätigt?
         s->notack = 0;
+		// Timer in welcher Zeit die Rückmeldung wieder verschickt wird solange nicht bestätigt
         s->retry_timer = 0;
+		// letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
         s->last_seq = 0;
         
+		// Servo deltatime, die Zeit für einen Servoschritt abhängig von ws_Servo.movetime, immer >= 1!
         ws_set_servo_deltatime(s);
     }
 }
