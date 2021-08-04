@@ -105,8 +105,8 @@ struct ws_v_t {
 	uint8_t g_servo_curpos;		// aktuelle Position 0: Anfang=Min, 1: Ende=Max
 	uint8_t g_servo_set;		// Wert der Rückmeldung, Bitmaske
 	uint8_t g_transmit_seq;		// letzte Sequenz für die SBOXNET_CMD_FB_CHANGED Meldung
-	uint8_t g_switches;			// Rückmeldungen
-	uint8_t g_switches_old;		// vorige Rückmeldungen
+	uint8_t g_fb_switches;			// Rückmeldungen
+	uint8_t g_fb_switches_old;		// vorige Rückmeldungen
 	uint8_t g_keys;				// Taster
 	uint8_t g_keystate;			// Taster Zustand: betätigt?
 	struct timer g_wait_timer;	// Wait Timer 16 ms Auflösung: Zeit nach Start nachdem Servos eingeschaltert werden
@@ -115,7 +115,7 @@ struct ws_v_t {
 	struct timer g_led_timer;	// LED Timer 16 ms Auflösung: Blinkrate für die Anzeige ws_LED_TIMER == ~500 ms
 	uint8_t g_led_toggle;		// wenn im manual mode, wird für das Anzeigen des selektierten Servos verwendet
 	uint8_t g_keys_t;			// zeitversetzte alte Wert für g_keys, wird in debounce_keys() verwendet
-	uint8_t g_switches_t;		// zeitversetzte alte Wert für g_switches, wird in debounce_keys() verwendet
+	uint8_t g_fb_switches_t;	// zeitversetzte alte Wert für g_fb_switches, wird in debounce_keys() verwendet
 	uint8_t g_move_sema;		// Bewegungssemaphore, wird hochgezählt bis 2
 	uint8_t g_manual_mode;		// Manueller Modus aktiv
 };
@@ -208,7 +208,7 @@ static void ws_read_switches(void) {
     row_s = ~row_s;
     
     debounce_keys(&ws_v.g_keys, &ws_v.g_keys_t, row_k);  // entprellen Tastendrücke
-    debounce_keys(&ws_v.g_switches, &ws_v.g_switches_t, row_s); // entprellen Rückmelder
+    debounce_keys(&ws_v.g_fb_switches, &ws_v.g_fb_switches_t, row_s); // entprellen Rückmelder
 }
 
 /* uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt)
@@ -244,11 +244,11 @@ static NOINLINE void ws_init_servos(void) {
 	// Lese die aktuellen Rückmelder, 2mal wegen Entprellung.
     ws_read_switches();
     ws_read_switches();
-    // now we have the current switches state in ws_v.g_switches
+    // now we have the current switches state in ws_v.g_fb_switches
     
     ws_v.g_servo_curpos = 0;
-    ws_v.g_servo_set = ws_v.g_switches;
-    ws_v.g_switches_old = ws_v.g_switches;
+    ws_v.g_servo_set = ws_v.g_fb_switches;
+    ws_v.g_fb_switches_old = ws_v.g_fb_switches;
 	
 	// für jeden der 8 Servos
     for (i = 0, switchmask = 0x01, s = ws_v.g_servos; s != (ws_v.g_servos+ws_CHANNEL_COUNT); i++, switchmask <<= 1, s++) {
@@ -295,7 +295,7 @@ static NOINLINE void ws_init_servos(void) {
         s->state.dstpos = 0;
         s->state.domove = 1;
 		// abhängig von der Rückmeldung Position setzen
-        if (ws_v.g_switches & switchmask) {
+        if (ws_v.g_fb_switches & switchmask) {
             s->state.dstpos = 1;
             s->curtime = s->maxtime;
         } else {
@@ -542,8 +542,8 @@ static NOINLINE void ws_show_status(void) {
             timer_set(&ws_v.g_led_timer, ws_LED_TIMER);
         }
     } else {
-        uint8_t d = ws_v.g_switches;
-        uint8_t mask = ws_v.g_switches ^ ws_v.g_servo_set;
+        uint8_t d = ws_v.g_fb_switches;
+        uint8_t mask = ws_v.g_fb_switches ^ ws_v.g_servo_set;
         if (mask) {
             d = (ws_v.g_led_toggle ? d | mask : d & ~mask);
             if (timer_timedout(&ws_v.g_led_timer)) {
@@ -560,7 +560,7 @@ static NOINLINE void ws_show_status(void) {
 uint8_t ws_do_reg_read(uint16_t reg, uint16_t* pdata) {
     switch(reg) {
         case R_FB_NUM:      *pdata = 8; return 0;
-        case R_FB_VALUE0:   *pdata = ws_v.g_switches; return 0;
+        case R_FB_VALUE0:   *pdata = ws_v.g_fb_switches; return 0;
         
         case R_CNTRL_NUM:      *pdata = 8; return 0;
         case R_CNTRL_VALUE0:   *pdata = ws_v.g_servo_set; return 0;
@@ -698,8 +698,8 @@ void ws_do_main(void) {
         ws_read_switches();
         
         if (ws_v.g_servos_enabled) {
-            uint8_t diff = ws_v.g_switches ^ ws_v.g_switches_old;
-            ws_v.g_switches_old = ws_v.g_switches;
+            uint8_t diff = ws_v.g_fb_switches ^ ws_v.g_fb_switches_old;
+            ws_v.g_fb_switches_old = ws_v.g_fb_switches;
             uint8_t mask = 1;
             for (uint8_t i = 0; i < ws_CHANNEL_COUNT; i++, mask <<= 1) {
                 struct ws_Servo* pservo = &ws_v.g_servos[i];
@@ -746,7 +746,7 @@ void ws_do_main(void) {
     }
     
     if (bit_is_clear(g_dev_state, DEV_STATE_FLG_WATCHDOG_b)) {
-        uint8_t switches = ws_v.g_switches;
+        uint8_t switches = ws_v.g_fb_switches;
         for (uint8_t i = 0, mask = 1; i < ws_CHANNEL_COUNT; i++, mask <<= 1) {
             if (ws_v.g_servos[i].retry_timer == 0 && ws_v.g_servos[i].notack) {
                 ws_v.g_servos[i].retry_timer = 50;
