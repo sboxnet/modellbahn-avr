@@ -84,7 +84,7 @@ static INLINE void port_ctrl_opc(PORT_t* p, uint8_t bv, uint8_t opc) {
 #define port_pullup_on(_port, _bv)  port_ctrl_opc(&(_port), _bv, PORT_OPC_PULLUP_gc)
 #define port_pullup_off(_port, _bv) port_ctrl_opc(&(_port), _bv, PORT_OPC_TOTEM_gc)
 
-#else // __AVR_XMEGA__
+#else // !__AVR_XMEGA__
 
 #define port_in(_port)              (*(&_port - 2))
 #define port_out(_port)             (_port)

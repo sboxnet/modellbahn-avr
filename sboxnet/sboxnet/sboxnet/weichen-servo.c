@@ -18,9 +18,10 @@
 
 /*
  * Ansteuerung von 8 Servos zum Antrieb von Weichen.
- * Mit Rückmeldung der Servostellung über Taster und Programmierinterface
+ * Mit Rueckmeldung der Servostellung ueber Taster (Feedback) und Programmierinterface
  * zur Einstellung des Servoswegs.
  * Die Servos werden per Multiplex angesteuert, ein Servo hat eine F=50Hz, 8x50 = 400 = 1250 Timer Ticks
+ * Pulsweite eines Servos von 1ms (MIN) - 2ms (MAX).
  */
 
 #include "common.h"
@@ -37,7 +38,7 @@ APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 
 // Anzahl der Servos
 #define ws_CHANNEL_COUNT 8
-// für g_curchannel
+// fuer g_curchannel
 #define ws_CHANNEL_MASK  0x07
 
 // Servo Timer TCC0
@@ -52,26 +53,26 @@ APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 #define ws_SERVO_TIMER_FREQ_HZ		400
 // 400 / 8 = 50 Hz
 #define ws_SERVO_TIMER_CHANNEL_FREQ_HZ (ws_SERVO_TIMER_FREQ_HZ / ws_CHANNEL_COUNT) // 50
-// Servo Timer TOP: Periode für TCC0
+// Servo Timer TOP: Periode fuer TCC0
 #define ws_SERVO_TIMER_TOP         (F_CPU / (ws_SERVO_TIMER_PRESCALER * ws_SERVO_TIMER_FREQ_HZ))  // 1250
 // Mikrosekunden -> Puls wert
 #define ws_SERVO_TIMER_PULS(_us)	((_us) * F_CPU_MHZ / (ws_SERVO_TIMER_PRESCALER))
-// Puls Wert für Min Puls
+// Puls Wert fuer Min Puls
 #define ws_SERVO_TIMER_PULS_MIN	ws_SERVO_TIMER_PULS(ws_SERVO_PULS_MIN_USEC)				// 500 Timerticks
-// Puls Wert für Max Puls
+// Puls Wert fuer Max Puls
 #define ws_SERVO_TIMER_PULS_MAX	ws_SERVO_TIMER_PULS(ws_SERVO_PULS_MAX_USEC)				// 1000 Timerticks
-// Schritte für Timer Puls
+// Schritte fuer Timer Puls
 #define ws_SERVO_TIMER_PULS_STEP	((ws_SERVO_TIMER_PULS_MAX - ws_SERVO_TIMER_PULS_MIN)/100)	// 5
 
 
-// Timer hat eine auflösung von 16 ms, 16*7=112ms
+// Timer hat eine aufloesung von 16 ms, 16*7=112ms
 #define ws_WAIT_TIMER  7 // 112ms
-// Timer hat eine auflösung von 16 ms, 16*31=496ms
+// Timer hat eine aufloesung von 16 ms, 16*31=496ms
 #define ws_LED_TIMER 31 // ~500 ms
-// Timer hat eine auflösung von 16 ms, 16*5=80ms
+// Timer hat eine aufloesung von 16 ms, 16*5=80ms
 #define ws_SWITCH_TIMER  5 // 5*16ms = 80 ms
 
-// Struct für einen Servo
+// Struct fuer einen Servo
 struct ws_Servo {
 	// aktueller Zustand
 	struct State {
@@ -82,52 +83,52 @@ struct ws_Servo {
 		unsigned maxchanged:1; // soll die Max Position in das EEPROM geschrieben werden?
         unsigned movtchanged:1; // soll die Bewegungzeit (servo->movetime) in das EEPROM geschrieben werden?
     } state;
-	uint16_t mintime; // Zeit für Min Puls in TCC0 Schritten
-	uint16_t maxtime; // Zeit für Max Puls in TCC0 Schritten
+	uint16_t mintime; // Zeit fuer Min Puls in TCC0 Schritten
+	uint16_t maxtime; // Zeit fuer Max Puls in TCC0 Schritten
 	uint16_t curtime; // aktuell berechnete Position
-	uint16_t deltatime; // um soviel soll die Position pro Schritt geändert werden
-    uint16_t perc_minv; // Prozent für Min Wert
-    uint16_t perc_maxv; // Prozent für Max Wert
+	uint16_t deltatime; // um soviel soll die Position pro Schritt geaendert werden
+    uint16_t perc_minv; // Prozent fuer Min Wert
+    uint16_t perc_maxv; // Prozent fuer Max Wert
     uint16_t movetime;  // Bewegungszeit in us
     uint8_t  moving;    // bewegt sich der Servo gerade? (ist ein Semaphore 0=bewegt sich nicht)
-    uint8_t  retry_timer; // Timer in welcher Zeit die Rückmeldung wieder verschickt wird solange nicht bestätigt, wird in main heruntergezählt
-    uint8_t  notack; // war die SBOXNET_CMD_FB_CHANGED schon bestätigt?
+    uint8_t  retry_timer; // Timer in welcher Zeit die Rueckmeldung wieder verschickt wird solange nicht bestaetigt, wird in main heruntergezaehlt
+    uint8_t  notack; // war die SBOXNET_CMD_FB_CHANGED schon bestaetigt?
     uint8_t  last_seq; // letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
 };
 
-// Struktur die die Variablen für die Servos hat
+// Struktur die die Variablen fuer die Servos hat
 struct ws_v_t {
 	// pro Server eine struct ws_Servo
 	struct ws_Servo g_servos[ws_CHANNEL_COUNT];
 	uint8_t g_curchannel;		// aktueller Kanal
-	uint8_t g_selservoid;		// aktuell gewählter Servo für manuellen Modus
+	uint8_t g_selservoid;		// aktuell gewaehlter Servo fuer manuellen Modus
 	struct ws_Servo* pselservo; // Zeiger auf aktuellen Server
-	uint8_t g_servo_curpos;		// aktuelle Position 0: Anfang=Min, 1: Ende=Max
-	uint8_t g_servo_set;		// Wert der Rückmeldung, Bitmaske
-	uint8_t g_transmit_seq;		// letzte Sequenz für die SBOXNET_CMD_FB_CHANGED Meldung
-	uint8_t g_fb_switches;			// Rückmeldungen
-	uint8_t g_fb_switches_old;		// vorige Rückmeldungen
+	uint8_t g_servo_curpos;		// Bitmaske der aktuelle Position 0: Anfang=Min, 1: Ende=Max
+	uint8_t g_servo_set;		// Wert der Rueckmeldung, Bitmaske
+	uint8_t g_transmit_seq;		// letzte Sequenz fuer die SBOXNET_CMD_FB_CHANGED Meldung
+	uint8_t g_fb_switches;			// Rueckmeldungen
+	uint8_t g_fb_switches_old;		// vorige Rueckmeldungen
 	uint8_t g_keys;				// Taster
-	uint8_t g_keystate;			// Taster Zustand: betätigt?
-	struct timer g_wait_timer;	// Wait Timer 16 ms Auflösung: Zeit nach Start nachdem Servos eingeschaltert werden
-	struct timer g_switch_timer;// Schalter Abfragetimer 16 ms Auflösung: In welchem Interval werden die Rückmelder und Taster abgefragt, ~80ms
+	uint8_t g_keystate;			// Taster Zustand: betaetigt?
+	struct timer g_wait_timer;	// Wait Timer 16 ms Aufloesung: Zeit nach Start nachdem Servos eingeschaltet werden
+	struct timer g_switch_timer;// Schalter Abfragetimer 16 ms Aufloesung: In welchem Interval werden die Rueckmelder und Taster abgefragt, ~80ms
 	uint8_t g_servos_enabled;	// sind die Servos eingeschaltet?
-	struct timer g_led_timer;	// LED Timer 16 ms Auflösung: Blinkrate für die Anzeige ws_LED_TIMER == ~500 ms
-	uint8_t g_led_toggle;		// wenn im manual mode, wird für das Anzeigen des selektierten Servos verwendet
-	uint8_t g_keys_t;			// zeitversetzte alte Wert für g_keys, wird in debounce_keys() verwendet
-	uint8_t g_fb_switches_t;	// zeitversetzte alte Wert für g_fb_switches, wird in debounce_keys() verwendet
-	uint8_t g_move_sema;		// Bewegungssemaphore, wird hochgezählt bis 2
+	struct timer g_led_timer;	// LED Timer 16 ms Aufloesung: Blinkrate fuer die Anzeige ws_LED_TIMER == ~500 ms
+	uint8_t g_led_toggle;		// wenn im manual mode, wird fuer das Anzeigen des selektierten Servos verwendet
+	uint8_t g_keys_t;			// zeitversetzte alte Wert fuer g_keys, wird in debounce_keys() verwendet
+	uint8_t g_fb_switches_t;	// zeitversetzte alte Wert fuer g_fb_switches, wird in debounce_keys() verwendet
+	uint8_t g_move_sema;		// globaler Bewegungssemaphore, wird hochgezaehlt bis 2 (d.h. es duerfen sich max 2 Servos diese Modules bewegen)
 	uint8_t g_manual_mode;		// Manueller Modus aktiv
 };
 
-struct ws_v_t ws_v = { 0 };  // Speicher für g_ Variablen
+struct ws_v_t ws_v = { 0 };  // Speicher fuer g_ Variablen
 
 // TODO: pro Modul ein eigener Bereich
 // Struktur im EEPROM
 struct wsServoEeprom_t {
 	// 16 bytes
-    uint16_t minv; // Wert für Min Ausschlag in Prozent * 10
-    uint16_t maxv; // Wert für Max Ausschlag in Prozent * 10
+    uint16_t minv; // Wert fuer Min Ausschlag in Prozent * 10
+    uint16_t maxv; // Wert fuer Max Ausschlag in Prozent * 10
     uint16_t movetime; // Bewegungszeit in us
     uint8_t  reserved[10];  // Reserve
 };
@@ -145,8 +146,8 @@ struct wsEeprom_t ws_eeprom EEMEM;
 #define ws_KEY_DOWN		0x08	// DOWN	
 
 /* int16_t ws_check_servo_minmax(uint16_t v, uint16_t vmin, uint16_t vmax)
-Überprüfung der Werte für minimaler und maximaler Serveausschlag.
-	v		zu überprüfender Wert
+ueberpruefung der Werte fuer minimaler und maximaler Serveausschlag.
+	v		zu ueberpruefender Wert
 	vmin	Minimalwert
 	vmax	Maximalwert
 */
@@ -180,35 +181,36 @@ uint16_t ws_percent_to_servo_time(uint16_t t) {
 }
 
 /* void ws_read_switches(void)
-Tastenprellen unterdrücken, wenn sich der zustand während er letzten 2 Aufrufe nicht geändert hat
+Tastenprellen unterdruecken, wenn sich der zustand waehrend er letzten 2 Aufrufe nicht geaendert hat
 */
 static void ws_read_switches(void) {
     uint8_t row_k, row_s;
     
 	// PORTA Taster
-    row_k = ~(port_in(PORTA)) & 0x0f; // gedrückt ist es ein Low Wert!
+    row_k = ~(port_in(PORTA)) & 0x0f; // gedrueckt ist es ein Low Wert!
 
-	// PORTA Rückmelde Multiplexer PA4 (lowest Bit), PA5, PA6 
+	// PORTA Rueckmelde Multiplexer PA4 (lowest Bit), PA5, PA6 
     row_s = 0;
     for (int8_t i = 7; i >= 0; i--) {
 		// Kanal i
 		// i um 4 Bits nach links shiften->Selektieren von Kanal
-        port_out(PORTA) = (port_out(PORTA) & 0x70)|(i<<4);
+		port_out(PORTA) = (port_out(PORTA) & 0x8f) | (i<<4);
+
 		// bisheriges Ergebnis um eins nach links
         row_s <<= 1;
 		// bischen warten
         _NOP();
         _NOP();
         _NOP();
-		// Bit PA7 ist der Rückmeldewert für den Kanal
+		// Bit PA7 ist der Rueckmeldewert fuer den Kanal
         if (port_in(PORTA) & 0x80) {
             row_s |= 1;
         }
     }
     row_s = ~row_s;
     
-    debounce_keys(&ws_v.g_keys, &ws_v.g_keys_t, row_k);  // entprellen Tastendrücke
-    debounce_keys(&ws_v.g_fb_switches, &ws_v.g_fb_switches_t, row_s); // entprellen Rückmelder
+    debounce_keys(&ws_v.g_keys, &ws_v.g_keys_t, row_k);  // entprellen Tastendruecke
+    debounce_keys(&ws_v.g_fb_switches, &ws_v.g_fb_switches_t, row_s); // entprellen Rueckmelder
 }
 
 /* uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt)
@@ -223,7 +225,7 @@ static inline uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt) {
 }
 
 /* void ws_set_servo_deltatime(struct ws_Servo* s)
-Servo deltatime, die Zeit für einen Servoschritt abhängig von ws_Servo.movetime, immer >= 1!
+Servo deltatime, die Zeit fuer einen Servoschritt abhaengig von ws_Servo.movetime, immer >= 1!
 	s	Zeiger auf den Servo, Struct ws_Servo
 */
 static void ws_set_servo_deltatime(struct ws_Servo* s) {
@@ -241,7 +243,7 @@ static NOINLINE void ws_init_servos(void) {
     struct ws_Servo* s;
     
     // read current switches. 2 calls needed because of key debounce.
-	// Lese die aktuellen Rückmelder, 2mal wegen Entprellung.
+	// Lese die aktuellen Rueckmelder, 2mal wegen Entprellung.
     ws_read_switches();
     ws_read_switches();
     // now we have the current switches state in ws_v.g_fb_switches
@@ -250,7 +252,7 @@ static NOINLINE void ws_init_servos(void) {
     ws_v.g_servo_set = ws_v.g_fb_switches;
     ws_v.g_fb_switches_old = ws_v.g_fb_switches;
 	
-	// für jeden der 8 Servos
+	// fuer jeden der 8 Servos
     for (i = 0, switchmask = 0x01, s = ws_v.g_servos; s != (ws_v.g_servos+ws_CHANNEL_COUNT); i++, switchmask <<= 1, s++) {
         uint16_t vmin, vmax, mtime;
 		// lese aus EEPROM: Minimalwert
@@ -260,22 +262,22 @@ static NOINLINE void ws_init_servos(void) {
 		// lese aus EEPROM: Bewegungszeit in us
         mtime = ws_get_eeprom_word(&ws_eeprom.servo[i].movetime, 100);
         
-		// prüfe Bewegungszeit x: 20 < x < 1000 
+		// pruefe Bewegungszeit x: 20 < x < 1000 
         mtime = ws_check_servo_minmax(mtime, 20, 1000);
         
 		// Prozentwerte in Timerticks umrechnen
         vmin = ws_percent_to_servo_time(vmin);
         vmax = ws_percent_to_servo_time(vmax);
         
-		// prüfe min und max werte
+		// pruefe min und max werte
         vmin = ws_check_servo_minmax(vmin, ws_SERVO_TIMER_PULS_MIN, ws_SERVO_TIMER_PULS_MAX);
         vmax = ws_check_servo_minmax(vmax, vmin, ws_SERVO_TIMER_PULS_MAX);
 		
-		// Minimale Zeit für den Servopuls in Timerticks
+		// Minimale Zeit fuer den Servopuls in Timerticks
         s->mintime = vmin;
-		// Maximale Zeit für den Servopuls in Timerticks
+		// Maximale Zeit fuer den Servopuls in Timerticks
         s->maxtime = vmax;
-		// Bewegungszeit für diesen Servo in us
+		// Bewegungszeit fuer diesen Servo in us
         s->movetime = mtime;
 		// und wieder in Prozent umrechnen
         s->perc_minv = ws_servo_time_to_percent(vmin);
@@ -285,30 +287,30 @@ static NOINLINE void ws_init_servos(void) {
         s->state.curpos = 0;
 		// bewegt sich der servo gerade?
         s->moving = 0;
-		// ist Minimal Wert geändert worden? wenn ja, in das EEPROM schreiben
+		// ist Minimal Wert geaendert worden? wenn ja, in das EEPROM schreiben
         s->state.minchanged = 0;
-		// ist Maximal Wert geändert worden? wenn ja, in das EEPROM schreiben
+		// ist Maximal Wert geaendert worden? wenn ja, in das EEPROM schreiben
         s->state.maxchanged = 0;
-		// ist bewegungszeit geändert worden? wenn ja, in das EEPROM schreiben
+		// ist bewegungszeit geaendert worden? wenn ja, in das EEPROM schreiben
         s->state.movtchanged = 0;
         // abhaengig von Servoposition-Rueckmeldung Startposition setzen und anfahren
         s->state.dstpos = 0;
         s->state.domove = 1;
-		// abhängig von der Rückmeldung Position setzen
+		// abhaengig von der Rueckmeldung Position setzen
         if (ws_v.g_fb_switches & switchmask) {
             s->state.dstpos = 1;
             s->curtime = s->maxtime;
         } else {
             s->curtime = s->mintime;
         }
-        // war die SBOXNET_CMD_FB_CHANGED schon bestätigt?
+        // war die SBOXNET_CMD_FB_CHANGED schon bestaetigt?
         s->notack = 0;
-		// Timer in welcher Zeit die Rückmeldung wieder verschickt wird solange nicht bestätigt
+		// Timer in welcher Zeit die Rueckmeldung wieder verschickt wird solange nicht bestaetigt
         s->retry_timer = 0;
 		// letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
         s->last_seq = 0;
         
-		// Servo deltatime, die Zeit für einen Servoschritt abhängig von ws_Servo.movetime, immer >= 1!
+		// Servo deltatime, die Zeit fuer einen Servoschritt abhaengig von ws_Servo.movetime, immer >= 1!
         ws_set_servo_deltatime(s);
     }
 }
@@ -320,7 +322,7 @@ void ws_do_init_system(void) {
     PORTCFG_MPCMASK = 0xff;				// alle PD Pins
     PORTD.PIN0CTRL = PORT_OPC_TOTEM_gc; // Output als Totem Pole
     
-	// PC als Servo Ausgänge
+	// PC als Servo Ausgaenge
     port_out(PORTC) = 0;				// erstmal aus
     port_dirout(PORTC, 0xff);			// PC0..7 Output
     PORTCFG_MPCMASK = 0xff;				// alle PC Pins
@@ -330,8 +332,8 @@ void ws_do_init_system(void) {
 	// PA1  ws_KEY_ACTION
 	// PA2  ws_KEY_UP
 	// PA3  ws_KEY_DOWN
-	// PA4..PA6 Rückmeldung Multiplexer
-	// PA7  ausgewählte Rückmeldung 
+	// PA4..PA6 Rueckmeldung Multiplexer
+	// PA7  ausgewaehlte Rueckmeldung 
     port_dirin(PORTA, 0x8f);			// PA0..PA3,PA7 Eingang
 	port_dirout(PORTA, 0x70);			// PA4..PA6 Ausgang
     PORTCFG_MPCMASK = 0x8f;				// PA0..PA3,PA7 Pull Up
@@ -347,96 +349,136 @@ void ws_do_init_system(void) {
     PR.PRPC = Bit(PR_TWI_bp)|Bit(PR_USART1_bp)|Bit(PR_USART0_bp)|Bit(PR_SPI_bp)|Bit(PR_HIRES_bp); // PORTC TWI, USART1, USART0, SPI, HIRES
     PR.PRPD = Bit(PR_TWI_bp)|Bit(PR_USART1_bp)|Bit(PR_USART0_bp)|Bit(PR_SPI_bp)|Bit(PR_HIRES_bp); // PORTD TWI, USART1, USART0, SPI, HIRES
 
-    // TCC0 Timer für Servos
+    // TCC0 Timer fuer Servos
     TCC0.CTRLB = TC_WGMODE_NORMAL_gc; // Normal Mode
     TCC0.CTRLD = 0;
     TCC0.CTRLE = 0;
     TCC0.INTCTRLA = TC_OVFINTLVL_LO_gc; // OVF Int Low Level
     TCC0.INTCTRLB = TC_CCAINTLVL_LO_gc; // CCA Int Low Level
-    TCC0.INTFLAGS = 0xff;               // Interrupt Flags löschen
-    TCC0.PER = ws_SERVO_TIMER_TOP;		// Periode für 8 Servos, pro Kanal 50 Hz == 1250
-    TCC0.CCA = ws_SERVO_TIMER_PULS_MIN; // Pulsweite für minimal Puls
+    TCC0.INTFLAGS = 0xff;               // Interrupt Flags loeschen
+    TCC0.PER = ws_SERVO_TIMER_TOP;		// Periode fuer 8 Servos, pro Kanal 50 Hz == 1250
+    TCC0.CCA = ws_SERVO_TIMER_PULS_MIN; // Pulsweite fuer minimal Puls
     TCC0.CTRLA = TC_CLKSEL_DIV64_gc;	// Timer aktivieren
 
-	// Wait Timer 16 ms Auflösung: Zeit nach Start nachdem Servos eingeschaltet werden
+	// Wait Timer 16 ms Aufloesung: Zeit nach Start nachdem Servos eingeschaltet werden
     timer_register(&ws_v.g_wait_timer, TIMER_RESOLUTION_16MS);
-	// LED Timer 16 ms Auflösung: Blinkrate für die Anzeige ws_LED_TIMER == ~500 ms
+	// LED Timer 16 ms Aufloesung: Blinkrate fuer die Anzeige ws_LED_TIMER == ~500 ms
     timer_register(&ws_v.g_led_timer,  TIMER_RESOLUTION_16MS);
-	// Schalter Abfragetimer 16 ms Auflösung: In welchem Interval werden die Rückmelder und Taster abgefragt, ~80ms
+	// Schalter Abfragetimer 16 ms Aufloesung: In welchem Interval werden die Rueckmelder und Taster abgefragt, ~80ms
     timer_register(&ws_v.g_switch_timer, TIMER_RESOLUTION_16MS);
-    
+	
+	// Zeiger auf aktuellen Servo    
     ws_v.pselservo = &ws_v.g_servos[ws_v.g_selservoid];
-
+	
+	// Servos Init
     ws_init_servos();
-
-	g_com.productid = ws_PRODUCT_ID;
-    g_com.vendorid = ws_VENDOR_ID;
-    g_com.firmware_version = ws_FIRMWARE_VERSION;
-    g_com.capabilities = CAP_CNTRL_TURNOUT;
+	
+	// Common Vars Init
+	g_com.productid = ws_PRODUCT_ID;		// Product ID
+    g_com.vendorid = ws_VENDOR_ID;			// Vendor ID
+    g_com.firmware_version = ws_FIRMWARE_VERSION; // Firmware Version
+    g_com.capabilities = CAP_CNTRL_TURNOUT; // Faehigkeit: Weichesteuerung
     g_com.cap_class = 0;
-    g_com.dev_desc_P = PSTR(ws_DEVICE_DESC);
+    g_com.dev_desc_P = PSTR(ws_DEVICE_DESC);// Beschreibung
 }
 
+/* static NOINLINE struct ws_Servo* ws_get_channel(uint8_t ch)
+Den Servo ch zurueckliefern. ch 0 .. ws_CHANNEL_COUNT-1
+*/
 static NOINLINE struct ws_Servo* ws_get_channel(uint8_t ch) {
 	return &ws_v.g_servos[ch];
 }
 
+/* static inline void ws_set_channels_off(void)
+Alle Servos aus: PC auf 0xff
+*/
 static inline void ws_set_channels_off(void) {
     port_out(PORTC) = 0xff;
 }
 
-// every 2.5ms
+// alle 2.5ms : 400Hz
+/* TCC0_OVF Timer C0 Overflow:
+* Im overflow werden einer von 8 Servos angesteuert
+*/
 ISR(TCC0_OVF_vect) {
+	
+	// nur wenn die Servos an sind
 	if (!ws_v.g_servos_enabled) {
         return;
     }
-    
+    // Servo fuer den Kanal ws_v.g_curchannel holen
     register struct ws_Servo* s = ws_get_channel(ws_v.g_curchannel);
     
+	// wenn sich der Servo Nicht gewegt und sich bewegen soll und der Bewegungssemaphore < 2 ist
     if (s->moving == 0 && s->state.domove && ws_v.g_move_sema < 2) {
+		// Bewegungssemaphore erhoehen
         ws_v.g_move_sema++;
+		// bewegt sich
         s->moving = 15;
+		// aktuelle Position ist die aktulle Zielposition == aktuelle Servoposition
         s->state.curpos = s->state.dstpos;
+		// in Bewegung?
         s->state.domove = 0;
     }
 
+	// Maske fuer den Kanal
     uint8_t mask = bitmask(ws_v.g_curchannel);
     
+	// Kanal auf off
     ws_set_channels_off();
     
-    if (s->moving) {
+    // soll sich der Kanal (Servo) bewegen?
+	if (s->moving) {
+		
+		// ja dann Ausgang auf Low setzen
         port_clr(PORTC, mask);
 
-        uint16_t a,b;
+        uint16_t a /*aktueller Wert*/,b /* maximaler Wert */;
+		// abhaengig von der aktuellen Position setzen in us: 0: maxtime 1: mintime
         b = s->state.curpos ? s->maxtime : s->mintime;
+		// soll die maxtime angefahren werden?
         if (s->state.curpos) {
+			// ja, dann die aktuelle Servoposition um deltatime erhoehen
             a = s->curtime + s->deltatime;
+			// ist diese >= maximal Wert?
             if (a >= b) {
+				// dann Bit setzen
                 ws_v.g_servo_curpos |= mask;
                 goto pos_reached;
             }
         } else {
+			// soll die minimale Positon angefahren werden, dann curtime - deltatime verringern
             a = s->curtime - s->deltatime;
+			// ist diese <= min Wert
             if ((int16_t)a <= (int16_t)b) {
+				// dann Bit zuruecksetzen
                 ws_v.g_servo_curpos &= ~mask;
 pos_reached:
+				// Position erreicht
                 a = b;
+				// Semaphore verringern
                 s->moving--;
             }
         }
+		// neue Position setzen
         s->curtime = a;
+		// ist der moving Semaphore auf 0?
         if (s->moving == 0) {
+			// dann den globalen Bewegungs Semaphore verkleinern
             ws_v.g_move_sema--;
         }
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+			// An compare & capture Kanal uebergeben, der fuer die Pulsweite verantwortlich ist
             TCC0.CCA = a;
         }
     }
+	//neuen Kanal setzen
     ws_v.g_curchannel = (ws_v.g_curchannel + 1) & ws_CHANNEL_MASK;
 }
 
 ISR(TCC0_CCA_vect) {
     if (ws_v.g_servos_enabled) {
+		// alle Servos auf 1 setzen
         ws_set_channels_off();
     }
 }
