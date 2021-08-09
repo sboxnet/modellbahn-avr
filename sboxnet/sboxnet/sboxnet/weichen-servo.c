@@ -72,8 +72,29 @@ APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 // Timer hat eine aufloesung von 16 ms, 16*5=80ms
 #define ws_SWITCH_TIMER  5 // 5*16ms = 80 ms
 
+#define POSMIN	0
+#define POSMAX  1
+
 // Struct fuer einen Servo
 struct ws_Servo {
+	uint16_t mintime; // Zeit fuer Min Puls in TCC0 Schritten
+	uint16_t maxtime; // Zeit fuer Max Puls in TCC0 Schritten
+	uint16_t curtime; // aktuell berechnete Position
+	uint16_t deltatime; // um soviel soll die Position pro Schritt geaendert werden
+	int8_t dir;
+	uint8_t minchanged;
+	uint8_t maxchanged;
+	uint8_t movtchanged;
+	uint8_t retry_timer; // Timer in welcher Zeit die Rueckmeldung wieder verschickt wird solange nicht bestaetigt, wird in main heruntergezaehlt
+	uint8_t notack; // war die SBOXNET_CMD_FB_CHANGED schon bestaetigt?
+	uint8_t last_seq; // letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
+    uint16_t perc_minv; // Prozent*10 fuer Min Wert
+    uint16_t perc_maxv; // Prozent*10 fuer Max Wert
+	uint16_t movetime;  // Bewegungszeit in us
+	uint8_t  moving;    // bewegt sich der Servo gerade? (ist ein Semaphore 0=bewegt sich nicht)
+
+
+	/*
 	// aktueller Zustand
 	struct State {
 		unsigned domove:1; // 1bit: in bewegung
@@ -94,6 +115,7 @@ struct ws_Servo {
     uint8_t  retry_timer; // Timer in welcher Zeit die Rueckmeldung wieder verschickt wird solange nicht bestaetigt, wird in main heruntergezaehlt
     uint8_t  notack; // war die SBOXNET_CMD_FB_CHANGED schon bestaetigt?
     uint8_t  last_seq; // letzte Sequencenr der SBOXNET_CMD_FB_CHANGED Nachricht
+*/
 };
 
 // Struktur die die Variablen fuer die Servos hat
@@ -101,6 +123,7 @@ struct ws_v_t {
 	// pro Server eine struct ws_Servo
 	struct ws_Servo g_servos[ws_CHANNEL_COUNT];
 	uint8_t g_curchannel;		// aktueller Kanal
+	uint8_t g_prevchannel;		// vorheriger Kanal
 	uint8_t g_selservoid;		// aktuell gewaehlter Servo fuer manuellen Modus
 	struct ws_Servo* pselservo; // Zeiger auf aktuellen Server
 	uint8_t g_servo_curpos;		// Bitmaske der aktuelle Position 0: Anfang=Min, 1: Ende=Max
@@ -217,8 +240,8 @@ static void ws_read_switches(void) {
 	p		Zeiger auf EEPROM Bereich der zu lesen ist
 	dflt	Deaultwert wenn Bereich nicht beschrieben ist
 */
-static inline uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt) {
-    uint16_t v = e2prom_get_word(p);
+static uint16_t ws_get_eeprom_word(uint16_t* p, uint16_t dflt) {
+    volatile uint16_t v = e2prom_get_word(p);
     if (v == 0xffff) // not programmed
         v = dflt;
     return v;
@@ -239,7 +262,8 @@ static void ws_set_servo_deltatime(struct ws_Servo* s) {
 Servo's Init.
 */
 static NOINLINE void ws_init_servos(void) {
-    uint8_t i, switchmask;
+    volatile uint8_t i;
+	volatile uint8_t switchmask;
     struct ws_Servo* s;
     
     // read current switches. 2 calls needed because of key debounce.
@@ -253,14 +277,15 @@ static NOINLINE void ws_init_servos(void) {
     ws_v.g_fb_switches_old = ws_v.g_fb_switches;
 	
 	// fuer jeden der 8 Servos
+	
     for (i = 0, switchmask = 0x01, s = ws_v.g_servos; s != (ws_v.g_servos+ws_CHANNEL_COUNT); i++, switchmask <<= 1, s++) {
-        uint16_t vmin, vmax, mtime;
+        volatile uint16_t vmin, vmax, mtime;
 		// lese aus EEPROM: Minimalwert
-        vmin = ws_get_eeprom_word(&ws_eeprom.servo[i].minv, 400);
+        vmin = ws_get_eeprom_word(&ws_eeprom.servo[i].minv, 0x12c /* 300 */);
 		// lese aus EEPROM: Maximalwert
-        vmax = ws_get_eeprom_word(&ws_eeprom.servo[i].maxv, 600);
+        vmax = ws_get_eeprom_word(&ws_eeprom.servo[i].maxv, 0x2bc /*700*/);
 		// lese aus EEPROM: Bewegungszeit in us
-        mtime = ws_get_eeprom_word(&ws_eeprom.servo[i].movetime, 100);
+        mtime = ws_get_eeprom_word(&ws_eeprom.servo[i].movetime, 0x64 /*100*/);
         
 		// pruefe Bewegungszeit x: 20 < x < 1000 
         mtime = ws_check_servo_minmax(mtime, 20, 1000);
@@ -273,6 +298,8 @@ static NOINLINE void ws_init_servos(void) {
         vmin = ws_check_servo_minmax(vmin, ws_SERVO_TIMER_PULS_MIN, ws_SERVO_TIMER_PULS_MAX);
         vmax = ws_check_servo_minmax(vmax, vmin, ws_SERVO_TIMER_PULS_MAX);
 		
+		
+		s->dir = 0; // keine Bewegungsrichtung
 		// Minimale Zeit fuer den Servopuls in Timerticks
         s->mintime = vmin;
 		// Maximale Zeit fuer den Servopuls in Timerticks
@@ -283,25 +310,21 @@ static NOINLINE void ws_init_servos(void) {
         s->perc_minv = ws_servo_time_to_percent(vmin);
         s->perc_maxv = ws_servo_time_to_percent(vmax);
         
-		// Servostatus: 0:am Anfang
-        s->state.curpos = 0;
-		// bewegt sich der servo gerade?
-        s->moving = 0;
 		// ist Minimal Wert geaendert worden? wenn ja, in das EEPROM schreiben
-        s->state.minchanged = 0;
+        s->minchanged = 0;
 		// ist Maximal Wert geaendert worden? wenn ja, in das EEPROM schreiben
-        s->state.maxchanged = 0;
+        s->maxchanged = 0;
 		// ist bewegungszeit geaendert worden? wenn ja, in das EEPROM schreiben
-        s->state.movtchanged = 0;
+        s->movtchanged = 0;
         // abhaengig von Servoposition-Rueckmeldung Startposition setzen und anfahren
-        s->state.dstpos = 0;
-        s->state.domove = 1;
+        // Rückmeldung g_fb_switches:1 => maxtime:
 		// abhaengig von der Rueckmeldung Position setzen
-        if (ws_v.g_fb_switches & switchmask) {
-            s->state.dstpos = 1;
-            s->curtime = s->maxtime;
+        if (ws_v.g_fb_switches & switchmask) { // Rueckmeldung 1 ?
+            s->curtime = s->maxtime; // Endposition
+			s->dir = -1;
         } else {
-            s->curtime = s->mintime;
+            s->curtime = s->mintime; // Startposition
+			s->dir = 1;
         }
         // war die SBOXNET_CMD_FB_CHANGED schon bestaetigt?
         s->notack = 0;
@@ -393,7 +416,8 @@ static NOINLINE struct ws_Servo* ws_get_channel(uint8_t ch) {
 Alle Servos aus: PC auf 0xff
 */
 static inline void ws_set_channels_off(void) {
-    port_out(PORTC) = 0xff;
+    //port_out(PORTC) = 0xff;
+	port_out(PORTC) = 0x0;
 }
 
 // alle 2.5ms : 400Hz
@@ -401,14 +425,55 @@ static inline void ws_set_channels_off(void) {
 * Im overflow werden einer von 8 Servos angesteuert
 */
 ISR(TCC0_OVF_vect) {
+	// nur wenn die Servos an sind
+	if (!ws_v.g_servos_enabled) {
+		return;
+	}
+	ws_v.g_prevchannel = ws_v.g_curchannel;
+	ws_v.g_curchannel = (ws_v.g_curchannel + 1) & ws_CHANNEL_MASK;
 	
+	if (ws_v.g_curchannel == 0) {
+		volatile uint8_t x = 0;  // for breakpoint for debugging
+	}
+	// Servo fuer den Kanal ws_v.g_curchannel holen
+	struct ws_Servo* s = ws_get_channel(ws_v.g_curchannel);
+	// Maske fuer den Kanal
+	volatile uint8_t mask = bitmask(ws_v.g_curchannel);
+
+	port_clr(PORTC, mask); // Ausgang auf 0, Ausgang wird durch 74hct540 invertiert!
+	if (s->dir > 0) {
+		// aufwärts
+		s->curtime = s->curtime + s->deltatime;
+		if (s->curtime >= s->maxtime) {
+			s->curtime = s->maxtime;
+			//s->dir = -s->dir;
+		}
+	} else {
+		// abwärts
+		s->curtime = s->curtime - s->deltatime;
+		if (((int16_t)s->curtime <= (int16_t)s->mintime)) {
+			s->curtime = s->mintime;
+			//s->dir = -s->dir;
+		}
+	}
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		// An compare & capture Kanal uebergeben, der fuer die Pulsweite verantwortlich ist
+		TCC0.CCA = s->curtime;
+	}
+	
+	/*
 	// nur wenn die Servos an sind
 	if (!ws_v.g_servos_enabled) {
         return;
     }
     // Servo fuer den Kanal ws_v.g_curchannel holen
     register struct ws_Servo* s = ws_get_channel(ws_v.g_curchannel);
-    
+    // Maske fuer den Kanal
+    uint8_t mask = bitmask(ws_v.g_curchannel);
+
+if (ws_v.g_curchannel == 0) {
+volatile uint8_t x = 0; 
+}
 	// wenn sich der Servo Nicht gewegt und sich bewegen soll und der Bewegungssemaphore < 2 ist
     if (s->moving == 0 && s->state.domove && ws_v.g_move_sema < 2) {
 		// Bewegungssemaphore erhoehen
@@ -419,49 +484,51 @@ ISR(TCC0_OVF_vect) {
         s->state.curpos = s->state.dstpos;
 		// in Bewegung?
         s->state.domove = 0;
+		port_set(PORTC, mask); // Ausgang auf 1
     }
 
 	// Maske fuer den Kanal
-    uint8_t mask = bitmask(ws_v.g_curchannel);
+    //uint8_t mask = bitmask(ws_v.g_curchannel);
     
 	// Kanal auf off
-    ws_set_channels_off();
-    
+    //ws_set_channels_off();
+   
     // soll sich der Kanal (Servo) bewegen?
 	if (s->moving) {
 		
-		// ja dann Ausgang auf Low setzen
-        port_clr(PORTC, mask);
+		// ja dann Ausgang auf High setzen
+        port_set(PORTC, mask);
 
-        uint16_t a /*aktueller Wert*/,b /* maximaler Wert */;
+        volatile uint16_t curtime; // aktueller Wert
+		volatile uint16_t maxtime; // maximaler Wert
 		// abhaengig von der aktuellen Position setzen in us: 0: maxtime 1: mintime
-        b = s->state.curpos ? s->maxtime : s->mintime;
+        maxtime = s->state.curpos==POSMAX ? s->maxtime : s->mintime;
 		// soll die maxtime angefahren werden?
-        if (s->state.curpos) {
+        if (s->state.curpos == POSMIN) {
 			// ja, dann die aktuelle Servoposition um deltatime erhoehen
-            a = s->curtime + s->deltatime;
+            curtime = s->curtime + s->deltatime;
 			// ist diese >= maximal Wert?
-            if (a >= b) {
+            if (curtime >= maxtime) {
 				// dann Bit setzen
                 ws_v.g_servo_curpos |= mask;
                 goto pos_reached;
             }
         } else {
 			// soll die minimale Positon angefahren werden, dann curtime - deltatime verringern
-            a = s->curtime - s->deltatime;
+            curtime = s->curtime - s->deltatime;
 			// ist diese <= min Wert
-            if ((int16_t)a <= (int16_t)b) {
+            if ((int16_t)curtime <= (int16_t)maxtime) {
 				// dann Bit zuruecksetzen
                 ws_v.g_servo_curpos &= ~mask;
 pos_reached:
 				// Position erreicht
-                a = b;
+                curtime = maxtime;
 				// Semaphore verringern
                 s->moving--;
             }
         }
 		// neue Position setzen
-        s->curtime = a;
+        s->curtime = curtime;
 		// ist der moving Semaphore auf 0?
         if (s->moving == 0) {
 			// dann den globalen Bewegungs Semaphore verkleinern
@@ -469,17 +536,20 @@ pos_reached:
         }
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 			// An compare & capture Kanal uebergeben, der fuer die Pulsweite verantwortlich ist
-            TCC0.CCA = a;
+            TCC0.CCA = curtime;
         }
     }
+	ws_v.g_prevchannel = ws_v.g_curchannel;
 	//neuen Kanal setzen
     ws_v.g_curchannel = (ws_v.g_curchannel + 1) & ws_CHANNEL_MASK;
+	*/
 }
 
 ISR(TCC0_CCA_vect) {
     if (ws_v.g_servos_enabled) {
-		// alle Servos auf 1 setzen
-        ws_set_channels_off();
+		// Servo aus HIGH setzen
+		volatile uint8_t mask = bitmask(ws_v.g_curchannel);
+		port_set(PORTC, mask);
     }
 }
 
@@ -531,17 +601,17 @@ static NOINLINE void ws_check_key_action(uint8_t keys) {
                 if (updown) {
                     if (servo->moving == 0) {
                         // set min/max
-                        uint8_t ismax = (servo->state.curpos ? 1:0);
+                        uint8_t ismax = servo->curtime == servo->maxtime; //(servo->state.curpos ? 1:0);
                         uint16_t vmin, vmax, v;
-                        if (ismax) {
+                        if (!ismax) {
                             vmin = servo->mintime;
                             vmax = ws_SERVO_TIMER_PULS_MAX;
-                            servo->state.maxchanged = 1;
+                            //servo->state.maxchanged = 1;
                             v = servo->maxtime;
                         } else {
                             vmin = ws_SERVO_TIMER_PULS_MIN;
                             vmax = servo->maxtime;
-                            servo->state.minchanged = 1;
+                            //servo->state.minchanged = 1;
                             v = servo->mintime;
                         }
                         v = ws_check_servo_minmax(v + ((keys & ws_KEY_UP) ? ws_SERVO_TIMER_PULS_STEP : -ws_SERVO_TIMER_PULS_STEP),
@@ -554,13 +624,14 @@ static NOINLINE void ws_check_key_action(uint8_t keys) {
                         servo->perc_minv = ws_servo_time_to_percent(servo->mintime);
                         servo->perc_maxv = ws_servo_time_to_percent(servo->maxtime);                    
                         servo->curtime = v;
-                        servo->state.domove = 1;
-                        servo->state.dstpos = servo->state.curpos;
+                        //servo->state.domove = 1;
+                        //servo->state.dstpos = servo->state.curpos;
                         ws_set_servo_deltatime(servo);
                     }
                 } else {
-                    servo->state.domove = 1;
-                    servo->state.dstpos = !servo->state.dstpos;
+                    //servo->state.domove = 1;
+                    //servo->state.dstpos = !servo->state.dstpos;
+					1;
                 }
             }
 		}
@@ -637,13 +708,22 @@ uint8_t ws_do_reg_read(uint16_t reg, uint16_t* pdata) {
 uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
     switch (reg) {
         case R_CNTRL_VALUE0: {
+			// mask: Bitmaske des Servos entspricht Servonummer
+			// data: Bitwert fuer Position: 0=mintime 1=maxtime
             ws_v.g_servo_set = (ws_v.g_servo_set & ~mask) | (data & mask);
-            for (uint8_t i = 0; i < ws_CHANNEL_COUNT; i++) {
+            for (volatile uint8_t i = 0; i < ws_CHANNEL_COUNT; i++) {
                 if (mask & 0x01) {
-                    struct ws_Servo* s = ws_get_channel(i);
+                    volatile struct ws_Servo* s = ws_get_channel(i);
                     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                        s->state.dstpos = (data & 0x01);
-                        s->state.domove = 1;
+						if (data & mask) {
+							// Bit ist 1, maxtime
+							s->curtime = s->mintime;
+							s->dir = 1;
+						} else {
+							// Bit ist 0, mintime
+							s->curtime = s->maxtime;
+							s->dir = -1;
+						}
                     }
                 }
                 mask >>= 1;
@@ -662,7 +742,7 @@ uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
                     servo->perc_minv = ws_check_servo_minmax(data, 0, servo->perc_maxv);
                     servo->mintime = ws_percent_to_servo_time(servo->perc_minv);
                     ws_set_servo_deltatime(servo);
-                    servo->state.minchanged = 1;
+                    //servo->state.minchanged = 1;
                 }
                 return 0;
             }
@@ -671,7 +751,7 @@ uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
                     servo->perc_maxv = ws_check_servo_minmax(data, servo->perc_minv, 1000);
                     servo->maxtime = ws_percent_to_servo_time(servo->perc_maxv);
                     ws_set_servo_deltatime(servo);
-                    servo->state.maxchanged = 1;
+                    //servo->state.maxchanged = 1;
                 }
                 return 0;
             }
@@ -679,7 +759,7 @@ uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
                 ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
                     servo->movetime = ws_check_servo_minmax(data, 20, 1000);
                     ws_set_servo_deltatime(servo);
-                    servo->state.movtchanged = 1;
+                    //servo->state.movtchanged = 1;
                 }
                 return 0;
             }
@@ -767,19 +847,19 @@ void ws_do_main(void) {
         for (uint8_t i = 0; i < ws_CHANNEL_COUNT; i++) {
             struct ws_Servo *servo = ws_v.g_servos + i;
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                if (servo->state.maxchanged) {
+                if (0) { //servo->state.maxchanged) {
                     if (eeprom_is_ready()) {    // note: eeprom erase+write: ca. 4ms !
-                        servo->state.maxchanged = 0;
+                        //servo->state.maxchanged = 0;
                         eeprom_update_word(&ws_eeprom.servo[i].maxv, servo->perc_maxv);// burns only if new value is different from old one.
                     }
-                } else if (servo->state.minchanged) {
+                } else if (0) {//servo->state.minchanged) {
                     if (eeprom_is_ready()) {
-                        servo->state.minchanged = 0;
+                        //servo->state.minchanged = 0;
                         eeprom_update_word(&ws_eeprom.servo[i].minv, servo->perc_minv);
                     }
-                } else if (servo->state.movtchanged) {
+                } else if (0) { //servo->state.movtchanged) {
                     if (eeprom_is_ready()) {
-                        servo->state.movtchanged = 0;
+                        //servo->state.movtchanged = 0;
                         eeprom_update_word(&ws_eeprom.servo[i].movetime, servo->movetime);
                     }
                 }
