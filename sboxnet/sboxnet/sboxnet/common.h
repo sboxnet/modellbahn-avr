@@ -246,6 +246,57 @@ extern uint8_t g_dev_state;
 //#define g_dev_errflags GPIO_GPIOR1
 extern uint8_t g_dev_errflags;
 
+// GBM Sensor
+struct gbm_sensor_t {
+	// 4 Bytes
+	uint16_t holdtime;
+	uint16_t reserved;
+};
+// GBM EEPROM
+struct gbm_eeprom_t {
+	//2+16*4=66 Bytes 
+	uint16_t  holdtime;
+	struct gbm_sensor_t sensors[16];
+};
+struct ws_Servo_eeprom_t {
+	// 8 Bytes
+	uint16_t minv; // Wert fuer Min Ausschlag in Prozent * 10
+	uint16_t maxv; // Wert fuer Max Ausschlag in Prozent * 10
+	uint16_t movetime; // Bewegungszeit in us
+	uint16_t reserved;
+};
+struct ws_eeprom_t {
+	// 8x8=64 Bytes
+	struct ws_Servo_eeprom_t servo[8];
+};
+struct dcc_eeprom_t {
+	// 2 Bytes
+	uint16_t locoaddr_scan_max;
+};
+struct booster_eeprom_t {
+	// 4 Bytes
+	uint16_t shortcut_limit;
+	uint16_t shortcut_interval;
+};
+// Struktur im EEPROM
+// EEPROM atxmega128a4u bei 0x1000
+struct Eeprom_t {
+	// +0 0x1000+0
+	struct gbm_eeprom_t gbm;
+	// +66 0x1000+0x42
+	struct ws_eeprom_t ws;
+	// +130 0x1000+0x82
+	struct dcc_eeprom_t dcc;
+	// +132 0x1000+0x84
+	struct booster_eeprom_t booster;
+	// +136 0x1000+0x88
+};
+#define EEPROM_OFFS_GBM 0x0	// 0
+#define EEPROM_OFFS_WS offsetof(struct Eeprom_t, ws) // 66
+#define EEPROM_OFFS_DCC offsetof(struct Eeprom_t, dcc) // 130
+#define EEPROM_OFFS_BOOSTER offsetof(struct Eeprom_t, booster) // 132
+
+
 //forward decls
 void com_sched_init_system(void);
 uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg);

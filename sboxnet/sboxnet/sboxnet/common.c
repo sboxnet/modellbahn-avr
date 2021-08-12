@@ -236,7 +236,8 @@ __ATTR_WEAK void booster_do_main(void) {
 __ATTR_WEAK void booster_do_before_bldr_activate(void) {
 }
 // end weaks
- 
+
+struct Eeprom_t eeprom EEMEM;
 
 static uint8_t com_process_cmd_reset(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
