@@ -477,7 +477,7 @@ static NOINLINE uint8_t ws_check_key_sel(uint8_t keys) {
                 
             } else {
                 ws_v.g_keystate |= ws_KEY_SEL;
-                
+                // manualmode aus wenn ws_KEY_SEL und ws_KEY_DOWN
                 if (keys & ws_KEY_DOWN) {
                     ws_v.g_manual_mode = 0;
                 } else {
@@ -751,10 +751,14 @@ void ws_do_main(void) {
         ws_v.g_servos_enabled = 1;
     }
     
+	// wenn kein Manualmode Werte in das EEPROM schreiben
     if (!ws_v.g_manual_mode) {
         for (uint8_t i = 0; i < ws_CHANNEL_COUNT; i++) {
             struct ws_Servo *servo = ws_v.g_servos + i;
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				if (i == 0) {
+					volatile uint8_t x = 0; // zum debuggen als Breakpoint
+				}
                 if (servo->maxchanged) {
                     if (eeprom_is_ready()) {    // note: eeprom erase+write: ca. 4ms !
                         servo->maxchanged = 0;
@@ -777,9 +781,10 @@ void ws_do_main(void) {
     
     if (bit_is_clear(g_dev_state, DEV_STATE_FLG_WATCHDOG_b)) {
         uint8_t switches = ws_v.g_fb_switches;
+		// Rueckmeldenachricht senden, nur jeweils eine Pro Main Schleife und wenn die Nachricht noch nicht bestaetigt ist, und wenn der Wiederholungszaehler auf 0 ist.
         for (uint8_t i = 0, mask = 1; i < ws_CHANNEL_COUNT; i++, mask <<= 1) {
             if (ws_v.g_servos[i].retry_timer == 0 && ws_v.g_servos[i].notack) {
-                ws_v.g_servos[i].retry_timer = 50;
+                ws_v.g_servos[i].retry_timer = 50; // Wiederholungszaehler setzen
                 
                 struct sboxnet_msg_max msg;
                 msg.msgh.dstaddr = 0;
@@ -797,7 +802,7 @@ void ws_do_main(void) {
         }
     }
     
-    //sleep_cpu();
+    sleep_cpu();
 }
 
 void ws_do_before_bldr_activate(void) {    
