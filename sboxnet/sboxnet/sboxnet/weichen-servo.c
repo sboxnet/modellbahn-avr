@@ -150,8 +150,8 @@ struct ws_v_t ws_v = { 0 };  // Speicher fuer g_ Variablen
 // Taster
 #define ws_KEY_SEL		0x01	// SEL
 #define ws_KEY_ACTION	0x02	// AKTION
-#define ws_KEY_UP		0x04	// UP
-#define ws_KEY_DOWN		0x08	// DOWN	
+#define ws_KEY_UP		0x08	// UP
+#define ws_KEY_DOWN		0x04	// DOWN	
 
 /* int16_t ws_check_servo_minmax(uint16_t v, uint16_t vmin, uint16_t vmax)
 ueberpruefung der Werte fuer minimaler und maximaler Serveausschlag.
