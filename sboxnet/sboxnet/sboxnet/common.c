@@ -732,7 +732,7 @@ __ATTR_OS_MAIN int main(void) {
                 com_sched_do_main();
             }
         } else {
-            sleep_cpu();
+            1; //sleep_cpu();
         }
     }
     
@@ -741,3 +741,12 @@ __ATTR_OS_MAIN int main(void) {
 
 #include "mtester.c"
 #include "weichen-servo.c"
+//#include "gbmelder.c"
+/*
+#define USE_BOOSTER 1
+#undef USE_DCCGEN
+#include "booster.c"
+#undef USE_BOOSTER
+#define USE_DCCGEN 1
+#include "booster.c"
+*/

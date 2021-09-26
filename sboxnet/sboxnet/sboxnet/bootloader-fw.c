@@ -981,7 +981,7 @@ static void bldr_main(uint8_t boot) {
             }
         }
         
-        sleep_cpu();
+        1; //sleep_cpu();
     }
 }
 
