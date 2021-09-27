@@ -785,7 +785,7 @@ void ws_do_main(void) {
         for (uint8_t i = 0, mask = 1; i < ws_CHANNEL_COUNT; i++, mask <<= 1) {
             if (ws_v.g_servos[i].retry_timer == 0 && ws_v.g_servos[i].notack) {
                 ws_v.g_servos[i].retry_timer = 50; // Wiederholungszaehler setzen
-                
+             
                 struct sboxnet_msg_max msg;
                 msg.msgh.dstaddr = 0;
                 msg.msgh.seq = ws_v.g_servos[i].last_seq = ws_get_next_transmit_seq();
@@ -802,7 +802,7 @@ void ws_do_main(void) {
         }
     }
     
-    sleep_cpu();
+    1; //sleep_cpu();
 }
 
 void ws_do_before_bldr_activate(void) {    
