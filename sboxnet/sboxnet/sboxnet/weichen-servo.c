@@ -559,14 +559,21 @@ static NOINLINE void ws_show_status(void) {
     if (ws_v.g_manual_mode) {
         if (timer_timedout(&ws_v.g_led_timer)) {
             port_out(PORTD) ^= bitmask(ws_v.g_selservoid);
-            timer_set(&ws_v.g_led_timer, ws_LED_TIMER);
+            timer_set(&ws_v.g_led_timer, 4*ws_LED_TIMER);
         }
     } else {
+		// hole Rueckmeldung
         uint8_t d = ws_v.g_fb_switches;
+		// berechne maske: Rueckmeldung xor aktueller Zustand
+		// ist Rueckmeldung anders als aktueller Zustand, maskebit pos setzen
         uint8_t mask = ws_v.g_fb_switches ^ ws_v.g_servo_set;
         if (mask) {
-            d = (ws_v.g_led_toggle ? d | mask : d & ~mask);
+			// led_toggle == 1: zeige Rueckmeldung dieses Bits an
+			// led_toggle == 0: led bit off
+            d = ((ws_v.g_led_toggle) ? (d | mask) : (d & ~mask));
+			// ist led Timer timed out?
             if (timer_timedout(&ws_v.g_led_timer)) {
+				// Toggle wechseln
                 ws_v.g_led_toggle = !ws_v.g_led_toggle;
                 timer_set(&ws_v.g_led_timer, ws_LED_TIMER);
             }
