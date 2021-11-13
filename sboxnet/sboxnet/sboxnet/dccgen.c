@@ -49,51 +49,49 @@
  * - CCA: DCC decoder. input capture, event 0, PC4
  */
 
-#define VENDOR_ID    0x0001
-#define FIRMWARE_VERSION 0x0102
-#define PRODUCT_ID   0x0004
-#define DEVICE_DESC  "DCCgen:1"
+#define dg_VENDOR_ID    0x0001
+#define dg_FIRMWARE_VERSION 0x0102
+#define dg_PRODUCT_ID   0x0004
+#define dg_DEVICE_DESC  "DCCgen:1"
 
 //APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 
-#define LED_PORT  PORTD
+//Port fuer LEDs
+#define dg_LED_PORT  PORTD
 
-#define NOTAUS_PORT PORTC
-#define NOTAUS_b    5
+// Port fuer NOTAUS Eingabe
+#define dg_NOTAUS_PORT PORTC
+// Bit fuer NOTAUS
+#define dg_NOTAUS_b    5
 
-static struct timer g_timer_10ms;
+static struct timer g_dg_timer_10ms;
 
-struct dccgen_eeprom {
+/*struct dccgen_eeprom {
     uint16_t   locoaddr_scan_max;
-};
+};*/
 
 
-#define DCC_CUTOUT_TEST_PORT  PORTC
-#define DCC_CUTOUT_TEST_b   6
+//#define dg_DCC_CUTOUT_TEST_PORT  PORTC
+//#define dg_DCC_CUTOUT_TEST_b   6
 
-#define TIMER_STARTUP  62 // ~1 s
+#define dg_TIMER_STARTUP  62 // ~1 s
 
-#define DCC_WATCHDOG_VAL 4 // 4*16ms = 64ms
+#define dg_DCC_WATCHDOG_VAL 4 // 4*16ms = 64ms
 
+// Bit im LED_PORT: Generator ist EIN  LED
+#define dg_LED_DCC_ON_b      6
+// Bit im LED_PORT: NOTAUS 
+#define dg_LED_DCC_NOTAUS_b  7
 
+// state: 
+#define dg_DCCGEN_FLAG_ON_b      0 // Generator EIN
+#define dg_DCCGEN_FLAG_NOTAUS_b  1 // Generator NOTAUS
 
+#define dg_SWITCH_NOTAUS_b  0 // Bit des NOTAUS Eingabeports
 
-#define DCC_IN_PORT PORTC
-#define DCC_IN_b   4
+#define dg_DCCGEN_DEFAULT_LOCOADDR_SCAN_MAX  100
 
-
-
-#define LED_DCC_ON_b      6
-#define LED_DCC_NOTAUS_b  7
-
-#define DCCGEN_FLAG_ON_b      0
-#define DCCGEN_FLAG_NOTAUS_b  1
-
-#define SWITCH_NOTAUS_b  0
-
-#define DCCGEN_DEFAULT_LOCOADDR_SCAN_MAX  100
-
-struct dccgen {
+struct dg_dccgen {
     uint8_t   flags;
     uint8_t   switches;
     uint8_t   switches_t;
@@ -103,64 +101,64 @@ struct dccgen {
         unsigned write_locoaddr_scan_max:1;
     }              eeprom_flags;
 };
-struct dccgen g_dccgen = { 0, };
+struct dg_dccgen g_dccgen = { 0, };
 
-#define DCC_PORT        PORTC
-#define DCC_PORT_BIT    4
+#define dg_DCC_PORT        PORTC
+#define dg_DCC_PORT_BIT    4
 
 
-#define DCC_1  ((58/2)-1)
-#define DCC_0  ((116/2)-1)
+#define dg_DCC_1  ((58/2)-1)
+#define dg_DCC_0  ((116/2)-1)
 
-#define NUM_DCC_SLOTS 2
-#define DCC_PACKET_COMPILED_BUFSIZE (2*(6*9+1+20))
+#define dg_NUM_DCC_SLOTS 2
+#define dg_DCC_PACKET_COMPILED_BUFSIZE (2*(6*9+1+20))
 
-struct dcc_packet_compiled {
+struct dg_dcc_packet_compiled {
     uint8_t size;
-    uint8_t buf[DCC_PACKET_COMPILED_BUFSIZE];
+    uint8_t buf[dg_DCC_PACKET_COMPILED_BUFSIZE];
 };
 
-struct dcc_packet {
+struct dg_dcc_packet {
     uint8_t size;
     uint8_t data[6];
 };
 
-struct dcc_slot {
+struct dg_dcc_slot {
     uint8_t fill;
-    struct dcc_packet_compiled pkg;
+    struct dg_dcc_packet_compiled pkg;
 };
 
-#define DCC_STATE_NONE  0
-#define DCC_STATE_INIT_RESET  1
-#define DCC_STATE_INIT_IDLE   2
-#define DCC_STATE_ON 3
+#define dg_DCC_STATE_NONE  0
+#define dg_DCC_STATE_INIT_RESET  1
+#define dg_DCC_STATE_INIT_IDLE   2
+#define dg_DCC_STATE_ON 3
 
-struct dcc_control {
+struct dg_dcc_control {
     uint8_t state;
     uint8_t packet_counter;
     uint8_t free_slot;
-    struct dcc_slot slots[NUM_DCC_SLOTS];
+    struct dg_dcc_slot slots[dg_NUM_DCC_SLOTS];
 };
 
-struct dcc_control g_dcc;
+struct dg_dcc_control g_dg_dcc;
 
-struct dcc_packet g_dcc_packet_reset = {
+struct dg_dcc_packet g_dcc_packet_reset = {
     .size = 2,
     .data = { 0, 0 },
 };
-struct dcc_packet g_dcc_packet_idle = {
+struct dg_dcc_packet g_dcc_packet_idle = {
     .size = 2,
     .data = { 0xff, 0 },
 };
 
 
-void dcc_init_dma(void) {
+void dg_dcc_init_dma(void) {
     DMA.CTRL = DMA_ENABLE_bm|DMA_DBUFMODE_CH01_gc|DMA_PRIMODE_RR0123_gc;
     DMA.INTFLAGS = 0xff;
     
-    struct dcc_slot* slot = &g_dcc.slots[0];
+    struct dg_dcc_slot* slot = &g_dg_dcc.slots[0];
     DMA_CH_t* ch = ((DMA_CH_t*)(&DMA.CH0));
-    for (uint8_t i = 0; i < NUM_DCC_SLOTS; i++, slot++, ch++) {
+    for (uint8_t i = 0; i < dg_NUM_DCC_SLOTS; i++, slot++, ch++) {
         ch->CTRLA = 0;
         ch->CTRLA = DMA_CH_RESET_bm;
         while (ch->CTRLA & DMA_CH_RESET_bm);
@@ -183,8 +181,8 @@ void dcc_init_dma(void) {
     }
 }
 
-void dcc_init(struct dcc_control* pcntr) {
-    pcntr->state = DCC_STATE_NONE;
+void dg_dcc_init(struct dg_dcc_control* pcntr) {
+    pcntr->state = dg_DCC_STATE_NONE;
     pcntr->packet_counter = 0;
     pcntr->free_slot = 0;
     
@@ -200,14 +198,14 @@ void dcc_init(struct dcc_control* pcntr) {
     TCC1.INTFLAGS = 0xff;
     TCC1.PER = 0;
     TCC1.CNT = 0;
-    TCC1.CCA = DCC_1;
+    TCC1.CCA = dg_DCC_1;
     
-    port_dirout(DCC_PORT, Bit(DCC_PORT_BIT));
+    port_dirout(dg_DCC_PORT, Bit(dg_DCC_PORT_BIT));
 }
 
-void dcc_compile_packet(struct dcc_slot* pdst, struct dcc_packet* psrc) {
-#define dcc_put_bit(_pdst, _bit) ({ \
-    uint8_t t = (_bit) ? DCC_1 : DCC_0; \
+void dg_dcc_compile_packet(struct dg_dcc_slot* pdst, struct dg_dcc_packet* psrc) {
+#define dg_dcc_put_bit(_pdst, _bit) ({ \
+    uint8_t t = (_bit) ? dg_DCC_1 : dg_DCC_0; \
     *(_pdst)++ = t; \
     *(_pdst)++ = t; \
 })
@@ -215,37 +213,37 @@ void dcc_compile_packet(struct dcc_slot* pdst, struct dcc_packet* psrc) {
     uint8_t size = psrc->size;
     // preamble
     for (uint8_t i = 16; i > 0; i--) {
-        dcc_put_bit(d, 1);
+        dg_dcc_put_bit(d, 1);
     }
     uint8_t xor = 0;
     for (uint8_t i = 0; i < size; i++) {
-        dcc_put_bit(d, 0);
+        dg_dcc_put_bit(d, 0);
         uint8_t b = psrc->data[i];
         xor ^= b;
         for (uint8_t k = 0x80; k != 0; k >>= 1) {
-            dcc_put_bit(d, (k & b));
+            dg_dcc_put_bit(d, (k & b));
         }
     }
-    dcc_put_bit(d, 0);
+    dg_dcc_put_bit(d, 0);
     for (uint8_t k = 0x80; k != 0; k >>= 1) {
-        dcc_put_bit(d, (k & xor));
+        dg_dcc_put_bit(d, (k & xor));
     }
-    dcc_put_bit(d, 1); // Packet End Bit
+    dg_dcc_put_bit(d, 1); // Packet End Bit
     pdst->pkg.size = d - pdst->pkg.buf;
     pdst->fill = 0;
 }
 
-void dcc_start_generator(struct dcc_control* pcntr) {
+void dg_dcc_start_generator(struct dg_dcc_control* pcntr) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
         TCC1.CTRLA = TC_CLKSEL_OFF_gc;
         TCC1.CTRLC = Bit(TC1_CMPA_bp); // set compare output CMPA to 1 (Recessive)
-        pcntr->state = DCC_STATE_INIT_RESET;
+        pcntr->state = dg_DCC_STATE_INIT_RESET;
         pcntr->packet_counter = 0;
         pcntr->free_slot = 0;
-        dcc_compile_packet(&pcntr->slots[0], &g_dcc_packet_reset); 
-        dcc_compile_packet(&pcntr->slots[1], &g_dcc_packet_reset);
+        dg_dcc_compile_packet(&pcntr->slots[0], &g_dcc_packet_reset); 
+        dg_dcc_compile_packet(&pcntr->slots[1], &g_dcc_packet_reset);
         
-        dcc_init_dma();
+        dg_dcc_init_dma();
 
         DMA.CH0.TRFCNT = pcntr->slots[0].pkg.size;
         DMA.CH1.TRFCNT = pcntr->slots[1].pkg.size;
@@ -253,14 +251,14 @@ void dcc_start_generator(struct dcc_control* pcntr) {
         setbit(DMA.CH0.CTRLA, DMA_CH_ENABLE_bp); // start with channel 0
 
         TCC1.CNT = 0;
-        TCC1.CCA = DCC_1;
+        TCC1.CCA = dg_DCC_1;
         TCC1.CTRLA = TC_CLKSEL_DIV64_gc; // start timer, first dma transfer is started on first compare match.
     }
 }
 
-void dcc_stop_generator(struct dcc_control* pcntr) {
+void dg_dcc_stop_generator(struct dg_dcc_control* pcntr) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        pcntr->state = DCC_STATE_NONE;
+        pcntr->state = dg_DCC_STATE_NONE;
         
         DMA.CH0.CTRLB = DMA_CH_ERRIF_bm|DMA_CH_TRNIF_bm|DMA_CH_ERRINTLVL_OFF_gc|DMA_CH_TRNINTLVL_OFF_gc; // clear interrupt flags and disable transfer end interrupt
         DMA.CH1.CTRLB = DMA_CH_ERRIF_bm|DMA_CH_TRNIF_bm|DMA_CH_ERRINTLVL_OFF_gc|DMA_CH_TRNINTLVL_OFF_gc; // clear interrupt flags and disable transfer end interrupt
@@ -274,32 +272,32 @@ void dcc_stop_generator(struct dcc_control* pcntr) {
 
 ISR(DMA_CH0_vect) {
     DMA.INTFLAGS = DMA_CH0ERRIF_bm|DMA_CH0TRNIF_bm;
-    g_dcc.slots[0].fill = 1;
-    g_dcc.free_slot = 0;
-    g_dcc.packet_counter++;
+    g_dg_dcc.slots[0].fill = 1;
+    g_dg_dcc.free_slot = 0;
+    g_dg_dcc.packet_counter++;
 }
 
 ISR(DMA_CH1_vect) {
     DMA.INTFLAGS = DMA_CH1ERRIF_bm|DMA_CH1TRNIF_bm;
-    g_dcc.slots[1].fill = 1;
-    g_dcc.free_slot = 1;
-    g_dcc.packet_counter++;
+    g_dg_dcc.slots[1].fill = 1;
+    g_dg_dcc.free_slot = 1;
+    g_dg_dcc.packet_counter++;
 }
 
 
-#define LOCO_FLG_SPEED_14   0
-#define LOCO_FLG_SPEED_28   1
-#define LOCO_FLG_SPEED_128  2
+#define dg_LOCO_FLG_SPEED_14   0
+#define dg_LOCO_FLG_SPEED_28   1
+#define dg_LOCO_FLG_SPEED_128  2
 
-#define LOCO_SPEED_DIR_FW   0x80
-#define LOCO_SPEED_DIR_REV  0x00
+#define dg_LOCO_SPEED_DIR_FW   0x80
+#define dg_LOCO_SPEED_DIR_REV  0x00
 
-#define LOCO_DCC_TIMER 2  // 20ms
+#define dg_LOCO_DCC_TIMER 2  // 20ms
 
-#define LOCO_SPTVAL  20
+#define dg_LOCO_SPTVAL  20
 
-struct loco {
-    struct loco* next;
+struct dg_loco {
+    struct dg_loco* next;
     uint16_t     addr;
     struct locoflags {
         unsigned  spd:2;
@@ -318,51 +316,51 @@ struct loco {
     }            pom;
 };
 
-#define MAX_LOCOS  100
+#define dg_MAX_LOCOS  100
 
-struct loco_list {
-    struct loco* pfree;
-    struct loco* pused;
-    struct loco* pcur;
+struct dg_loco_list {
+    struct dg_loco* pfree;
+    struct dg_loco* pused;
+    struct dg_loco* pcur;
     uint8_t      numlocos;
-    struct loco  loco[MAX_LOCOS];
+    struct dg_loco  loco[dg_MAX_LOCOS];
     volatile uint8_t timer;
 };
 
-struct loco_list g_locos;
+struct dg_loco_list g_dg_locos;
 
-#define LOCO_COMPILE_SPEED  0
-#define LOCO_COMPILE_FN0_4  1
-#define LOCO_COMPILE_FN5_8  2
-#define LOCO_COMPILE_FN9_12 3
-#define LOCO_COMPILE_FN_IDX(_i) (LOCO_COMPILE_FN0_4 + (_i))
-#define LOCO_COMPILE_POM    4
+#define dg_LOCO_COMPILE_SPEED  0
+#define dg_LOCO_COMPILE_FN0_4  1
+#define dg_LOCO_COMPILE_FN5_8  2
+#define dg_LOCO_COMPILE_FN9_12 3
+#define dg_LOCO_COMPILE_FN_IDX(_i) (dg_LOCO_COMPILE_FN0_4 + (_i))
+#define dg_LOCO_COMPILE_POM    4
 
-#define PUT_COMPILE_BUF(_x)  ({ pkg->data[pkg->size++] = (_x); })
+#define dg_PUT_COMPILE_BUF(_x)  ({ pkg->data[pkg->size++] = (_x); })
 
-void loco_compile_addr(uint16_t addr, struct dcc_packet* pkg) {
+void dg_loco_compile_addr(uint16_t addr, struct dg_dcc_packet* pkg) {
     pkg->size = 0;
     if (addr < 100) { // short address
-        PUT_COMPILE_BUF((uint8_t)addr);
+        dg_PUT_COMPILE_BUF((uint8_t)addr);
     } else {
-        PUT_COMPILE_BUF((uint8_t)((addr >> 8) | 0xc0));
-        PUT_COMPILE_BUF((uint8_t)addr);
+        dg_PUT_COMPILE_BUF((uint8_t)((addr >> 8) | 0xc0));
+        dg_PUT_COMPILE_BUF((uint8_t)addr);
     }    
 }
 
-void loco_compile(struct loco* ploco, uint8_t what, struct dcc_slot* pslot) {
-    struct dcc_packet pkgbuf;
-    struct dcc_packet* pkg = &pkgbuf;
+void dg_loco_compile(struct dg_loco* ploco, uint8_t what, struct dg_dcc_slot* pslot) {
+    struct dg_dcc_packet pkgbuf;
+    struct dg_dcc_packet* pkg = &pkgbuf;
     
-    loco_compile_addr(ploco->addr, pkg);
+    dg_loco_compile_addr(ploco->addr, pkg);
 
-    if (what == LOCO_COMPILE_SPEED) {
+    if (what == dg_LOCO_COMPILE_SPEED) {
         uint8_t cmd = 0x40;
-        if (ploco->speed & LOCO_SPEED_DIR_FW) {
+        if (ploco->speed & dg_LOCO_SPEED_DIR_FW) {
             cmd |= 0x20;
         }
         uint8_t speed = ploco->speed & 0x7f;
-        if (ploco->flags.spd == LOCO_FLG_SPEED_14) {
+        if (ploco->flags.spd == dg_LOCO_FLG_SPEED_14) {
             if (speed >= 2) {
                 speed = ((speed - 2) * 14 / 125) + 2;
                 if (speed > 15) {
@@ -373,9 +371,9 @@ void loco_compile(struct loco* ploco, uint8_t what, struct dcc_slot* pslot) {
             if (ploco->fnkey[0] & 0x01) {
                 cmd |= 0x10;
             }            
-            PUT_COMPILE_BUF(cmd);
+            dg_PUT_COMPILE_BUF(cmd);
             
-        } else if (ploco->flags.spd == LOCO_FLG_SPEED_28) {
+        } else if (ploco->flags.spd == dg_LOCO_FLG_SPEED_28) {
             if (speed == 0) {
                 speed = 0;
             } else if (speed == 1) {
@@ -390,46 +388,46 @@ void loco_compile(struct loco* ploco, uint8_t what, struct dcc_slot* pslot) {
             if (speed & 0x01) {
                 cmd |= 0x10;
             }
-            PUT_COMPILE_BUF(cmd);
+            dg_PUT_COMPILE_BUF(cmd);
             
         } else {
-            PUT_COMPILE_BUF(0x3f); // advanced instruction: 128 speed step control
-            PUT_COMPILE_BUF(ploco->speed);
+            dg_PUT_COMPILE_BUF(0x3f); // advanced instruction: 128 speed step control
+            dg_PUT_COMPILE_BUF(ploco->speed);
         }
         
-    } else if (what == LOCO_COMPILE_FN0_4) {
+    } else if (what == dg_LOCO_COMPILE_FN0_4) {
         uint8_t cmd = 0x80;
         cmd |= (ploco->fnkey[0] >> 1) & 0x0f;
         if (ploco->fnkey[0] & 0x01) {
             cmd |= 0x10;
         }
-        PUT_COMPILE_BUF(cmd);
+        dg_PUT_COMPILE_BUF(cmd);
         
-    } else if (what == LOCO_COMPILE_FN5_8) {
+    } else if (what == dg_LOCO_COMPILE_FN5_8) {
         uint8_t cmd = 0xb0;
         cmd |= (ploco->fnkey[0] >> 5) & 0x07;
         if (ploco->fnkey[1] & 0x01) {
             cmd |= 0x08;
         }
-        PUT_COMPILE_BUF(cmd);
+        dg_PUT_COMPILE_BUF(cmd);
         
-    } else if (what == LOCO_COMPILE_FN9_12) {
+    } else if (what == dg_LOCO_COMPILE_FN9_12) {
         uint8_t cmd = 0xa0;
         cmd |= (ploco->fnkey[1] >> 1) & 0x0f;
-        PUT_COMPILE_BUF(cmd);        
+        dg_PUT_COMPILE_BUF(cmd);        
     
-    } else if (what == LOCO_COMPILE_POM) {
+    } else if (what == dg_LOCO_COMPILE_POM) {
          uint8_t cmd = 0xec | ((ploco->pom.cv >> 8) & 0x03);
-         PUT_COMPILE_BUF(cmd);
-         PUT_COMPILE_BUF(ploco->pom.cv & 0x0ff);
-         PUT_COMPILE_BUF(ploco->pom.data);
+         dg_PUT_COMPILE_BUF(cmd);
+         dg_PUT_COMPILE_BUF(ploco->pom.cv & 0x0ff);
+         dg_PUT_COMPILE_BUF(ploco->pom.data);
     }
     
-    dcc_compile_packet(pslot, pkg);
+    dg_dcc_compile_packet(pslot, pkg);
 }
 
-struct loco* loco_find(uint16_t addr) {
-    struct loco* p = g_locos.pused;
+struct dg_loco* dg_loco_find(uint16_t addr) {
+    struct dg_loco* p = g_dg_locos.pused;
     while (p) {
         if (p->addr == addr) {
             return p;
@@ -439,64 +437,64 @@ struct loco* loco_find(uint16_t addr) {
     return 0;
 }
 
-void loco_scan(struct dcc_slot* freeslot) {
+void dg_loco_scan(struct dg_dcc_slot* freeslot) {
     g_dccgen.locoaddr_scan_cur++;
     if (g_dccgen.locoaddr_scan_cur > g_dccgen.locoaddr_scan_max) {
         g_dccgen.locoaddr_scan_cur = 1;
     }
-    if (!loco_find(g_dccgen.locoaddr_scan_cur)) {
-        struct dcc_packet pkgbuf;
-        struct dcc_packet* pkg = &pkgbuf;
-        loco_compile_addr(g_dccgen.locoaddr_scan_cur, pkg);
-        PUT_COMPILE_BUF(0xa0); // function group two instruction  FN 9-12 packet
-        dcc_compile_packet(freeslot, pkg);
+    if (!dg_loco_find(g_dccgen.locoaddr_scan_cur)) {
+        struct dg_dcc_packet pkgbuf;
+        struct dg_dcc_packet* pkg = &pkgbuf;
+        dg_loco_compile_addr(g_dccgen.locoaddr_scan_cur, pkg);
+        dg_PUT_COMPILE_BUF(0xa0); // function group two instruction  FN 9-12 packet
+        dg_dcc_compile_packet(freeslot, pkg);
     } else {
-        dcc_compile_packet(freeslot, &g_dcc_packet_idle);
+       dg_dcc_compile_packet(freeslot, &g_dcc_packet_idle);
     }
 }
 
-void loco_task(void) {
-    struct dcc_slot* freeslot = &g_dcc.slots[g_dcc.free_slot];
+void dg_loco_task(void) {
+    struct dg_dcc_slot* freeslot = &g_dg_dcc.slots[g_dg_dcc.free_slot];
     
     if (!freeslot->fill) {
         return;
     }
-    switch (g_dcc.state) {
-        case DCC_STATE_NONE:
+    switch (g_dg_dcc.state) {
+        case dg_DCC_STATE_NONE:
             return;
             
-        case DCC_STATE_INIT_RESET: {
-            dcc_compile_packet(freeslot, &g_dcc_packet_reset);
+        case dg_DCC_STATE_INIT_RESET: {
+            dg_dcc_compile_packet(freeslot, &g_dcc_packet_reset);
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                if (g_dcc.packet_counter > 100) {
-                    g_dcc.packet_counter = 0;
-                    g_dcc.state = DCC_STATE_INIT_IDLE;
+                if (g_dg_dcc.packet_counter > 100) {
+                    g_dg_dcc.packet_counter = 0;
+                    g_dg_dcc.state = dg_DCC_STATE_INIT_IDLE;
                 }
             }
             break;
         }
-        case DCC_STATE_INIT_IDLE: {
-            dcc_compile_packet(freeslot, &g_dcc_packet_idle);
+        case dg_DCC_STATE_INIT_IDLE: {
+            dg_dcc_compile_packet(freeslot, &g_dcc_packet_idle);
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-                if (g_dcc.packet_counter > 30) {
-                    g_dcc.packet_counter = 0;
-                    g_dcc.state = DCC_STATE_ON;
+                if (g_dg_dcc.packet_counter > 30) {
+                    g_dg_dcc.packet_counter = 0;
+                    g_dg_dcc.state = dg_DCC_STATE_ON;
                 }
             }
             break;
         }
-        case DCC_STATE_ON: {
+        case dg_DCC_STATE_ON: {
             // find next loco
-            if (g_locos.pcur == 0) {
-                if (g_locos.timer == 0) {
-                    g_locos.pcur = g_locos.pused;
-                    g_locos.timer = LOCO_DCC_TIMER;
+            if (g_dg_locos.pcur == 0) {
+                if (g_dg_locos.timer == 0) {
+                    g_dg_locos.pcur = g_dg_locos.pused;
+                    g_dg_locos.timer = dg_LOCO_DCC_TIMER;
                 }
-                loco_scan(freeslot);
+                dg_loco_scan(freeslot);
                 break;
             }
-            struct loco* ploco = g_locos.pcur;
-            struct loco* pfound = ploco;
+            struct dg_loco* ploco = g_dg_locos.pcur;
+            struct dg_loco* pfound = ploco;
             do {
                 if (ploco->sptimer > 0) {
                     ploco->sptimer--;
@@ -506,77 +504,77 @@ void loco_task(void) {
                 }
                 ploco = ploco->next;
                 if (ploco == 0) {
-                    ploco = g_locos.pused;
+                    ploco = g_dg_locos.pused;
                 }
-            } while (ploco != g_locos.pcur);
+            } while (ploco != g_dg_locos.pcur);
 
-            uint8_t compile = LOCO_COMPILE_SPEED;
+            uint8_t compile = dg_LOCO_COMPILE_SPEED;
             if (pfound->flags.pom) {
                 pfound->flags.pom--;
-                compile = LOCO_COMPILE_POM;
+                compile = dg_LOCO_COMPILE_POM;
             } else if (pfound->flags.fn0) {
                 pfound->flags.fn0 = 0;
-                compile = LOCO_COMPILE_FN_IDX(0);
+                compile = dg_LOCO_COMPILE_FN_IDX(0);
             } else if (pfound->flags.fn1) {
                 pfound->flags.fn1 = 0;
-                compile = LOCO_COMPILE_FN_IDX(1);
+                compile = dg_LOCO_COMPILE_FN_IDX(1);
             } else if (pfound->flags.fn2) {
                 pfound->flags.fn2 = 0;
-                compile = LOCO_COMPILE_FN_IDX(2);                    
+                compile = dg_LOCO_COMPILE_FN_IDX(2);                    
             } else {
-                if (pfound->sptval < LOCO_SPTVAL) {
+                if (pfound->sptval < dg_LOCO_SPTVAL) {
                     pfound->sptval++;
                 }
-                if (pfound->sptval > (LOCO_SPTVAL/2)) {
+                if (pfound->sptval > (dg_LOCO_SPTVAL/2)) {
                     pfound->flags.fn0 = 1;
                     pfound->flags.fn1 = 1;
                     pfound->flags.fn2 = 1;
                 }
                 pfound->sptimer = pfound->sptval;
                 
-                g_locos.pcur = g_locos.pcur->next;
+                g_dg_locos.pcur = g_dg_locos.pcur->next;
             }
-            loco_compile(pfound, compile, freeslot);
+            dg_loco_compile(pfound, compile, freeslot);
             break;
         }
     }
-    if (g_dcc.free_slot == 0) {
-        DMA.CH0.TRFCNT = g_dcc.slots[0].pkg.size;
+    if (g_dg_dcc.free_slot == 0) {
+        DMA.CH0.TRFCNT = g_dg_dcc.slots[0].pkg.size;
     } else {
-        DMA.CH1.TRFCNT = g_dcc.slots[1].pkg.size;
+        DMA.CH1.TRFCNT = g_dg_dcc.slots[1].pkg.size;
     }
 }
 
-void loco_list_init(void) {
-    memset(&g_locos, 0, sizeof(g_locos));
+void dg_loco_list_init(void) {
+    memset(&g_dg_locos, 0, sizeof(g_dg_locos));
     
-    struct loco_list* p = &g_locos;
+    struct dg_loco_list* p = &g_dg_locos;
     p->pfree = p->loco;
-    for (uint8_t i = 0; i < MAX_LOCOS-1; i++) {
+    for (uint8_t i = 0; i < dg_MAX_LOCOS-1; i++) {
         p->loco[i].next = p->loco + i + 1;
     }
 }
 
-void loco_list_reset(void) {
-    g_locos.pcur = g_locos.pused;
-    g_locos.timer = 0;
+void dg_loco_list_reset(void) {
+    g_dg_locos.pcur = g_dg_locos.pused;
+    g_dg_locos.timer = 0;
 }
 
-uint8_t loco_is_addr_valid(uint16_t addr) {
+uint8_t dg_loco_is_addr_valid(uint16_t addr) {
     return (addr > 0) && (addr < 10000);
 }
 
-uint8_t loco_add(uint16_t addr, uint8_t flags, struct loco** pploco) {
-    if (!loco_is_addr_valid(addr)) {
+uint8_t dg_loco_add(uint16_t addr, uint8_t flags, struct dg_loco** pploco) {
+    if (!dg_loco_is_addr_valid(addr)) {
         return SBOXNET_ACKRC_LOCO_INVADDR;
     }
     // is a slot available?
-    if (g_locos.pfree == 0) {
+    if (g_dg_locos.pfree == 0) {
         return SBOXNET_ACKRC_LOCO_NOSLOT;
     }
     
     // is address free?
-    struct loco* p = g_locos.pused;
+    struct dg_loco* p = g_dg_locos.pused;
     while (p) {
         if (p->addr == addr) {
             return SBOXNET_ACKRC_LOCO_ADDRINUSE;
@@ -585,22 +583,22 @@ uint8_t loco_add(uint16_t addr, uint8_t flags, struct loco** pploco) {
     }
     
     // create new loco
-    struct loco* ploco = g_locos.pfree;
-    g_locos.pfree = ploco->next;
+    struct dg_loco* ploco = g_dg_locos.pfree;
+    g_dg_locos.pfree = ploco->next;
  
-    memset(ploco, 0, sizeof(struct loco));
+    memset(ploco, 0, sizeof(struct dg_loco));
     ploco->addr = addr;
     uint8_t spd = flags & 0x03;
     if (spd > 2) {
         spd = 2;
     }
     ploco->flags.spd = spd;
-    ploco->sptimer = LOCO_SPTVAL;
-    ploco->sptval = LOCO_SPTVAL;
+    ploco->sptimer = dg_LOCO_SPTVAL;
+    ploco->sptval = dg_LOCO_SPTVAL;
  
-    ploco->next = g_locos.pused;
-    g_locos.pused = ploco;
-    g_locos.numlocos++;
+    ploco->next = g_dg_locos.pused;
+    g_dg_locos.pused = ploco;
+    g_dg_locos.numlocos++;
     
     if (pploco) {
         *pploco = ploco;
@@ -609,23 +607,23 @@ uint8_t loco_add(uint16_t addr, uint8_t flags, struct loco** pploco) {
     return 0;
 }
 
-uint8_t loco_del(uint16_t addr) {
-    struct loco* p = g_locos.pused;
-    struct loco* pold = 0;
+uint8_t dg_loco_del(uint16_t addr) {
+    struct dg_loco* p = g_dg_locos.pused;
+    struct dg_loco* pold = 0;
     while (p) {
         if (p->addr == addr) {
-            if (g_locos.pcur == p) {
-                g_locos.pcur = p->next;
+            if (g_dg_locos.pcur == p) {
+                g_dg_locos.pcur = p->next;
             }
             if (pold) {
                 pold->next = p->next;
             } else {
-                g_locos.pused = p->next;
+                g_dg_locos.pused = p->next;
             }
-            g_locos.numlocos--;
+            g_dg_locos.numlocos--;
             // add to free list
-            p->next = g_locos.pfree;
-            g_locos.pfree = p;
+            p->next = g_dg_locos.pfree;
+            g_dg_locos.pfree = p;
             return 0;
         }
         pold = p;
@@ -634,8 +632,8 @@ uint8_t loco_del(uint16_t addr) {
     return SBOXNET_ACKRC_LOCO_NOTFOUND;
 }
 
-uint8_t loco_set_func(uint16_t addr, uint8_t fn0, uint8_t fn1) {
-    struct loco* p = loco_find(addr);
+uint8_t dg_loco_set_func(uint16_t addr, uint8_t fn0, uint8_t fn1) {
+    struct dg_loco* p = dg_loco_find(addr);
     if (!p) {
         return SBOXNET_ACKRC_LOCO_NOTFOUND;
     }
@@ -660,8 +658,8 @@ uint8_t loco_set_func(uint16_t addr, uint8_t fn0, uint8_t fn1) {
     return 0;
 }
 
-uint8_t loco_set_speed(uint16_t addr, uint8_t speed) {
-    struct loco* p = loco_find(addr);
+uint8_t dg_loco_set_speed(uint16_t addr, uint8_t speed) {
+    struct dg_loco* p = dg_loco_find(addr);
     if (!p) {
         return SBOXNET_ACKRC_LOCO_NOTFOUND;
     }
@@ -673,17 +671,17 @@ uint8_t loco_set_speed(uint16_t addr, uint8_t speed) {
     return 0;
 }
 
-void loco_timing(void) {
-    if (g_locos.timer) {
-        g_locos.timer--;
+void dg_loco_timing(void) {
+    if (g_dg_locos.timer) {
+        g_dg_locos.timer--;
     }
 }
 
-uint8_t loco_pom(uint16_t addr, uint16_t cv, uint8_t data) {
-    if (!loco_is_addr_valid(addr)) {
+uint8_t dg_loco_pom(uint16_t addr, uint16_t cv, uint8_t data) {
+    if (!dg_loco_is_addr_valid(addr)) {
         return SBOXNET_ACKRC_LOCO_INVADDR;
     }
-    struct loco* p = loco_find(addr);
+    struct dg_loco* p = dg_loco_find(addr);
     if (!p) {
         return SBOXNET_ACKRC_LOCO_NOTFOUND;
     }
@@ -711,25 +709,25 @@ uint8_t loco_pom(uint16_t addr, uint16_t cv, uint8_t data) {
     return 0;
 }
 
-void dccgen_init(void) {
+void dg_dccgen_init(void) {
     g_dccgen.flags = 0;
     g_dccgen.locoaddr_scan_cur = 1;
-    g_dccgen.locoaddr_scan_max = e2prom_get_word(&g_eeprom.dccgen.locoaddr_scan_max);
+    g_dccgen.locoaddr_scan_max = e2prom_get_word((uint16_t*)offsetof(struct Eeprom_t, dcc.locoaddr_scan_max));
     if (g_dccgen.locoaddr_scan_max == 0xffff) {
-        g_dccgen.locoaddr_scan_max = DCCGEN_DEFAULT_LOCOADDR_SCAN_MAX;
+        g_dccgen.locoaddr_scan_max = dg_DCCGEN_DEFAULT_LOCOADDR_SCAN_MAX;
     }
     g_dccgen.eeprom_flags.write_locoaddr_scan_max = 0;
 
-    dcc_init(&g_dcc);
-    loco_list_init();
+    dg_dcc_init(&g_dg_dcc);
+    dg_loco_list_init();
 }
 
-static void dcc_read_switches(void) {
+static void dg_dcc_read_switches(void) {
     uint8_t sw;
 
     sw = 0;
-    if (bit_is_set(port_in(NOTAUS_PORT), NOTAUS_b)) {
-       setbit(sw, SWITCH_NOTAUS_b);
+    if (bit_is_set(port_in(dg_NOTAUS_PORT), dg_NOTAUS_b)) {
+       setbit(sw, dg_SWITCH_NOTAUS_b);
     }
     
     debounce_keys(&g_dccgen.switches, &g_dccgen.switches_t, sw);
@@ -738,25 +736,23 @@ static void dcc_read_switches(void) {
 
 
 
-void do_init_system(void) {
-    uint8_t portd_bits = 0
+void dg_do_init_system(void) {
+	// LEDs Output
+    uint8_t portd_bits = Bit(dg_LED_DCC_NOTAUS_b)|Bit(dg_LED_DCC_ON_b); // Bits für LEDs
+    port_out(dg_LED_PORT) = portd_bits;	// LEDs aus (High)
+    PORTCFG_MPCMASK = portd_bits;		// Konfig LEDs Ports
+    PORTD.PIN0CTRL = PORT_OPC_TOTEM_gc;	// als Totempole
+    port_dirout(dg_LED_PORT, portd_bits); // Ports als Ausgabe
 
-                        |Bit(LED_DCC_NOTAUS_b)|Bit(LED_DCC_ON_b)
-
-                        ;
-    port_out(PORTD) = portd_bits;
-    PORTCFG_MPCMASK = portd_bits;
-    PORTD.PIN0CTRL = PORT_OPC_TOTEM_gc;
-    port_dirout(PORTD, portd_bits);
-
-    PORTCFG_MPCMASK = Bit(NOTAUS_b);
+	// NOTAUS als Eingabe mit Pullup
+	port_dirin(dg_NOTAUS_PORT, Bit(dg_NOTAUS_b));
+    PORTCFG_MPCMASK = Bit(dg_NOTAUS_b);
     PORTC.PIN0CTRL = PORT_OPC_PULLUP_gc;
-
-
-    
+	
     // configure sleep mode: idle sleep mode, sleep mode allowed
     SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
     // power reduction
+	/*
     PR.PRPA = Bit(PR_DAC_bp)
                 |Bit(PR_AC_bp);
     PR.PRPB = Bit(PR_DAC_bp)
@@ -764,26 +760,21 @@ void do_init_system(void) {
                 |Bit(PR_AC_bp);
     PR.PRPC = Bit(PR_TWI_bp)|Bit(PR_USART1_bp)|Bit(PR_USART0_bp)|Bit(PR_SPI_bp)|Bit(PR_HIRES_bp); // PR_TC1_bp PR_TC0_bp;
     PR.PRPD = Bit(PR_TWI_bp)|Bit(PR_USART1_bp)|Bit(PR_USART0_bp)|Bit(PR_SPI_bp)|Bit(PR_HIRES_bp); // PR_TC1_bp PR_TC0_bp;
+*/
 
-
-    
-    g_com.productid = PRODUCT_ID;
-    g_com.vendorid = VENDOR_ID;
-    g_com.firmware_version = FIRMWARE_VERSION;
-    g_com.capabilities = 0
-
-        |CAP_DCC_GENERATOR
-
-        ;
+    g_com.productid = dg_PRODUCT_ID;
+    g_com.vendorid = dg_VENDOR_ID;
+    g_com.firmware_version = dg_FIRMWARE_VERSION;
+    g_com.capabilities = CAP_DCC_GENERATOR;
     g_com.cap_class = 0;
-    g_com.dev_desc_P = PSTR(DEVICE_DESC);
+    g_com.dev_desc_P = PSTR(dg_DEVICE_DESC);
 
-    timer_register(&g_timer_10ms, TIMER_RESOLUTION_1MS);
+    timer_register(&g_dg_timer_10ms, TIMER_RESOLUTION_1MS);
     
-    dccgen_init();
+    dg_dccgen_init();
 }
 
-uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
+uint8_t dg_do_msg(struct sboxnet_msg_header *pmsg) {
 
     uint8_t rc = 0;
     if (pmsg->dstaddr == SBOXNET_ADDR_BROADCAST) {
@@ -792,35 +783,36 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
 
     switch (pmsg->cmd) {
         case SBOXNET_CMD_LOCO_POWER: {
+			// bei NOTAUS muss erst das Notauf Flag zurueckgesetzt werde, also SBOXNET_CMD_LOCO_POWER 0 0, SBOXNET_CMD_LOCO_POWER 1 1
             if (pmsg->opt.len != 1) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint8_t flags = pmsg->data[0];
             if (flags & 0x01) { // on
                 if (
-                        bit_is_set(g_dccgen.flags, DCCGEN_FLAG_NOTAUS_b) ||
-                        bit_is_set(g_dev_state, DEV_STATE_FLG_WATCHDOG_b)) {
+                        bit_is_set(g_dccgen.flags, dg_DCCGEN_FLAG_NOTAUS_b) /* ||
+                        bit_is_set(g_dev_state, DEV_STATE_FLG_WATCHDOG_b)*/) {
                     return SBOXNET_ACKRC_LOCO_NOTAUS;
                 }
 
-                if (bit_is_clear(g_dccgen.flags, DCCGEN_FLAG_ON_b) && g_dcc.state == DCC_STATE_NONE) {
+                if (bit_is_clear(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b) && g_dg_dcc.state == dg_DCC_STATE_NONE) {
                     if (flags & 0x02) {
-                        loco_list_reset();
+                        dg_loco_list_reset();
                     } else {
-                        loco_list_init();
+                        dg_loco_list_init();
                     }
-                    dcc_start_generator(&g_dcc);
+                    dg_dcc_start_generator(&g_dg_dcc);
                 }
-                setbit(g_dccgen.flags, DCCGEN_FLAG_ON_b);
+                setbit(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b);
 
             } else { // off
-                dcc_stop_generator(&g_dcc);
-                g_locos.pcur = 0;
+                dg_dcc_stop_generator(&g_dg_dcc);
+                g_dg_locos.pcur = 0;
                 if (!(flags & 0x02)) {
-                    loco_list_init();
+                    dg_loco_list_init();
                 }
-                clrbit(g_dccgen.flags, DCCGEN_FLAG_ON_b);
-                clrbit(g_dccgen.flags, DCCGEN_FLAG_NOTAUS_b);
+                clrbit(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b);
+                clrbit(g_dccgen.flags, dg_DCCGEN_FLAG_NOTAUS_b);
 
             }
             pmsg->opt.len = 0;
@@ -833,12 +825,12 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint16_t addr = ((uint16_t)pmsg->data[1] << 8) | pmsg->data[0];
-            rc = loco_set_speed(addr, pmsg->data[2]);
+            rc = dg_loco_set_speed(addr, pmsg->data[2]);
             if (rc) {
                 return rc;
             }
             if (msglen == 5) {
-                rc = loco_set_func(addr, pmsg->data[3], pmsg->data[4]);
+                rc = dg_loco_set_func(addr, pmsg->data[3], pmsg->data[4]);
                 if (rc) {
                     return rc;
                 }
@@ -852,7 +844,7 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint16_t addr = ((uint16_t)pmsg->data[1] << 8) | pmsg->data[0];
-            rc = loco_set_func(addr, pmsg->data[2], pmsg->data[3]);
+            rc = dg_loco_set_func(addr, pmsg->data[2], pmsg->data[3]);
             pmsg->opt.len = 0;
             return rc;
         }
@@ -864,7 +856,7 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
             uint16_t addr = ((uint16_t)pmsg->data[1] << 8) | pmsg->data[0];
             uint8_t flags = pmsg->data[2];
             pmsg->opt.len = 0;
-            return loco_add(addr, flags, 0);
+            return dg_loco_add(addr, flags, 0);
         }
         
         case SBOXNET_CMD_LOCO_DEL: {
@@ -873,7 +865,7 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
             }
             uint16_t addr = ((uint16_t)pmsg->data[1] << 8) | pmsg->data[0];
             pmsg->opt.len = 0;
-            return loco_del(addr);
+            return dg_loco_del(addr);
         }
         
         case SBOXNET_CMD_LOCO_POM: {
@@ -884,23 +876,23 @@ uint8_t do_msg(struct sboxnet_msg_header *pmsg) {
             uint16_t cv = ((uint16_t)pmsg->data[3] << 8) | pmsg->data[2];
             uint8_t data = pmsg->data[4];
             pmsg->opt.len = 0;
-            return loco_pom(addr, cv, data);
+            return dg_loco_pom(addr, cv, data);
         }
     }
     return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
-uint8_t do_reg_read(uint16_t reg, uint16_t* pdata) {
+uint8_t dg_do_reg_read(uint16_t reg, uint16_t* pdata) {
     switch(reg) {
         case R_DCCGEN_FLAGS:     *pdata = g_dccgen.flags; return 0;
-        case R_DCCGEN_NUM_LOCOS: *pdata = g_locos.numlocos; return 0;
+        case R_DCCGEN_NUM_LOCOS: *pdata = g_dg_locos.numlocos; return 0;
         case R_DCCGEN_LOCOADDR_SCAN_MAX: *pdata = g_dccgen.locoaddr_scan_max; return 0;
         case R_DCCGEN_LOCOADDR_SCAN_CUR: *pdata = g_dccgen.locoaddr_scan_cur; return 0;
     }    
     return SBOXNET_ACKRC_REG_INVALID;
 };
 
-uint8_t do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
+uint8_t dg_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
     switch (reg) {
         case R_DCCGEN_LOCOADDR_SCAN_MAX: {
             g_dccgen.locoaddr_scan_max = data;
@@ -912,54 +904,53 @@ uint8_t do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 }
 
 
-void do_setup(void) {
+void dg_do_setup(void) {
 }
 
-static void led_set(uint8_t bit, uint8_t on) {
+static void dg_led_set(uint8_t bit, uint8_t on) {
     if (on) {
-        port_clrbit(LED_PORT, bit);
+        port_clrbit(dg_LED_PORT, bit);
     } else {
-        port_setbit(LED_PORT, bit);
+        port_setbit(dg_LED_PORT, bit);
     }
 }
     
-void do_main(void) {
-    if (timer_timedout(&g_timer_10ms)) {
-        timer_set(&g_timer_10ms, 10);
+void dg_do_main(void) {
+    if (timer_timedout(&g_dg_timer_10ms)) {
+        timer_set(&g_dg_timer_10ms, 10);
         
-        loco_timing();
-        dcc_read_switches();
+        dg_loco_timing();
+        dg_dcc_read_switches();
     }
     
-    loco_task();
+    dg_loco_task();
     
-    if (bit_is_set(g_dccgen.switches, SWITCH_NOTAUS_b)) {
-        setbit(g_dccgen.flags, DCCGEN_FLAG_NOTAUS_b);
+    if (bit_is_set(g_dccgen.switches, dg_SWITCH_NOTAUS_b)) {
+        setbit(g_dccgen.flags, dg_DCCGEN_FLAG_NOTAUS_b);
     }
-    if (bit_is_set(g_dev_state, DEV_STATE_FLG_WATCHDOG_b) || bit_is_set(g_dccgen.flags, DCCGEN_FLAG_NOTAUS_b)) {
-        if (bit_is_set(g_dccgen.flags, DCCGEN_FLAG_ON_b)) {
-            clrbit(g_dccgen.flags, DCCGEN_FLAG_ON_b);
-            dcc_stop_generator(&g_dcc);
+    if (bit_is_set(g_dccgen.flags, dg_DCCGEN_FLAG_NOTAUS_b)) {
+        if (bit_is_set(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b)) {
+            clrbit(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b);
+            dg_dcc_stop_generator(&g_dg_dcc);
         }
     }
     
-    led_set(LED_DCC_ON_b,     bit_is_set(g_dccgen.flags, DCCGEN_FLAG_ON_b));
-    led_set(LED_DCC_NOTAUS_b, bit_is_set(g_dccgen.flags, DCCGEN_FLAG_NOTAUS_b));
+    dg_led_set(dg_LED_DCC_ON_b,     bit_is_set(g_dccgen.flags, dg_DCCGEN_FLAG_ON_b));
+    dg_led_set(dg_LED_DCC_NOTAUS_b, bit_is_set(g_dccgen.flags, dg_DCCGEN_FLAG_NOTAUS_b));
 
 
     if (g_dccgen.eeprom_flags.write_locoaddr_scan_max && eeprom_is_ready()) {
-        eeprom_update_word(&g_eeprom.dccgen.locoaddr_scan_max, g_dccgen.locoaddr_scan_max);
+		eeprom_update_word((uint16_t*)offsetof(struct Eeprom_t, dcc.locoaddr_scan_max), g_dccgen.locoaddr_scan_max);
         g_dccgen.eeprom_flags.write_locoaddr_scan_max = 0;
     }
     
     sleep_cpu();
 }
 
-void do_before_bldr_activate(void) {
+void dg_do_before_bldr_activate(void) {
 
-    dcc_stop_generator(&g_dcc);
+    dg_dcc_stop_generator(&g_dg_dcc);
 
-    
     PORTC.INT0MASK = 0;
     PORTC.INT1MASK = 0;
     PORTC.INTFLAGS = 0xff; // clear interrupt flags;

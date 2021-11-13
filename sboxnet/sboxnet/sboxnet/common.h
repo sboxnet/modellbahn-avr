@@ -310,43 +310,43 @@ uint8_t com_sched_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 void mtester_do_init_system(void);
 void gbm_do_init_system(void);
 void ws_do_init_system(void);
-void dcc_do_init_system(void);
+void dg_do_init_system(void);
 void booster_do_init_system(void);
 // do_msg
 uint8_t mtester_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t gbm_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t ws_do_msg(struct sboxnet_msg_header *pmsg);
-uint8_t dcc_do_msg(struct sboxnet_msg_header *pmsg);
+uint8_t dg_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t booster_do_msg(struct sboxnet_msg_header *pmsg);
 // do_setup
 void mtester_do_setup(void);
 void gbm_do_setup(void);
 void ws_do_setup(void);
-void dcc_do_setup(void);
+void dg_do_setup(void);
 void booster_do_setup(void);
 // do_main
 void mtester_do_main(void);
 void gbm_do_main(void);
 void ws_do_main(void);
-void dcc_do_main(void);
+void dg_do_main(void);
 void booster_do_main(void);
 // do_before_bldr_activate(void)
 void mtester_do_before_bldr_activate(void);
 void gbm_do_before_bldr_activate(void);
 void ws_do_before_bldr_activate(void);
-void dcc_do_before_bldr_activate(void);
+void dg_do_before_bldr_activate(void);
 void booster_do_before_bldr_activate(void);
 // uint8_t do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t mtester_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t gbm_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t ws_do_reg_read(uint16_t reg, uint16_t* pdata);
-uint8_t dcc_do_reg_read(uint16_t reg, uint16_t* pdata);
+uint8_t dg_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t booster_do_reg_read(uint16_t reg, uint16_t* pdata);
 //  uint8_t do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t mtester_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t gbm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
-uint8_t dcc_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
+uint8_t dg_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t booster_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 
 

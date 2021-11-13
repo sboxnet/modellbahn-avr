@@ -186,30 +186,32 @@ __ATTR_WEAK void ws_do_before_bldr_activate(void) {
 }
 */
 
+/*
 // dcc weaks
-__ATTR_WEAK void dcc_do_init_system(void) {
+__ATTR_WEAK void dg_do_init_system(void) {
 }
 
-__ATTR_WEAK uint8_t dcc_do_reg_read(uint16_t reg, uint16_t* pdata) {
+__ATTR_WEAK uint8_t dg_do_reg_read(uint16_t reg, uint16_t* pdata) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t dcc_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
+__ATTR_WEAK uint8_t dg_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t dcc_do_msg(struct sboxnet_msg_header *pmsg) {
+__ATTR_WEAK uint8_t dg_do_msg(struct sboxnet_msg_header *pmsg) {
 	return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
-__ATTR_WEAK void dcc_do_setup(void) {
+__ATTR_WEAK void dg_do_setup(void) {
 }
 
-__ATTR_WEAK void dcc_do_main(void) {
+__ATTR_WEAK void dg_do_main(void) {
 }
 
-__ATTR_WEAK void dcc_do_before_bldr_activate(void) {
+__ATTR_WEAK void dg_do_before_bldr_activate(void) {
 }
+*/
 
 // booster weaks
 __ATTR_WEAK void booster_do_init_system(void) {
@@ -461,7 +463,7 @@ void com_sched_init_system(void) {
 		}
 		case MODULE_DCC:
 		{
-			dcc_do_init_system();
+			dg_do_init_system();
 			return;
 		}
 		case MODULE_BOOSTER:
@@ -486,7 +488,7 @@ uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg) {
 			return ws_do_msg(pmsg);
 			
 		case MODULE_DCC:
-			return dcc_do_msg(pmsg);
+			return dg_do_msg(pmsg);
 
 		case MODULE_BOOSTER:
 			return booster_do_msg(pmsg);
@@ -508,7 +510,7 @@ void com_sched_do_setup(void) {
 			return ws_do_setup();
 		
 		case MODULE_DCC:
-			return dcc_do_setup();
+			return dg_do_setup();
 
 		case MODULE_BOOSTER:
 			return booster_do_setup();
@@ -533,7 +535,7 @@ void com_sched_do_main(void) {
 			return;
 			
 		case MODULE_DCC:
-			dcc_do_main();
+			dg_do_main();
 			return;
 			
 		case MODULE_BOOSTER:
@@ -560,7 +562,7 @@ void com_sched_do_before_bldr_activate(void) {
 			return;
 		
 		case MODULE_DCC:
-			dcc_do_main();
+			dg_do_main();
 			return;
 		
 		case MODULE_BOOSTER:
@@ -584,7 +586,7 @@ uint8_t com_sched_do_reg_read(uint16_t reg, uint16_t* pdata) {
 			return ws_do_reg_read(reg, pdata);
 		
 		case MODULE_DCC:
-			return dcc_do_reg_read(reg, pdata);
+			return dg_do_reg_read(reg, pdata);
 		
 		case MODULE_BOOSTER:
 		return booster_do_reg_read(reg, pdata);
@@ -606,7 +608,7 @@ uint8_t com_sched_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 			return ws_do_reg_write(reg, data, mask);
 		
 		case MODULE_DCC:
-			return dcc_do_reg_write(reg, data, mask);
+			return dg_do_reg_write(reg, data, mask);
 		
 		case MODULE_BOOSTER:
 			return booster_do_reg_write(reg, data, mask);
@@ -742,10 +744,8 @@ __ATTR_OS_MAIN int main(void) {
 #include "mtester.c"
 #include "weichen-servo.c"
 //#include "gbmelder.c"
+#include "dccgen.c"
 /*
-#define USE_BOOSTER 1
-#undef USE_DCCGEN
-#include "booster.c"
 #undef USE_BOOSTER
 #define USE_DCCGEN 1
 #include "booster.c"
