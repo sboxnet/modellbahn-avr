@@ -995,8 +995,8 @@ void bldr_start(void) {
     
     g_v.timer_watchdog = 0;
 
-    if (e2prom_get_byte(&bldr_eeprom.firmware_update) == 0) { // check Firmware Update flag in EEPROM address 0
-        // enable app sector vector table
+    if (e2prom_get_byte(&bldr_eeprom.firmware_update) == 0xff) { // check Firmware Update flag in EEPROM address 0
+        // enable app sector vector table: IVSEL == 0 app vector table
         ioreg_ccp(&PMIC.CTRL, Bit(PMIC_HILVLEN_bp)|Bit(PMIC_MEDLVLEN_bp)|Bit(PMIC_LOLVLEN_bp));
         __asm__ __volatile__ (
             "jmp  0\n"    // jump to application start code
