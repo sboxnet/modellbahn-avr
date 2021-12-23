@@ -24,298 +24,259 @@
  * - Current/shortcut detection: MAX_SHORTCUT_CNT shortcuts must have occured in TIMER_SHORT_CUT time
  * - Shortcut detection is disabled in the TIMER_STARTUP time after DCC startup
  * - Shortcut detection is disabled in the first half of the first DCC bit after a cutout
+ *
+ * Timers:
+ *  TCC0_CCB_vect    Kurzschlusserkennung
+ *  TCC1_CCA_vect    Periodic Timer
+ *  TCD0_CCC_vect    Cutout Generator
+ *  PORTC_INT0_vect  Strom zu hoch
+ *  PORTC_INT1_vect  DCC Input Signal
+ *  TCD1_CCA_vect    DCC Decoder
+ *
+ * Ausgabe signals:
+ * PC0  IN1 bridge a and b input1
+ * PC1  IN2 bridge a and b input2
+ * PC2  EN  Brücke ein
+ *
+ * PD0  Abschaltung (Kurzschluss)
+ * PD1  Overflow (Strom zu hoch)
+ * PD2  NOTAUS
+ * PD3  ON
+ *
+ * Input signals:
+ * PA0  Strom-Sensor Brücke a
+ * PA1  Spannungs-Sensor Versorungsspannung
+ * PA2  Strom-Sensor Brücke b
+ *
+ * PC3  Strom zu hoch: L6206 OCD hat ausgelöst, ist auf 0
+ * PC4  DCC Input Signal
+ * PC5  Notaus Input Signal: wenn High --> Notaus
  */
 
+// defines ...........................
 
-#define PRODUCT_ID   0x0003
-#define VENDOR_ID    0x0001
-#define FIRMWARE_VERSION 0x0100
-#define DEVICE_DESC  "Booster:1"
+#define bo_PRODUCT_ID   0x0003
+#define bo_VENDOR_ID    0x0001
+#define bo_FIRMWARE_VERSION 0x0100
+#define bo_DEVICE_DESC  "Booster:1"
 
 //APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 
+#define bo_TIMER_PRESCALER   64
+#define bo_TIMER_FREQ_HZ     100
+#define bo_TIMER_PERIOD      (F_CPU / (bo_TIMER_PRESCALER * bo_TIMER_FREQ_HZ))  // 5000
 
-#define TIMER_PRESCALER   64
-#define TIMER_FREQ_HZ     100
-#define TIMER_PERIOD      (F_CPU / (TIMER_PRESCALER * TIMER_FREQ_HZ))  // 5000
+#define bo_LED_PORT  PORTD
+#define bo_LED_SHORTCUT_b    0
+#define bo_LED_CUR_OV_b      1
+#define bo_LED_NOTAUS_b      2
+#define bo_LED_ON			 3
+
+#define bo_DCCM_PORT  PORTC
+// out
+#define bo_DCCM_EN_b   2
+#define bo_DCCM_IN1_b  0
+#define bo_DCCM_IN2_b  1
+#define bo_DCCM_CUTOUT_b 7
+// in
+#define bo_CUR_OV_b   3
+#define bo_DCC_IN_b   4
+#define bo_NOTAUS_b   5
+
+#define bo_MEASURE_PORT PORTA // PORT fuer die ADC Messungen
+#define bo_CUR_a	0
+#define bo_CUR_b	1
+#define bo_Vcc		2
+
+#define bo_TIMER_STARTUP  100 // 1 s
+
+#define bo_SWITCH_NOTAUS_b  0
+
+#define bo_BOOSTER_FLG_ON_b      0
+#define bo_BOOSTER_FLG_NOTAUS_b  1
+#define bo_BOOSTER_FLG_CUR_OV_b  2
+
+#define bo_DCC_IN_PORT bo_DCCM_PORT
+
+#define bo_TIMER_SHORT_CUT 35000 // 70ms
+#define bo_MAX_SHORTCUT_CNT 5000 // * ca.13us * 5100 = 70ms
+
+#define bo_DCC_WATCHDOG_VAL 4 // 4*16ms = 64ms
+
+#define bo_DEC_STATE_OFF      0
+#define bo_DEC_STATE_FIRST    1
+#define bo_DEC_STATE_PREAMBLE 2
+#define bo_DEC_STATE_STARTBIT 3
+#define bo_DEC_STATE_BIT_H1   4
+#define bo_DEC_STATE_BIT_H2   5
+#define bo_DEC_STATE_STARTSTOPBIT 6
+
+// declaration .........................
+static void bo_do_dec_parse_packet(void);
+void bo_dec_init(uint8_t evmux);
+void bo_dec_start(void);
+void bo_dcc_sensors_shortcut_off(void);
+void bo_dcc_sensors_shortcut_on(void);
 
 
+// structs ...........................
 
-static uint8_t g_timer = 0;
+struct bo_dccdec {
+	uint8_t state;
+	uint8_t preamble;
+	uint8_t buf[10];
+	uint8_t bufsize;
+	uint8_t bits;
+	uint8_t bitbuf;
+	uint8_t lasthbit;
+	uint8_t xor;
+	uint8_t cutout;
+};
 
+struct bo_v_t {
+	uint16_t g_dcc_shortcut_cnt;
+	uint16_t g_shortcutnummax;
+	uint16_t g_booster_flags;
+	uint16_t g_timer_startup;
+	uint8_t g_switches;
+	uint8_t g_switches_t;
+	uint8_t g_timer;
+	uint16_t g_advals[4];
+	struct bo_dccdec dccdec;
+};
 
-
-#define LED_PORT  PORTD
-#define LED_NOTAUS_b      0
-#define LED_CUR_OV_b      1
-#define LED_CUR_SHORT_b   2
-
-#define DCCM_PORT  PORTC
-#define DCCM_EN_b   2
-#define DCCM_IN1_b  0
-#define DCCM_IN2_b  1
-#define DCCM_CUTOUT_b 7
-
-#define CUR_OV_PORT  PORTC
-#define CUR_OV_b   3
-
-#define NOTAUS_PORT  PORTC
-#define NOTAUS_b   5
-
-#define TIMER_STARTUP  100 // 1 s
-static uint8_t g_timer_startup = 0;
-
-static uint16_t g_advals[2] = { 0, 0 };
-
-#define SWITCH_NOTAUS_b  0
-static uint8_t g_switches = 0;
-static uint8_t g_switches_t = 0;
-
-#define BOOSTER_FLG_ON_b      0
-#define BOOSTER_FLG_NOTAUS_b  1
-#define BOOSTER_FLG_CUR_OV_b  2
-static uint8_t g_booster_flags = 0;
+struct bo_v_t bo_v = { 0 };
 
 
+// functions ..............................
 
-#define DCC_IN_PORT PORTC
-#define DCC_IN_b   4
-
-
-
-
-
-
-#define TIMER_SHORT_CUT 35000 // 70ms
-#define MAX_SHORTCUT_CNT 5000 // * ca.13us * 5100 = 70ms
-uint16_t g_dcc_shortcut_cnt = 0;
-
-uint16_t g_shortcutnummax = 0;
-
-#define DCC_WATCHDOG_VAL 4 // 4*16ms = 64ms
-
-#include "dccdec.hh"
-
-static void do_dec_parse_packet(void) {
-	timer_set(&g_booster.timer_dcc_watchdog, DCC_WATCHDOG_VAL);
+static void bo_do_dec_parse_packet(void) {
+	//timer_set(&g_booster.timer_dcc_watchdog, bo_DCC_WATCHDOG_VAL);
 	
-	if (g_dccdec.buf[0] != 0 // broadcast or reset
-	&& g_dccdec.buf[0] != 0xff) { // idle
+	if (bo_v.dccdec.buf[0] != 0 // broadcast or reset
+			&& bo_v.dccdec.buf[0] != 0xff) { // idle
 		// produce cutout with TCD0.CCC
 		ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 			TCD0.CCC = TCD0.CNT + (28/2);
 		}
 		TCD0.INTFLAGS = Bit(TC0_CCCIF_bp);
 		TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCCINTLVL_gm)|TC_CCCINTLVL_LO_gc;
-		g_dccdec.cutout = 1;
-		port_setbit(DCC_CUTOUT_TEST_PORT, DCC_CUTOUT_TEST_b); // cutout test point
+		bo_v.dccdec.cutout = 1;
+		//port_setbit(bo_DCC_CUTOUT_TEST_PORT, bo_DCC_CUTOUT_TEST_b); // cutout test point
 	}
 }
 
-// dcc detector cutout generator
-ISR(TCD0_CCC_vect) {
-	switch (g_dccdec.cutout) {
-		case 1: { // cutout enable
-			port_set(DCCM_PORT, Bit(DCCM_EN1_b)|Bit(DCCM_EN2_b)); // EN* on
-			port_clr(DCCM_PORT, Bit(DCCM_IN1_b)|Bit(DCCM_IN2_b)); // 2 lower MOSFETs on, connect to 0V
-			AWEXC.OUTOVEN = 0;                                    // output override enable off
-			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-				TCD0.CCC = TCD0.CNT + (432/2);
-			}
-			g_dccdec.cutout = 2;
-			booster_sensors_shortcut_off(); // disable shortcut sensors
-			break;
-		}
-		case 2: { //cutout disable
-			AWEXC.OUTOVEN = Bit(3)|Bit(2)|Bit(1)|Bit(0);
-			port_clr(DCCM_PORT, Bit(DCCM_EN1_b)|Bit(DCCM_EN2_b)|Bit(DCCM_IN1_b)|Bit(DCCM_IN2_b));
-			port_clrbit(DCC_CUTOUT_TEST_PORT, DCC_CUTOUT_TEST_b); // cutout test point
-			if (g_dccdec.state != DEC_STATE_OFF) {
-				g_dccdec.state = DEC_STATE_FIRST;
-			}
-			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-				TCD0.CCC = TCD0.CNT + (2*58/2);
-			}
-			g_dccdec.cutout = 3;
-			break;
-		};
-		case 3:
-		default: {
-			TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCCINTLVL_gm)|TC_CCCINTLVL_OFF_gc;
-			g_dccdec.cutout = 0;
-			if (g_booster.timer_startup.value <= 0) {
-				booster_sensors_shortcut_on(); // enable shortcut sensors after first preamble bit to avoid
-				// shortcut detections during powerup after cutout
-			}
-		}
-	}
-}
-
-void dcc_sensors_off(void) {
+void bo_dcc_sensors_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
     PORTC.INT0MASK = 0; // L6206 Stromüberwachung
     
     TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
     
-    g_dcc_shortcut_cnt = 0;
+    bo_v.g_dcc_shortcut_cnt = 0;
 }
 
-void dcc_sensors_init(void) {
-    port_set(LED_PORT, Bit(LED_NOTAUS_b)|Bit(LED_CUR_SHORT_b));
+void bo_dcc_sensors_init(void) {
+    port_set(bo_LED_PORT, Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_SHORTCUT_b));
 
-    clrbit(g_booster_flags, BOOSTER_FLG_CUR_OV_b);
+    clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
 
     // L6206 Stromüberwachung
-    PORTC.INT0MASK = Bit(CUR_OV_b);
+    PORTC.INT0MASK = Bit(bo_CUR_OV_b);
     PORTC.INTFLAGS = Bit(PORT_INT0IF_bp); // clear interrupt flags;
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
     PORTC.PIN3CTRL = PORT_ISC_FALLING_gc;
     
-    g_dcc_shortcut_cnt = 0;
+    bo_v.g_dcc_shortcut_cnt = 0;
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCC0.CCB = TCC0.CNT + TIMER_SHORT_CUT;
+        TCC0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
         TCC0.INTFLAGS = Bit(TC0_CCBIF_bp);
         TCC0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc;
     }
 }
 
-void dcc_sensors_shortcut_on(void) {
+void bo_dcc_sensors_shortcut_on(void) {
     if ((PORTC.INTCTRL & PORT_INT0LVL_gm) == PORT_INT0LVL_OFF_gc) {
         PORTC.INTFLAGS = Bit(PORT_INT0IF_bp);
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_LO_gc;
     }
 }
 
-void dcc_sensors_shortcut_off(void) {
+void bo_dcc_sensors_shortcut_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
 }
 
-void dcc_power_off_all(void) {
+void bo_dcc_power_off_all(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        dcc_sensors_off();
+        bo_dcc_sensors_off();
 
-        port_clr(DCCM_PORT, Bit(DCCM_EN_b)|Bit(DCCM_IN1_b)|Bit(DCCM_IN2_b));
+        port_clr(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b));
                 
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_OFF_gc;
 
         TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
 
-        g_timer_startup = 0;
+        bo_v.g_timer_startup = 0;
     }
 }
 
-void dcc_power_on_track(void) {
+void bo_dcc_power_on_track(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        PORTC.INT1MASK = Bit(DCC_IN_b);
+        PORTC.INT1MASK = Bit(bo_DCC_IN_b);
         PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc;
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_HI_gc;
                 
-        dcc_sensors_init();
+        bo_dcc_sensors_init();
         
-        g_timer_startup = TIMER_STARTUP;
+        bo_v.g_timer_startup = bo_TIMER_STARTUP;
+		
+		bo_dec_start();
 
-        if (bit_is_set(port_in(DCC_IN_PORT), DCC_IN_b)) {
-            port_setbit(DCCM_PORT, DCCM_IN1_b);
-            port_clrbit(DCCM_PORT, DCCM_IN2_b);
+        if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+            port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+            port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         } else {
-            port_clrbit(DCCM_PORT, DCCM_IN1_b);
-            port_setbit(DCCM_PORT, DCCM_IN2_b);
+            port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+            port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         }
-        port_setbit(DCCM_PORT, DCCM_EN_b);
+        port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
     }
 }
 
-void dcc_notaus(void) {
-    dcc_power_off_all();
-    setbit(g_booster_flags, BOOSTER_FLG_NOTAUS_b);
-    port_clrbit(LED_PORT, LED_NOTAUS_b);
+void bo_dcc_notaus(void) {
+    bo_dcc_power_off_all();
+    setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b);
+    port_clrbit(bo_LED_PORT, bo_LED_NOTAUS_b);
 }
 
-ISR(PORTC_INT0_vect) { // L6206 current
-    port_clrbit(LED_PORT, LED_CUR_SHORT_b);
-    
-    if (g_dcc_shortcut_cnt <= MAX_SHORTCUT_CNT) {
-        g_dcc_shortcut_cnt++;
-    }
-    if (g_dcc_shortcut_cnt > g_shortcutnummax ) {
-        g_shortcutnummax = g_dcc_shortcut_cnt;
-    }
+void bo_booster_init(void) {
+    bo_dcc_power_off_all();
+	bo_dec_init(EVSYS_CHMUX_PORTC_PIN4_gc);
 }
 
-ISR(TCC0_CCB_vect) { // shortcut detector
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCC0.CCB = TCC0.CNT + TIMER_SHORT_CUT;
-    }
-    if (g_dcc_shortcut_cnt >= MAX_SHORTCUT_CNT) {
-        dcc_power_off_all();
-        setbit(g_booster_flags, BOOSTER_FLG_CUR_OV_b);
-        port_clrbit(LED_PORT, LED_CUR_SHORT_b);
-    } else {
-        port_setbit(LED_PORT, LED_CUR_SHORT_b);
-    }
-    g_dcc_shortcut_cnt = 0;
-}
-
-void booster_init(void) {
-    dcc_power_off_all();
-}
-
-static NOINLINE void dcc_signal_disable(void) {
-    port_clrbit(DCCM_PORT, DCCM_EN_b);
+static NOINLINE void bo_dcc_signal_disable(void) {
+    port_clrbit(bo_DCCM_PORT, bo_DCCM_EN_b);
     _delay_us(2);
 }
 
-static NOINLINE void dcc_signal_enable(void) {
+static NOINLINE void bo_dcc_signal_enable(void) {
     _delay_us(1);
-    port_setbit(DCCM_PORT, DCCM_EN_b);
+    port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
 }
 
-ISR(PORTC_INT1_vect) { // DCC Input Signal
-    if (bit_is_set(port_in(DCC_IN_PORT), DCC_IN_b)) {
-        dcc_signal_disable();
-        port_setbit(DCCM_PORT, DCCM_IN1_b);
-        port_clrbit(DCCM_PORT, DCCM_IN2_b);
-    } else {
-        dcc_signal_disable();
-        port_clrbit(DCCM_PORT, DCCM_IN1_b);
-        port_setbit(DCCM_PORT, DCCM_IN2_b);
-    }
-    dcc_signal_enable();
-    
-    if (g_timer_startup == 0) {
-        dcc_sensors_shortcut_on();
-    }
-}
-
-static void read_switches(void) {
+static void bo_read_switches(void) {
     uint8_t sw;
 
     sw = 0;
-    if (bit_is_set(port_in(NOTAUS_PORT), NOTAUS_b)) {
-       setbit(sw, SWITCH_NOTAUS_b);
+    if (bit_is_set(port_in(bo_DCCM_PORT), bo_NOTAUS_b)) {
+       setbit(sw, bo_SWITCH_NOTAUS_b);
     }
     
-    debounce_keys(&g_switches, &g_switches_t, sw);
+    debounce_keys(&bo_v.g_switches, &bo_v.g_switches_t, sw);
 }
 
-
-// every 10ms ~ 100Hz
-ISR(TCC0_CCA_vect) {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCC0.CCA += TIMER_PERIOD;
-    }
-    
-    g_timer++;
-        
-    if (g_timer_startup) {
-        g_timer_startup--;
-    }
-    read_switches();
-}
-
-static void measure_task(void) {
+static void bo_measure_task(void) {
     if (ADCA.INTFLAGS == 0x03) {
         int16_t ch0;
         int16_t ch1;
@@ -328,20 +289,20 @@ static void measure_task(void) {
             ch0 = 0;
         if (ch1 < 0)
             ch1 = 0;
-        g_advals[0] = ch0;
-        g_advals[1] = ch1;
+        bo_v.g_advals[0] = ch0;
+        bo_v.g_advals[1] = ch1;
         ADCA.INTFLAGS = 0x03; // clear intflags
         ADCA.CTRLA |= Bit(3)|Bit(2); // start conversions
     }
 }
 
-static void notaus_task(void) {
-    if (bit_is_set(g_switches, SWITCH_NOTAUS_b) || bit_is_set(g_v.dev_state, DEV_STATE_FLG_WATCHDOG_b)) {
-        dcc_notaus();
+static void bo_notaus_task(void) {
+    if (bit_is_set(bo_v.g_switches, bo_SWITCH_NOTAUS_b)) {
+        bo_dcc_notaus();
     }
 }
 
-static uint8_t read_production_signature_row(uint8_t offset) {
+static uint8_t bo_read_production_signature_row(uint8_t offset) {
     uint8_t value;
     NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
     value = pgm_read_byte(offset);
@@ -349,100 +310,113 @@ static uint8_t read_production_signature_row(uint8_t offset) {
     return value;
 }
 
-void do_init_system(void) {
+/* void bo_do_init_system(void)
+Booster init.
+*/
+void bo_do_init_system(void) {
+	// LED Port
+    port_out(bo_LED_PORT) = 0xff; // zuerst mal aus
+	uint8_t m = Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_CUR_OV_b)|Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_ON);
+    port_dirout(bo_LED_PORT, m);
+    PORTCFG_MPCMASK = m; // PD3..0
+    bo_LED_PORT.PIN0CTRL = PORT_OPC_TOTEM_gc;
 	
-    port_out(PORTD) = 0xff;
-    port_dirout(PORTD, 0x07);
-    PORTCFG_MPCMASK = 0x07; // PD2..0
-    PORTD.PIN0CTRL = PORT_OPC_TOTEM_gc;
-    
-    port_out(PORTC) = 0;
-    port_dirout(PORTC, 0x57);
-    PORTCFG_MPCMASK = 0x57;
+    // bo_DCCM_PORT (PORTC)
+	// out
+    port_out(bo_DCCM_PORT) = 0;
+	m = Bit(bo_DCCM_CUTOUT_b)|Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b);
+    port_dirout(bo_DCCM_PORT, m);
+    PORTCFG_MPCMASK = m;
     PORTC.PIN0CTRL = PORT_OPC_TOTEM_gc;
-    port_dirin(PORTC, Bit(7)|Bit(5)|Bit(3));
-    PORTCFG_MPCMASK = Bit(7)|Bit(5)|Bit(3);
-    PORTC.PIN3CTRL = PORT_OPC_PULLUP_gc;
+	// in
+	m = Bit(bo_CUR_OV_b)|Bit(bo_DCC_IN_b)|Bit(bo_NOTAUS_b);
+    port_dirin(bo_DCCM_PORT, m);
+    PORTCFG_MPCMASK = m;
+    PORTC.PIN3CTRL = PORT_OPC_PULLUP_gc; // Eingabe als pullup
     
-    port_dirin(PORTA, 0xff);
+	// ADC
+    port_dirin(bo_MEASURE_PORT, 0xff); // alles PORTA als Eingabe
     PORTCFG_MPCMASK = 0xff; // all pins
     PORTA.PIN0CTRL = PORT_OPC_PULLDOWN_gc;
-    PORTCFG_MPCMASK = 0x03;
+    PORTCFG_MPCMASK = Bit(bo_Vcc)|Bit(bo_CUR_a)|Bit(bo_CUR_b);
     PORTA.PIN0CTRL = PORT_OPC_TOTEM_gc;
     
     // configure sleep mode: idle sleep mode, sleep mode allowed
     SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
         
-    // timer
-    TCC0.CTRLB = TC_WGMODE_NORMAL_gc;
-    TCC0.CTRLD = 0;
-    TCC0.CTRLE = 0;
-    TCC0.INTCTRLA = 0;
-    TCC0.INTCTRLB = TC_CCAINTLVL_LO_gc;
-    TCC0.INTFLAGS = 0xff;
-    TCC0.PER = 0xffff;
-    TCC0.CCA = TCC0.CNT + TIMER_PERIOD;
-    TCC0.CTRLA = TC_CLKSEL_DIV64_gc;
+    // Periodic Timer
+    TCC1.CTRLB = TC_WGMODE_NORMAL_gc;
+    TCC1.CTRLD = 0;
+    TCC1.CTRLE = 0;
+    TCC1.INTCTRLA = 0;
+    TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc; // low interrupt level
+    TCC1.INTFLAGS = 0xff;				// clear int flags
+    TCC1.PER= 0xffff;					// infinite  period
+    TCC1.CCA = TCC1.CNT + bo_TIMER_PERIOD; // 100 Hz
+    TCC1.CTRLA = TC_CLKSEL_DIV64_gc;
 
-    // ADC: use signed mode (unsigned mode may be broken) and Vcc/1.6 reference (1V internal reference may be broken)
+    // ADC: use signed mode (unsigned mode may be broken)
     //      see Atmel Xmega Errata
-    ADCA.CTRLB = Bsv(ADC_CONMODE_bp,1)|Bsv(ADC_FREERUN_bp,0)|ADC_RESOLUTION_12BIT_gc;
-    ADCA.REFCTRL = ADC_REFSEL_VCC_gc; //|Bit(ADC_BANDGAP_bp);
+    ADCA.CTRLB = Bsv(ADC_CONMODE_bp,1)/*signed mode*/ |Bsv(ADC_FREERUN_bp,0)/* not freerun */ |ADC_RESOLUTION_12BIT_gc /*12bit result right adjusted*/;
+    ADCA.REFCTRL = ADC_REFSEL_INT1V_gc;
     ADCA.EVCTRL = 0;
     ADCA.PRESCALER = ADC_PRESCALER_DIV128_gc;
-    ADCA.INTFLAGS = 0x0f;
-    ADCA.CALL = read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL0));
-    ADCA.CALH = read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL1));
+    ADCA.INTFLAGS = 0x0f; // clear int flags
+    ADCA.CALL = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL0));
+    ADCA.CALH = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL1));
     ADCA.CTRLA = Bit(ADC_ENABLE_bp);
+	
     // ADC Channel 0: current
     ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
     ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc;
     ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
-    // ADC Channel 1: voltage
+    // ADC Channel 1: current
+    ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
+    ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
+    ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
+    // ADC Channel 2: voltage
     ADCA.CH1.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
+    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN2_gc;
     ADCA.CH1.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
     // start conversions
-    ADCA.CTRLA |= Bit(3)|Bit(2);
+    ADCA.CTRLA |= Bit(4)|Bit(3)|Bit(2);
     
-    g_com.productid = PRODUCT_ID;
-    g_com.vendorid = VENDOR_ID;
-    g_com.firmware_version = FIRMWARE_VERSION;
-    g_com.capabilities = 0
-        |CAP_DCC_BOOSTER
-        ;
+    g_com.productid = bo_PRODUCT_ID;
+    g_com.vendorid = bo_VENDOR_ID;
+    g_com.firmware_version = bo_FIRMWARE_VERSION;
+    g_com.capabilities = CAP_DCC_BOOSTER;
     g_com.cap_class = 0;
-    g_com.dev_desc_P = PSTR(DEVICE_DESC);
+    g_com.dev_desc_P = PSTR(bo_DEVICE_DESC);
 
-    g_booster_flags = 0;
+    bo_v.g_booster_flags = 0;
 
-    booster_init();
+    bo_booster_init();
 }
 
-uint8_t do_msg(struct sboxnet_msg_max *pmsg) {
-    switch (pmsg->msg.cmd) {
+uint8_t bo_do_msg(struct sboxnet_msg_max *pmsg) {
+    switch (pmsg->msgh.cmd) {
         case SBOXNET_CMD_LOCO_POWER: {
-            if (pmsg->msg.opt.len != 1) {
+            if (pmsg->msgh.opt.len != 1) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint8_t flags = pmsg->data[0];
             if (flags & 0x01) { // on
-                if (bit_is_set(g_switches, SWITCH_NOTAUS_b) || bit_is_set(g_v.dev_state, DEV_STATE_FLG_WATCHDOG_b)) {
+                if (bit_is_set(bo_v.g_switches, bo_SWITCH_NOTAUS_b)) {
                     return SBOXNET_ACKRC_LOCO_NOTAUS;
                 } else {
-                    clrbit(g_booster_flags, BOOSTER_FLG_NOTAUS_b);
-                    port_setbit(LED_PORT, LED_NOTAUS_b);
+                    clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b);
+                    port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b);
                 }
 
-                if (bit_is_clear(g_booster_flags, BOOSTER_FLG_ON_b)) {
-                    dcc_power_on_track();
+                if (bit_is_clear(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b)) {
+                    bo_dcc_power_on_track();
                 }
-                setbit(g_booster_flags, BOOSTER_FLG_ON_b);
+                setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b);
             } else { // off
-                dcc_power_off_all();
-                clrbit(g_booster_flags, BOOSTER_FLG_ON_b);
+                bo_dcc_power_off_all();
+                clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b);
             }
-            pmsg->msg.opt.len = 0;
+            pmsg->msgh.opt.len = 0;
             return SBOXNET_ACKRC_OK;
         }
 
@@ -450,32 +424,34 @@ uint8_t do_msg(struct sboxnet_msg_max *pmsg) {
     return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
-uint8_t do_reg_read(uint16_t reg, uint16_t* pdata) {
+uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata) {
     switch(reg) {
 
-        case R_BOOSTER_FLAGS: *pdata = g_booster_flags; return 0;
+        case R_BOOSTER_FLAGS: *pdata = bo_v.g_booster_flags; return 0;
         case R_ADCVAL_NUM: *pdata = 2; return 0;
-        case R_ADCVAL_0: *pdata = g_advals[0]; return 0;
-        case R_ADCVAL_1: *pdata = g_advals[1]; return 0;
+        case R_ADCVAL_0: *pdata = bo_v.g_advals[0]; return 0;
+        case R_ADCVAL_1: *pdata = bo_v.g_advals[1]; return 0;
         
-        case 202: *pdata = g_shortcutnummax; g_shortcutnummax = 0; return 0;
+        case 202: *pdata = bo_v.g_shortcutnummax; bo_v.g_shortcutnummax = 0; return 0;
 
     }    
     return SBOXNET_ACKRC_REG_INVALID;
 };
 
 
-void do_setup(void) {
+void bo_do_setup(void) {
 }
 
-void do_main(void) {
-    measure_task();
-    notaus_task();
+void bo_do_main(void) {
+	// Sparnnung und Strom Messung
+    bo_measure_task();
+	// NOTAUS abfragen
+    bo_notaus_task();
 }
 
-void do_before_bldr_activate(void) {
+void bo_do_before_bldr_activate(void) {
 
-    dcc_power_off_all();
+    bo_dcc_power_off_all();
 
     
     PORTC.INT0MASK = 0;
@@ -492,4 +468,279 @@ void do_before_bldr_activate(void) {
     TCC1.INTCTRLB = 0;
     TCC1.CTRLA = 0; // stop timer
     TCC1.INTFLAGS = 0xff; // clear interrupt flags
+}
+
+/*---------------------------------------------------------*/
+
+/***************************************************************************
+ *   Copyright (C) 2014-2015
+ *   by Thomas Maier <balagi@justmail.de>
+ *
+ *   Copyright: See COPYING file that comes with this distribution         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ ***************************************************************************/
+
+/* Uses:
+ * 
+ * TCD1
+ * - sets: timer 500 kHz / 2us, normal mode, 8bit
+ * - CCA: DCC decoder. input capture, event 0
+ */
+
+
+
+
+// declaration
+static void bo_do_dec_parse_packet(void);
+
+//struct dccdec g_dccdec;
+
+
+void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
+    bo_v.dccdec.state = bo_DEC_STATE_OFF;
+    bo_v.dccdec.preamble = 0;
+    bo_v.dccdec.bufsize = 0;
+    bo_v.dccdec.bits = 0;
+    bo_v.dccdec.lasthbit = 0;
+    bo_v.dccdec.xor = 0;
+    bo_v.dccdec.cutout = 0;
+    
+    EVSYS.CH0MUX = evmux;
+    EVSYS.CH0CTRL = 0;
+    
+    TCD1.CTRLA = TC_CLKSEL_OFF_gc;
+    TCD1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc;
+    TCD1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;
+    TCD1.CTRLE = TC1_BYTEM_bm;
+    TCD1.INTCTRLA = 0;
+    TCD1.INTCTRLB = 0;
+    TCD1.INTFLAGS = 0xff;
+    TCD1.PER = 0xffff;
+}
+
+void bo_dec_start(void) {
+    bo_v.dccdec.state = bo_DEC_STATE_FIRST;
+    bo_v.dccdec.preamble = 0;
+    bo_v.dccdec.bufsize = 0;
+    bo_v.dccdec.cutout = 0;
+    
+    TCD1.CTRLFSET = TC_CMD_RESTART_gc;
+    TCD1.INTFLAGS = 0xff;
+    TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;
+    TCD1.CTRLA = TC_CLKSEL_DIV64_gc;
+}
+
+/*
+static void bo_dec_stop(void) {
+    bo_v.dccdec.state = bo_DEC_STATE_OFF;
+    TCD1.INTCTRLB = 0;
+    TCD1.INTFLAGS = 0xff;
+    TCD1.CTRLA = TC_CLKSEL_OFF_gc;
+}
+*/
+static void bo_dec_parse_packet(void) {
+    if (bo_v.dccdec.bufsize >= 3 && bo_v.dccdec.xor == 0) {
+//port_tglbit(PORTC, 6);
+        bo_do_dec_parse_packet();
+    }
+}
+
+static void bo_dec_halfbit(uint8_t hb) {
+    switch(bo_v.dccdec.state) {
+        case bo_DEC_STATE_PREAMBLE: {
+            if (hb) {
+                if (bo_v.dccdec.preamble < 100) {
+                    bo_v.dccdec.preamble++;
+                }
+            } else {
+                if (bo_v.dccdec.preamble >= 20) {
+                    bo_v.dccdec.state = bo_DEC_STATE_STARTBIT;
+                } else {
+                    bo_v.dccdec.preamble = 0;
+                }
+            }
+            break;
+        }
+        case bo_DEC_STATE_STARTBIT: {
+            if (hb) {
+                goto bo_dec_reset;
+            }
+            bo_v.dccdec.state = bo_DEC_STATE_BIT_H1;
+            bo_v.dccdec.bufsize = 0;
+            bo_v.dccdec.bits = 0;
+            bo_v.dccdec.xor = 0;
+            break;
+        }
+        case bo_DEC_STATE_BIT_H1: {
+            bo_v.dccdec.lasthbit = hb;
+            if (bo_v.dccdec.bits < 8) {
+                bo_v.dccdec.state = bo_DEC_STATE_BIT_H2;
+            } else {
+                if (bo_v.dccdec.bufsize < sizeof(bo_v.dccdec.buf)) {
+                    bo_v.dccdec.buf[bo_v.dccdec.bufsize++] = bo_v.dccdec.bitbuf;
+                }
+                bo_v.dccdec.xor ^= bo_v.dccdec.bitbuf;
+                bo_v.dccdec.state = bo_DEC_STATE_STARTSTOPBIT;
+            }
+            break;
+        }
+        case bo_DEC_STATE_BIT_H2: {
+            if (hb != bo_v.dccdec.lasthbit) {
+                goto bo_dec_reset;
+            }
+            bo_v.dccdec.bitbuf <<= 1;
+            if (hb) {
+                bo_v.dccdec.bitbuf |= 0x01;
+            }
+            bo_v.dccdec.bits++;
+            bo_v.dccdec.state = bo_DEC_STATE_BIT_H1;
+            break;
+        }
+        case bo_DEC_STATE_STARTSTOPBIT: {
+            if (hb != bo_v.dccdec.lasthbit) {
+                goto bo_dec_reset;
+            }
+            if (hb) { // end of packet bit ?
+                bo_dec_parse_packet();
+                goto bo_dec_reset;
+                
+            } else { // stop bit
+                bo_v.dccdec.state = bo_DEC_STATE_BIT_H1;
+                bo_v.dccdec.bits = 0;
+            }
+            break;
+        }
+    }
+    return;
+   
+   bo_dec_reset:
+    bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
+    bo_v.dccdec.preamble = 0;
+    bo_v.dccdec.bufsize = 0;
+    bo_v.dccdec.xor = 0;
+}
+
+// ISR ......................
+
+ISR(TCD1_CCA_vect) {
+    if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
+        return;
+    }
+    TCD1.CTRLFSET = TC_CMD_RESTART_gc;
+    if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
+        bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
+        bo_v.dccdec.preamble = 0;
+        TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
+    } else {
+        uint8_t hb = 0;
+        if (bit_is_clear(TCD1.INTFLAGS, TC1_OVFIF_bp) && TCD1.CCA < (87/2) ) {
+            hb = 1;
+        }
+        TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
+        bo_dec_halfbit(hb);
+    }
+}
+
+// dcc detector cutout generator
+ISR(TCD0_CCC_vect) {
+	switch (bo_v.dccdec.cutout) {
+		case 1: { // cutout enable
+			port_set(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)); // EN* on
+			port_clr(bo_DCCM_PORT, Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b)); // 2 lower MOSFETs on, connect to 0V
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				TCD0.CCC = TCD0.CNT + (432/2);
+			}
+			bo_v.dccdec.cutout = 2;
+			bo_dcc_sensors_shortcut_off(); // disable shortcut sensors
+			break;
+		}
+		case 2: { //cutout disable
+			//AWEXC.OUTOVEN = Bit(3)|Bit(2)|Bit(1)|Bit(0);
+			port_clr(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b));
+			//port_clrbit(DCC_CUTOUT_TEST_PORT, DCC_CUTOUT_TEST_b); // cutout test point
+			if (bo_v.dccdec.state != bo_DEC_STATE_OFF) {
+				bo_v.dccdec.state = bo_DEC_STATE_FIRST;
+			}
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				TCD0.CCC = TCD0.CNT + (2*58/2);
+			}
+			bo_v.dccdec.cutout = 3;
+			break;
+		};
+		case 3:
+		default: {
+			TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCCINTLVL_gm)|TC_CCCINTLVL_OFF_gc;
+			bo_v.dccdec.cutout = 0;
+			if (bo_v.g_timer_startup <= 0) {
+				bo_dcc_sensors_shortcut_on(); // enable shortcut sensors after first preamble bit to avoid
+				// shortcut detections during powerup after cutout
+			}
+		}
+	}
+}
+
+ISR(PORTC_INT0_vect) { // L6206 current
+	port_clrbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
+	
+	if (bo_v.g_dcc_shortcut_cnt <= bo_MAX_SHORTCUT_CNT) {
+		bo_v.g_dcc_shortcut_cnt++;
+	}
+	if (bo_v.g_dcc_shortcut_cnt > bo_v.g_shortcutnummax ) {
+		bo_v.g_shortcutnummax = bo_v.g_dcc_shortcut_cnt;
+	}
+}
+
+ISR(TCC0_CCB_vect) { // shortcut detector
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		TCC0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
+	}
+	if (bo_v.g_dcc_shortcut_cnt >= bo_MAX_SHORTCUT_CNT) {
+		bo_dcc_power_off_all();
+		setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
+		port_clrbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
+		} else {
+		port_setbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
+	}
+	bo_v.g_dcc_shortcut_cnt = 0;
+}
+
+// every 10ms ~ 100Hz
+ISR(TCC1_CCA_vect) {
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		TCC1.CCA += bo_TIMER_PERIOD;
+	}
+	
+	bo_v.g_timer++;
+	
+	if (bo_v.g_timer_startup) {
+		bo_v.g_timer_startup--;
+	}
+	bo_read_switches();
+}
+
+ISR(PORTC_INT1_vect) { // DCC Input Signal
+	if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+		bo_dcc_signal_disable();
+		port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
+		} else {
+		bo_dcc_signal_disable();
+		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+		port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
+	}
+	bo_dcc_signal_enable();
+	
+	if (bo_v.g_timer_startup == 0) {
+		bo_dcc_sensors_shortcut_on();
+	}
 }

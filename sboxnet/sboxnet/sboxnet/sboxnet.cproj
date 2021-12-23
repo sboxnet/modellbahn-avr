@@ -139,9 +139,6 @@
     <None Include="crc-ccitt.py">
       <SubType>compile</SubType>
     </None>
-    <None Include="dccdec.hh">
-      <SubType>compile</SubType>
-    </None>
     <None Include="doku.txt">
       <SubType>compile</SubType>
     </None>
@@ -175,6 +172,9 @@
       <SubType>compile</SubType>
     </None>
     <None Include="dccgen.c">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="dccdec.c">
       <SubType>compile</SubType>
     </None>
     <Compile Include="iox128a4u.h">

@@ -745,8 +745,5 @@ __ATTR_OS_MAIN int main(void) {
 #include "weichen-servo.c"
 //#include "gbmelder.c"
 #include "dccgen.c"
-/*
-#undef USE_BOOSTER
-#define USE_DCCGEN 1
+
 #include "booster.c"
-*/
