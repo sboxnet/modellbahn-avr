@@ -393,10 +393,10 @@ void bo_do_init_system(void) {
     bo_booster_init();
 }
 
-uint8_t bo_do_msg(struct sboxnet_msg_max *pmsg) {
-    switch (pmsg->msgh.cmd) {
+uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
+    switch (pmsg->cmd) {
         case SBOXNET_CMD_LOCO_POWER: {
-            if (pmsg->msgh.opt.len != 1) {
+            if (pmsg->opt.len != 1) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint8_t flags = pmsg->data[0];
@@ -416,7 +416,7 @@ uint8_t bo_do_msg(struct sboxnet_msg_max *pmsg) {
                 bo_dcc_power_off_all();
                 clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b);
             }
-            pmsg->msgh.opt.len = 0;
+            pmsg->opt.len = 0;
             return SBOXNET_ACKRC_OK;
         }
 
@@ -437,6 +437,10 @@ uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata) {
     }    
     return SBOXNET_ACKRC_REG_INVALID;
 };
+
+uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
+	return 0;
+}
 
 
 void bo_do_setup(void) {

@@ -213,30 +213,40 @@ __ATTR_WEAK void dg_do_before_bldr_activate(void) {
 }
 */
 
+/*
 // booster weaks
-__ATTR_WEAK void booster_do_init_system(void) {
+__ATTR_WEAK void bo_do_init_system(void) {
 }
 
-__ATTR_WEAK uint8_t booster_do_reg_read(uint16_t reg, uint16_t* pdata) {
+__ATTR_WEAK uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t booster_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
+__ATTR_WEAK uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t booster_do_msg(struct sboxnet_msg_header *pmsg) {
+__ATTR_WEAK uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
 	return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
-__ATTR_WEAK void booster_do_setup(void) {
+__ATTR_WEAK void bo_do_setup(void) {
 }
 
-__ATTR_WEAK void booster_do_main(void) {
+__ATTR_WEAK void bo_do_main(void) {
 }
 
-__ATTR_WEAK void booster_do_before_bldr_activate(void) {
+__ATTR_WEAK void bo_do_before_bldr_activate(void) {
 }
+*/
+void bo_do_init_system(void);
+uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg);
+uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata);
+uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
+void bo_do_setup(void);
+void bo_do_main(void);
+void bo_do_before_bldr_activate(void);
+
 // end weaks
 
 struct Eeprom_t eeprom EEMEM;
@@ -468,7 +478,7 @@ void com_sched_init_system(void) {
 		}
 		case MODULE_BOOSTER:
 		{
-			booster_do_init_system();
+			bo_do_init_system();
 			return;
 		}
 		default:
@@ -491,7 +501,7 @@ uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg) {
 			return dg_do_msg(pmsg);
 
 		case MODULE_BOOSTER:
-			return booster_do_msg(pmsg);
+			return bo_do_msg(pmsg);
 
 		default:
 			return SBOXNET_ACKRC_CMD_UNKNOWN;
@@ -501,19 +511,24 @@ uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg) {
 void com_sched_do_setup(void) {
 	switch(g_v.module) {
 		case MODULE_TESTER:
-			return mtester_do_setup();
+			mtester_do_setup();
+			return;
 
 		case MODULE_GBM:
-			return gbm_do_setup();
+			gbm_do_setup();
+			return;
 		
 		case MODULE_WS:
-			return ws_do_setup();
+			ws_do_setup();
+			return;
 		
 		case MODULE_DCC:
-			return dg_do_setup();
+			dg_do_setup();
+			return;
 
 		case MODULE_BOOSTER:
-			return booster_do_setup();
+			bo_do_setup();
+			return;
 
 		default:
 			return;
@@ -539,7 +554,7 @@ void com_sched_do_main(void) {
 			return;
 			
 		case MODULE_BOOSTER:
-			booster_do_main();
+			bo_do_main();
 			return;
 
 		default:
@@ -566,7 +581,7 @@ void com_sched_do_before_bldr_activate(void) {
 			return;
 		
 		case MODULE_BOOSTER:
-			booster_do_main();
+			bo_do_main();
 			return;
 
 		default:
@@ -589,7 +604,7 @@ uint8_t com_sched_do_reg_read(uint16_t reg, uint16_t* pdata) {
 			return dg_do_reg_read(reg, pdata);
 		
 		case MODULE_BOOSTER:
-		return booster_do_reg_read(reg, pdata);
+		return bo_do_reg_read(reg, pdata);
 
 		default:
 			return SBOXNET_ACKRC_REG_INVALID;
@@ -611,7 +626,7 @@ uint8_t com_sched_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 			return dg_do_reg_write(reg, data, mask);
 		
 		case MODULE_BOOSTER:
-			return booster_do_reg_write(reg, data, mask);
+			return bo_do_reg_write(reg, data, mask);
 
 		default:
 		return SBOXNET_ACKRC_REG_INVALID;
