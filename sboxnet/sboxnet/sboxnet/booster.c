@@ -38,10 +38,10 @@
  * PC1  IN2 bridge a and b input2
  * PC2  EN  Brücke ein
  *
- * PD0  Abschaltung (Kurzschluss)
- * PD1  Overflow (Strom zu hoch)
- * PD2  NOTAUS
- * PD3  ON
+ * PD0  Abschaltung (Kurzschluss) wenn auf Low LED an
+ * PD1  Overflow (Strom zu hoch)  wenn auf Low LED an
+ * PD2  NOTAUS  wenn auf Low LED an
+ * PD3  ON      wenn auf Low LED an
  *
  * Input signals:
  * PA0  Strom-Sensor Brücke a
@@ -70,7 +70,7 @@
 #define bo_LED_SHORTCUT_b    0
 #define bo_LED_CUR_OV_b      1
 #define bo_LED_NOTAUS_b      2
-#define bo_LED_ON			 3
+#define bo_LED_ON_b			 3
 
 #define bo_DCCM_PORT  PORTC
 // out
@@ -205,63 +205,106 @@ void bo_dcc_sensors_shortcut_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
 }
 
+/* void bo_dcc_power_off_all(void)
+Alles aus: DCC Signal, sensoren, ON LED aus
+*/
 void bo_dcc_power_off_all(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		// Sensoren aus
         bo_dcc_sensors_off();
 
+		// DCC Enable, IN1 und IN2 auf Low
         port_clr(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b));
-                
+        
+		// setze PORTC INT1 (DCC Input Signal) zurück
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
-        PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_OFF_gc;
+        PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_OFF_gc; // DCC Input Signal Interrupt aus
 
-        TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
+        TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // TCC0 CCB Kurzschlusserkennung aus
 
-        bo_v.g_timer_startup = 0;
+        bo_v.g_timer_startup = 0; // Startup Timer reseten
+		
+		// LED ON aus
+		port_setbit(bo_LED_PORT, bo_LED_ON_b);		
     }
 }
 
+/* void bo_dcc_power_on_track(void)
+DCC Signal auf das Gleis und DCC Decoder starten.
+*/
 void bo_dcc_power_on_track(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		// PORTC Interrupt 1 PC4 ein
         PORTC.INT1MASK = Bit(bo_DCC_IN_b);
+		//auf PC4 beidseitige Flanke
         PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc;
+		// und aktivieren: Interrupt 1 on PORTC
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
+		// Interrupt 1 auf PORTC als Highlevel Interrupt
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_HI_gc;
-                
+        
+		// DCC Sensoren aktivieren
         bo_dcc_sensors_init();
         
+		// Startup Timer starten
         bo_v.g_timer_startup = bo_TIMER_STARTUP;
-		
+		// DCC Decoder starten
 		bo_dec_start();
 
+		// ist DCC Signal auf High?
         if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+			// ja:
+			// Brücke: IN1 auf H
             port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+			// Brücke: IN2 auf L
             port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         } else {
+			// nein:
+			// Brücke: IN1 auf L
             port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+			// Brücke: IN2 auf H
             port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         }
+		// Brücke ein
         port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
+		
+		// LED ON ein
+		port_clrbit(bo_LED_PORT, bo_LED_ON_b);
     }
 }
 
+/* void bo_dcc_notaus(void)
+NOTAUS an: Signal vom Gleis, setze Notaus Flag, NOTAUS LED an
+ */
 void bo_dcc_notaus(void) {
-    bo_dcc_power_off_all();
-    setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b);
-    port_clrbit(bo_LED_PORT, bo_LED_NOTAUS_b);
+    bo_dcc_power_off_all(); // Gleis stromlos machen
+    setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b); // Setze NOTAUS Flag 
+    port_clrbit(bo_LED_PORT, bo_LED_NOTAUS_b); // LED NOTAUS ein
 }
 
+/* void bo_booster_init(void)
+Booster Init.
+*/
 void bo_booster_init(void) {
-    bo_dcc_power_off_all();
-	bo_dec_init(EVSYS_CHMUX_PORTC_PIN4_gc);
+    bo_dcc_power_off_all(); // zuerst mal alles aus
+	bo_dec_init(EVSYS_CHMUX_PORTC_PIN4_gc); // init DCC decoder: PIN4 of PORTC
 }
 
+/* void bo_dcc_signal_disable(void)
+Booster aus.
+*/
 static NOINLINE void bo_dcc_signal_disable(void) {
+	// EN auf L
     port_clrbit(bo_DCCM_PORT, bo_DCCM_EN_b);
     _delay_us(2);
 }
 
+/* void bo_dcc_signal_enable(void)
+Booster ein.
+*/
 static NOINLINE void bo_dcc_signal_enable(void) {
     _delay_us(1);
+	// EN auf H
     port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
 }
 
@@ -405,7 +448,7 @@ uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
                     return SBOXNET_ACKRC_LOCO_NOTAUS;
                 } else {
                     clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b);
-                    port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b);
+                    port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b); // NOTAUS LED OFF
                 }
 
                 if (bit_is_clear(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b)) {
