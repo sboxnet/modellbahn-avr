@@ -563,6 +563,32 @@ void com_sched_do_main(void) {
 }
 
 void com_sched_do_before_bldr_activate(void) {
+	// stop timers
+	TCC0.INTCTRLA = 0;
+	TCC0.INTCTRLB = 0;
+	TCC0.CTRLA = 0; // stop timer
+	TCC0.INTFLAGS = 0xff; // clear interrupt flags
+
+	TCC1.INTCTRLA = 0;
+	TCC1.INTCTRLB = 0;
+	TCC1.CTRLA = 0; // stop timer
+	TCC1.INTFLAGS = 0xff; // clear interrupt flags
+
+	TCD0.INTCTRLA = 0;
+	TCD0.INTCTRLB = 0;
+	TCD0.CTRLA = 0; // stop timer
+	TCD0.INTFLAGS = 0xff; // clear interrupt flags
+
+	TCD1.INTCTRLA = 0;
+	TCD1.INTCTRLB = 0;
+	TCD1.CTRLA = 0; // stop timer
+	TCD1.INTFLAGS = 0xff; // clear interrupt flags
+	
+	TCE0.INTCTRLA = 0;
+	TCE0.INTCTRLB = 0;
+	TCE0.CTRLA = 0;
+	TCE0.INTFLAGS = 0xff;
+
 	switch(g_v.module) {
 		case MODULE_TESTER:
 			mtester_do_main();
@@ -649,15 +675,15 @@ static void com_init_system(void) {
     com_sched_init_system();
     
     // timer
-    TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
-    TCD0.CTRLD = 0;
-    TCD0.CTRLE = 0;
-    TCD0.INTCTRLA = 0;
-    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc;
-    TCD0.INTFLAGS = 0xff;
-    TCD0.PER = 0xffff;
-    //TCD0.CCA = TCD0.CNT + TIMER_PERIOD;
-    TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
+    TCD1.CTRLB = TC_WGMODE_NORMAL_gc;
+    TCD1.CTRLD = 0;
+    TCD1.CTRLE = 0;
+    TCD1.INTCTRLA = 0;
+    TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;
+    TCD1.INTFLAGS = 0xff;
+    TCD1.PER = 0xffff;
+    //TCD1.CCA = TCD0.CNT + TIMER_PERIOD;
+    TCD1.CTRLA = TC_CLKSEL_DIV64_gc;
 
     // write product and vendor id to eeprom
     eeprom_update_word(&bldr_eeprom.productid, g_com.productid);
@@ -677,9 +703,9 @@ static void com_init_system(void) {
 }
 
 // every 1ms
-ISR(TCD0_CCA_vect) {
+ISR(TCD1_CCA_vect) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCD0.CCA += TIMER_PERIOD;
+        TCD1.CCA += TIMER_PERIOD;
     }
     g_com.timer++;
     struct timer *t;

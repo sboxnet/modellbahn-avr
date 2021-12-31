@@ -19,19 +19,52 @@
 #include "common.h"
 
 /*
+ * Interrupts:
+ * -- common --
+ *  TCD1_CCA_vect CCA common.c every 1 ms
+ * -- mtester --
+ *  TCC1_OVF_vect TCC1 OVF mtester Schrittsteuerung
+ * -- weichen-servo --
+ *  TCC0_OVF_vect TCC0 OVF weichen-servo.c Servo Move
+ *  TCC0_CCA_vect TCC0 CCA setzt Servos zurück
+ * -- dccgen --
+ *   DMA_CH0_vect dccgen
+ *   DMA_CH1_vect dccgen
+ * -- booster --
+ *   TCD0_CCD_vect DCC Decoder
+ *   TCD0_CCC_vect DCC detector cutout generator
+ *   PORTC_INT0_vect L6206 current
+ *   TCD0_CCB_vect Kurzschluss Erkennung (shortcut detector)
+ * -- sboxnet --
+ *   USARTE0_RXC_vect sboxnet receiver interrupt
+ *   USARTE0_TXC_vect sboxnet transmitter interrupt
+ *
  * - DCC Cutout is generated only at the end of the packet
  * - At the end of a cutout, shortcut detection may be triggered once or two times.
  * - Current/shortcut detection: MAX_SHORTCUT_CNT shortcuts must have occured in TIMER_SHORT_CUT time
  * - Shortcut detection is disabled in the TIMER_STARTUP time after DCC startup
  * - Shortcut detection is disabled in the first half of the first DCC bit after a cutout
  *
- * Timers:
- *  TCC0_CCB_vect    Kurzschlusserkennung
- *  TCC1_CCA_vect    Periodic Timer
- *  TCD0_CCC_vect    Cutout Generator
- *  PORTC_INT0_vect  Strom zu hoch
- *  PORTC_INT1_vect  DCC Input Signal
- *  TCD1_CCA_vect    DCC Decoder
+ * Timers in atxmega128ua4:
+ * TCC0 weichen-servo
+ * TCC1 mtester
+ * TCD0 booster
+ * TCD1 common
+ *
+ * TCC0 OVF weichen-servo	Servo Move TCC0_OVF_vect
+ * TCC0 CCA weichen-servo   setzte Servos zurück TCC0_CCA_vect
+ 
+ * TCC1 OVF mtester			Schrittsteuerung TCC1_OVF_vect
+
+ * TCD0 CCA booster         Periodic Timer every 10ms ~ 100Hz TCD0_CCA_vect
+ * TCD0 CCB booster			Kurzschluss Erkennung (shortcut detector) TCD0_CCB_vect
+ * TCD0 CCC booster         dcc detector cutout generator TCD0_CCC_vect
+ * TCD0 CCD booster			DCC Decoder TCD0_CCD_vect
+ *
+ * TCD1 CCA common			alle 1 ms TCD1_CCA_vect
+ *
+ * TCE0 not used
+ *
  *
  * Ausgabe signals:
  * PC0  IN1 bridge a and b input1
@@ -103,6 +136,9 @@
 
 #define bo_DCC_WATCHDOG_VAL 4 // 4*16ms = 64ms
 
+#define bo_BOOSTER_DEFAULT_SHORTCUT_INTERVAL  35000 // 70ms
+#define bo_BOOSTER_DEFAULT_SHORTCUT_LIMIT     4300
+
 #define bo_DEC_STATE_OFF      0
 #define bo_DEC_STATE_FIRST    1
 #define bo_DEC_STATE_PREAMBLE 2
@@ -142,6 +178,16 @@ struct bo_v_t {
 	uint8_t g_switches_t;
 	uint8_t g_timer;
 	uint16_t g_advals[4];
+	struct timer   timer_startup;
+	struct timer   timer_dcc_watchdog;
+	uint16_t       shortcut_cnt;
+	uint16_t       shortcut_limit;
+	uint16_t       shortcut_interval;
+	uint16_t       shortcut_nummax;
+	struct {
+		unsigned write_shortcut_limit:1;
+		unsigned write_shortcut_interval:1;
+	} eeprom_flags;
 	struct bo_dccdec dccdec;
 };
 
@@ -170,7 +216,7 @@ void bo_dcc_sensors_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
     PORTC.INT0MASK = 0; // L6206 Stromüberwachung
     
-    TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
+    TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
     
     bo_v.g_dcc_shortcut_cnt = 0;
 }
@@ -188,9 +234,9 @@ void bo_dcc_sensors_init(void) {
     
     bo_v.g_dcc_shortcut_cnt = 0;
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCC0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
-        TCC0.INTFLAGS = Bit(TC0_CCBIF_bp);
-        TCC0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc;
+        TCD0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
+        TCD0.INTFLAGS = Bit(TC0_CCBIF_bp);
+        TCD0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc;
     }
 }
 
@@ -220,7 +266,7 @@ void bo_dcc_power_off_all(void) {
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_OFF_gc; // DCC Input Signal Interrupt aus
 
-        TCC0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // TCC0 CCB Kurzschlusserkennung aus
+        TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // TCC0 CCB Kurzschlusserkennung aus
 
         bo_v.g_timer_startup = 0; // Startup Timer reseten
 		
@@ -288,6 +334,22 @@ Booster Init.
 void bo_booster_init(void) {
     bo_dcc_power_off_all(); // zuerst mal alles aus
 	bo_dec_init(EVSYS_CHMUX_PORTC_PIN4_gc); // init DCC decoder: PIN4 of PORTC
+	
+	timer_register(&bo_v.timer_startup, TIMER_RESOLUTION_16MS);
+	timer_register(&bo_v.timer_dcc_watchdog, TIMER_RESOLUTION_16MS);
+	volatile uint16_t a0 = offsetof(struct Eeprom_t, booster.shortcut_limit);
+	bo_v.shortcut_limit = e2prom_get_word(a0);
+	if (bo_v.shortcut_limit == 0xffff) {
+		bo_v.shortcut_limit = bo_BOOSTER_DEFAULT_SHORTCUT_LIMIT;
+	}
+	volatile uint16_t a1 = offsetof(struct Eeprom_t, booster.shortcut_interval);
+	bo_v.shortcut_interval = e2prom_get_word(a1);
+	if (bo_v.shortcut_interval == 0xffff) {
+		bo_v.shortcut_interval = bo_BOOSTER_DEFAULT_SHORTCUT_INTERVAL;
+	}
+	bo_v.shortcut_nummax = 0;
+	bo_v.eeprom_flags.write_shortcut_limit = 0;
+	bo_v.eeprom_flags.write_shortcut_interval = 0;
 }
 
 /* void bo_dcc_signal_disable(void)
@@ -323,19 +385,24 @@ static void bo_measure_task(void) {
     if (ADCA.INTFLAGS == 0x03) {
         int16_t ch0;
         int16_t ch1;
+		uint16_t ch2;
         // channel 0 and 1 conversion finished
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
             ch0 = (int16_t)ADCA.CH0.RES;
             ch1 = (int16_t)ADCA.CH1.RES;
+			ch2 = (int16_t)ADCA.CH2.RES;
         }
         if (ch0 < 0)
             ch0 = 0;
         if (ch1 < 0)
             ch1 = 0;
+		if (ch2 < 0)
+			ch2 = 0;
         bo_v.g_advals[0] = ch0;
         bo_v.g_advals[1] = ch1;
-        ADCA.INTFLAGS = 0x03; // clear intflags
-        ADCA.CTRLA |= Bit(3)|Bit(2); // start conversions
+		bo_v.g_advals[2] = ch2;
+        ADCA.INTFLAGS = 0x07; // clear intflags
+        ADCA.CTRLA |= Bit(4)|Bit(3)|Bit(2); // start conversions
     }
 }
 
@@ -359,7 +426,7 @@ Booster init.
 void bo_do_init_system(void) {
 	// LED Port
     port_out(bo_LED_PORT) = 0xff; // zuerst mal aus
-	uint8_t m = Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_CUR_OV_b)|Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_ON);
+	uint8_t m = Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_CUR_OV_b)|Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_ON_b);
     port_dirout(bo_LED_PORT, m);
     PORTCFG_MPCMASK = m; // PD3..0
     bo_LED_PORT.PIN0CTRL = PORT_OPC_TOTEM_gc;
@@ -388,15 +455,15 @@ void bo_do_init_system(void) {
     SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
         
     // Periodic Timer
-    TCC1.CTRLB = TC_WGMODE_NORMAL_gc;
-    TCC1.CTRLD = 0;
-    TCC1.CTRLE = 0;
-    TCC1.INTCTRLA = 0;
-    TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc; // low interrupt level
-    TCC1.INTFLAGS = 0xff;				// clear int flags
-    TCC1.PER= 0xffff;					// infinite  period
-    TCC1.CCA = TCC1.CNT + bo_TIMER_PERIOD; // 100 Hz
-    TCC1.CTRLA = TC_CLKSEL_DIV64_gc;
+    TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
+    TCD0.CTRLD = 0;
+    TCD0.CTRLE = 0;
+    TCD0.INTCTRLA = 0;
+    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc; // low interrupt level
+    TCD0.INTFLAGS = 0xff;				// clear int flags
+    TCD0.PER= 0xffff;					// infinite  period
+    TCD0.CCA = TCD0.CNT + bo_TIMER_PERIOD; // 100 Hz
+    TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
 
     // ADC: use signed mode (unsigned mode may be broken)
     //      see Atmel Xmega Errata
@@ -414,13 +481,13 @@ void bo_do_init_system(void) {
     ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc;
     ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
     // ADC Channel 1: current
-    ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
-    ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
-    // ADC Channel 2: voltage
     ADCA.CH1.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN2_gc;
+    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
     ADCA.CH1.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
+    // ADC Channel 2: voltage
+    ADCA.CH2.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
+    ADCA.CH2.MUXCTRL = ADC_CH_MUXPOS_PIN2_gc;
+    ADCA.CH2.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
     // start conversions
     ADCA.CTRLA |= Bit(4)|Bit(3)|Bit(2);
     
@@ -471,18 +538,31 @@ uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata) {
     switch(reg) {
 
         case R_BOOSTER_FLAGS: *pdata = bo_v.g_booster_flags; return 0;
-        case R_ADCVAL_NUM: *pdata = 2; return 0;
+        case R_ADCVAL_NUM: *pdata = 3; return 0;
         case R_ADCVAL_0: *pdata = bo_v.g_advals[0]; return 0;
         case R_ADCVAL_1: *pdata = bo_v.g_advals[1]; return 0;
-        
-        case 202: *pdata = bo_v.g_shortcutnummax; bo_v.g_shortcutnummax = 0; return 0;
-
+        case R_ADCVAL_2: *pdata = bo_v.g_advals[2]; return 0;
+        case R_BOOSTER_SHORTCUT_LIMIT:  *pdata = bo_v.shortcut_limit; return 0;
+        case R_BOOSTER_SHORTCUT_CNT:    *pdata = bo_v.shortcut_nummax; bo_v.shortcut_nummax = 0; return 0;
+        case R_BOOSTER_SHORTCUT_INTERVAL: *pdata = bo_v.shortcut_interval; return 0;
     }    
     return SBOXNET_ACKRC_REG_INVALID;
 };
 
 uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
-	return 0;
+	switch(reg) {
+        case R_BOOSTER_SHORTCUT_LIMIT: {
+	        bo_v.shortcut_limit = data;
+	        bo_v.eeprom_flags.write_shortcut_limit = 1;
+	        return 0;
+        }
+        case R_BOOSTER_SHORTCUT_INTERVAL: {
+	        bo_v.shortcut_interval = data;
+	        bo_v.eeprom_flags.write_shortcut_interval = 1;
+	        return 0;
+        }
+	}
+	return SBOXNET_ACKRC_REG_INVALID;
 }
 
 
@@ -494,27 +574,24 @@ void bo_do_main(void) {
     bo_measure_task();
 	// NOTAUS abfragen
     bo_notaus_task();
+	
+	if (bo_v.eeprom_flags.write_shortcut_limit && eeprom_is_ready()) {
+		eeprom_update_word((uint16_t*)offsetof(struct Eeprom_t, booster.shortcut_limit), bo_v.shortcut_limit);
+		bo_v.eeprom_flags.write_shortcut_limit = 0;
+	}
+	if (bo_v.eeprom_flags.write_shortcut_interval && eeprom_is_ready()) {
+		eeprom_update_word((uint16_t*)offsetof(struct Eeprom_t, booster.shortcut_interval), bo_v.shortcut_interval);
+		bo_v.eeprom_flags.write_shortcut_interval = 0;
+	}
 }
 
 void bo_do_before_bldr_activate(void) {
-
     bo_dcc_power_off_all();
 
-    
     PORTC.INT0MASK = 0;
     PORTC.INT1MASK = 0;
     PORTC.INTFLAGS = 0xff; // clear interrupt flags;
     PORTC.INTCTRL = 0;
-
-    TCC0.INTCTRLA = 0;
-    TCC0.INTCTRLB = 0;
-    TCC0.CTRLA = 0; // stop timer
-    TCC0.INTFLAGS = 0xff; // clear interrupt flags
-
-    TCC1.INTCTRLA = 0;
-    TCC1.INTCTRLB = 0;
-    TCC1.CTRLA = 0; // stop timer
-    TCC1.INTFLAGS = 0xff; // clear interrupt flags
 }
 
 /*---------------------------------------------------------*/
@@ -537,13 +614,6 @@ void bo_do_before_bldr_activate(void) {
  *                                                                         *
  ***************************************************************************/
 
-/* Uses:
- * 
- * TCD1
- * - sets: timer 500 kHz / 2us, normal mode, 8bit
- * - CCA: DCC decoder. input capture, event 0
- */
-
 
 
 
@@ -565,14 +635,14 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0MUX = evmux;
     EVSYS.CH0CTRL = 0;
     
-    TCD1.CTRLA = TC_CLKSEL_OFF_gc;
-    TCD1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc;
-    TCD1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;
-    TCD1.CTRLE = TC1_BYTEM_bm;
-    TCD1.INTCTRLA = 0;
-    TCD1.INTCTRLB = 0;
-    TCD1.INTFLAGS = 0xff;
-    TCD1.PER = 0xffff;
+    TCD0.CTRLA = TC_CLKSEL_OFF_gc;
+    TCD0.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc;
+    TCD0.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;
+    TCD0.CTRLE = TC1_BYTEM_bm;
+    TCD0.INTCTRLA = 0;
+    TCD0.INTCTRLB = 0;
+    TCD0.INTFLAGS = 0xff;
+    TCD0.PER = 0xffff;
 }
 
 void bo_dec_start(void) {
@@ -581,18 +651,18 @@ void bo_dec_start(void) {
     bo_v.dccdec.bufsize = 0;
     bo_v.dccdec.cutout = 0;
     
-    TCD1.CTRLFSET = TC_CMD_RESTART_gc;
-    TCD1.INTFLAGS = 0xff;
-    TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;
-    TCD1.CTRLA = TC_CLKSEL_DIV64_gc;
+    TCD0.CTRLFSET = TC_CMD_RESTART_gc;
+    TCD0.INTFLAGS = 0xff;
+    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc;
+    TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
 }
 
 /*
 static void bo_dec_stop(void) {
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
-    TCD1.INTCTRLB = 0;
-    TCD1.INTFLAGS = 0xff;
-    TCD1.CTRLA = TC_CLKSEL_OFF_gc;
+    TCD0.INTCTRLB = 0;
+    TCD0.INTFLAGS = 0xff;
+    TCD0.CTRLA = TC_CLKSEL_OFF_gc;
 }
 */
 static void bo_dec_parse_packet(void) {
@@ -679,21 +749,21 @@ static void bo_dec_halfbit(uint8_t hb) {
 
 // ISR ......................
 
-ISR(TCD1_CCA_vect) {
+ISR(TCD0_CCD_vect) { // DCC Decoder
     if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
         return;
     }
-    TCD1.CTRLFSET = TC_CMD_RESTART_gc;
+    TCD0.CTRLFSET = TC_CMD_RESTART_gc;
     if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
         bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
         bo_v.dccdec.preamble = 0;
-        TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
+        TCD0.INTFLAGS = Bit(TC1_OVFIF_bp);
     } else {
         uint8_t hb = 0;
-        if (bit_is_clear(TCD1.INTFLAGS, TC1_OVFIF_bp) && TCD1.CCA < (87/2) ) {
+        if (bit_is_clear(TCD0.INTFLAGS, TC1_OVFIF_bp) && TCD0.CCD < (87/2) ) {
             hb = 1;
         }
-        TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
+        TCD0.INTFLAGS = Bit(TC1_OVFIF_bp);
         bo_dec_halfbit(hb);
     }
 }
@@ -747,47 +817,59 @@ ISR(PORTC_INT0_vect) { // L6206 current
 	}
 }
 
-ISR(TCC0_CCB_vect) { // shortcut detector
+ISR(TCD0_CCB_vect) { // Kurzschluss Erkennung (shortcut detector)
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		TCC0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
+		TCD0.CCB = TCD0.CNT + bo_TIMER_SHORT_CUT;
 	}
 	if (bo_v.g_dcc_shortcut_cnt >= bo_MAX_SHORTCUT_CNT) {
 		bo_dcc_power_off_all();
 		setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
 		port_clrbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
-		} else {
+	} else {
 		port_setbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
 	}
 	bo_v.g_dcc_shortcut_cnt = 0;
 }
 
 // every 10ms ~ 100Hz
-ISR(TCC1_CCA_vect) {
+ISR(TCD0_CCA_vect) {
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		TCC1.CCA += bo_TIMER_PERIOD;
+		// neu starten
+		TCD0.CCA += bo_TIMER_PERIOD;
 	}
 	
+	// Timertick erhöhen
 	bo_v.g_timer++;
-	
+	// Startup Timer verringern wenn <> 0
 	if (bo_v.g_timer_startup) {
 		bo_v.g_timer_startup--;
 	}
+	// Taster einlesen (NOTAUS)
 	bo_read_switches();
 }
 
 ISR(PORTC_INT1_vect) { // DCC Input Signal
+	// ist DCC H?
 	if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+		// zuerst aus
 		bo_dcc_signal_disable();
+		// dann IN1 H
 		port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+		// und IN2 L
 		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
-		} else {
+	} else {
+		// zuerst aus
 		bo_dcc_signal_disable();
+		// dann IN1 L
 		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+		// unt IN2 H
 		port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
 	}
+	// EN H
 	bo_dcc_signal_enable();
 	
 	if (bo_v.g_timer_startup == 0) {
+		// der Startup Timer 0 ist, dann Kurzschluss Sensor ein
 		bo_dcc_sensors_shortcut_on();
 	}
 }

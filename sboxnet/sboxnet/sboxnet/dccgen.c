@@ -27,27 +27,6 @@
  */
 
 
-/*
- * TCC0
- * - timer not running
- * - CCA: AWEXC for booster IN1/IN2. PC0, PC1.
- * - CCB: AWEXC for booster EN. PC2 and PC3 wired or.
- * 
- * TCC1
- * - timer 500 kHz / 2us, FRQ Mode, 8bit
- * - DCC generator.
- * - CCA: filled by DMA transfer
- * 
- * TCD0
- * - general timer 500 kHz / 2us, normal mode, 16bit
- * - CCA: timer
- * - CCB: booster shortcut detector
- * - CCC: DCC decoder, cutout timer
- * 
- * TCD1
- * - timer 500 kHz / 2us, normal mode, 8bit
- * - CCA: DCC decoder. input capture, event 0, PC4
- */
 
 #define dg_VENDOR_ID    0x0001
 #define dg_FIRMWARE_VERSION 0x0102
