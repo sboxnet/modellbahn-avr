@@ -286,9 +286,13 @@ void bo_dcc_power_on_track(void) {
         PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc;
 		// und aktivieren: Interrupt 1 on PORTC
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
-		// Interrupt 1 auf PORTC als Highlevel Interrupt
-        PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_HI_gc;
-        
+		// Interrupt 1 auf PORTC als MED level Interrupt
+        PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_MED_gc;
+  	/*PORTC.INT1MASK = Bit(bo_DCC_IN_b); // PORTC INT1: aktiviere PORTC PIN 4 als Source
+	PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc; // PC4 Interrupt bei beiden Flanken
+	PORTC.INTFLAGS = 3; // loesche Interrtupt Flags
+	PORTC.INTCTRL = PORT_INT1LVL_HI_gc;*/
+
 		// DCC Sensoren aktivieren
         bo_dcc_sensors_init();
         
@@ -443,6 +447,11 @@ void bo_do_init_system(void) {
     port_dirin(bo_DCCM_PORT, m);
     PORTCFG_MPCMASK = m;
     PORTC.PIN3CTRL = PORT_OPC_PULLUP_gc; // Eingabe als pullup
+	// DCC Input: wird in bo_dcc_power_on_track() gemacht
+	/*PORTC.INT1MASK = Bit(bo_DCC_IN_b); // PORTC INT1: aktiviere PORTC PIN 4 als Source
+	PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc; // PC4 Interrupt bei beiden Flanken
+	PORTC.INTFLAGS = 3; // lösche Interrtupt Flags
+	PORTC.INTCTRL = PORT_INT1LVL_HI_gc;*/
     
 	// ADC
     port_dirin(bo_MEASURE_PORT, 0xff); // alles PORTA als Eingabe
