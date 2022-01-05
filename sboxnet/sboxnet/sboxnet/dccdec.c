@@ -67,9 +67,9 @@ static void DCCFUNC(dec_init)(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_g
     EVSYS.CH0CTRL = 0;
     
     TCD1.CTRLA = TC_CLKSEL_OFF_gc;
-    TCD1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc;
-    TCD1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;
-    TCD1.CTRLE = TC1_BYTEM_bm;
+    TCD1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc;  // use CCA for capture
+    TCD1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;       // event channel CH0, event action capture
+    TCD1.CTRLE = TC1_BYTEM_bm;                           // use byte mode
     TCD1.INTCTRLA = 0;
     TCD1.INTCTRLB = 0;
     TCD1.INTFLAGS = 0xff;
@@ -82,10 +82,10 @@ static void DCCFUNC(dec_start)(void) {
     DCCFUNC(dccdec).bufsize = 0;
     DCCFUNC(dccdec).cutout = 0;
     
-    TCD1.CTRLFSET = TC_CMD_RESTART_gc;
+    TCD1.CTRLFSET = TC_CMD_RESTART_gc;	// start timer from begin
     TCD1.INTFLAGS = 0xff;
-    TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;
-    TCD1.CTRLA = TC_CLKSEL_DIV64_gc;
+    TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;	// Interrupt Level low
+    TCD1.CTRLA = TC_CLKSEL_DIV64_gc;	// start timer with /64 = 32Mhz / 64 = 500kHz = 2us
 }
 
 static void DCCFUNC(dec_stop)(void) {
@@ -188,7 +188,7 @@ ISR(TCD1_CCA_vect) {
         TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
     } else {
         uint8_t hb = 0;
-        if (bit_is_clear(TCD1.INTFLAGS, TC1_OVFIF_bp) && TCD1.CCA < (87/2) ) {
+        if (bit_is_clear(TCD1.INTFLAGS, TC1_OVFIF_bp) && TCD1.CCA < (87/2) ) { // kleiner 87 us (87/2 ein Tick sind 2us)? -> brdann ist es eine 1
             hb = 1;
         }
         TCD1.INTFLAGS = Bit(TC1_OVFIF_bp);
