@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2014-2015
+ *   Copyright (C) 2014-2022
  *   by Thomas Maier <balagi@justmail.de>
  *
  *   Copyright: See COPYING file that comes with this distribution         *
@@ -19,52 +19,11 @@
 #include "common.h"
 
 /*
- * Interrupts:
- * -- common --
- *  TCD1_CCA_vect CCA common.c every 1 ms
- * -- mtester --
- *  TCC1_OVF_vect TCC1 OVF mtester Schrittsteuerung
- * -- weichen-servo --
- *  TCC0_OVF_vect TCC0 OVF weichen-servo.c Servo Move
- *  TCC0_CCA_vect TCC0 CCA setzt Servos zurück
- * -- dccgen --
- *   DMA_CH0_vect dccgen
- *   DMA_CH1_vect dccgen
- * -- booster --
- *   TCD0_CCD_vect DCC Decoder
- *   TCD0_CCC_vect DCC detector cutout generator
- *   PORTC_INT0_vect L6206 current
- *   TCD0_CCB_vect Kurzschluss Erkennung (shortcut detector)
- * -- sboxnet --
- *   USARTE0_RXC_vect sboxnet receiver interrupt
- *   USARTE0_TXC_vect sboxnet transmitter interrupt
- *
  * - DCC Cutout is generated only at the end of the packet
  * - At the end of a cutout, shortcut detection may be triggered once or two times.
  * - Current/shortcut detection: MAX_SHORTCUT_CNT shortcuts must have occured in TIMER_SHORT_CUT time
  * - Shortcut detection is disabled in the TIMER_STARTUP time after DCC startup
  * - Shortcut detection is disabled in the first half of the first DCC bit after a cutout
- *
- * Timers in atxmega128ua4:
- * TCC0 weichen-servo
- * TCC1 mtester
- * TCD0 booster
- * TCD1 common
- *
- * TCC0 OVF weichen-servo	Servo Move TCC0_OVF_vect
- * TCC0 CCA weichen-servo   setzte Servos zurück TCC0_CCA_vect
- 
- * TCC1 OVF mtester			Schrittsteuerung TCC1_OVF_vect
-
- * TCD0 CCA booster         Periodic Timer every 10ms ~ 100Hz TCD0_CCA_vect
- * TCD0 CCB booster			Kurzschluss Erkennung (shortcut detector) TCD0_CCB_vect
- * TCD0 CCC booster         dcc detector cutout generator TCD0_CCC_vect
- * TCD0 CCD booster			DCC Decoder TCD0_CCD_vect
- *
- * TCD1 CCA common			alle 1 ms TCD1_CCA_vect
- *
- * TCE0 not used
- *
  *
  * Ausgabe signals:
  * PC0  IN1 bridge a and b input1
