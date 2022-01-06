@@ -245,7 +245,7 @@ static uint16_t bldr_stack_size(void) {
 #define TCE_PERIOD    (16384-1)
 */
 #define SBOXNET_TIMER_PRESCALER TC_CLKSEL_DIV8_gc
-#define SBOXNET_TIMER_PERIOD    (16384-1)
+#define SBOXNET_TIMER_PERIOD    (16384-1)  // 32Mhz / 8 / (16384-1) = 244 Hz = 4ms
 
 #define SBOXNET_DEVICE_ADDR    g_v.dev_addr
 

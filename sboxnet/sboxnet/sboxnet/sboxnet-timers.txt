@@ -61,7 +61,14 @@ booster:
  *
  * TCD1 CCA common			alle 1 ms TCD1_CCA_vect
  *
+ * Defines fuer sboxnet sind in bootloader-fw.c SBOXNET_*
+ * bootloader-fw.c: SBOXNET_SECTION ISR(TCE0_CCA_vect)
+ * bootloader-fw.c: BOOTLOADER_SECTION ISR(TCE0_OVF_vect)
+ * bootloader-fw.c: bldr_init_sboxnettimer()
+ *
+ * sboxnet.c: Core sboxnet Code (sboxnet_set_timer() TCE0.CCA MED, bldr_init_sboxnettimer() TCE0.OVF MED)
+ *
  * TCE0 CCA sboxnet         sboxnet_timer_bit Backoff und Kollisionserkennung TCE0_CCA_vect bootloader-fw.c
- * TCE0 OVF sboxnet         alle 4 ms bootloader-fw.c
+ * TCE0 OVF sboxnet         alle 4 ms bootloader-fw.c (32Mhz / 8 / (16384-1) = 244 Hz = 4ms)
 */
 
