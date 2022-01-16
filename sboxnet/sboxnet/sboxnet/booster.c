@@ -80,7 +80,7 @@
 #define bo_CUR_b	1
 #define bo_Vcc		2
 
-#define bo_TIMER_STARTUP  100 // 1 s
+#define bo_TIMER_STARTUP  63 // bei 16ms Timer //100 // 1 s
 
 #define bo_SWITCH_NOTAUS_b  0
 
@@ -423,11 +423,13 @@ void bo_do_init_system(void) {
     SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
         
     // Periodic Timer
-    TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
+    TCD0.CTRLB = Bit(TC0_CCAEN_bp)|Bit(TC0_CCBEN_bp)|Bit(TC0_CCCEN_bp)|Bit(TC0_CCDEN_bp)|TC_WGMODE_NORMAL_gc;
     TCD0.CTRLD = 0;
-    TCD0.CTRLE = 0;
+    TCD0.CTRLE = 0; //TC1_BYTEM_bm;							// Byte Mode
     TCD0.INTCTRLA = 0;
-    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc; // low interrupt level
+    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCDINTLVL_LO_gc; // low interrupt level:
+															// CCB wird in bo_dcc_sensors_init() aktiviert und in bo_dcc_sensors_off() deaktvierte
+															// CCC wird in bo_do_dec_parse_packet() aktiviert und in in der ISR(TCD0_CCC_vect) wieder deaktiviert
     TCD0.INTFLAGS = 0xff;				// clear int flags
     TCD0.PER= 0xffff;					// infinite  period
     TCD0.CCA = TCD0.CNT + bo_TIMER_PERIOD; // 100 Hz
@@ -603,12 +605,12 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0MUX = evmux; // event source multiplexer: PORTC PIN4 DCC Input
     EVSYS.CH0CTRL = 0;
     
-    TCD0.CTRLA = TC_CLKSEL_OFF_gc;
-    TCD0.CTRLB = Bit(TC0_CCDEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
+    //TCD0.CTRLA = TC_CLKSEL_OFF_gc;
+    //TCD0.CTRLB = Bit(TC0_CCDEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
     TCD0.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
-    TCD0.CTRLE = TC1_BYTEM_bm;							// Byte Mode
+    //TCD0.CTRLE = TC1_BYTEM_bm;							// Byte Mode
     TCD0.INTCTRLA = 0;
-    TCD0.INTCTRLB = 0;
+    //TCD0.INTCTRLB = 0;
     TCD0.INTFLAGS = 0xff;
     TCD0.PER = 0xffff;
 }
@@ -621,7 +623,7 @@ void bo_dec_start(void) {
     
     TCD0.CTRLFSET = TC_CMD_RESTART_gc;		// start timer from begin
     TCD0.INTFLAGS = 0xff;
-    TCD0.INTCTRLB = TC_CCDINTLVL_LO_gc;		// Interrupt Level low
+    TCD0.INTCTRLB |= TC_CCDINTLVL_LO_gc;		// Interrupt Level low
     TCD0.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
 }
 
@@ -721,7 +723,7 @@ ISR(TCD0_CCD_vect) { // DCC Decoder
     if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
         return;
     }
-    TCD0.CTRLFSET = TC_CMD_RESTART_gc;
+    //TCD0.CTRLFSET = TC_CMD_RESTART_gc;
     if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
         bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
         bo_v.dccdec.preamble = 0;
@@ -802,8 +804,15 @@ ISR(TCD0_CCB_vect) { // Kurzschluss Erkennung (shortcut detector)
 // every 10ms ~ 100Hz
 ISR(TCD0_CCA_vect) {
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		// neu starten
-		TCD0.CCA += bo_TIMER_PERIOD;
+		volatile uint16_t tcca = TCD0.CCA;
+		volatile uint16_t tcnt = TCD0.CNT;
+		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
+		TCD0.CCA = tcca2;
+		volatile uint8_t x = 1;
+		 // neu starten
+		//TCD0.CCA += bo_TIMER_PERIOD;
+		//volatile uint16_t y = TCD0.CCA;
+		//x = y;
 	}
 	
 	// Timertick erhöhen

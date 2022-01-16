@@ -682,7 +682,7 @@ static void com_init_system(void) {
     TCD1.INTCTRLB = TC_CCAINTLVL_LO_gc;
     TCD1.INTFLAGS = 0xff;
     TCD1.PER = 0xffff;
-    //TCD1.CCA = TCD0.CNT + TIMER_PERIOD;
+    //TCD1.CCA = TCD1.CNT + TIMER_PERIOD;
     TCD1.CTRLA = TC_CLKSEL_DIV64_gc;
 
     // write product and vendor id to eeprom
@@ -705,7 +705,12 @@ static void com_init_system(void) {
 // every 1ms
 ISR(TCD1_CCA_vect) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCD1.CCA += TIMER_PERIOD;
+		volatile uint16_t tcnt = TCD1.CNT;
+		volatile uint16_t tcca = TCD1.CCA;
+		volatile uint16_t tcca2 = tcca + TIMER_PERIOD;
+		TCD1.CCA = tcca2;
+        //TCD1.CCA += TIMER_PERIOD;
+		volatile uint8_t x = 1;
     }
     g_com.timer++;
     struct timer *t;
