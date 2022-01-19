@@ -877,7 +877,73 @@ void bldr_init_modules(void) {
 }
 
 BOOTLOADER_SECTION
+void bldr_init_timers(void) {
+	// alle Timer zuruecksetzen
+
+	// TCC0
+	TCC0.CTRLA = 0;
+	TCC0.CTRLB = 0;
+	TCC0.CTRLC = 0;
+	TCC0.CTRLD = 0;
+	TCC0.CTRLE = 0;
+	TCC0.INTCTRLA = 0;
+	TCC0.INTCTRLB = 0;
+	TCC0.INTFLAGS = 0xff;
+	TCC0.CNT = 0;
+	TCC0.PER = 0;
+	TCC0.CCA = 0;
+	TCC0.CCB = 0;
+	TCC0.CCC = 0;
+	TCC0.CCD = 0;
+
+	// TCC1
+	TCC1.CTRLA = 0;
+	TCC1.CTRLB = 0;
+	TCC1.CTRLC = 0;
+	TCC1.CTRLD = 0;
+	TCC1.CTRLE = 0;
+	TCC1.INTCTRLA = 0;
+	TCC1.INTCTRLB = 0;
+	TCC1.INTFLAGS = 0xff;
+	TCC1.CNT = 0;
+	TCC1.PER = 0;
+	TCC1.CCA = 0;
+	TCC1.CCB = 0;
+	
+	// TCD0
+	TCD0.CTRLA = 0;
+	TCD0.CTRLB = 0;
+	TCD0.CTRLC = 0;
+	TCD0.CTRLD = 0;
+	TCD0.CTRLE = 0;
+	TCD0.INTCTRLA = 0;
+	TCD0.INTCTRLB = 0;
+	TCD0.INTFLAGS = 0xff;
+	TCD0.CNT = 0;
+	TCD0.PER = 0;
+	TCD0.CCA = 0;
+	TCD0.CCB = 0;
+	TCD0.CCC = 0;
+	TCD0.CCD = 0;
+
+	// TCD1
+	TCD1.CTRLA = 0;
+	TCD1.CTRLB = 0;
+	TCD1.CTRLC = 0;
+	TCD1.CTRLD = 0;
+	TCD1.CTRLE = 0;
+	TCD1.INTCTRLA = 0;
+	TCD1.INTCTRLB = 0;
+	TCD1.INTFLAGS = 0xff;
+	TCD1.CNT = 0;
+	TCD1.PER = 0;
+	TCD1.CCA = 0;
+	TCD1.CCB = 0;
+}
+
+BOOTLOADER_SECTION
 static void bldr_init_system(void) {
+	bldr_init_timers();
 	bldr_init_ports();
 	bldr_init_modules();
 	bldr_init_devvars();

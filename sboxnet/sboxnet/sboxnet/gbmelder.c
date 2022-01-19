@@ -70,7 +70,7 @@ struct gbm_v_t {
 
 struct gbm_v_t gbm_v = { 0 };  // Speicher fuer g_ Variablen
 
-#define PREFIX gbm
+#define _DCCPREFIX gbm_
 #include "dccdec.hh"
 
 

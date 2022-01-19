@@ -605,14 +605,14 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0MUX = evmux; // event source multiplexer: PORTC PIN4 DCC Input
     EVSYS.CH0CTRL = 0;
     
-    //TCD0.CTRLA = TC_CLKSEL_OFF_gc;
-    //TCD0.CTRLB = Bit(TC0_CCDEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
-    TCD0.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
-    //TCD0.CTRLE = TC1_BYTEM_bm;							// Byte Mode
-    TCD0.INTCTRLA = 0;
-    //TCD0.INTCTRLB = 0;
-    TCD0.INTFLAGS = 0xff;
-    TCD0.PER = 0xffff;
+    TCC1.CTRLA = TC_CLKSEL_OFF_gc;
+    TCC1.CTRLB = Bit(TC0_CCAEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
+    TCC1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
+    TCC1.CTRLE = TC1_BYTEM_bm;							// Byte Mode
+    TCC1.INTCTRLA = 0;
+    TCC1.INTCTRLB = 0;
+    TCC1.INTFLAGS = 0xff;
+    TCC1.PER = 0xffff;
 }
 
 void bo_dec_start(void) {
@@ -621,10 +621,10 @@ void bo_dec_start(void) {
     bo_v.dccdec.bufsize = 0;
     bo_v.dccdec.cutout = 0;
     
-    TCD0.CTRLFSET = TC_CMD_RESTART_gc;		// start timer from begin
-    TCD0.INTFLAGS = 0xff;
-    TCD0.INTCTRLB |= TC_CCDINTLVL_LO_gc;		// Interrupt Level low
-    TCD0.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
+    TCC1.CTRLFSET = TC_CMD_RESTART_gc;		// start timer from begin
+    TCC1.INTFLAGS = 0xff;
+    TCC1.INTCTRLB |= TC_CCAINTLVL_LO_gc;		// Interrupt Level low
+    TCC1.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
 }
 
 /*
@@ -719,21 +719,21 @@ static void bo_dec_halfbit(uint8_t hb) {
 
 // ISR ......................
 
-ISR(TCD0_CCD_vect) { // DCC Decoder
+ISR(TCC1_CCA_vect) { // DCC Decoder
     if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
         return;
     }
-    //TCD0.CTRLFSET = TC_CMD_RESTART_gc;
+    TCC1.CTRLFSET = TC_CMD_RESTART_gc;
     if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
         bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
         bo_v.dccdec.preamble = 0;
-        TCD0.INTFLAGS = Bit(TC1_OVFIF_bp);
+        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
     } else {
         uint8_t hb = 0;
-        if (bit_is_clear(TCD0.INTFLAGS, TC1_OVFIF_bp) && TCD0.CCD < (87/2) ) {
+        if (bit_is_clear(TCC1.INTFLAGS, TC1_OVFIF_bp) && TCC1.CCA < (87/2) ) {
             hb = 1;
         }
-        TCD0.INTFLAGS = Bit(TC1_OVFIF_bp);
+        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
         bo_dec_halfbit(hb);
     }
 }
@@ -809,10 +809,6 @@ ISR(TCD0_CCA_vect) {
 		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
 		TCD0.CCA = tcca2;
 		volatile uint8_t x = 1;
-		 // neu starten
-		//TCD0.CCA += bo_TIMER_PERIOD;
-		//volatile uint16_t y = TCD0.CCA;
-		//x = y;
 	}
 	
 	// Timertick erhöhen
