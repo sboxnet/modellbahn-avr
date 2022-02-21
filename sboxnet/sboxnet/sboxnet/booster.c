@@ -606,13 +606,15 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0CTRL = 0;
     
     TCC1.CTRLA = TC_CLKSEL_OFF_gc;
-    TCC1.CTRLB = Bit(TC0_CCAEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
+    TCC1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
     TCC1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
     TCC1.CTRLE = TC1_BYTEM_bm;							// Byte Mode
     TCC1.INTCTRLA = 0;
     TCC1.INTCTRLB = 0;
     TCC1.INTFLAGS = 0xff;
     TCC1.PER = 0xffff;
+	TCC1.CNT = 0;
+	TCC1.CTRLFSET = TC_CMD_RESTART_gc;
 }
 
 void bo_dec_start(void) {
@@ -621,9 +623,10 @@ void bo_dec_start(void) {
     bo_v.dccdec.bufsize = 0;
     bo_v.dccdec.cutout = 0;
     
+	TCC1.CCA = 87/2;
     TCC1.CTRLFSET = TC_CMD_RESTART_gc;		// start timer from begin
     TCC1.INTFLAGS = 0xff;
-    TCC1.INTCTRLB |= TC_CCAINTLVL_LO_gc;		// Interrupt Level low
+    TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc;		// Interrupt Level low
     TCC1.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
 }
 
