@@ -239,6 +239,7 @@ __ATTR_WEAK void bo_do_main(void) {
 __ATTR_WEAK void bo_do_before_bldr_activate(void) {
 }
 */
+/*
 void bo_do_init_system(void);
 uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata);
@@ -246,7 +247,7 @@ uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 void bo_do_setup(void);
 void bo_do_main(void);
 void bo_do_before_bldr_activate(void);
-
+*/
 // end weaks
 
 struct Eeprom_t eeprom EEMEM;

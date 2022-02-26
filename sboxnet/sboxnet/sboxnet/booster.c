@@ -536,7 +536,7 @@ uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 }
 
 
-void bo_do_setup(void) {
+__attribute__((optimize(0))) void bo_do_setup(void) {
 }
 
 void bo_do_main(void) {
@@ -828,14 +828,14 @@ ISR(PORTC_INT1_vect) { // DCC Input Signal
 	// ist DCC H?
 	if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
 		// zuerst aus
-		bo_dcc_signal_disable();
+		//bo_dcc_signal_disable();
 		// dann IN1 H
 		port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
 		// und IN2 L
 		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
 	} else {
 		// zuerst aus
-		bo_dcc_signal_disable();
+		//bo_dcc_signal_disable();
 		// dann IN1 L
 		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
 		// unt IN2 H
