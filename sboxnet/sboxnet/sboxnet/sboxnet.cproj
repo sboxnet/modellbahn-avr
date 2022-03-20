@@ -162,6 +162,9 @@
     <Compile Include="bootloader-fw.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="puidaddr.c">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="common.c">
       <SubType>compile</SubType>
     </Compile>
@@ -183,6 +186,9 @@
     <None Include="mtester.c">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="puidaddr.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sboxnet-struct.h">
       <SubType>compile</SubType>
     </Compile>

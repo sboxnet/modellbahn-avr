@@ -427,7 +427,8 @@ void bo_do_init_system(void) {
     TCD0.CTRLD = 0;
     TCD0.CTRLE = 0; //TC1_BYTEM_bm;							// Byte Mode
     TCD0.INTCTRLA = 0;
-    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCDINTLVL_LO_gc; // low interrupt level:
+    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCBINTLVL_LO_gc|TC_CCCINTLVL_LO_gc|TC_CCDINTLVL_LO_gc|TC_WGMODE_NORMAL_gc;
+															// low interrupt level:
 															// CCB wird in bo_dcc_sensors_init() aktiviert und in bo_dcc_sensors_off() deaktvierte
 															// CCC wird in bo_do_dec_parse_packet() aktiviert und in in der ISR(TCD0_CCC_vect) wieder deaktiviert
     TCD0.INTFLAGS = 0xff;				// clear int flags
@@ -534,10 +535,12 @@ uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 	}
 	return SBOXNET_ACKRC_REG_INVALID;
 }
-
-
-__attribute__((optimize(0))) void bo_do_setup(void) {
+__attribute__((optimize("O0")))
+void bo_do_setup(void) {
+	volatile uint8_t c = 0;
+	volatile uint8_t a = 123;
 }
+
 
 void bo_do_main(void) {
 	// Sparnnung und Strom Messung
