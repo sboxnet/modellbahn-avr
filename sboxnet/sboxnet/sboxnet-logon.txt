@@ -1,0 +1,3 @@
+->SBOXNET_CMD_NET_RESET
+<-SBOXNET_CMD_DEV_REQ_ADDR(puid,productid,vendorid)
+->SBOXNET_CMD_DEV_SET_ADDR(addr,puid,productid,vendorid)

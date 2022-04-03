@@ -363,7 +363,7 @@ class sbntst(object):
             
             self.sbnreiver.start()
             self.init_conn()
-            self.send_net_reset()
+            #self.send_net_reset()
             # wait 2 secs to let init
             time.sleep(2)
             while True:

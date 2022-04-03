@@ -197,18 +197,6 @@ enum Register_t {
 #define DEV_DESC_MAX_SIZE   32
 #define DEV_NUM_DESCS       3
 
-struct bldr_eeprom_t {
-    uint8_t     firmware_update;
-    uint32_t    puid;
-    uint16_t    productid;
-    uint16_t    vendorid;
-    uint8_t     reserved1[64-9];
-    // align on eeprom page size (32bytes)
-    uint8_t     dev_desc[DEV_NUM_DESCS][DEV_DESC_MAX_SIZE];
-};
-
-#define BLDR_EEPROM_ADDR  0x300
-#define bldr_eeprom  (*(struct bldr_eeprom_t*)BLDR_EEPROM_ADDR)
 
 #define WATCHDOG_VAL   128 // 0.5s
 
@@ -278,7 +266,23 @@ struct booster_eeprom_t {
 	uint16_t shortcut_limit;
 	uint16_t shortcut_interval;
 };
+
 // Struktur im EEPROM
+struct bldr_eeprom_t {
+	uint8_t     dev_addr;			// 0x0
+	
+	uint8_t     firmware_update;	// 0x1
+	uint32_t    puid;				// 0x2
+	uint16_t    productid;			// 0x6
+	uint16_t    vendorid;			// 0x8
+	uint8_t     reserved1[64-10];	// 0xa
+	// align on eeprom page size (32bytes)
+	uint8_t     dev_desc[DEV_NUM_DESCS][DEV_DESC_MAX_SIZE]; // 64+3x32 = 160
+};
+
+#define BLDR_EEPROM_ADDR  0x300
+#define bldr_eeprom  (*(struct bldr_eeprom_t*)BLDR_EEPROM_ADDR)
+
 // EEPROM atxmega128a4u bei 0x1000
 struct Eeprom_t {
 	// +0 0x1000+0
@@ -295,6 +299,7 @@ struct Eeprom_t {
 #define EEPROM_OFFS_WS offsetof(struct Eeprom_t, ws) // 66
 #define EEPROM_OFFS_DCC offsetof(struct Eeprom_t, dcc) // 130
 #define EEPROM_OFFS_BOOSTER offsetof(struct Eeprom_t, booster) // 132
+
 
 
 //forward decls

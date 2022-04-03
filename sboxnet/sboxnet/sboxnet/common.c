@@ -253,10 +253,12 @@ void bo_do_before_bldr_activate(void);
 struct Eeprom_t eeprom EEMEM;
 
 static uint8_t com_process_cmd_reset(void) {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        g_v.dev_addr = SBOXNET_ADDR_BROADCAST;
-        setbit(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b);
-    }
+    if (g_v.dev_addr == 0xff) {
+		ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+			g_v.dev_addr = SBOXNET_ADDR_BROADCAST;
+			setbit(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b);
+		}
+	}
     return SBOXNET_ACKRC_SEND_NO_ANSWER;
 }
 
@@ -701,6 +703,7 @@ static void com_init_system(void) {
             }
         }
     }
+	volatile uint8_t x1 = 0;
 }
 
 // every 1ms
