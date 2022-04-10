@@ -82,13 +82,9 @@ def logInfo(o, s):
     log(o, 'INFO', s)
 
 def logDebug(o, s):
-    try:
-        o.debug
-    except NameError:
-        pass
-    else:
+    if getattr(o, 'debug', False):
         if o.debug:
-            log(o, 'DEBUG', s)
+            log(o, 'DEBUG', s)        
 
 def logError(o, s):
     log(o, 'ERROR', s)
@@ -215,8 +211,8 @@ class SboxnetTransmitter(Thread):
         logDebug(self, f"TERMINATE {self}")
     
     def send(self, msg):
-        #if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
-        #    logDebug(self, f"try to send msg: {msg}")
+        if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
+            logDebug(self, f"try to send msg: {msg}")
         with self.tmsglock:
             if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
                 logDebug(self, "can a msg be sent?")
@@ -363,9 +359,10 @@ class sbntst(object):
             
             self.sbnreiver.start()
             self.init_conn()
-            self.send_net_reset()
+            #self.send_net_reset()
             # wait 2 secs to let init
-            time.sleep(2)
+            self.show_dev_descs()
+            #time.sleep(2)
             while True:
                 rline = ""
                 with self.readlock:
@@ -417,10 +414,15 @@ class sbntst(object):
             
     def send_net_reset(self):
         resetmsg = sboxnet.SboxnetMsg.new(255, sboxnet.SBOXNET_CMD_NET_RESET, 0)
-        #while not self.resetdone:
-        self.sbntransmitter.send(resetmsg)
-        time.sleep(1)
+        while not self.resetdone:
+            self.sbntransmitter.send(resetmsg)
+            time.sleep(1)
     
+    def show_dev_descs(self):
+        for addr in range(256):
+            logDebug(self, f"get desc: addr={addr}:")
+            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0])
+            time.sleep(0.05)
     #
     # SboxnetTester.execmsg(addr, cmd, data = [], printit = True)
     # create a sboxnet msg and send it
@@ -945,11 +947,13 @@ def init_readline():
     atexit.register(save_history)
 
 def init_dccmap():
+    cwd = os.getcwd()
+    logInfo(None, f"CWD: {cwd}")
     dccmap = dict()
     with open('moba-dcc.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            #print("x"+row['DCC']+"e")
+            #print(row['DCC']+row['Artikel'])
             dcc = int(row['DCC'])
             m = dict()
             m['dcc'] = dcc;
@@ -961,13 +965,6 @@ def init_dccmap():
 
 
 if __name__ == "__main__":
-
-    #logInfo(None, "Init Signals")
-    #init_signals()
-    logInfo(None, "Init Readline")
-    init_readline()
-    logInfo(None, "Init DCC Map")
-    dccmap = init_dccmap()
     
     logInfo(None, "Parse Arguments...")
     parser = argparse.ArgumentParser()
@@ -980,7 +977,15 @@ if __name__ == "__main__":
     #    debug = True
     #if args.sniffer:
     #    sniffer = True
-    print(f"----- debug={args.debug} sniffer={args.sniffer} ++++++")
+    logInfo(None,(f"----- debug={args.debug} sniffer={args.sniffer} ++++++"))
+    
+    #logInfo(None, "Init Signals")
+    #init_signals()
+    logInfo(None, "Init Readline")
+    init_readline()
+    logInfo(None, "Init DCC Map")
+    dccmap = init_dccmap()
+    
     
     # create SboxnetTester: 
     sbntest = sbntst(dccmap, args.debug, args.sniffer)
