@@ -27,6 +27,7 @@ import argparse
 import threading
 import time
 from threading import Thread
+import queue
 import psutil
 
 
@@ -85,10 +86,9 @@ def makelonga(arr, idx):
     return makelong(arr[idx+3],arr[idx+2],arr[idx+1],arr[idx])
 def log(o, h, s):
     if o:
-        print('%s:(%s)(%s)(%s.%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], o.__class__.__name__, inspect.stack()[2][3], h, s))
+        put_string('%s:(%s)(%s)(%s.%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], o.__class__.__name__, inspect.stack()[2][3], h, s))
     else:
-        print('%s:(%s)(%s)(%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], inspect.stack()[2][3], h, s))
-    sys.stdout.flush()
+        put_string('%s:(%s)(%s)(%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], inspect.stack()[2][3], h, s))
     
 def logInfo(o, s):
     log(o, 'INFO', s)
@@ -224,7 +224,8 @@ class SboxnetTransmitter(Thread):
     
     def send(self, msg):
         if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
-            logDebug(self, f"try to send msg: {msg}")
+            pass
+            #logDebug(self, f"try to send msg: {msg}")
         with self.tmsglock:
             if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
                 #logDebug(self, "can a msg be sent?")
@@ -400,6 +401,7 @@ class sbntst(object):
                     continue
                 if tokens[0] in ["exit","quit","q"]:
                     ThisSystem = psutil.Process(current_system_pid)
+                    run_output = False
                     ThisSystem.terminate()
                     
                 found = False
@@ -992,8 +994,25 @@ def init_dccmap():
     return dccmap
 
 
+def put_string(str):
+    output_queue.put_nowait(str)
+
+def output_loop():
+    while run_output:
+        try:
+            str = output_queue.get_nowait()
+            print(str)
+        except queue.Empty:
+            pass
+        time.sleep(.3)
+        
 
 if __name__ == "__main__":
+    output_queue = queue.Queue()
+    run_output = True
+    th_out = threading.Thread(target=output_loop)
+    th_out.start()
+    
     current_system_pid = os.getpid()
     logInfo(None, "Parse Arguments...")
     parser = argparse.ArgumentParser()
@@ -1014,7 +1033,6 @@ if __name__ == "__main__":
     init_readline()
     logInfo(None, "Init DCC Map")
     dccmap = init_dccmap()
-    
     
     # create SboxnetTester: 
     sbntest = sbntst(dccmap, args.debug, args.sniffer)
