@@ -224,8 +224,10 @@ class SboxnetTransmitter(Thread):
     
     def send(self, msg):
         if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
+
             pass
             #logDebug(self, f"try to send msg: {msg}")
+
         with self.tmsglock:
             if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
                 #logDebug(self, "can a msg be sent?")
@@ -388,6 +390,7 @@ class sbntst(object):
             self.init_conn()
             #self.send_net_reset()
             # wait 2 secs to let init
+
             t = SboxnetGetAddresses(self)
             t.start()
             while True:
@@ -453,6 +456,7 @@ class sbntst(object):
             logDebug(self, f"get desc: addr={addr}:")
             self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0], printit=True, wait_for_anwers=False)
             time.sleep(0.5)
+
     #
     # SboxnetTester.execmsg(addr, cmd, data = [], printit = True)
     # create a sboxnet msg and send it
@@ -997,6 +1001,7 @@ def init_dccmap():
 def put_string(str):
     output_queue.put_nowait(str)
 
+
 def output_loop():
     while run_output:
         try:
@@ -1012,6 +1017,7 @@ if __name__ == "__main__":
     run_output = True
     th_out = threading.Thread(target=output_loop)
     th_out.start()
+
     
     current_system_pid = os.getpid()
     logInfo(None, "Parse Arguments...")

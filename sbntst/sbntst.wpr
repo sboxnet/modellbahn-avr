@@ -33,6 +33,7 @@ proj.launch-config = {loc('sbntst.py'): ('project',
          ''))}
 [user attributes]
 debug.breakpoints = {loc('sboxnet.py'): {293: (0,
+
         None,
         1,
         0)}}
@@ -503,6 +504,7 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
          loc('sboxnet.py')]),
                                'open_files': ['sboxnet.py',
         'sbntst.py']},
+
         'saved_notebook_display': None,
         'split_percents': {0: 0.22770700636942676},
         'splits': 2,
@@ -510,6 +512,7 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
         'traversal_pos': ((0,
                            1),
                           1649592405.1394663),
+
         'user_data': {}},
                  'saved_notebook_display': None,
                  'split_percents': {},
@@ -525,6 +528,7 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
                          901)}]}
 guimgr.recent-documents = [loc('sbntst.py'),
                            loc('sboxnet.py')]
+
 guimgr.visual-state = {loc('../../../../usr/lib/python3.6/bdb.py'): {'attrib-starts': [('Bdb|0|',
         16),
         ('Bdb|0|.set_trace|0|',
@@ -701,6 +705,7 @@ search.search-history = ['find',
                          'SboxnetWatchdog',
                          'init_conn',
                          'sboxnet2usb',
+
                          'devgetdesc',
                          'self.resetdone',
                          'devreset',
@@ -712,3 +717,4 @@ search.search-history = ['find',
                          'SboxnetDebugInfo',
                          'cmd_getfwversion',
                          'SboxnetDebugRingBuf']
+
