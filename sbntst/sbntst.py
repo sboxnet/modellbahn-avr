@@ -1,5 +1,14 @@
 #!/usr/bin/python3 -tt
 
+#
+# uses
+#
+# readline
+# psutil
+# pyusb
+#
+
+
 import sys
 import time
 import re
@@ -18,6 +27,9 @@ import argparse
 import threading
 import time
 from threading import Thread
+import queue
+import psutil
+
 
 import sboxnet
 import usb.core
@@ -74,10 +86,10 @@ def makelonga(arr, idx):
     return makelong(arr[idx+3],arr[idx+2],arr[idx+1],arr[idx])
 def log(o, h, s):
     if o:
-        print('%s:(%s)(%s)(%s.%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], o.__class__.__name__, inspect.stack()[2][3], h, s))
+        put_string('%s:(%s)(%s)(%s.%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], o.__class__.__name__, inspect.stack()[2][3], h, s))
     else:
-        print('%s:(%s)(%s)(%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], inspect.stack()[2][3], h, s))
-
+        put_string('%s:(%s)(%s)(%s):%s:%s' % (datetime.now(), inspect.stack()[2][1], inspect.stack()[2][2], inspect.stack()[2][3], h, s))
+    
 def logInfo(o, s):
     log(o, 'INFO', s)
 
@@ -212,13 +224,18 @@ class SboxnetTransmitter(Thread):
     
     def send(self, msg):
         if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
-            logDebug(self, f"try to send msg: {msg}")
+
+            pass
+            #logDebug(self, f"try to send msg: {msg}")
+
         with self.tmsglock:
             if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
-                logDebug(self, "can a msg be sent?")
+                #logDebug(self, "can a msg be sent?")
+                pass
             if (self.sbntst.sbnusb.getstatus() and sboxnet.SboxnetUSB.SBOXNET_STATUS_TX_CANSEND):
                 if msg.cmd != sboxnet.SBOXNET_CMD_NET_WATCHDOG:
-                    logDebug(self, f"send msg: {msg}")
+                    #logDebug(self, f"send msg: {msg}")
+                    pass
                 self.sbntst.sbnusb.sendmsg(msg)
         #time.sleep(0.01)
     
@@ -242,7 +259,19 @@ class SboxnetWatchdog(Thread):
     def terminate(self):
         self.term = True    
 
+class SboxnetGetAddresses(Thread):
+    def __init__(self, sbntst):
+        super().__init__(name="SboxnetGetAddresses")
+        self.sbntst = sbntst
+        self.debug = self.sbntst.debug
+        
+    def run(self):
+        if self.sbntst:
+            #print(dir(self.sbntst))
+            self.sbntst.show_dev_descs()
+       
             
+      
 
 class sbntst(object):
     _prdid = sboxnet.SboxnetUSB.PRODUCTID
@@ -278,7 +307,7 @@ class sbntst(object):
         #self.sbnreiver.start()
         # start transmitter
         self.sbntransmitter.start()
-        self.sbnwatchdog.start()
+        self.sbnwatchdog.start()        
     
     def get_sbnusb(self):
         return self.sbnusb
@@ -361,8 +390,9 @@ class sbntst(object):
             self.init_conn()
             #self.send_net_reset()
             # wait 2 secs to let init
-            self.show_dev_descs()
-            #time.sleep(2)
+
+            t = SboxnetGetAddresses(self)
+            t.start()
             while True:
                 rline = ""
                 with self.readlock:
@@ -373,7 +403,10 @@ class sbntst(object):
                 if len(tokens) == 0:
                     continue
                 if tokens[0] in ["exit","quit","q"]:
-                    break
+                    ThisSystem = psutil.Process(current_system_pid)
+                    run_output = False
+                    ThisSystem.terminate()
+                    
                 found = False
                 for cmd in cmdlist:
                     try:
@@ -421,25 +454,27 @@ class sbntst(object):
     def show_dev_descs(self):
         for addr in range(256):
             logDebug(self, f"get desc: addr={addr}:")
-            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0])
-            time.sleep(0.05)
+            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0], printit=True, wait_for_anwers=False)
+            time.sleep(0.5)
+
     #
     # SboxnetTester.execmsg(addr, cmd, data = [], printit = True)
     # create a sboxnet msg and send it
-    def execmsg(self, addr, cmd, data = [], printit = True):
+    def execmsg(self, addr, cmd, data = [], printit = True, wait_for_anwers = True):
         msg = sboxnet.SboxnetMsg.new(addr, cmd, 0, data)
         self.lastcmd = msg
         self.sbntransmitter.send(msg)
-        endtime = time.time() + 5
-        while time.time() < endtime:
-            if self.lastcmd is not None:
-                # cmd not processed
-                time.sleep(0.1)
-            else:
-                # cmd processed
-                break
-        if self.lastcmd is not None:
-            print(f"ERROR: no answer from device {self.lastcmd.dstaddr}")
+        if wait_for_anwers:
+            endtime = time.time() + 5
+            while time.time() < endtime:
+                if self.lastcmd is not None:
+                    # cmd not processed
+                    time.sleep(0.1)
+                else:
+                    # cmd processed
+                    break
+                if self.lastcmd is not None:
+                    print(f"ERROR: no answer from device {self.lastcmd.dstaddr}")
         return
     
     #
@@ -963,9 +998,28 @@ def init_dccmap():
     return dccmap
 
 
+def put_string(str):
+    output_queue.put_nowait(str)
+
+
+def output_loop():
+    while run_output:
+        try:
+            str = output_queue.get_nowait()
+            print(str)
+        except queue.Empty:
+            pass
+        time.sleep(.3)
+        
 
 if __name__ == "__main__":
+    output_queue = queue.Queue()
+    run_output = True
+    th_out = threading.Thread(target=output_loop)
+    th_out.start()
+
     
+    current_system_pid = os.getpid()
     logInfo(None, "Parse Arguments...")
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--debug", help="run with debug output", action="store_true")
@@ -985,7 +1039,6 @@ if __name__ == "__main__":
     init_readline()
     logInfo(None, "Init DCC Map")
     dccmap = init_dccmap()
-    
     
     # create SboxnetTester: 
     sbntest = sbntst(dccmap, args.debug, args.sniffer)

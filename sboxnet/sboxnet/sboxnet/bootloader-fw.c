@@ -573,10 +573,12 @@ static uint8_t bldr_cmd_reg_read_multi(struct sboxnet_msg_header *pmsg) {
 
 BLDR_APP_SECTION
 static void bldr_process_cmd_net_reset(void) {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        g_v.dev_addr = SBOXNET_ADDR_BROADCAST;
-        setbit(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b);
-    }
+	if (g_v.dev_addr != 0xff) {
+		ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+			g_v.dev_addr = SBOXNET_ADDR_BROADCAST;
+			setbit(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b);
+		}
+	}
 }
 
 BLDR_APP_SECTION
@@ -845,8 +847,10 @@ void bldr_init_sboxnettimer(void) {
 
 BOOTLOADER_SECTION
 void bldr_init_vars(void) {
+	g_v.dev_addr = e2prom_get_byte(&bldr_eeprom.dev_addr);
+	
 	g_v.dev_puid = e2prom_get_long(&bldr_eeprom.puid);
-	g_v.dev_addr = 0xff;
+	//g_v.dev_addr = 0xff;
 	    
 	g_v.fwup_pageaddr = 0;
 	g_v.fwup_pageoffs = 0;
@@ -1010,10 +1014,12 @@ static uint8_t _bldr_task(struct sboxnet_msg_max* pmsg) {
         while(1);
     }
     
-    if (bit_is_set(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b)) {
-        bldr_sboxnet_logon(pmsg);
-        return 1;
-    }
+	if (g_v.dev_addr == 0xff) {
+		if (bit_is_set(g_dev_state, DEV_STATE_FLG_REQ_ADDR_b)) {
+			bldr_sboxnet_logon(pmsg);
+			return 1;
+		}
+	}
     return 0;
 }
 

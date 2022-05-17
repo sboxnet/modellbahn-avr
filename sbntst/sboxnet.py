@@ -636,7 +636,7 @@ class SboxnetMaster(threading.Thread):
         threading.Thread.__init__(self, name="Sboxnet")
         #if 1: logDebug(self, f"serialn={serialn} sbnusb={sbnusb} cbobj={cbobj}")
         self._sbnusb = sbnusb
-        self._reset = True
+        self._reset = False #True
         self._run = True
         self._recvmsglist = []
         self._tmitmsglist = []
@@ -782,14 +782,14 @@ class SboxnetMaster(threading.Thread):
     # SboxnetMaster.
     def _serve(self):
         self._run = True
-        self._reset = True
+        self._reset = False #True
         watchdog_timer = datetime.now() + timedelta(milliseconds=100)
         while self._run:
             if self._sbnusb is None:
                 with self._msglistlock:
                     self._init_conn()
                     time.sleep(1.0)
-                    self._reset = True
+                    self._reset = False #True
             if self._sbnusb is not None:
                 try:
                     if self._reset:
