@@ -75,10 +75,11 @@
 #define bo_DCC_IN_b   4
 #define bo_NOTAUS_b   5
 
-#define bo_MEASURE_PORT PORTA // PORT fuer die ADC Messungen
-#define bo_CUR_a	0
-#define bo_CUR_b	1
-#define bo_Vcc		2
+// ADC: PA0,2: Strom PA1: Voltage
+#define bo_MEASURE_PORT PORTA // PORT for ADC
+#define bo_CUR_a	0 // current bridge 1
+#define bo_CUR_b	2 // current bridge 2
+#define bo_Vcc		1 // supply voltage for bridge
 
 #define bo_TIMER_STARTUP  63 // bei 16ms Timer //100 // 1 s
 
@@ -170,6 +171,152 @@ static void bo_do_dec_parse_packet(void) {
 		//port_setbit(bo_DCC_CUTOUT_TEST_PORT, bo_DCC_CUTOUT_TEST_b); // cutout test point
 	}
 }
+
+// utils --------------------------------------------------------
+
+static uint8_t bo_read_production_signature_row(uint8_t offset) {
+	uint8_t value;
+	NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
+	value = pgm_read_byte(offset);
+	NVM.CMD = NVM_CMD_NO_OPERATION_gc;
+	return value;
+}
+// init ---------------------------------------------------------
+
+void bo_init_led_port(void){
+	// LED port: active low
+    port_out(bo_LED_PORT) = 0xff;	// all off
+    uint8_t m = Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_CUR_OV_b)|Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_ON_b);  // led bits
+    port_dirout(bo_LED_PORT, m);	// dir output
+    PORTCFG_MPCMASK = m;			// PD3..0
+    bo_LED_PORT.PIN0CTRL = PORT_OPC_TOTEM_gc; // output as totem pole
+}
+void bo_init_dccm_port(void) {
+	// bo_DCCM_PORT (PORTC)
+	// 
+	// out: cutout marker, enable driver, driver IN1 and IN2
+	port_out(bo_DCCM_PORT) = 0;		// all off (=0)
+	uint8_t m = Bit(bo_DCCM_CUTOUT_b)|Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b);
+	port_dirout(bo_DCCM_PORT, m);	// as output
+	PORTCFG_MPCMASK = m;
+	PORTC.PIN0CTRL = PORT_OPC_TOTEM_gc;	// as totem pole
+	
+	// in: current overflow, dcc in, notaus
+	m = Bit(bo_CUR_OV_b)|Bit(bo_DCC_IN_b)|Bit(bo_NOTAUS_b);
+	port_dirin(bo_DCCM_PORT, m);	// as input
+	PORTCFG_MPCMASK = m;
+	PORTC.PIN3CTRL = PORT_OPC_PULLUP_gc; // as pull up
+}
+void bo_init_dcc_in(void) {
+	// DCC input
+	
+	// PORTC Interrupt 1 PC4 on
+    PORTC.INT1MASK = Bit(bo_DCC_IN_b);
+	// on PC4 both edges
+    PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc;
+	// set on: interrupt 1 on PORTC
+    PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
+	// MED PortC Interrupt 
+	PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_MED_gc;
+}
+void bo_init_adc() {
+	// ADC: PA0,2: Strom PA1: Voltage
+	port_dirin(bo_MEASURE_PORT, 0xff); // all PORTA input
+	PORTCFG_MPCMASK = 0xff; // all pins
+	PORTA.PIN0CTRL = PORT_OPC_PULLDOWN_gc; //all pull down
+	PORTCFG_MPCMASK = Bit(bo_Vcc)|Bit(bo_CUR_a)|Bit(bo_CUR_b);
+	PORTA.PIN0CTRL = PORT_OPC_TOTEM_gc;
+	
+	// ADC: use signed mode (unsigned mode may be broken)
+	//      see Atmel Xmega Errata
+	ADCA.CTRLB = Bsv(ADC_CONMODE_bp,1)/*signed mode*/ |Bsv(ADC_FREERUN_bp,0)/* not freerun */ |ADC_RESOLUTION_12BIT_gc /*12bit result right adjusted*/;
+	ADCA.REFCTRL = ADC_REFSEL_INT1V_gc;			// 1V reference
+	ADCA.EVCTRL = 0;							// no event
+	ADCA.PRESCALER = ADC_PRESCALER_DIV128_gc;	// 128 adc prescaler
+	ADCA.INTFLAGS = 0x0f;						// clear int flags
+	ADCA.CALL = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL0)); // set call with NVM_PROD_SIGNATURES_t:ADCACAL0
+	ADCA.CALH = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL1)); // set calh with NVM_PROD_SIGNATURES_t:ADCACAL1
+	ADCA.CTRLA = Bit(ADC_ENABLE_bp);			// enable ADC
+	
+    // ADC Channel 0: current PA0
+    ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
+    ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc;
+    ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
+    // ADC Channel 1: voltage PA1
+    ADCA.CH2.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
+    ADCA.CH2.MUXCTRL = ADC_CH_MUXPOS_PIN2_gc;
+    ADCA.CH2.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
+    // ADC Channel 2: current PA2
+    ADCA.CH1.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
+    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
+    ADCA.CH1.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
+    // start conversions
+    ADCA.CTRLA |= Bit(4)|Bit(3)|Bit(2);
+}
+
+void bo_init_timers(void) {
+	// Timers for booster:
+	/*
+	TCC1.CCA	 DCC Decoder
+    TCD0.CCA	 Periodic timer  every 10ms ~ 100Hz
+    TCD0.CCB	 Kurzschluss Erkennung (shortcut detector)
+    TCD0.CCC	 cutout generator
+	PORTC.INT0 Stromabschaltung
+	PORTC.INT1 DCC Input Signal
+*/
+	// DCC decoder
+	TCC1.CTRLA = TC_CLKSEL_OFF_gc;
+	TCC1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
+	TCC1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
+	TCC1.CTRLE = TC1_BYTEM_bm;							// Byte Mode
+	TCC1.INTCTRLA = 0;
+	TCC1.INTCTRLB = 0;
+	TCC1.INTFLAGS = 0xff;
+	TCC1.PER = 0xffff;
+	TCC1.CNT = 0;
+	TCC1.CTRLFSET = TC_CMD_RESTART_gc;
+	
+	// Periodic Timer: CCA:periodic timer, CCB:Kurzschluss Erkennung (shortcut detector), CCC: cutout generator
+	TCD0.CTRLB = Bit(TC0_CCAEN_bp)|Bit(TC0_CCBEN_bp)|Bit(TC0_CCCEN_bp)|TC_WGMODE_NORMAL_gc;
+	TCD0.CTRLD = 0;
+	TCD0.CTRLE = 0; //TC1_BYTEM_bm;							// Byte Mode
+	TCD0.INTCTRLA = 0;
+	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCBINTLVL_LO_gc|TC_CCCINTLVL_LO_gc|TC_WGMODE_NORMAL_gc;
+	// low interrupt level:
+	// CCB wird in bo_dcc_sensors_init() aktiviert und in bo_dcc_sensors_off() deaktvierte
+	// CCC wird in bo_do_dec_parse_packet() aktiviert und in in der ISR(TCD0_CCC_vect) wieder deaktiviert
+	TCD0.INTFLAGS = 0xff;				// clear int flags
+	TCD0.PER= 0xffff;					// infinite  period
+	TCD0.CCA = TCD0.CNT + bo_TIMER_PERIOD; // 100 Hz
+	TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
+}
+/* void bo_do_init_system(void)
+Booster init.
+*/
+void bo_booster_init(void);
+
+void bo_do_init_system(void) {
+	bo_init_led_port();
+	bo_init_dccm_port();
+	bo_init_dcc_in();
+	bo_init_adc();
+	bo_init_timers();
+   
+    // configure sleep mode: idle sleep mode, sleep mode allowed
+    SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
+
+    g_com.productid = bo_PRODUCT_ID;
+    g_com.vendorid = bo_VENDOR_ID;
+    g_com.firmware_version = bo_FIRMWARE_VERSION;
+    g_com.capabilities = CAP_DCC_BOOSTER;
+    g_com.cap_class = 0;
+    g_com.dev_desc_P = PSTR(bo_DEVICE_DESC);
+
+    bo_v.g_booster_flags = 0;
+
+    bo_booster_init();
+}
+//---------------------------------------------------------------
 
 void bo_dcc_sensors_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
@@ -375,105 +522,6 @@ static void bo_notaus_task(void) {
     }
 }
 
-static uint8_t bo_read_production_signature_row(uint8_t offset) {
-    uint8_t value;
-    NVM.CMD = NVM_CMD_READ_CALIB_ROW_gc;
-    value = pgm_read_byte(offset);
-    NVM.CMD = NVM_CMD_NO_OPERATION_gc;
-    return value;
-}
-
-/* void bo_do_init_system(void)
-Booster init.
-*/
-void bo_do_init_system(void) {
-	// LED Port
-    port_out(bo_LED_PORT) = 0xff; // zuerst mal aus
-	uint8_t m = Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_CUR_OV_b)|Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_ON_b);
-    port_dirout(bo_LED_PORT, m);
-    PORTCFG_MPCMASK = m; // PD3..0
-    bo_LED_PORT.PIN0CTRL = PORT_OPC_TOTEM_gc;
-	
-    // bo_DCCM_PORT (PORTC)
-	// out
-    port_out(bo_DCCM_PORT) = 0;
-	m = Bit(bo_DCCM_CUTOUT_b)|Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b);
-    port_dirout(bo_DCCM_PORT, m);
-    PORTCFG_MPCMASK = m;
-    PORTC.PIN0CTRL = PORT_OPC_TOTEM_gc;
-	// in
-	m = Bit(bo_CUR_OV_b)|Bit(bo_DCC_IN_b)|Bit(bo_NOTAUS_b);
-    port_dirin(bo_DCCM_PORT, m);
-    PORTCFG_MPCMASK = m;
-    PORTC.PIN3CTRL = PORT_OPC_PULLUP_gc; // Eingabe als pullup
-	// DCC Input: wird in bo_dcc_power_on_track() gemacht
-	/*PORTC.INT1MASK = Bit(bo_DCC_IN_b); // PORTC INT1: aktiviere PORTC PIN 4 als Source
-	PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc; // PC4 Interrupt bei beiden Flanken
-	PORTC.INTFLAGS = 3; // lösche Interrtupt Flags
-	PORTC.INTCTRL = PORT_INT1LVL_HI_gc;*/
-    
-	// ADC
-    port_dirin(bo_MEASURE_PORT, 0xff); // alles PORTA als Eingabe
-    PORTCFG_MPCMASK = 0xff; // all pins
-    PORTA.PIN0CTRL = PORT_OPC_PULLDOWN_gc;
-    PORTCFG_MPCMASK = Bit(bo_Vcc)|Bit(bo_CUR_a)|Bit(bo_CUR_b);
-    PORTA.PIN0CTRL = PORT_OPC_TOTEM_gc;
-    
-    // configure sleep mode: idle sleep mode, sleep mode allowed
-    SLEEP.CTRL = SLEEP_SMODE_IDLE_gc|Bit(SLEEP_SEN_bp);
-        
-    // Periodic Timer
-    TCD0.CTRLB = Bit(TC0_CCAEN_bp)|Bit(TC0_CCBEN_bp)|Bit(TC0_CCCEN_bp)|Bit(TC0_CCDEN_bp)|TC_WGMODE_NORMAL_gc;
-    TCD0.CTRLD = 0;
-    TCD0.CTRLE = 0; //TC1_BYTEM_bm;							// Byte Mode
-    TCD0.INTCTRLA = 0;
-    TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCBINTLVL_LO_gc|TC_CCCINTLVL_LO_gc|TC_CCDINTLVL_LO_gc|TC_WGMODE_NORMAL_gc;
-															// low interrupt level:
-															// CCB wird in bo_dcc_sensors_init() aktiviert und in bo_dcc_sensors_off() deaktvierte
-															// CCC wird in bo_do_dec_parse_packet() aktiviert und in in der ISR(TCD0_CCC_vect) wieder deaktiviert
-    TCD0.INTFLAGS = 0xff;				// clear int flags
-    TCD0.PER= 0xffff;					// infinite  period
-    TCD0.CCA = TCD0.CNT + bo_TIMER_PERIOD; // 100 Hz
-    TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
-
-    // ADC: use signed mode (unsigned mode may be broken)
-    //      see Atmel Xmega Errata
-    ADCA.CTRLB = Bsv(ADC_CONMODE_bp,1)/*signed mode*/ |Bsv(ADC_FREERUN_bp,0)/* not freerun */ |ADC_RESOLUTION_12BIT_gc /*12bit result right adjusted*/;
-    ADCA.REFCTRL = ADC_REFSEL_INT1V_gc;
-    ADCA.EVCTRL = 0;
-    ADCA.PRESCALER = ADC_PRESCALER_DIV128_gc;
-    ADCA.INTFLAGS = 0x0f; // clear int flags
-    ADCA.CALL = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL0));
-    ADCA.CALH = bo_read_production_signature_row(offsetof(NVM_PROD_SIGNATURES_t, ADCACAL1));
-    ADCA.CTRLA = Bit(ADC_ENABLE_bp);
-	
-    // ADC Channel 0: current
-    ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc;
-    ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
-    // ADC Channel 1: current
-    ADCA.CH1.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH1.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
-    ADCA.CH1.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
-    // ADC Channel 2: voltage
-    ADCA.CH2.CTRL = ADC_CH_GAIN_1X_gc|ADC_CH_INPUTMODE_SINGLEENDED_gc;
-    ADCA.CH2.MUXCTRL = ADC_CH_MUXPOS_PIN2_gc;
-    ADCA.CH2.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc|ADC_CH_INTLVL_OFF_gc;
-    // start conversions
-    ADCA.CTRLA |= Bit(4)|Bit(3)|Bit(2);
-    
-    g_com.productid = bo_PRODUCT_ID;
-    g_com.vendorid = bo_VENDOR_ID;
-    g_com.firmware_version = bo_FIRMWARE_VERSION;
-    g_com.capabilities = CAP_DCC_BOOSTER;
-    g_com.cap_class = 0;
-    g_com.dev_desc_P = PSTR(bo_DEVICE_DESC);
-
-    bo_v.g_booster_flags = 0;
-
-    bo_booster_init();
-}
-
 uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
     switch (pmsg->cmd) {
         case SBOXNET_CMD_LOCO_POWER: {
@@ -588,6 +636,13 @@ void bo_do_before_bldr_activate(void) {
  ***************************************************************************/
 
 
+/* event system
+   src: EVSYS_CHMUX_PORTC_PIN4_gc --> dst: TCC1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;
+   when tcc1 is started from 0,
+   CCA contains number of ticks till capture is made at rise or fall of pc4=dcc-input
+   TCC1: 32.000.000/64 = 500.000 = 2us
+   
+*/
 
 
 // declaration
@@ -605,19 +660,8 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.xor = 0;
     bo_v.dccdec.cutout = 0;
     
-    EVSYS.CH0MUX = evmux; // event source multiplexer: PORTC PIN4 DCC Input
+    EVSYS.CH0MUX = evmux; // event source multiplexer: PORTC PIN4 DCC Input --> TCC1.CCA
     EVSYS.CH0CTRL = 0;
-    
-    TCC1.CTRLA = TC_CLKSEL_OFF_gc;
-    TCC1.CTRLB = Bit(TC1_CCAEN_bp)|TC_WGMODE_NORMAL_gc; // use CCA for capture
-    TCC1.CTRLD = TC_EVACT_CAPT_gc|TC_EVSEL_CH0_gc;		// Event Action: CH0, Input Capture
-    TCC1.CTRLE = TC1_BYTEM_bm;							// Byte Mode
-    TCC1.INTCTRLA = 0;
-    TCC1.INTCTRLB = 0;
-    TCC1.INTFLAGS = 0xff;
-    TCC1.PER = 0xffff;
-	TCC1.CNT = 0;
-	TCC1.CTRLFSET = TC_CMD_RESTART_gc;
 }
 
 void bo_dec_start(void) {
@@ -626,7 +670,8 @@ void bo_dec_start(void) {
     bo_v.dccdec.bufsize = 0;
     bo_v.dccdec.cutout = 0;
     
-	TCC1.CCA = 87/2;
+	TCC1.CCA = 87/2; // dcc high 52..64us: dcc low 90us..10ms: is CCA lower then 87/2 --> DCC H
+	 
     TCC1.CTRLFSET = TC_CMD_RESTART_gc;		// start timer from begin
     TCC1.INTFLAGS = 0xff;
     TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc;		// Interrupt Level low
@@ -649,29 +694,40 @@ static void bo_dec_parse_packet(void) {
 }
 
 static void bo_dec_halfbit(uint8_t hb) {
+	// hb is the half bit
+	
     switch(bo_v.dccdec.state) {
+		// if in preamble?
         case bo_DEC_STATE_PREAMBLE: {
             if (hb) {
+				// hb is 1, then wait till there where up to 100 hb==1
                 if (bo_v.dccdec.preamble < 100) {
                     bo_v.dccdec.preamble++;
                 }
             } else {
+				// hb == 0
                 if (bo_v.dccdec.preamble >= 20) {
+					// greater then 20 preamble half bits? then it is a DCC startbit
                     bo_v.dccdec.state = bo_DEC_STATE_STARTBIT;
                 } else {
+					// else begin again
                     bo_v.dccdec.preamble = 0;
                 }
             }
             break;
         }
+		// start bit
         case bo_DEC_STATE_STARTBIT: {
             if (hb) {
+				// is half bit is 1, then dec reset
+				// first bit must be a 0
                 goto bo_dec_reset;
             }
-            bo_v.dccdec.state = bo_DEC_STATE_BIT_H1;
-            bo_v.dccdec.bufsize = 0;
-            bo_v.dccdec.bits = 0;
-            bo_v.dccdec.xor = 0;
+			// first bit is a 0, start
+            bo_v.dccdec.state = bo_DEC_STATE_BIT_H1;  // first half bit after start bit
+            bo_v.dccdec.bufsize = 0;	// bits in buffer
+            bo_v.dccdec.bits = 0;		// number of bits in buffer
+            bo_v.dccdec.xor = 0;		// xor state
             break;
         }
         case bo_DEC_STATE_BIT_H1: {
@@ -726,21 +782,36 @@ static void bo_dec_halfbit(uint8_t hb) {
 // ISR ......................
 
 ISR(TCC1_CCA_vect) { // DCC Decoder
+	// if state is OFF, do nothing
     if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
         return;
     }
+	// else restart TCC1
     TCC1.CTRLFSET = TC_CMD_RESTART_gc;
+	
     if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
+		// if first bit? then preamble begin
+		
         bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
+		// number of bits in preamble
         bo_v.dccdec.preamble = 0;
-        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
+		// clear OVF interrupt bit to be sure
+        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp); 
     } else {
+		// do work
+		
+		// init DCC Low
         uint8_t hb = 0;
+		// if no OVF Interrupt (no overflow, CCA contains tick since 0) and CCA is "DCC Low"
         if (bit_is_clear(TCC1.INTFLAGS, TC1_OVFIF_bp) && TCC1.CCA < (87/2) ) {
+			// then it is a high (half) bit
             hb = 1;
         }
+		// clear OVF interrupt bit to be sure
         TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
-        bo_dec_halfbit(hb);
+
+		// decode half bit
+        //bo_dec_halfbit(hb);
     }
 }
 

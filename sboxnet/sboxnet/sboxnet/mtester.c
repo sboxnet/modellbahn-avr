@@ -20,7 +20,7 @@ APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
 // wird bei jedem TCC0 OV um eins verringert
 volatile int8_t step = NUM_STEPS-1;
 
-// TCC0 overflow 
+// TCC1 overflow 
 ISR(TCC1_OVF_vect) {
     step--;
     if (step < 0) {

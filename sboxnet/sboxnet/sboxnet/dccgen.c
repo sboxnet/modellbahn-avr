@@ -249,7 +249,7 @@ void dg_dcc_stop_generator(struct dg_dcc_control* pcntr) {
     }
 }
 
-ISR(DMA_CH0_vect) {
+ISR(DMA_CH0_vect) { 
     DMA.INTFLAGS = DMA_CH0ERRIF_bm|DMA_CH0TRNIF_bm;
     g_dg_dcc.slots[0].fill = 1;
     g_dg_dcc.free_slot = 0;
