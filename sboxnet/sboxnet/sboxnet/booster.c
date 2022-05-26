@@ -113,6 +113,7 @@ void bo_dec_init(uint8_t evmux);
 void bo_dec_start(void);
 void bo_dcc_sensors_shortcut_off(void);
 void bo_dcc_sensors_shortcut_on(void);
+void bo_booster_init(void);
 
 
 // structs ...........................
@@ -293,8 +294,6 @@ void bo_init_timers(void) {
 /* void bo_do_init_system(void)
 Booster init.
 */
-void bo_booster_init(void);
-
 void bo_do_init_system(void) {
 	bo_init_led_port();
 	bo_init_dccm_port();
@@ -318,44 +317,51 @@ void bo_do_init_system(void) {
 }
 //---------------------------------------------------------------
 
+// DCC sensors off: L6206 Stromüberwachung and short cut timer
 void bo_dcc_sensors_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
     PORTC.INT0MASK = 0; // L6206 Stromüberwachung
     
-    TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm;
+    TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // int for short cut timer off
     
     bo_v.g_dcc_shortcut_cnt = 0;
 }
 
+// DCC sensors init: current overflow (OV) portc int0 (pc3) falling edge and shortcut
 void bo_dcc_sensors_init(void) {
-    port_set(bo_LED_PORT, Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_SHORTCUT_b));
+    port_set(bo_LED_PORT, Bit(bo_LED_NOTAUS_b)|Bit(bo_LED_SHORTCUT_b)|Bit(bo_LED_CUR_OV_b)); // notaus, shortcut, current overflow: leds off
 
-    clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
+    clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b); // booster flags current ov off
 
-    // L6206 Stromüberwachung
-    PORTC.INT0MASK = Bit(bo_CUR_OV_b);
-    PORTC.INTFLAGS = Bit(PORT_INT0IF_bp); // clear interrupt flags;
-    PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
-    PORTC.PIN3CTRL = PORT_ISC_FALLING_gc;
+    // L6206 Stromüberwachung current: portc int0 (pc3) falling edge as portc.int0
+    PORTC.INT0MASK = Bit(bo_CUR_OV_b);		// for pc3 (bit 3)
+    PORTC.INTFLAGS = Bit(PORT_INT0IF_bp);	// clear portc.int0 interrupt flag
+    PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc; // portc.int0 off
+    PORTC.PIN3CTRL = PORT_ISC_FALLING_gc;	// falling edge
     
+	// short cutsensor will be enabled in bo_dcc_sensors_shortcut_on()
     bo_v.g_dcc_shortcut_cnt = 0;
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        TCD0.CCB = TCC0.CNT + bo_TIMER_SHORT_CUT;
-        TCD0.INTFLAGS = Bit(TC0_CCBIF_bp);
-        TCD0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc;
-    }
 }
 
 void bo_dcc_sensors_shortcut_on(void) {
-    if ((PORTC.INTCTRL & PORT_INT0LVL_gm) == PORT_INT0LVL_OFF_gc) {
-        PORTC.INTFLAGS = Bit(PORT_INT0IF_bp);
-        PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_LO_gc;
+    bo_v.g_dcc_shortcut_cnt = 0;	// shortcut count =0
+	// timer tcd0.ccb: short cut timer
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+	    TCD0.CCB = TCD0.CNT + bo_TIMER_SHORT_CUT;	// tcd0.ccb is shortcut timer
+	    TCD0.INTFLAGS = Bit(TC0_CCBIF_bp);			// tcd0 ccb interrupt flag reset
+	    TCD0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc; // and LO Level ccb interrupt on
     }
+	// portc int0: current ov
+    PORTC.INTFLAGS = Bit(PORT_INT0IF_bp); // clear int0 flag
+    PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_LO_gc; // and portc.int0 as low level int on
 }
 
+// short cutsensor int off pc3.int0
 void bo_dcc_sensors_shortcut_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
 }
+
+//-------------------------------------------------------
 
 /* void bo_dcc_power_off_all(void)
 Alles aus: DCC Signal, sensoren, ON LED aus
