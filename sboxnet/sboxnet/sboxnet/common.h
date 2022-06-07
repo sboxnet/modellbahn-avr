@@ -27,7 +27,7 @@
 #include "avrutilslib/defines.h"
 #include "avrutilslib/ringbuffer.h"
 
-#include "sboxnet/sboxnet.h"
+#include "sboxnet.h"
 
 #define BLDR_VERSION           0x0004
 

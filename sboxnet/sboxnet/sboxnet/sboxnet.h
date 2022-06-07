@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 
-#include "sboxnet/sboxnet-struct.h"
+#include "sboxnet-struct.h"
 
 
 #ifdef __cplusplus

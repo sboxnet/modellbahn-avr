@@ -340,6 +340,31 @@ static uint8_t com_process_std_msg(struct sboxnet_msg_header *pmsg) {
                 return SBOXNET_ACKRC_OK;
             }
         }
+		case SBOXNET_CMD_DEV_GET_DESC_ADDR: {
+            /*if (pmsg->opt.len > 1) {
+	            return SBOXNET_ACKRC_INVALID_ARG;
+            }*/
+			
+            if (pmsg->opt.len) {
+	            return SBOXNET_ACKRC_INVALID_ARG;
+            }
+			
+            /*if (id >= DEV_NUM_DESCS) {
+	            return SBOXNET_ACKRC_INVALID_ARG;
+            }
+			*/
+            uint8_t* pdesc = bldr_eeprom.dev_desc[0];
+            uint8_t n = 0;
+            while (n < DEV_DESC_MAX_SIZE) {
+	            uint8_t c = e2prom_get_byte(pdesc++);
+	            if (c == 0 || c == 0xff) {
+		            break;
+	            }
+	            pmsg->data[n++] = c;
+            }
+            pmsg->opt.len = n;
+            return SBOXNET_ACKRC_OK;
+		}
     }
     
     if (pmsg->dstaddr == SBOXNET_ADDR_BROADCAST) {

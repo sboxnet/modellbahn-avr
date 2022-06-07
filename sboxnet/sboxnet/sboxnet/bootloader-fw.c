@@ -274,7 +274,7 @@ static uint16_t bldr_stack_size(void) {
 #define SBOXNET_USART_ID              USARTE0
 #define SBOXNET_USART_DEF_INTR        1
 #define SBOXNET_PRNG_SEED             (g_v.prandom)
-#include "sboxnet/sboxnet.c"
+#include "sboxnet.c"
 
 SBOXNET_SECTION ISR(TCE0_CCA_vect) {
     sboxnet_timer_bit();
@@ -475,7 +475,7 @@ static uint8_t _bldr_process_basic_msg(struct sboxnet_msg_header *pmsg) {
             }
             pmsg->opt.len = 0;
             return SBOXNET_ACKRC_OK;
-        }
+        }		
     }
     return SBOXNET_ACKRC_CMD_UNKNOWN;
 }

@@ -78,7 +78,6 @@ booster:
  * TCD0.CCA	booster Periodic timer  every 10ms ~ 100Hz
  * TCD0.CCB	booster Kurzschluss Erkennung (shortcut detector)
  * TCD0.CCC	booster cutout generator
- *
  * PORTC_INT0	L6206 current
  * PORTC_INT1	DCC Input Signal
  *

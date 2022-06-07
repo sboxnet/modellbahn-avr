@@ -26,7 +26,7 @@
 #include "avrutilslib/defines.h"
 #include "avrutilslib/random.h"
 
-#include "sboxnet/sboxnet.h"
+#include "sboxnet.h"
 
 #ifndef __AVR_XMEGA__
 #undef __SELECT_USART

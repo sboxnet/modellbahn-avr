@@ -109,7 +109,7 @@
 
 // declaration .........................
 static void bo_do_dec_parse_packet(void);
-void bo_dec_init(uint8_t evmux);
+void bo_dec_init(void);
 void bo_dec_start(void);
 void bo_dcc_sensors_shortcut_off(void);
 void bo_dcc_sensors_shortcut_on(void);
@@ -351,12 +351,9 @@ void bo_dcc_sensors_shortcut_on(void) {
 	    TCD0.INTFLAGS = Bit(TC0_CCBIF_bp);			// tcd0 ccb interrupt flag reset
 	    TCD0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc; // and LO Level ccb interrupt on
     }
-	// portc int0: current ov
-    PORTC.INTFLAGS = Bit(PORT_INT0IF_bp); // clear int0 flag
-    PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_LO_gc; // and portc.int0 as low level int on
 }
 
-// short cutsensor int off pc3.int0
+// shortcut sensor int off pc3.int0
 void bo_dcc_sensors_shortcut_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
 }
@@ -364,7 +361,7 @@ void bo_dcc_sensors_shortcut_off(void) {
 //-------------------------------------------------------
 
 /* void bo_dcc_power_off_all(void)
-Alles aus: DCC Signal, sensoren, ON LED aus
+all off: DCC Signal, sensors, ON LED off
 */
 void bo_dcc_power_off_all(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
@@ -382,59 +379,54 @@ void bo_dcc_power_off_all(void) {
 
         bo_v.g_timer_startup = 0; // Startup Timer reseten
 		
-		// LED ON aus
+		// LED ON off
 		port_setbit(bo_LED_PORT, bo_LED_ON_b);		
     }
 }
 
 /* void bo_dcc_power_on_track(void)
-DCC Signal auf das Gleis und DCC Decoder starten.
+DCC signal on track and start DCC decoder.
 */
 void bo_dcc_power_on_track(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		// PORTC Interrupt 1 PC4 ein
+		// PORTC Interrupt 1 PC4 on
         PORTC.INT1MASK = Bit(bo_DCC_IN_b);
-		//auf PC4 beidseitige Flanke
+		// PC4(=DCC in) both edges
         PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc;
-		// und aktivieren: Interrupt 1 on PORTC
-        PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
-		// Interrupt 1 auf PORTC als MED level Interrupt
+		// PORTC INT 1 on:
+        PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);  // clear PORTC.INT1 flag
+		// Portc.INT1 as MED Int enable
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_MED_gc;
-  	/*PORTC.INT1MASK = Bit(bo_DCC_IN_b); // PORTC INT1: aktiviere PORTC PIN 4 als Source
-	PORTC.PIN4CTRL = PORT_ISC_BOTHEDGES_gc; // PC4 Interrupt bei beiden Flanken
-	PORTC.INTFLAGS = 3; // loesche Interrtupt Flags
-	PORTC.INTCTRL = PORT_INT1LVL_HI_gc;*/
 
-		// DCC Sensoren aktivieren
+		// DCC sensors enable
         bo_dcc_sensors_init();
         
-		// Startup Timer starten
+		// startup timer start
         bo_v.g_timer_startup = bo_TIMER_STARTUP;
-		// DCC Decoder starten
+		// DCC decoder start
 		bo_dec_start();
 
-		// ist DCC Signal auf High?
+		// is DCC signal H?
         if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
-			// ja:
-			// Brücke: IN1 auf H
+			// bridge: IN1 to H
             port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
-			// Brücke: IN2 auf L
+			// bridge: IN2 to L
             port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         } else {
-			// nein:
-			// Brücke: IN1 auf L
+			
+			// bridge: IN1 to L
             port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
-			// Brücke: IN2 auf H
+			// bridge: IN2 to H
             port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
         }
-		// Brücke ein
+		// bridge enable
         port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
 		
-		// LED ON ein
+		// set LED ON to on
 		port_clrbit(bo_LED_PORT, bo_LED_ON_b);
     }
 }
-
+//-------------------------------------------------------
 /* void bo_dcc_notaus(void)
 NOTAUS an: Signal vom Gleis, setze Notaus Flag, NOTAUS LED an
  */
@@ -449,7 +441,7 @@ Booster Init.
 */
 void bo_booster_init(void) {
     bo_dcc_power_off_all(); // zuerst mal alles aus
-	bo_dec_init(EVSYS_CHMUX_PORTC_PIN4_gc); // init DCC decoder: PIN4 of PORTC
+	bo_dec_init(); // init DCC decoder: PIN4 of PORTC
 	
 	timer_register(&bo_v.timer_startup, TIMER_RESOLUTION_16MS);
 	timer_register(&bo_v.timer_dcc_watchdog, TIMER_RESOLUTION_16MS);
@@ -657,7 +649,7 @@ static void bo_do_dec_parse_packet(void);
 //struct dccdec g_dccdec;
 
 
-void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
+void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
     bo_v.dccdec.preamble = 0;
     bo_v.dccdec.bufsize = 0;
@@ -666,7 +658,7 @@ void bo_dec_init(uint8_t evmux) { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.xor = 0;
     bo_v.dccdec.cutout = 0;
     
-    EVSYS.CH0MUX = evmux; // event source multiplexer: PORTC PIN4 DCC Input --> TCC1.CCA
+    EVSYS.CH0MUX = EVSYS_CHMUX_PORTC_PIN4_gc; // event source multiplexer: PORTC PIN4 DCC Input --> TCC1.CCA
     EVSYS.CH0CTRL = 0;
 }
 
@@ -817,8 +809,42 @@ ISR(TCC1_CCA_vect) { // DCC Decoder
         TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
 
 		// decode half bit
-        //bo_dec_halfbit(hb);
+        bo_dec_halfbit(hb);
     }
+}
+
+// every 10ms ~ 100Hz
+ISR(TCD0_CCA_vect) {
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		volatile uint16_t tcca = TCD0.CCA;
+		volatile uint16_t tcnt = TCD0.CNT;
+		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
+		TCD0.CCA = tcca2;
+		volatile uint8_t x = 1;
+	}
+	
+	// Timertick erhöhen
+	bo_v.g_timer++;
+	// Startup Timer verringern wenn <> 0
+	if (bo_v.g_timer_startup) {
+		bo_v.g_timer_startup--;
+	}
+	// Taster einlesen (NOTAUS)
+	bo_read_switches();
+}
+
+ISR(TCD0_CCB_vect) { // Kurzschluss Erkennung (shortcut detector)
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		TCD0.CCB = TCD0.CNT + bo_TIMER_SHORT_CUT;
+	}
+	if (bo_v.g_dcc_shortcut_cnt >= bo_MAX_SHORTCUT_CNT) {
+		bo_dcc_power_off_all();
+		setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
+		port_clrbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
+		} else {
+		port_setbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
+	}
+	bo_v.g_dcc_shortcut_cnt = 0;
 }
 
 // dcc detector cutout generator
@@ -870,39 +896,6 @@ ISR(PORTC_INT0_vect) { // L6206 current
 	}
 }
 
-ISR(TCD0_CCB_vect) { // Kurzschluss Erkennung (shortcut detector)
-	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		TCD0.CCB = TCD0.CNT + bo_TIMER_SHORT_CUT;
-	}
-	if (bo_v.g_dcc_shortcut_cnt >= bo_MAX_SHORTCUT_CNT) {
-		bo_dcc_power_off_all();
-		setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_CUR_OV_b);
-		port_clrbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
-	} else {
-		port_setbit(bo_LED_PORT, bo_LED_SHORTCUT_b);
-	}
-	bo_v.g_dcc_shortcut_cnt = 0;
-}
-
-// every 10ms ~ 100Hz
-ISR(TCD0_CCA_vect) {
-	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-		volatile uint16_t tcca = TCD0.CCA;
-		volatile uint16_t tcnt = TCD0.CNT;
-		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
-		TCD0.CCA = tcca2;
-		volatile uint8_t x = 1;
-	}
-	
-	// Timertick erhöhen
-	bo_v.g_timer++;
-	// Startup Timer verringern wenn <> 0
-	if (bo_v.g_timer_startup) {
-		bo_v.g_timer_startup--;
-	}
-	// Taster einlesen (NOTAUS)
-	bo_read_switches();
-}
 
 ISR(PORTC_INT1_vect) { // DCC Input Signal
 	// ist DCC H?

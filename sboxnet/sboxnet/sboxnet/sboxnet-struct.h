@@ -89,7 +89,7 @@ struct sboxnet_debug_info {
 
 // SBOXNET Commands
 
-#define SBOXNET_PROTOCOL_VERSION        0x0101
+#define SBOXNET_PROTOCOL_VERSION        0x0102
 // System Commands:
 // reset. clients must request a new address --> answer SBOXNET_CMD_DEV_REQ_ADDR
 // destination: single client or broadcast
@@ -114,6 +114,8 @@ struct sboxnet_debug_info {
 #define SBOXNET_CMD_DEV_FW_UPD_START     0x18
 // download firmware:  len:3+n 16bit-addr bitflags n * data8  --> len:0
 #define SBOXNET_CMD_DEV_FW_UPD_LOAD      0x19
+// device get address addr and description:    -->  len:n n*data8, devaddr in srcaddr
+#define SBOXNET_CMD_DEV_GET_DESC_ADDR         0x1a
 
 // Register Commands
 // read register: len:3 reg16 len8   --> len:2*len8 len8*databyte16
