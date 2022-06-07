@@ -174,8 +174,8 @@ class SboxnetReceiver(threading.Thread):
                         print("-------------------------------------")
                         print(f"LOGON  {ame}")
                         print("+++++++++++++++++++++++++++++++++++++")
-        #elif msg.cmd == (sboxnet.SBOXNET_CMD_REG_READ|0x80):
-        #    self.sbntst.printmsg(msg)
+        elif msg.cmd == (sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR|0x80):
+            self.sbntst.printmsg(msg)
             
         self.sbntst.printmsg(msg)
         self.sbntst.lastcmd = None
@@ -390,9 +390,14 @@ class sbntst(object):
             self.init_conn()
             #self.send_net_reset()
             # wait 2 secs to let init
-
-            t = SboxnetGetAddresses(self)
-            t.start()
+            
+            # broadcast to all devices, get addr and desc
+            msg = sboxnet.SboxnetMsg.new(255, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, 0)
+            self.sbntransmitter.send(msg)
+            time.sleep(0.5)
+            
+            #t = SboxnetGetAddresses(self)
+            #t.start()
             while True:
                 rline = ""
                 with self.readlock:
@@ -451,11 +456,11 @@ class sbntst(object):
             self.sbntransmitter.send(resetmsg)
             time.sleep(1)
     
-    def show_dev_descs(self):
-        for addr in range(256):
-            logDebug(self, f"get desc: addr={addr}:")
-            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0], printit=True, wait_for_anwers=False)
-            time.sleep(0.5)
+    #def show_dev_descs(self):
+        #for addr in range(256):
+        #    logDebug(self, f"get desc: addr={addr}:")
+        #    self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [0], printit=True, wait_for_anwers=False)
+        #    time.sleep(0.5)
 
     #
     # SboxnetTester.execmsg(addr, cmd, data = [], printit = True)
@@ -491,6 +496,10 @@ class sbntst(object):
             f"{('>' if (msg.cmd & 0x80) else ' ')} {sboxnet.cmd_to_str(msg.cmd & 0x7f)} {msg.cmd} (0x{msg.cmd:x}) CRC {msg.crc} (0x{msg.crc:x})"
         #logDebug(self, f"Outstr: {outstr}")
         
+        if msg.cmd == (0x80|sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR):
+            logDebug(self, f'address and devdesc')
+            desc = bytes(msg.data[0:msg.dlen]).decode(encoding="ascii")
+            outstr = outstr + f"DEV {msg.srcaddr} DESC: {desc}"
         if msg.cmd == (0x80|sboxnet.SBOXNET_CMD_DEV_GET_DESC):
             logDebug(self, f'---- device description ----')
             desc = bytes(msg.data[0:msg.dlen]).decode(encoding="ascii")
