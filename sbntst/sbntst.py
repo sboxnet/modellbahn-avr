@@ -174,9 +174,6 @@ class SboxnetReceiver(threading.Thread):
                         print("-------------------------------------")
                         print(f"LOGON  {ame}")
                         print("+++++++++++++++++++++++++++++++++++++")
-        elif msg.cmd == (sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR|0x80):
-            self.sbntst.printmsg(msg)
-            
         self.sbntst.printmsg(msg)
         self.sbntst.lastcmd = None
                 
@@ -321,6 +318,7 @@ class sbntst(object):
                     self.cmd_reset,
                     self.cmd_devreset,
                     self.cmd_devgetdesc,
+                    self.cmd_devgetdescaddr,
                     self.cmd_devsetdesc,
                     self.cmd_dbgstate,
                     self.cmd_dbginfo,
@@ -414,6 +412,7 @@ class sbntst(object):
                     
                 found = False
                 for cmd in cmdlist:
+                    #print(cmd)
                     try:
                         if cmd(tokens):
                             found = True
@@ -547,32 +546,33 @@ class sbntst(object):
     def cmd_help(self, toks):
         if toks[0] not in ["help", "h"]:
             return 0
-        print("help|h")
-        print("exit|quit|q")
-        print("getserialnumber")
-        print("setserialnumber s")
-        print("list")
-        print("reset")
-        print("devreset [addr]")
-        print("devgetdesc addr [1..id]")
-        print("devsetdesc addr [1..id] text")
-        print("dbgstate|ds")
-        print("dbginfo|di")
-        print("dbgrecvbuf|dr")
-        print("dbgtmitbuf|dt")
-        print("dbgstack|dst")
-        print("getfwversion")
-        print("identify addr on")
-        print("regread|rr addr reg [num]")
-        print("regreadm|rrm addr reg0 ...")
-        print("regwrite|rw addr reg data")
-        print("regwritebit|rwb addr reg(31..) bit val")
-        print("locopower|lp addr flags")
-        print("locodrive|ld addr locaddr locspeed [fnkeys]")
-        print("locofunc|lf addr locaddr fnkeys")
-        print("locoadd|la addr locaddr flags")
-        print("locodel addr locaddr")
-        print("locopom addr locaddr cv data")
+        put_string("help|h")
+        put_string("exit|quit|q")
+        put_string("getserialnumber")
+        put_string("setserialnumber s")
+        put_string("list")
+        put_string("reset")
+        put_string("devreset [addr]")
+        put_string("devgetdesc addr [1..id]")
+        put_string("devgetdescaddr|gda addr")
+        put_string("devsetdesc addr [1..id] text")
+        put_string("dbgstate|ds")
+        put_string("dbginfo|di")
+        put_string("dbgrecvbuf|dr")
+        put_string("dbgtmitbuf|dt")
+        put_string("dbgstack|dst")
+        put_string("getfwversion")
+        put_string("identify addr on")
+        put_string("regread|rr addr reg [num]")
+        put_string("regreadm|rrm addr reg0 ...")
+        put_string("regwrite|rw addr reg data")
+        put_string("regwritebit|rwb addr reg(31..) bit val")
+        put_string("locopower|lp addr flags")
+        put_string("locodrive|ld addr locaddr locspeed [fnkeys]")
+        put_string("locofunc|lf addr locaddr fnkeys")
+        put_string("locoadd|la addr locaddr flags")
+        put_string("locodel addr locaddr")
+        put_string("locopom addr locaddr cv data")
         
         """
         print("tobootloader")
@@ -655,6 +655,18 @@ class sbntst(object):
             if addr is not None and did is not None:
                 self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC, [did])
                 time.sleep(0.5)
+        return 1
+    #
+    # sbntst.cmd_devgetdescaddr
+    # sboxnet get device descripion and address
+    def cmd_devgetdescaddr(self, toks):
+        if toks[0] not in ["devgetdescaddr", "gda"]:
+            return 0
+        if len(toks) != 2:
+            print("ERROR: usage: devgetdescaddr addr")
+        else:
+            addr = checkbyte(toks[1], "addr")
+            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, wait_for_anwers=False)
         return 1
     #
     # sbntst.cmd_devsetdesc(toks)
@@ -1018,7 +1030,7 @@ def output_loop():
             print(str)
         except queue.Empty:
             pass
-        time.sleep(.3)
+        time.sleep(.1)
         
 
 if __name__ == "__main__":
