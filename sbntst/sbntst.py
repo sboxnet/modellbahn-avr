@@ -499,6 +499,7 @@ class sbntst(object):
             logDebug(self, f'address and devdesc')
             desc = bytes(msg.data[0:msg.dlen]).decode(encoding="ascii")
             outstr = outstr + f"DEV {msg.srcaddr} DESC: {desc}"
+            put_string(f"DEV {msg.srcaddr} DESC: {desc}")
         if msg.cmd == (0x80|sboxnet.SBOXNET_CMD_DEV_GET_DESC):
             logDebug(self, f'---- device description ----')
             desc = bytes(msg.data[0:msg.dlen]).decode(encoding="ascii")
