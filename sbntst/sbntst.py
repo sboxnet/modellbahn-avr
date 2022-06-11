@@ -254,19 +254,7 @@ class SboxnetWatchdog(Thread):
         logDebug(self, f"TERMINATE {self}")
         
     def terminate(self):
-        self.term = True    
-
-class SboxnetGetAddresses(Thread):
-    def __init__(self, sbntst):
-        super().__init__(name="SboxnetGetAddresses")
-        self.sbntst = sbntst
-        self.debug = self.sbntst.debug
-        
-    def run(self):
-        if self.sbntst:
-            #print(dir(self.sbntst))
-            self.sbntst.show_dev_descs()
-       
+        self.term = True      
             
       
 
@@ -304,7 +292,8 @@ class sbntst(object):
         #self.sbnreiver.start()
         # start transmitter
         self.sbntransmitter.start()
-        self.sbnwatchdog.start()        
+        self.sbnwatchdog.start()
+        self.addrdescmap = {}
     
     def get_sbnusb(self):
         return self.sbnusb
@@ -315,6 +304,7 @@ class sbntst(object):
                     self.cmd_getserialnumber,
                     self.cmd_setserialnumber,
                     self.cmd_list,
+                    self.cmd_listad,
                     self.cmd_reset,
                     self.cmd_devreset,
                     self.cmd_devgetdesc,
@@ -392,12 +382,9 @@ class sbntst(object):
             # broadcast to all devices, get addr and desc
             msg = sboxnet.SboxnetMsg.new(255, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, 0)
             self.sbntransmitter.send(msg)
-            time.sleep(0.5)
-            
-            #t = SboxnetGetAddresses(self)
-            #t.start()
             while True:
                 rline = ""
+                time.sleep(2)
                 with self.readlock:
                     # do read actions
                     rline = input("> ")
@@ -499,6 +486,9 @@ class sbntst(object):
             logDebug(self, f'address and devdesc')
             desc = bytes(msg.data[0:msg.dlen]).decode(encoding="ascii")
             outstr = outstr + f"DEV {msg.srcaddr} DESC: {desc}"
+            # find addr in map
+            addr = msg.srcaddr
+            self.addrdescmap[addr] = desc
             put_string(f"DEV {msg.srcaddr} DESC: {desc}")
         if msg.cmd == (0x80|sboxnet.SBOXNET_CMD_DEV_GET_DESC):
             logDebug(self, f'---- device description ----')
@@ -552,6 +542,7 @@ class sbntst(object):
         put_string("getserialnumber")
         put_string("setserialnumber s")
         put_string("list")
+        put_string("listad|ad")
         put_string("reset")
         put_string("devreset [addr]")
         put_string("devgetdesc addr [1..id]")
@@ -640,7 +631,16 @@ class sbntst(object):
             return 0
         self.sbnreiver.addrmap.print_entries()
         return 1
-    
+    #
+    # sbntst.cmd_list(toks)
+    # list all devices on bus with desc
+    def cmd_listad(self, toks):
+        if toks[0] not in ["listad", "ad"]:
+            return 0
+        x = dict(sorted(self.addrdescmap.items()))
+        for k in x.keys():
+            put_string(f"ADDR: {k} DESC: {x[k]}")
+        return 1
     #
     # sbntst.cmd_devgetdesc(toks)
     # sboxnet get device description
