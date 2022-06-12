@@ -42,6 +42,8 @@ SBOXNET_CMD_DEV_IDENTIFY = 0x16
 SBOXNET_CMD_DEV_FW_UPD_START = 0x18
 # download firmware:  len:7+n productid16 vendorid16 16bit-addr bitflags n * data8  --> len:0
 SBOXNET_CMD_DEV_FW_UPD_LOAD = 0x19
+# device get address addr and description:    -->  len:n n*data8, devaddr in srcaddr
+SBOXNET_CMD_DEV_GET_DESC_ADDR = 0x1a
 
 # Register Commands
 # read register: len:3 reg16 len8   --> len:2*len8 len8*databyte16
@@ -96,6 +98,7 @@ CMD_STR = {
     SBOXNET_CMD_DEV_IDENTIFY:"SBOXNET_CMD_DEV_IDENTIFY",
     SBOXNET_CMD_DEV_FW_UPD_START:"SBOXNET_CMD_DEV_FW_UPD_START",
     SBOXNET_CMD_DEV_FW_UPD_LOAD:"SBOXNET_CMD_DEV_FW_UPD_LOAD",
+    SBOXNET_CMD_DEV_GET_DESC_ADDR:"SBOXNET_CMD_DEV_GET_DESC_ADDR",
     SBOXNET_CMD_REG_READ:"SBOXNET_CMD_REG_READ",
     SBOXNET_CMD_REG_READ_MULTI:"SBOXNET_CMD_REG_READ_MULTI",
     SBOXNET_CMD_REG_WRITE:"SBOXNET_CMD_REG_WRITE",
