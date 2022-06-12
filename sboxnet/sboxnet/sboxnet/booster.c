@@ -282,7 +282,7 @@ void bo_init_timers(void) {
 	TCD0.CTRLD = 0;
 	TCD0.CTRLE = 0; //TC1_BYTEM_bm;							// Byte Mode
 	TCD0.INTCTRLA = 0;
-	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCBINTLVL_LO_gc|TC_CCCINTLVL_LO_gc|TC_WGMODE_NORMAL_gc;
+	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc|TC_CCBINTLVL_LO_gc|TC_CCCINTLVL_LO_gc;
 	// low interrupt level:
 	// CCB wird in bo_dcc_sensors_init() aktiviert und in bo_dcc_sensors_off() deaktvierte
 	// CCC wird in bo_do_dec_parse_packet() aktiviert und in in der ISR(TCD0_CCC_vect) wieder deaktiviert
@@ -322,7 +322,7 @@ void bo_dcc_sensors_off(void) {
     PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT0LVL_gm) | PORT_INT0LVL_OFF_gc;
     PORTC.INT0MASK = 0; // L6206 Stromüberwachung
     
-    TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // int for short cut timer off
+    TCD0.INTCTRLB = TCD0.INTCTRLB & ~TC0_CCBINTLVL_gm; // int for short cut timer off
     
     bo_v.g_dcc_shortcut_cnt = 0;
 }
@@ -349,8 +349,8 @@ void bo_dcc_sensors_shortcut_on(void) {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 	    TCD0.CCB = TCD0.CNT + bo_TIMER_SHORT_CUT;	// tcd0.ccb is shortcut timer
 	    TCD0.INTFLAGS = Bit(TC0_CCBIF_bp);			// tcd0 ccb interrupt flag reset
-	    TCD0.INTCTRLB = (TCC0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc; // and LO Level ccb interrupt on
-    }
+	    TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCBINTLVL_gm) | TC_CCBINTLVL_LO_gc; // and LO Level ccb interrupt on
+	}
 }
 
 // shortcut sensor int off pc3.int0
@@ -375,7 +375,7 @@ void bo_dcc_power_off_all(void) {
         PORTC.INTFLAGS = Bit(PORT_INT1IF_bp);
         PORTC.INTCTRL = (PORTC.INTCTRL & ~PORT_INT1LVL_gm) | PORT_INT1LVL_OFF_gc; // DCC Input Signal Interrupt aus
 
-        TCD0.INTCTRLB &= ~TC0_CCBINTLVL_gm; // TCC0 CCB Kurzschlusserkennung aus
+        TCD0.INTCTRLB = TCD0.INTCTRLB & ~TC0_CCBINTLVL_gm; // TCD0 CCB Kurzschlusserkennung aus
 
         bo_v.g_timer_startup = 0; // Startup Timer reseten
 		
@@ -426,75 +426,84 @@ void bo_dcc_power_on_track(void) {
 		port_clrbit(bo_LED_PORT, bo_LED_ON_b);
     }
 }
-//-------------------------------------------------------
+
 /* void bo_dcc_notaus(void)
-NOTAUS an: Signal vom Gleis, setze Notaus Flag, NOTAUS LED an
+NOTAUS on: DCC signal off, set Notaus flag, NOTAUS LED on
  */
 void bo_dcc_notaus(void) {
-    bo_dcc_power_off_all(); // Gleis stromlos machen
-    setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b); // Setze NOTAUS Flag 
-    port_clrbit(bo_LED_PORT, bo_LED_NOTAUS_b); // LED NOTAUS ein
+    bo_dcc_power_off_all(); // track power off
+    setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b); // set NOTAUS flag 
+    port_clrbit(bo_LED_PORT, bo_LED_NOTAUS_b); // LED NOTAUS on
 }
 
 /* void bo_booster_init(void)
-Booster Init.
+Booster init.
 */
 void bo_booster_init(void) {
-    bo_dcc_power_off_all(); // zuerst mal alles aus
-	bo_dec_init(); // init DCC decoder: PIN4 of PORTC
+    bo_dcc_power_off_all(); // all off
+	bo_dec_init();			// init DCC decoder: PIN4 of PORTC
 	
-	timer_register(&bo_v.timer_startup, TIMER_RESOLUTION_16MS);
-	timer_register(&bo_v.timer_dcc_watchdog, TIMER_RESOLUTION_16MS);
+	timer_register(&bo_v.timer_startup, TIMER_RESOLUTION_16MS);	// startup timer: 16ms resolution
+	//timer_register(&bo_v.timer_dcc_watchdog, TIMER_RESOLUTION_16MS);
+	
+	// read shortcut limit from eeprom
 	volatile uint16_t a0 = offsetof(struct Eeprom_t, booster.shortcut_limit);
 	bo_v.shortcut_limit = e2prom_get_word(a0);
 	if (bo_v.shortcut_limit == 0xffff) {
 		bo_v.shortcut_limit = bo_BOOSTER_DEFAULT_SHORTCUT_LIMIT;
 	}
+	// read shortcut interval from eeprom
 	volatile uint16_t a1 = offsetof(struct Eeprom_t, booster.shortcut_interval);
 	bo_v.shortcut_interval = e2prom_get_word(a1);
 	if (bo_v.shortcut_interval == 0xffff) {
 		bo_v.shortcut_interval = bo_BOOSTER_DEFAULT_SHORTCUT_INTERVAL;
 	}
-	bo_v.shortcut_nummax = 0;
-	bo_v.eeprom_flags.write_shortcut_limit = 0;
-	bo_v.eeprom_flags.write_shortcut_interval = 0;
+	bo_v.shortcut_nummax = 0;	// max shortcut number
+	bo_v.eeprom_flags.write_shortcut_limit = 0;		// has shortcut limit be written?
+	bo_v.eeprom_flags.write_shortcut_interval = 0;	// has shortcut interval be written?
 }
 
 /* void bo_dcc_signal_disable(void)
-Booster aus.
+disable booster.
 */
 static NOINLINE void bo_dcc_signal_disable(void) {
-	// EN auf L
+	// EN to L
     port_clrbit(bo_DCCM_PORT, bo_DCCM_EN_b);
     _delay_us(2);
 }
 
 /* void bo_dcc_signal_enable(void)
-Booster ein.
+enable booster.
 */
 static NOINLINE void bo_dcc_signal_enable(void) {
     _delay_us(1);
-	// EN auf H
+	// EN to H
     port_setbit(bo_DCCM_PORT, bo_DCCM_EN_b);
 }
-
+/* void bo_read_switches(void)
+booster switches read: NOTAUS
+*/
 static void bo_read_switches(void) {
     uint8_t sw;
 
     sw = 0;
-    if (bit_is_set(port_in(bo_DCCM_PORT), bo_NOTAUS_b)) {
-       setbit(sw, bo_SWITCH_NOTAUS_b);
+    if (bit_is_set(port_in(bo_DCCM_PORT), bo_NOTAUS_b)) {	// when switch is open
+       setbit(sw, bo_SWITCH_NOTAUS_b);						// then NOTAUS
     }
     
-    debounce_keys(&bo_v.g_switches, &bo_v.g_switches_t, sw);
+    debounce_keys(&bo_v.g_switches, &bo_v.g_switches_t, sw);	// debounce keys
 }
 
+/* void bo_measure_task(void)
+get ad values: ADC: PA0,2: Strom PA1: Voltage
+called in bo_do_main
+*/
 static void bo_measure_task(void) {
-    if (ADCA.INTFLAGS == 0x03) {
+    if (ADCA.INTFLAGS == 0x07) {
         int16_t ch0;
         int16_t ch1;
-		uint16_t ch2;
-        // channel 0 and 1 conversion finished
+		int16_t ch2;
+        // channel 0,1 and 2 conversion finished
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
             ch0 = (int16_t)ADCA.CH0.RES;
             ch1 = (int16_t)ADCA.CH1.RES;
@@ -514,32 +523,50 @@ static void bo_measure_task(void) {
     }
 }
 
+/*  void bo_notaus_task(void)
+test if NOTAUS is active
+called in bo_do_main
+*/
 static void bo_notaus_task(void) {
     if (bit_is_set(bo_v.g_switches, bo_SWITCH_NOTAUS_b)) {
         bo_dcc_notaus();
     }
 }
 
+/* uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg)
+handle sboxnet msg: pmsg
+messages handled:
+- SBOXNET_CMD_LOCO_POWER [on]: booster on/off
+*/
 uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
     switch (pmsg->cmd) {
+		// booster on/off
         case SBOXNET_CMD_LOCO_POWER: {
+			// is one parameter is given [flag]?
+			// flag & 0x01 != 0: ON
+			// flag & 0x01 == 0: OFF
             if (pmsg->opt.len != 1) {
                 return SBOXNET_ACKRC_INVALID_ARG;
             }
             uint8_t flags = pmsg->data[0];
             if (flags & 0x01) { // on
+				// if NOTAUS flag is set, then NOTAUS
                 if (bit_is_set(bo_v.g_switches, bo_SWITCH_NOTAUS_b)) {
                     return SBOXNET_ACKRC_LOCO_NOTAUS;
                 } else {
+					// else reset NOTAUS flag
                     clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_NOTAUS_b);
-                    port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b); // NOTAUS LED OFF
+					// and NOTAUS LED off
+                    port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b);
                 }
-
-                if (bit_is_clear(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b)) {
+				// if booster is off?
+				if (bit_is_clear(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b)) {
+					// then DCC on track
                     bo_dcc_power_on_track();
                 }
+				// set booster flags
                 setbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b);
-            } else { // off
+            } else { // else off
                 bo_dcc_power_off_all();
                 clrbit(bo_v.g_booster_flags, bo_BOOSTER_FLG_ON_b);
             }
@@ -551,21 +578,34 @@ uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg) {
     return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
+/* uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata)
+read a register
+*/
 uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata) {
     switch(reg) {
-
+		// booster flags
         case R_BOOSTER_FLAGS: *pdata = bo_v.g_booster_flags; return 0;
+		// read number of ADC values
         case R_ADCVAL_NUM: *pdata = 3; return 0;
+		// read value of adc channel 0: bridge 1 current
         case R_ADCVAL_0: *pdata = bo_v.g_advals[0]; return 0;
+		// read value of adc channel 1: bridge supply voltage
         case R_ADCVAL_1: *pdata = bo_v.g_advals[1]; return 0;
+		// read value of adc channel 2: bridge 2 current
         case R_ADCVAL_2: *pdata = bo_v.g_advals[2]; return 0;
+		// read shortcut limit
         case R_BOOSTER_SHORTCUT_LIMIT:  *pdata = bo_v.shortcut_limit; return 0;
+		// read max shortcut count
         case R_BOOSTER_SHORTCUT_CNT:    *pdata = bo_v.shortcut_nummax; bo_v.shortcut_nummax = 0; return 0;
+		// read shortcut interval
         case R_BOOSTER_SHORTCUT_INTERVAL: *pdata = bo_v.shortcut_interval; return 0;
     }    
     return SBOXNET_ACKRC_REG_INVALID;
 };
 
+/* uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask)
+write a register
+*/
 uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 	switch(reg) {
         case R_BOOSTER_SHORTCUT_LIMIT: {
@@ -583,11 +623,11 @@ uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 }
 __attribute__((optimize("O0")))
 void bo_do_setup(void) {
-	volatile uint8_t c = 0;
-	volatile uint8_t a = 123;
 }
 
-
+/* void bo_do_main(void)
+main booster: do measure, notaus, and write changed eeprom values
+*/
 void bo_do_main(void) {
 	// Sparnnung und Strom Messung
     bo_measure_task();
@@ -646,9 +686,6 @@ void bo_do_before_bldr_activate(void) {
 // declaration
 static void bo_do_dec_parse_packet(void);
 
-//struct dccdec g_dccdec;
-
-
 void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
     bo_v.dccdec.preamble = 0;
@@ -658,7 +695,7 @@ void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.xor = 0;
     bo_v.dccdec.cutout = 0;
     
-    EVSYS.CH0MUX = EVSYS_CHMUX_PORTC_PIN4_gc; // event source multiplexer: PORTC PIN4 DCC Input --> TCC1.CCA
+    EVSYS.CH0MUX = EVSYS_CHMUX_PORTC_PIN4_gc; // event source multiplexer: src PORTC PIN4 DCC Input --> dest TCC1.CCA
     EVSYS.CH0CTRL = 0;
 }
 
@@ -899,7 +936,8 @@ ISR(PORTC_INT0_vect) { // L6206 current
 
 ISR(PORTC_INT1_vect) { // DCC Input Signal
 	// ist DCC H?
-	if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+	volatile uint8_t x = bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b);
+	if (x) { //bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
 		// zuerst aus
 		//bo_dcc_signal_disable();
 		// dann IN1 H
