@@ -686,6 +686,8 @@ void bo_do_before_bldr_activate(void) {
 // declaration
 static void bo_do_dec_parse_packet(void);
 
+
+
 void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
     bo_v.dccdec.preamble = 0;
@@ -857,7 +859,6 @@ ISR(TCD0_CCA_vect) {
 		volatile uint16_t tcnt = TCD0.CNT;
 		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
 		TCD0.CCA = tcca2;
-		volatile uint8_t x = 1;
 	}
 	
 	// Timertick erhöhen
