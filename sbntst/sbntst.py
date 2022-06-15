@@ -384,7 +384,11 @@ class sbntst(object):
             self.sbntransmitter.send(msg)
             while True:
                 rline = ""
-                time.sleep(2)
+                #l1 = len(self.addrdescmap)
+                #print(l1)
+                #while l1 != len(self.addrdescmap):
+                time.sleep(0.1)
+                #print("sync end")
                 with self.readlock:
                     # do read actions
                     rline = input("> ")
