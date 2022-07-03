@@ -169,7 +169,7 @@ static void bo_do_dec_parse_packet(void) {
 		TCD0.INTFLAGS = Bit(TC0_CCCIF_bp);
 		TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCCINTLVL_gm)|TC_CCCINTLVL_LO_gc;
 		bo_v.dccdec.cutout = 1;
-		//port_setbit(bo_DCC_CUTOUT_TEST_PORT, bo_DCC_CUTOUT_TEST_b); // cutout test point
+		port_setbit(bo_DCCM_PORT, bo_DCCM_CUTOUT_b); // cutout test point
 	}
 }
 
@@ -899,9 +899,8 @@ ISR(TCD0_CCC_vect) {
 			break;
 		}
 		case 2: { //cutout disable
-			//AWEXC.OUTOVEN = Bit(3)|Bit(2)|Bit(1)|Bit(0);
 			port_clr(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)|Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b));
-			//port_clrbit(DCC_CUTOUT_TEST_PORT, DCC_CUTOUT_TEST_b); // cutout test point
+			port_clrbit(bo_DCCM_PORT, bo_DCCM_CUTOUT_b); // cutout test point
 			if (bo_v.dccdec.state != bo_DEC_STATE_OFF) {
 				bo_v.dccdec.state = bo_DEC_STATE_FIRST;
 			}
@@ -936,28 +935,30 @@ ISR(PORTC_INT0_vect) { // L6206 current
 
 
 ISR(PORTC_INT1_vect) { // DCC Input Signal
-	// ist DCC H?
-	volatile uint8_t x = bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b);
-	if (x) { //bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
-		// zuerst aus
-		//bo_dcc_signal_disable();
-		// dann IN1 H
-		port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
-		// und IN2 L
-		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
-	} else {
-		// zuerst aus
-		//bo_dcc_signal_disable();
-		// dann IN1 L
-		port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
-		// unt IN2 H
-		port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
-	}
-	// EN H
-	bo_dcc_signal_enable();
+	if (bo_v.dccdec.cutout == 0) { // NO cutout? then normal operation
+		// ist DCC H?
+		volatile uint8_t x = bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b);
+		if (x) { //bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
+			// zuerst aus
+			//bo_dcc_signal_disable();
+			// dann IN1 H
+			port_setbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+			// und IN2 L
+			port_clrbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
+		} else {
+			// zuerst aus
+			//bo_dcc_signal_disable();
+			// dann IN1 L
+			port_clrbit(bo_DCCM_PORT, bo_DCCM_IN1_b);
+			// unt IN2 H
+			port_setbit(bo_DCCM_PORT, bo_DCCM_IN2_b);
+		}
+		// EN H
+		bo_dcc_signal_enable();
 	
-	if (bo_v.g_timer_startup == 0) {
-		// der Startup Timer 0 ist, dann Kurzschluss Sensor ein
-		bo_dcc_sensors_shortcut_on();
+		if (bo_v.g_timer_startup == 0) {
+			// der Startup Timer 0 ist, dann Kurzschluss Sensor ein
+			bo_dcc_sensors_shortcut_on();
+		}
 	}
 }
