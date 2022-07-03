@@ -44,6 +44,8 @@ SBOXNET_CMD_DEV_FW_UPD_START = 0x18
 SBOXNET_CMD_DEV_FW_UPD_LOAD = 0x19
 # device get address addr and description:    -->  len:n n*data8, devaddr in srcaddr
 SBOXNET_CMD_DEV_GET_DESC_ADDR = 0x1a
+# device set fix address len:1 fixaddr --> len:0
+SBOXNET_CMD_DEV_SET_FIX_ADDR = 0x1b
 
 # Register Commands
 # read register: len:3 reg16 len8   --> len:2*len8 len8*databyte16

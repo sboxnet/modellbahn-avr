@@ -310,6 +310,7 @@ class sbntst(object):
                     self.cmd_devgetdesc,
                     self.cmd_devgetdescaddr,
                     self.cmd_devsetdesc,
+                    self.cmd_devsetfixaddr,
                     self.cmd_dbgstate,
                     self.cmd_dbginfo,
                     self.cmd_dbgrecvbuf,
@@ -552,6 +553,7 @@ class sbntst(object):
         put_string("devgetdesc addr [1..id]")
         put_string("devgetdescaddr|gda addr")
         put_string("devsetdesc addr [1..id] text")
+        put_string("devsetfixaddr fixaddr")
         put_string("dbgstate|ds")
         put_string("dbginfo|di")
         put_string("dbgrecvbuf|dr")
@@ -672,6 +674,18 @@ class sbntst(object):
         else:
             addr = checkbyte(toks[1], "addr")
             self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, wait_for_anwers=False)
+        return 1
+    #
+    # sbntst.cmd_devsetfixaddr
+    # sboxnet set device fixed address
+    def cmd_devsetfixaddr(self, toks):
+        if toks[0] not in ["devsetfixaddr", "sfa"]:
+            return 0
+        if len(toks) != 2:
+            print("ERROR: usage devsetfixaddr fixaddr")
+        else:
+            fixaddr = checkbyte(toks[1], "addr")
+            self.execmsg(255, sboxnet.SBOXNET_CMD_DEV_SET_FIX_ADDR, wait_for_anwers=False)
         return 1
     #
     # sbntst.cmd_devsetdesc(toks)
