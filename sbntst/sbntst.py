@@ -551,7 +551,7 @@ class sbntst(object):
         put_string("reset")
         put_string("devreset [addr]")
         put_string("devgetdesc addr [1..id]")
-        put_string("devgetdescaddr|gda addr")
+        put_string("devgetdescaddr|gda")
         put_string("devsetdesc addr [1..id] text")
         put_string("devsetfixaddr fixaddr")
         put_string("dbgstate|ds")
@@ -669,11 +669,11 @@ class sbntst(object):
     def cmd_devgetdescaddr(self, toks):
         if toks[0] not in ["devgetdescaddr", "gda"]:
             return 0
-        if len(toks) != 2:
-            print("ERROR: usage: devgetdescaddr addr")
+        if len(toks) != 1:
+            print("ERROR: usage: devgetdescaddr")
         else:
-            addr = checkbyte(toks[1], "addr")
-            self.execmsg(addr, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, wait_for_anwers=False)
+            #addr = checkbyte(toks[1], "addr")
+            self.execmsg(255, sboxnet.SBOXNET_CMD_DEV_GET_DESC_ADDR, wait_for_anwers=False)
         return 1
     #
     # sbntst.cmd_devsetfixaddr
@@ -685,7 +685,7 @@ class sbntst(object):
             print("ERROR: usage devsetfixaddr fixaddr")
         else:
             fixaddr = checkbyte(toks[1], "addr")
-            self.execmsg(255, sboxnet.SBOXNET_CMD_DEV_SET_FIX_ADDR, wait_for_anwers=False)
+            self.execmsg(255, sboxnet.SBOXNET_CMD_DEV_SET_FIX_ADDR, [fixaddr], wait_for_anwers=False)
         return 1
     #
     # sbntst.cmd_devsetdesc(toks)
