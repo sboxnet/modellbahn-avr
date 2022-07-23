@@ -3,12 +3,12 @@
 #include "sboxnet-struct.h"
 
 #define mt_DEVICE_DESC "ModulTester"
-#define mt_PRODUCT_ID   0xa123
-#define mt_VENDOR_ID    0x5566
+#define mt_PRODUCT_ID   0x0500
+#define mt_VENDOR_ID    0x1234
 #define mt_FIRMWARE_VERSION 0x0200
 /*
 
-APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
+APP_FIRMWARE_HEADER(mt_PRODUCT_ID, mt_VENDOR_ID, mt_FIRMWARE_VERSION)
 */
 
 /* timer TCC1

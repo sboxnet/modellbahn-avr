@@ -134,30 +134,32 @@ __ATTR_WEAK void mtester_do_before_bldr_activate(void) {
 }
 */
 
-// gbm weaks
-__ATTR_WEAK void gbm_do_init_system(void) {
+/*
+// gm weaks
+__ATTR_WEAK void gm_do_init_system(void) {
 }
 
-__ATTR_WEAK uint8_t gbm_do_reg_read(uint16_t reg, uint16_t* pdata) {
+__ATTR_WEAK uint8_t gm_do_reg_read(uint16_t reg, uint16_t* pdata) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t gbm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
+__ATTR_WEAK uint8_t gm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 	return SBOXNET_ACKRC_REG_INVALID;
 }
 
-__ATTR_WEAK uint8_t gbm_do_msg(struct sboxnet_msg_header *pmsg) {
+__ATTR_WEAK uint8_t gm_do_msg(struct sboxnet_msg_header *pmsg) {
 	return SBOXNET_ACKRC_CMD_UNKNOWN;
 }
 
-__ATTR_WEAK void gbm_do_setup(void) {
+__ATTR_WEAK void gm_do_setup(void) {
 }
 
-__ATTR_WEAK void gbm_do_main(void) {
+__ATTR_WEAK void gm_do_main(void) {
 }
 
-__ATTR_WEAK void gbm_do_before_bldr_activate(void) {
+__ATTR_WEAK void gm_do_before_bldr_activate(void) {
 }
+*/
 
 /*
 // ws weaks
@@ -319,6 +321,9 @@ static uint8_t com_cmd_reg_read_multi(struct sboxnet_msg_header *pmsg) {
     return SBOXNET_ACKRC_OK;
 }
 
+// identify button bit
+#define KEY_ID_b     0
+
 static uint8_t com_process_std_msg(struct sboxnet_msg_header *pmsg) {
     
     switch (pmsg->cmd) {
@@ -364,6 +369,19 @@ static uint8_t com_process_std_msg(struct sboxnet_msg_header *pmsg) {
             }
             pmsg->opt.len = n;
             return SBOXNET_ACKRC_OK;
+		}
+		case SBOXNET_CMD_DEV_SET_FIX_ADDR:
+		{
+			if (pmsg->opt.len > 1) {
+	            return SBOXNET_ACKRC_INVALID_ARG;
+            }
+			if (bit_is_set(g_v.key_id, KEY_ID_b)) {
+				uint8_t fixaddr = pmsg->data[0];
+				g_v.dev_addr = fixaddr;
+				eeprom_update_byte(&bldr_eeprom.dev_addr, fixaddr);
+			}
+			pmsg->opt.len = 0;
+			return SBOXNET_ACKRC_OK;
 		}
     }
     
@@ -491,7 +509,7 @@ void com_sched_init_system(void) {
 		}
 		case MODULE_GBM:
 		{
-			gbm_do_init_system();
+			gm_do_init_system();
 			return;
 		}
 		case MODULE_WS:
@@ -520,7 +538,7 @@ uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg) {
 			return mtester_do_msg(pmsg);
 
 		case MODULE_GBM:
-			return gbm_do_msg(pmsg);
+			return gm_do_msg(pmsg);
 			
 		case MODULE_WS:
 			return ws_do_msg(pmsg);
@@ -543,7 +561,7 @@ void com_sched_do_setup(void) {
 			return;
 
 		case MODULE_GBM:
-			gbm_do_setup();
+			gm_do_setup();
 			return;
 		
 		case MODULE_WS:
@@ -570,7 +588,7 @@ void com_sched_do_main(void) {
 			return;
 
 		case MODULE_GBM:
-			gbm_do_main();
+			gm_do_main();
 			return;
 			
 		case MODULE_WS:
@@ -623,7 +641,7 @@ void com_sched_do_before_bldr_activate(void) {
 			return;
 
 		case MODULE_GBM:
-			gbm_do_main();
+			gm_do_main();
 			return;
 		
 		case MODULE_WS:
@@ -649,7 +667,7 @@ uint8_t com_sched_do_reg_read(uint16_t reg, uint16_t* pdata) {
 			return mtester_do_reg_read(reg, pdata);
 
 		case MODULE_GBM:
-			return gbm_do_reg_read(reg, pdata);
+			return gm_do_reg_read(reg, pdata);
 		
 		case MODULE_WS:
 			return ws_do_reg_read(reg, pdata);
@@ -671,7 +689,7 @@ uint8_t com_sched_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 			return mtester_do_reg_write(reg, data, mask);
 
 		case MODULE_GBM:
-			return gbm_do_reg_write(reg, data, mask);
+			return gm_do_reg_write(reg, data, mask);
 		
 		case MODULE_WS:
 			return ws_do_reg_write(reg, data, mask);
@@ -739,7 +757,7 @@ ISR(TCD1_CCA_vect) {
 		volatile uint16_t tcca2 = tcca + TIMER_PERIOD;
 		TCD1.CCA = tcca2;
         //TCD1.CCA += TIMER_PERIOD;
-		volatile uint8_t x = 1;
+		//volatile uint8_t x = 1;
     }
     g_com.timer++;
     struct timer *t;
@@ -818,7 +836,7 @@ __ATTR_OS_MAIN int main(void) {
 
 #include "mtester.c"
 #include "weichen-servo.c"
-//#include "gbmelder.c"
+#include "gbmelder.c"
 #include "dccgen.c"
 
 #include "booster.c"

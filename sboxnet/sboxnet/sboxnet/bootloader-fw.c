@@ -303,12 +303,14 @@ BOOTLOADER_SECTION ISR(TCE0_OVF_vect) { // every 4ms
 BLDR_APP_SECTION
 static void bldr_leds_task(void) {
     // read identify key
+	// LED rt is PE1, as input: read identify key
+	//                as output: drive RED LED
     if (g_v.timer_keys == 0) {
-        if (bit_is_clear(port_dir(LED_PORT), LED_RED_b)) {
+        if (bit_is_clear(port_dir(LED_PORT), LED_RED_b)) { // is PE1 a input?
             g_v.timer_keys = 10;
-            uint8_t sw = bit_is_set(port_in(LED_PORT), LED_RED_b) ? 0 : Bit(KEY_ID_b);
-            port_dirout(LED_PORT, Bit(LED_RED_b));
-            debounce_keys(&g_v.key_id, &g_v.key_id_t, sw);
+            uint8_t sw = bit_is_set(port_in(LED_PORT), LED_RED_b) ? 0 : Bit(KEY_ID_b); // read ID KEY, low active, set bit KEY_ID_b in sw 
+            port_dirout(LED_PORT, Bit(LED_RED_b));	// PE1 as output
+            debounce_keys(&g_v.key_id, &g_v.key_id_t, sw); // debounce ID KEY
         } else {
             g_v.timer_keys = 1;
             port_dirin(LED_PORT, Bit(LED_RED_b));
@@ -810,9 +812,9 @@ void bldr_init_ports(void) {
 	PORTCFG_VPCTRLA = PORTCFG_VP1MAP_PORTB_gc|PORTCFG_VP0MAP_PORTA_gc;
 	PORTCFG_VPCTRLB = PORTCFG_VP3MAP_PORTD_gc|PORTCFG_VP2MAP_PORTC_gc;
 
-	port_dirout(PORTE, 0x03); // LEDs on
+	port_dirout(PORTE, 0x03); // LEDs off
 	port_clr(PORTE, 0x03);
-	g_v.led_gn = 0x03;
+	g_v.led_gn = 0x00;
 	g_v.led_rt = 0x00;   
 }
 

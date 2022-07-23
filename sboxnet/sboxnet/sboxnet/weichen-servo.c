@@ -28,8 +28,8 @@
 
 #include <avr/eeprom.h>
 
-#define ws_PRODUCT_ID   0x0001
-#define ws_VENDOR_ID    0x0001
+#define ws_PRODUCT_ID   0x0100
+#define ws_VENDOR_ID    0x1234
 #define ws_FIRMWARE_VERSION 0x0102
 #define ws_DEVICE_DESC  "WeichenServo:1"
 /*

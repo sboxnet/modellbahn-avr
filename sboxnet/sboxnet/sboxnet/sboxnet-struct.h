@@ -116,6 +116,8 @@ struct sboxnet_debug_info {
 #define SBOXNET_CMD_DEV_FW_UPD_LOAD      0x19
 // device get address addr and description:    -->  len:n n*data8, devaddr in srcaddr
 #define SBOXNET_CMD_DEV_GET_DESC_ADDR         0x1a
+// device set fixed address: len:1  fixaddr --> len:0
+#define SBOXNET_CMD_DEV_SET_FIX_ADDR		0x1b
 
 // Register Commands
 // read register: len:3 reg16 len8   --> len:2*len8 len8*databyte16

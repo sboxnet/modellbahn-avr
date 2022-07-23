@@ -47,12 +47,12 @@
 
 // defines ...........................
 
-#define bo_PRODUCT_ID   0x0003
-#define bo_VENDOR_ID    0x0001
+#define bo_PRODUCT_ID   0x0300
+#define bo_VENDOR_ID    0x1234
 #define bo_FIRMWARE_VERSION 0x0100
 #define bo_DEVICE_DESC  "Booster:1"
 
-//APP_FIRMWARE_HEADER(PRODUCT_ID, VENDOR_ID, FIRMWARE_VERSION)
+//APP_FIRMWARE_HEADER(bo_PRODUCT_ID, bo_VENDOR_ID, bo_FIRMWARE_VERSION)
 
 #define bo_TIMER_PRESCALER   64
 #define bo_TIMER_FREQ_HZ     100
@@ -819,44 +819,85 @@ static void bo_dec_halfbit(uint8_t hb) {
 // ISR ......................
 
 ISR(TCC1_CCA_vect) { // DCC Decoder
-	// if state is OFF, do nothing
-    if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
-        return;
-    }
-	// else restart TCC1
-    TCC1.CTRLFSET = TC_CMD_RESTART_gc;
+	switch (g_v.module) {
+		case MODULE_GBM:
+		{
+			// if state is OFF, do nothing
+			if (gm_v.dccdec.state == gm_DEC_STATE_OFF) {
+				return;
+			}
+			// else restart TCC1
+			TCC1.CTRLFSET = TC_CMD_RESTART_gc;
 	
-    if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
-		// if first bit? then preamble begin
+			if (gm_v.dccdec.state == gm_DEC_STATE_FIRST) {
+				// if first bit? then preamble begin
 		
-        bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
-		// number of bits in preamble
-        bo_v.dccdec.preamble = 0;
-		// clear OVF interrupt bit to be sure
-        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp); 
-    } else {
-		// do work
+				gm_v.dccdec.state = gm_DEC_STATE_PREAMBLE;
+				// number of bits in preamble
+				gm_v.dccdec.preamble = 0;
+				// clear OVF interrupt bit to be sure
+				TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
+			} else {
+				// do work
 		
-		// init DCC Low
-        uint8_t hb = 0;
-		// if no OVF Interrupt (no overflow, CCA contains tick since 0) and CCA is "DCC Low"
-        if (bit_is_clear(TCC1.INTFLAGS, TC1_OVFIF_bp) && TCC1.CCA < (87/2) ) {
-			// then it is a high (half) bit
-            hb = 1;
-        }
-		// clear OVF interrupt bit to be sure
-        TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
+				// init DCC Low
+				uint8_t hb = 0;
+				// if no OVF Interrupt (no overflow, CCA contains tick since 0) and CCA is "DCC Low"
+				if (bit_is_clear(TCC1.INTFLAGS, TC1_OVFIF_bp) && TCC1.CCA < (87/2) ) {
+					// then it is a high (half) bit
+					hb = 1;
+				}
+				// clear OVF interrupt bit to be sure
+				TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
 
-		// decode half bit
-        bo_dec_halfbit(hb);
-    }
+				// decode half bit
+				gm_dec_halfbit(hb);
+			}
+			break;
+		}
+		case MODULE_BOOSTER:
+		{
+			// if state is OFF, do nothing
+			if (bo_v.dccdec.state == bo_DEC_STATE_OFF) {
+				return;
+			}
+			// else restart TCC1
+			TCC1.CTRLFSET = TC_CMD_RESTART_gc;
+			
+			if(bo_v.dccdec.state == bo_DEC_STATE_FIRST) {
+				// if first bit? then preamble begin
+				
+				bo_v.dccdec.state = bo_DEC_STATE_PREAMBLE;
+				// number of bits in preamble
+				bo_v.dccdec.preamble = 0;
+				// clear OVF interrupt bit to be sure
+				TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
+				} else {
+				// do work
+				
+				// init DCC Low
+				uint8_t hb = 0;
+				// if no OVF Interrupt (no overflow, CCA contains tick since 0) and CCA is "DCC Low"
+				if (bit_is_clear(TCC1.INTFLAGS, TC1_OVFIF_bp) && TCC1.CCA < (87/2) ) {
+					// then it is a high (half) bit
+					hb = 1;
+				}
+				// clear OVF interrupt bit to be sure
+				TCC1.INTFLAGS = Bit(TC1_OVFIF_bp);
+
+				// decode half bit
+				bo_dec_halfbit(hb);
+			}
+			break;
+		}
+	}
 }
 
 // every 10ms ~ 100Hz
 ISR(TCD0_CCA_vect) {
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 		volatile uint16_t tcca = TCD0.CCA;
-		volatile uint16_t tcnt = TCD0.CNT;
+		//volatile uint16_t tcnt = TCD0.CNT;
 		volatile uint16_t tcca2 = tcca + bo_TIMER_PERIOD;
 		TCD0.CCA = tcca2;
 	}
