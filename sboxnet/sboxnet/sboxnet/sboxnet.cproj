@@ -177,6 +177,9 @@
     <None Include="dccdec.c">
       <SubType>compile</SubType>
     </None>
+    <None Include="gbm2.c">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="iox128a4u.h">
       <SubType>compile</SubType>
     </Compile>

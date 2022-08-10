@@ -873,7 +873,7 @@ void bldr_init_modules(void) {
 	// PB0..3 zur abfrage des Modul Typs
 	
 	// PB auf Eingabe PullUps ON
-	PORTB.DIR = 0x08;
+	PORTB.DIR = 0x00;
 	PORTCFG_MPCMASK = 0xff; // all pins
 	PORTB.PIN0CTRL = PORT_OPC_PULLUP_gc;
 	// lese Modultyp

@@ -19,6 +19,7 @@
 /*
  * TCD1: use common TCD1.CCB get sensors in cutout
  * TCC1: CCA DCC Decoder
+ * ~ at 600 ns after cutout begin read feedback
  */
 
 #include "common.h"
