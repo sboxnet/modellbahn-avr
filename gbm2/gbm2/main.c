@@ -9,8 +9,25 @@
  * Author : balagi
  */ 
 
+#define F_CPU_MHZ 32
+#define F_CPU  (F_CPU_MHZ * 1000000)
+
 #include <avr/io.h>
 //#include <avr/iox32a4u.h>, über project included
+#include <stddef.h>
+#include <stdint.h>
+#include <avr/pgmspace.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <avr/wdt.h>
+#include <util/atomic.h>
+#include <util/delay.h>
+#include <avr/sleep.h>
+#include <avr/eeprom.h>
+#include <string.h>
+#include <avr/sfr_defs.h>
+#include "avrutilslib/defines.h"
+
 
 static void gbm2_switch_to_32MHz(void) {
 	// zuerst auf internen 32 MHz Osz Umschalten
