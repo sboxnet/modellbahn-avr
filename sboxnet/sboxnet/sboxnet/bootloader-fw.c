@@ -1101,6 +1101,15 @@ static void bldr_crc_section(void) {
     );
 }
 
+// barrier
+// avoid to run in this section
+BLDR_STATIC_SECTION __ATTR_USED NOINLINE
+__attribute__((optimize("O0")))
+static void xsbldr_barrier(void) {
+	while (1) {
+		g_v.led_rt = 0xff;	
+	}
+}
 
 
 // boot loader static section ------

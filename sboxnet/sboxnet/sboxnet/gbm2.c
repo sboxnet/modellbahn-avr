@@ -1,5 +1,8 @@
 /*
- * gbm2.c
+ * gbm2.c: railcom gbm
+ * Um eine '0' zu übertragen muss der Decoder einen Strom I von 30+4/-6 mA liefern
+ * bei einem Spannungsabfall am Gleis von bis zu 2.2V.
+ * Bei einer '1' darf der Strom I höchstens +/- 0.1mA betragen.
  *
  * Created: 10.08.2022 16:15:49
  *  Author: balagi

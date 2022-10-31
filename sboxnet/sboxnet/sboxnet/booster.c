@@ -380,7 +380,9 @@ void bo_dcc_power_off_all(void) {
         bo_v.g_timer_startup = 0; // Startup Timer reseten
 		
 		// LED ON off
-		port_setbit(bo_LED_PORT, bo_LED_ON_b);		
+		port_setbit(bo_LED_PORT, bo_LED_ON_b);
+		// NOTAUS off
+		port_setbit(bo_LED_PORT, bo_LED_NOTAUS_b);
     }
 }
 
@@ -996,7 +998,6 @@ ISR(PORTC_INT1_vect) { // DCC Input Signal
 		}
 		// EN H
 		bo_dcc_signal_enable();
-	
 		if (bo_v.g_timer_startup == 0) {
 			// der Startup Timer 0 ist, dann Kurzschluss Sensor ein
 			bo_dcc_sensors_shortcut_on();

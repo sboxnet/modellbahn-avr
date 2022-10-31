@@ -120,10 +120,17 @@ struct dg_dcc_control {
 
 struct dg_dcc_control g_dg_dcc;
 
+// src dcc packet: reset
+// is compiled over dg_dcc_compile_packet to a dcc one of 2 slots
+// and transfered with dma to TCC1.CCAL
 struct dg_dcc_packet g_dcc_packet_reset = {
     .size = 2,
     .data = { 0, 0 },
 };
+// src dcc packet: idle
+// is compiled over dg_dcc_compile_packet to a dcc one of 2 slots
+// and transfered with dma to TCC1.CCAL
+// the value for CCA is set --> toggle each CCA TC1_CMPA_bp -> Pin OC1A -> PC4 --> dcc output
 struct dg_dcc_packet g_dcc_packet_idle = {
     .size = 2,
     .data = { 0xff, 0 },
@@ -131,27 +138,38 @@ struct dg_dcc_packet g_dcc_packet_idle = {
 
 
 void dg_dcc_init_dma(void) {
+	// 4 channel DMA
+	// enable DMA, double buf channel 0 and 1, prio mode RR 0123
     DMA.CTRL = DMA_ENABLE_bm|DMA_DBUFMODE_CH01_gc|DMA_PRIMODE_RR0123_gc;
     DMA.INTFLAGS = 0xff;
     
+	// init DMA channel slot (2 slots)
     struct dg_dcc_slot* slot = &g_dg_dcc.slots[0];
     DMA_CH_t* ch = ((DMA_CH_t*)(&DMA.CH0));
     for (uint8_t i = 0; i < dg_NUM_DCC_SLOTS; i++, slot++, ch++) {
-        ch->CTRLA = 0;
-        ch->CTRLA = DMA_CH_RESET_bm;
-        while (ch->CTRLA & DMA_CH_RESET_bm);
-        ch->REPCNT = 0; // endless
-        ch->CTRLA = Bsv(DMA_CH_ENABLE_bp, 0)|Bsv(DMA_CH_REPEAT_bp, 1)|Bsv(DMA_CH_SINGLE_bp, 1)|DMA_CH_BURSTLEN_1BYTE_gc; // single shot: transfer only 1 byte at transfer trigger
-        ch->CTRLB = DMA_CH_ERRIF_bm|DMA_CH_TRNIF_bm|DMA_CH_ERRINTLVL_OFF_gc|DMA_CH_TRNINTLVL_LO_gc;
-        ch->ADDRCTRL = DMA_CH_SRCRELOAD_BLOCK_gc|DMA_CH_SRCDIR_INC_gc|DMA_CH_DESTRELOAD_NONE_gc|DMA_CH_DESTDIR_FIXED_gc;
-        ch->TRIGSRC = DMA_CH_TRIGSRC_TCC1_CCA_gc;
+        ch->CTRLA = 0;						// this slot off
+        ch->CTRLA = DMA_CH_RESET_bm;		// this slot reset
+        while (ch->CTRLA & DMA_CH_RESET_bm);// wait till it is reseted
+        ch->REPCNT = 0;						// endless repeat
+        // single shot: transfer only 1 byte at transfer trigger
+		ch->CTRLA = Bsv(DMA_CH_ENABLE_bp, 0)|Bsv(DMA_CH_REPEAT_bp, 1)|Bsv(DMA_CH_SINGLE_bp, 1)|DMA_CH_BURSTLEN_1BYTE_gc;
+		// transfer interrupt low level, other interrupts off
+        ch->CTRLB = DMA_CH_ERRIF_bm|DMA_CH_TRNIF_bm|DMA_CH_ERRINTLVL_OFF_gc|DMA_CH_TRNINTLVL_LO_gc;	
+        // reload block src address at each dma transfer, src address inc, reload block dest addr at each block, dest addr is fix
+		ch->ADDRCTRL = DMA_CH_SRCRELOAD_BLOCK_gc|DMA_CH_SRCDIR_INC_gc|DMA_CH_DESTRELOAD_NONE_gc|DMA_CH_DESTDIR_FIXED_gc;
+        // trigger src: TCC1.CCA
+		ch->TRIGSRC = DMA_CH_TRIGSRC_TCC1_CCA_gc;
+		// one byte each block
         ch->TRFCNT = 1;
         
+		//source address
         uint32_t srcaddr = (uintptr_t)slot->pkg.buf;
         ch->SRCADDR0 = (uint8_t)srcaddr;
         ch->SRCADDR1 = (uint8_t)(srcaddr >> 8);
         ch->SRCADDR2 = (uint8_t)(srcaddr >> 16);
         
+		// dest addr: TCC1.CCAL
+		// the value for CCA is set --> toggle each CCA TC1_CMPA_bp -> Pin OC1A -> PC4
         uint32_t dstaddr = (uintptr_t)&TCC1.CCAL;
         ch->DESTADDR0 = (uint8_t)dstaddr;
         ch->DESTADDR1 = (uint8_t)(dstaddr >> 8);
@@ -165,6 +183,7 @@ void dg_dcc_init(struct dg_dcc_control* pcntr) {
     pcntr->free_slot = 0;
     
     // DCC timer
+	// TCC1 enable CCA, FREQ Mode:  toggled on each compare match between the CNT and CCA registers
     TCC1.CTRLB = Bsv(TC1_CCAEN_bp,1)|TC_WGMODE_FRQ_gc;
     
     TCC1.CTRLA = TC_CLKSEL_OFF_gc;

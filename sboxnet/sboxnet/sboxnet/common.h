@@ -233,12 +233,12 @@ extern uint8_t g_dev_state;
 #define DEV_ERR_FLG_32MHZOSC_b   7
 
 // values for g_v.module
-#define MODULE_TESTER 1
-#define MODULE_GBM    2
-#define MODULE_WS     3
-#define MODULE_DCC    4
-#define MODULE_BOOSTER 5
-#define MODULE_GBM2 6
+#define MODULE_TESTER 9
+#define MODULE_GBM    10
+#define MODULE_WS     11
+#define MODULE_DCC    12
+#define MODULE_BOOSTER 13
+#define MODULE_GBM2 14
 //#define MODULE_OTHER  0xe
 
 // bit manipulation with setbit/clrbit result in atomic sbi/cbi asm instructions !

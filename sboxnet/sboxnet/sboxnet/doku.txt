@@ -1,3 +1,16 @@
 - TCE0 in bootloader-fw.c bldr_init_system()
 
  avr-cpp -dM -mmcu=atxmega128a4u -E test.c|grep AT
+
+ sections:
+ .appcrc=		10000
+ .bldrapp=		10100
+ .bldrinit=		20000
+ .bldrvec=		20200
+ .bootloader=	20242
+ .bldrstatic=	21b00
+ .bldrcrc=		21dfe
+ .bldrstatvec=	21ff6
+
+ cd c:\Users\balagi\Documents\modellbahn-avr\sboxnet\sboxnet\sboxnet\Debug
+ avr-objdump -d sboxnet.elf >out.lis
