@@ -9,7 +9,6 @@
  booster:      bo_PRODUCT_ID   0x0300 bo_VENDOR_ID    0x1234
  dcc-gen:      dg_PRODUCT_ID   0x0400 dg_VENDOR_ID    0x1234
  mtester:      mt_PRODUCT_ID   0x0500 mt_VENDOR_ID    0x1234
- gbm2:         g2_PRODUCT_ID   0x0600 g2_VENDOR_ID    0x1234
 */
 
 #if !defined(__AVR_ATxmega32A4__) && !defined(__AVR_ATxmega128A4U__)
@@ -38,6 +37,7 @@
 #include "avrutilslib/ringbuffer.h"
 
 #include "sboxnet.h"
+#include "dcc_dec.h"
 
 #define BLDR_VERSION           0x0004
 
@@ -328,49 +328,42 @@ void gm_do_init_system(void);
 void ws_do_init_system(void);
 void dg_do_init_system(void);
 void bo_do_init_system(void);
-void g2_do_init_system(void);
 // do_msg
 uint8_t mtester_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t gm_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t ws_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t dg_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg);
-uint8_t g2_do_msg(struct sboxnet_msg_header *pmsg);
 // do_setup
 void mtester_do_setup(void);
 void gm_do_setup(void);
 void ws_do_setup(void);
 void dg_do_setup(void);
 void bo_do_setup(void);
-void g2_do_setup(void);
 // do_main
 void mtester_do_main(void);
 void gm_do_main(void);
 void ws_do_main(void);
 void dg_do_main(void);
 void bo_do_main(void);
-void g2_do_main(void);
 // do_before_bldr_activate(void)
 void mtester_do_before_bldr_activate(void);
 void gm_do_before_bldr_activate(void);
 void ws_do_before_bldr_activate(void);
 void dg_do_before_bldr_activate(void);
 void bo_do_before_bldr_activate(void);
-void g2_do_before_bldr_activate(void);
 // uint8_t do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t mtester_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t gm_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t ws_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t dg_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata);
-uint8_t g2_do_reg_read(uint16_t reg, uint16_t* pdata);
 //  uint8_t do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t mtester_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t gm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t dg_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
-uint8_t g2_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 
 
 #define setbit_atomic(_reg, _bitnr) \

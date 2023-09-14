@@ -39,10 +39,10 @@ void mtester_do_init_system(void) {
     PORTA.PIN0CTRL = PORT_OPC_TOTEM_gc; // all PORTA Pins to TOTEM 
     
 	// PB3 as output
-    port_out(PORTB) = 0x0;
-    port_dirout(PORTB, 0x8); // PB3 as output
-    PORTCFG_MPCMASK = 0xff; // all pin
-    PORTB.PIN0CTRL = PORT_OPC_TOTEM_gc; // all PORTB Pins to TOTEM 
+    //port_out(PORTB) = 0x0;
+    //port_dirin(PORTB, 0x8); // PB3 as output
+    //PORTCFG_MPCMASK = 0xff; // all pin
+    //PORTB.PIN0CTRL = PORT_OPC_TOTEM_gc; // all PORTB Pins to TOTEM 
 
     port_out(PORTC) = 0x0;
     port_dirout(PORTC, 0xff); // PORTC as output
@@ -184,7 +184,7 @@ void mtester_exec_step0() {
     // PC* auf LOW
     port_out(PORTC) = 0;
     
-    port_out(PORTB) = 0xff; // PB all 1
+    //port_out(PORTB) = 0xff; // PB all 1
     port_clr(PORTD, 0x0f); // PD0..3 auf LOW
     
     port_set(PORTD, 0x30); // PD4..5 H
@@ -197,7 +197,7 @@ void mtester_exec_step1() {
     // PC* auf H
     port_out(PORTC) = 0xff;
     
-    port_out(PORTB) = 0; // PB all 0
+    //port_out(PORTB) = 0; // PB all 0
     port_set(PORTD, 0x0f); // PD0..3 auf H
     
     port_clr(PORTD, 0x30); // PD4..5 L
@@ -210,7 +210,7 @@ void mtester_exec_step2() {
     // PC* auf 11110000
     port_out(PORTC) = 0xf0;
     
-    port_out(PORTB) = 0; // PB all 0
+    //port_out(PORTB) = 0; // PB all 0
     port_set(PORTD, 0x0f); // PD0..3 auf H
     
     port_clr(PORTD, 0x30); // PD4..5 L

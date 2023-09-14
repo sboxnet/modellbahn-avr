@@ -21,7 +21,7 @@
  * TCC1: CCA DCC Decoder
  * ~ at 600 ns after cutout begin read feedback
  */
-
+#include "dcc_dec.h"
 #include "common.h"
 
 #define gm_PRODUCT_ID   0x0200
@@ -52,7 +52,7 @@ struct gm_gbmelder_pipe {
 	pipe_t pipe;
 	uint8_t buf[64];
 };
-
+/*
 struct gm_dccdec {
 	uint8_t state;
 	uint8_t preamble;
@@ -64,7 +64,7 @@ struct gm_dccdec {
 	uint8_t xor;
 	uint8_t cutout;
 };
-
+*/
 struct gm_v_t {
 	uint8_t g_holdtime;
 	uint8_t g_old_holdtime;
@@ -78,13 +78,13 @@ struct gm_v_t {
 	struct timer g_power_on_timer;
 	uint8_t g_power_on;
 	uint16_t g_dec_lastaddr;
-	struct gm_dccdec dccdec;
+	struct dcc_dec_t dccdec;
 };
 
 struct gm_v_t gm_v = { 0 };  // Speicher gm Variablen
 
 // DCC Decoder states
-#define gm_DEC_STATE_OFF      0
+/*#define gm_DEC_STATE_OFF      0
 #define gm_DEC_STATE_FIRST    1
 #define gm_DEC_STATE_PREAMBLE 2
 #define gm_DEC_STATE_STARTBIT 3
@@ -122,14 +122,13 @@ void gm_dec_start(void) {
     TCC1.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
 }
 
-/*
 static void gm_dec_stop(void) {
     gm_v.dccdec.state = gm_DEC_STATE_OFF;
     TCD0.INTCTRLB = 0;
     TCD0.INTFLAGS = 0xff;
     TCD0.CTRLA = TC_CLKSEL_OFF_gc;
 }
-*/
+
 static void gm_dec_parse_packet(void) {
     if (gm_v.dccdec.bufsize >= 3 && gm_v.dccdec.xor == 0) {
 //port_tglbit(PORTC, 6);
@@ -222,7 +221,7 @@ static void gm_dec_halfbit(uint8_t hb) {
     gm_v.dccdec.bufsize = 0;
     gm_v.dccdec.xor = 0;
 }
-
+*/
 
 static void gm_do_dec_parse_packet(void) {
     if (!gm_v.g_power_on || !timer_timedout(&gm_v.g_power_on_timer)) {
@@ -377,7 +376,7 @@ void gm_do_init_system(void) {
     
     // DCC Input Pin
     PORTC.PIN4CTRL = PORT_OPC_PULLDOWN_gc|PORT_ISC_BOTHEDGES_gc;
-    gm_dec_init();
+    dcc_dec_init(&gm_v.dccdec);
     
     timer_register(&gm_v.g_power_on_timer, TIMER_RESOLUTION_16MS);
     gm_v.g_power_on = 0;
@@ -473,7 +472,7 @@ uint8_t gm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 }
 
 void gm_do_setup(void) {
-    gm_dec_start();
+    dcc_dec_start();
 }
 
 void gm_do_main(void) {    
@@ -553,4 +552,4 @@ void gm_do_before_bldr_activate(void) {
     //gm_dec_stop();
 }
 
-// ISR(TCC1_CCA_vect) { // DCC Decoder is in booster.c depends on g_v.module
+// ISR(TCC1_CCA_vect) { // DCC Decoder is in dcc_dec.c depends on g_v.module

@@ -527,11 +527,6 @@ void com_sched_init_system(void) {
 			bo_do_init_system();
 			return;
 		}
-		case MODULE_GBM2:
-		{
-			g2_do_init_system();
-			return;
-		}
 		default:
 			return;
 	}
@@ -553,9 +548,6 @@ uint8_t com_sched_do_msg(struct sboxnet_msg_header *pmsg) {
 
 		case MODULE_BOOSTER:
 			return bo_do_msg(pmsg);
-
-		case MODULE_GBM2:
-			return g2_do_msg(pmsg);
 
 		default:
 			return SBOXNET_ACKRC_CMD_UNKNOWN;
@@ -583,10 +575,6 @@ void com_sched_do_setup(void) {
 		case MODULE_BOOSTER:
 			bo_do_setup();
 			return;
-
-        case MODULE_GBM2:
-			g2_do_setup();
-			return;
 			
 		default:
 			return;
@@ -613,10 +601,6 @@ void com_sched_do_main(void) {
 			
 		case MODULE_BOOSTER:
 			bo_do_main();
-			return;
-
-        case MODULE_GBM2:
-			g2_do_main();
 			return;
         
 		default:
@@ -671,10 +655,6 @@ void com_sched_do_before_bldr_activate(void) {
 		case MODULE_BOOSTER:
 			bo_do_before_bldr_activate();
 			return;
-		
-		case MODULE_GBM2:
-			g2_do_before_bldr_activate();
-			return;
 
 		default:
 			return;
@@ -697,9 +677,6 @@ uint8_t com_sched_do_reg_read(uint16_t reg, uint16_t* pdata) {
 		
 		case MODULE_BOOSTER:
 			return bo_do_reg_read(reg, pdata);
-
-		case MODULE_GBM2:
-			return g2_do_reg_read(reg, pdata);
 		
 		default:
 			return SBOXNET_ACKRC_REG_INVALID;
@@ -723,9 +700,6 @@ uint8_t com_sched_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask) {
 		case MODULE_BOOSTER:
 			return bo_do_reg_write(reg, data, mask);
 
-		case MODULE_GBM2:
-			return g2_do_reg_write(reg, data, mask);
-		
 		default:
 		return SBOXNET_ACKRC_REG_INVALID;
 	}
@@ -865,4 +839,4 @@ __ATTR_OS_MAIN int main(void) {
 #include "gbmelder.c"
 #include "dccgen.c"
 #include "booster.c"
-#include "gbm2.c"
+#include "dcc_dec.c"

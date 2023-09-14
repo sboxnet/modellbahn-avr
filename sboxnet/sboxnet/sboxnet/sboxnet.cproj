@@ -162,6 +162,9 @@
     <Compile Include="bootloader-fw.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="dcc_dec.c">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="common.c">
       <SubType>compile</SubType>
     </Compile>
@@ -177,9 +180,9 @@
     <None Include="dccdec.c">
       <SubType>compile</SubType>
     </None>
-    <None Include="gbm2.c">
+    <Compile Include="dcc_dec.h">
       <SubType>compile</SubType>
-    </None>
+    </Compile>
     <Compile Include="iox128a4u.h">
       <SubType>compile</SubType>
     </Compile>

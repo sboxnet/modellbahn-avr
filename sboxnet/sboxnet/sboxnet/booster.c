@@ -156,7 +156,7 @@ struct bo_v_t bo_v = { 0 };
 
 
 // functions ..............................
-
+/*
 static void bo_do_dec_parse_packet(void) {
 	//timer_set(&g_booster.timer_dcc_watchdog, bo_DCC_WATCHDOG_VAL);
 	
@@ -172,6 +172,7 @@ static void bo_do_dec_parse_packet(void) {
 		port_setbit(bo_DCCM_PORT, bo_DCCM_CUTOUT_b); // cutout test point
 	}
 }
+*/
 
 // utils --------------------------------------------------------
 
@@ -686,7 +687,7 @@ void bo_do_before_bldr_activate(void) {
 
 
 // declaration
-static void bo_do_dec_parse_packet(void);
+//static void bo_do_dec_parse_packet(void);
 
 
 
@@ -724,14 +725,16 @@ static void bo_dec_stop(void) {
     TCD0.INTFLAGS = 0xff;
     TCD0.CTRLA = TC_CLKSEL_OFF_gc;
 }
-*/
+
 static void bo_dec_parse_packet(void) {
     if (bo_v.dccdec.bufsize >= 3 && bo_v.dccdec.xor == 0) {
 //port_tglbit(PORTC, 6);
         bo_do_dec_parse_packet();
     }
 }
+*/
 
+/*
 static void bo_dec_halfbit(uint8_t hb) {
 	// hb is the half bit
 	
@@ -817,9 +820,10 @@ static void bo_dec_halfbit(uint8_t hb) {
     bo_v.dccdec.bufsize = 0;
     bo_v.dccdec.xor = 0;
 }
+*/
 
 // ISR ......................
-
+/*
 ISR(TCC1_CCA_vect) { // DCC Decoder
 	switch (g_v.module) {
 		case MODULE_GBM:
@@ -894,6 +898,7 @@ ISR(TCC1_CCA_vect) { // DCC Decoder
 		}
 	}
 }
+*/
 
 // every 10ms ~ 100Hz
 ISR(TCD0_CCA_vect) {
