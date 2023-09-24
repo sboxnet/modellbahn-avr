@@ -71,8 +71,10 @@ void dcc_dec_parse_packet(struct dcc_dec_t* dccdec) {
 						TCD0.INTCTRLB = (TCD0.INTCTRLB & ~TC0_CCCINTLVL_gm)|TC_CCCINTLVL_LO_gc;
 						g_dccdec->cutout = 1;
 						port_setbit(bo_DCCM_PORT, bo_DCCM_CUTOUT_b); // cutout test point
-					}
+				}
+				break;
 			}
+			
 			case MODULE_GBM:
 			{
 				if (!gm_v.g_power_on || !timer_timedout(&gm_v.g_power_on_timer)) {
@@ -97,7 +99,8 @@ void dcc_dec_parse_packet(struct dcc_dec_t* dccdec) {
 						    
 						    //port_clrbit(PORTB, 2);
 					    }
-				    }
+				}
+				break;
 			}
 			default: return;
 

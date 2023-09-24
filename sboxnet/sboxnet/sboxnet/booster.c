@@ -149,7 +149,7 @@ struct bo_v_t {
 		unsigned write_shortcut_limit:1;
 		unsigned write_shortcut_interval:1;
 	} eeprom_flags;
-	struct bo_dccdec dccdec;
+	struct dcc_dec_t dccdec;
 };
 
 struct bo_v_t bo_v = { 0 };
@@ -407,7 +407,7 @@ void bo_dcc_power_on_track(void) {
 		// startup timer start
         bo_v.g_timer_startup = bo_TIMER_STARTUP;
 		// DCC decoder start
-		bo_dec_start();
+		dcc_dec_start();
 
 		// is DCC signal H?
         if (bit_is_set(port_in(bo_DCC_IN_PORT), bo_DCC_IN_b)) {
@@ -444,7 +444,7 @@ Booster init.
 */
 void bo_booster_init(void) {
     bo_dcc_power_off_all(); // all off
-	bo_dec_init();			// init DCC decoder: PIN4 of PORTC
+	dcc_dec_init(&bo_v.dccdec);			// init DCC decoder: PIN4 of PORTC
 	
 	timer_register(&bo_v.timer_startup, TIMER_RESOLUTION_16MS);	// startup timer: 16ms resolution
 	//timer_register(&bo_v.timer_dcc_watchdog, TIMER_RESOLUTION_16MS);
@@ -704,6 +704,7 @@ void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0CTRL = 0;
 }
 
+/*
 void bo_dec_start(void) {
     bo_v.dccdec.state = bo_DEC_STATE_FIRST;
     bo_v.dccdec.preamble = 0;
@@ -717,7 +718,7 @@ void bo_dec_start(void) {
     TCC1.INTCTRLB = TC_CCAINTLVL_LO_gc;		// Interrupt Level low
     TCC1.CTRLA = TC_CLKSEL_DIV64_gc;		// start timer with /64 = 32Mhz / 64 = 500kHz = 2us Step
 }
-
+*/
 /*
 static void bo_dec_stop(void) {
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
