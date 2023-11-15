@@ -690,7 +690,7 @@ void bo_do_before_bldr_activate(void) {
 //static void bo_do_dec_parse_packet(void);
 
 
-
+/*
 void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     bo_v.dccdec.state = bo_DEC_STATE_OFF;
     bo_v.dccdec.preamble = 0;
@@ -703,6 +703,7 @@ void bo_dec_init() { // e.g.: EVSYS_CHMUX_PORTC_PIN4_gc
     EVSYS.CH0MUX = EVSYS_CHMUX_PORTC_PIN4_gc; // event source multiplexer: src PORTC PIN4 DCC Input --> dest TCC1.CCA
     EVSYS.CH0CTRL = 0;
 }
+*/
 
 /*
 void bo_dec_start(void) {
