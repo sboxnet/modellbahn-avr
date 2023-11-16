@@ -222,7 +222,7 @@ static void gm_dec_halfbit(uint8_t hb) {
     gm_v.dccdec.xor = 0;
 }
 */
-
+/*
 static void gm_do_dec_parse_packet(void) {
     if (!gm_v.g_power_on || !timer_timedout(&gm_v.g_power_on_timer)) {
         return;
@@ -266,7 +266,7 @@ ISR(TCD1_CCB_vect) {
     }
     gm_v.g_dec_lastaddr = 0;
 }
-
+*/d
 
 /*
 PA0..7

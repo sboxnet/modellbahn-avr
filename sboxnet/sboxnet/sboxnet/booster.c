@@ -108,7 +108,7 @@
 #define bo_DEC_STATE_STARTSTOPBIT 6
 
 // declaration .........................
-static void bo_do_dec_parse_packet(void);
+//static void bo_do_dec_parse_packet(void);
 void bo_dec_init(void);
 void bo_dec_start(void);
 void bo_dcc_sensors_shortcut_off(void);
@@ -468,12 +468,13 @@ void bo_booster_init(void) {
 
 /* void bo_dcc_signal_disable(void)
 disable booster.
-*/
+
 static NOINLINE void bo_dcc_signal_disable(void) {
 	// EN to L
     port_clrbit(bo_DCCM_PORT, bo_DCCM_EN_b);
     _delay_us(2);
 }
+*/
 
 /* void bo_dcc_signal_enable(void)
 enable booster.
