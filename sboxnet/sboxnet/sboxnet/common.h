@@ -203,6 +203,7 @@ enum Register_t {
 #define CAP_CNTRL_GENERIC 0x0010
 #define CAP_CNTRL_TURNOUT 0x0020
 #define CAP_TESTER        0x0040
+#define CAP_FB_OCCUPANCY_RAILCOM 0x0080
 
 #define DEV_DESC_MAX_SIZE   32
 #define DEV_NUM_DESCS       3
