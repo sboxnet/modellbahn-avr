@@ -5,6 +5,7 @@
  *  Author: vm
  */ 
 
+#include "dcc_dec.h"
 #include "common.h"
 #include "sboxnet-struct.h"
 
@@ -12,10 +13,49 @@
 #define g2_PRODUCT_ID   0x0501
 #define g2_VENDOR_ID    0x1234
 #define g2_FIRMWARE_VERSION 0x0100
-/*
 
-APP_FIRMWARE_HEADER(mt_PRODUCT_ID, mt_VENDOR_ID, mt_FIRMWARE_VERSION)
-*/
+
+struct g2_sensor {
+	uint8_t  timer;
+	uint16_t locoaddr;
+	uint8_t  last_seq;
+	uint8_t  holdtime;
+	struct bits {
+		unsigned notack:1;
+		unsigned on:1;
+		unsigned holdtime_changed:1;
+	}        flags;
+	uint8_t  retry_timer;
+};
+
+#define g2_DEFAULT_HOLDTIME 200
+
+#define g2_NUM_SENSORS   10
+struct g2_gbm2_pipe {
+	pipe_t pipe;
+	uint8_t buf[64];
+};
+
+struct g2_v_t {
+	uint8_t g_holdtime;
+	uint8_t g_old_holdtime;
+	uint16_t g_sensor_bits;
+	uint16_t g_sensor_bits_1;
+	struct g2_sensor g_sensors[g2_NUM_SENSORS];
+	uint8_t  g_led_counter;
+	uint8_t  g_transmit_seq;
+	struct g2_gbm2_pipe g_locoaddr_pipe;
+	//struct timer g_led_timer;
+	struct timer g_power_on_timer;
+	uint8_t g_power_on;
+	uint16_t g_dec_lastaddr;
+	struct dcc_dec_t dccdec;
+};
+
+struct g2_v_t g2_v = { 0 };  // Speicher g2 Variablen
+
+//APP_FIRMWARE_HEADER(mt_PRODUCT_ID, mt_VENDOR_ID, mt_FIRMWARE_VERSION)
+
 
 /* timer TCC1
  */

@@ -75,22 +75,22 @@ void dcc_dec_parse_packet(struct dcc_dec_t* dccdec) {
 				break;
 			}
 			
-			case MODULE_GBM:
+			case MODULE_GBM2:
 			{
-				if (!gm_v.g_power_on || !timer_timedout(&gm_v.g_power_on_timer)) {
+				if (!g2_v.g_power_on || !timer_timedout(&g2_v.g_power_on_timer)) {
 					return;
 				}
 				    
 				if (g_dccdec->buf[0] != 0 // broadcast or reset
 				    && (g_dccdec->buf[0] != 0xff)) { // idle
 					    
-					    gm_v.g_dec_lastaddr = 0;
+					    g2_v.g_dec_lastaddr = 0;
 					    if (g_dccdec->buf[0] <= 0x7f) {
-						    gm_v.g_dec_lastaddr = g_dccdec->buf[0];
+						    g2_v.g_dec_lastaddr = g_dccdec->buf[0];
 						} else if (g_dccdec->buf[0] >= 192 && g_dccdec->buf[0] <= 231) {
-						    gm_v.g_dec_lastaddr = ((uint16_t)gm_v.dccdec.buf[0] << 8) | gm_v.dccdec.buf[1];
+						    g2_v.g_dec_lastaddr = ((uint16_t)g2_v.dccdec.buf[0] << 8) | g2_v.dccdec.buf[1];
 					    }
-					    if (gm_v.g_dec_lastaddr) {
+					    if (g2_v.g_dec_lastaddr) {
 						    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 							    TCD1.CCB = TCD1.CNT + (290/2); // ca 290 us after stop bit
 						    }

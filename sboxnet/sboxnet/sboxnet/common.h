@@ -234,12 +234,12 @@ extern uint8_t g_dev_state;
 #define DEV_ERR_FLG_32MHZOSC_b   7
 
 // values for g_v.module
-#define MODULE_TESTER 9
-#define MODULE_GBM    10
-#define MODULE_WS     11
-#define MODULE_DCC    12
-#define MODULE_BOOSTER 13
-#define MODULE_GBM2 14
+#define MODULE_TESTER 9  // 0x1001
+#define MODULE_GBM    10 // 0x1010
+#define MODULE_WS     11 // 0x1011
+#define MODULE_DCC    12 // 0x1100
+#define MODULE_BOOSTER 13 // 0x1101
+#define MODULE_GBM2 14   // 0x1110
 //#define MODULE_OTHER  0xe
 
 // bit manipulation with setbit/clrbit result in atomic sbi/cbi asm instructions !
@@ -329,42 +329,49 @@ void gm_do_init_system(void);
 void ws_do_init_system(void);
 void dg_do_init_system(void);
 void bo_do_init_system(void);
+void g2_do_init_system(void);
 // do_msg
 uint8_t mtester_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t gm_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t ws_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t dg_do_msg(struct sboxnet_msg_header *pmsg);
 uint8_t bo_do_msg(struct sboxnet_msg_header *pmsg);
+uint8_t g2_do_msg(struct sboxnet_msg_header *pmsg);
 // do_setup
 void mtester_do_setup(void);
 void gm_do_setup(void);
 void ws_do_setup(void);
 void dg_do_setup(void);
 void bo_do_setup(void);
+void g2_do_setup(void);
 // do_main
 void mtester_do_main(void);
 void gm_do_main(void);
 void ws_do_main(void);
 void dg_do_main(void);
 void bo_do_main(void);
+void g2_do_main(void);
 // do_before_bldr_activate(void)
 void mtester_do_before_bldr_activate(void);
 void gm_do_before_bldr_activate(void);
 void ws_do_before_bldr_activate(void);
 void dg_do_before_bldr_activate(void);
 void bo_do_before_bldr_activate(void);
+void g2_do_before_bldr_activate(void);
 // uint8_t do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t mtester_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t gm_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t ws_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t dg_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t bo_do_reg_read(uint16_t reg, uint16_t* pdata);
+uint8_t g2_do_reg_read(uint16_t reg, uint16_t* pdata);
 //  uint8_t do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t mtester_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t gm_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t ws_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t dg_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 uint8_t bo_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
+uint8_t g2_do_reg_write(uint16_t reg, uint16_t data, uint16_t mask);
 
 
 #define setbit_atomic(_reg, _bitnr) \
