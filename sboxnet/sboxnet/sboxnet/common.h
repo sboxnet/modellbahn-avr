@@ -351,22 +351,15 @@ void gm_do_main(void);
 void ws_do_main(void);
 void dg_do_main(void);
 void bo_do_main(void);
-<<<<<<< HEAD
 void g2_do_main(void); 
-=======
-void g2_do_main(void);
->>>>>>> a456f7595d4c6d33243cd73359cab26a7b6a029d
 // do_before_bldr_activate(void)
 void mtester_do_before_bldr_activate(void);
 void gm_do_before_bldr_activate(void);
 void ws_do_before_bldr_activate(void);
 void dg_do_before_bldr_activate(void);
 void bo_do_before_bldr_activate(void);
-<<<<<<< HEAD
-extern void g2_do_before_bldr_activate(void);
-=======
 void g2_do_before_bldr_activate(void);
->>>>>>> a456f7595d4c6d33243cd73359cab26a7b6a029d
+
 // uint8_t do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t mtester_do_reg_read(uint16_t reg, uint16_t* pdata);
 uint8_t gm_do_reg_read(uint16_t reg, uint16_t* pdata);
