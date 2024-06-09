@@ -43,7 +43,7 @@ void g2_do_init_system(void) {
     g_com.productid = g2_PRODUCT_ID;
     g_com.vendorid = g2_VENDOR_ID;
     g_com.firmware_version = g2_FIRMWARE_VERSION;
-    g_com.capabilities = CAP_FB_OCCUPANCY;
+    g_com.capabilities = CAP_FB_OCCUPANCY_RAILCOM;
     g_com.cap_class = 0;
     g_com.dev_desc_P = PSTR(g2_DEVICE_DESC);
 }
