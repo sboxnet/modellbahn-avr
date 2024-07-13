@@ -942,6 +942,7 @@ ISR(TCD0_CCC_vect) {
 		case 1: { // cutout enable
 			port_set(bo_DCCM_PORT, Bit(bo_DCCM_EN_b)); // EN* on
 			port_clr(bo_DCCM_PORT, Bit(bo_DCCM_IN1_b)|Bit(bo_DCCM_IN2_b)); // 2 lower MOSFETs on, connect to 0V
+			port_setbit(bo_DCCM_PORT, bo_DCCM_CUTOUT_b); // cutout test point
 			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
 				TCD0.CCC = TCD0.CNT + (432/2);
 			}
