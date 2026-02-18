@@ -25,6 +25,9 @@
  * - Shortcut detection is disabled in the TIMER_STARTUP time after DCC startup
  * - Shortcut detection is disabled in the first half of the first DCC bit after a cutout
  *
+ * über den DCC Generator werden DCC_A/B gespeist. Daraus wird PC4 erzeugt --> PORTC_INT1_vect, der erzeugt dann die Signale für PC0 und PC1, die die H-Brücken speisen.
+ * PC4 wird als beidseitiger Flankentrigger eingerichtet. 
+ *
  * Ausgabe signals:
  * PC0  IN1 bridge a and b input1
  * PC1  IN2 bridge a and b input2
